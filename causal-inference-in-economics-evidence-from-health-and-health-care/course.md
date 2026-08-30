@@ -1,4 +1,5 @@
 # Causal Inference in Economics: Evidence from Health and Health Care
+slug: causal-inference-in-economics-evidence-from-health-and-health-care
 level: Advanced undergraduate / first-year graduate economics; assumes regression, expectations and basic probability, but every design is built up from scratch before any algebra
 language: English
 notation: One notation throughout. D_i ∈ {0,1} is the treatment (default meaning: individual i has health insurance coverage). Y_i is the outcome (default: a health or spending outcome). Potential outcomes Y_i(1) and Y_i(0); observed outcome Y_i = D_i·Y_i(1) + (1−D_i)·Y_i(0); individual effect τ_i = Y_i(1) − Y_i(0). ATE = E[τ_i], ATT = E[τ_i | D_i = 1], LATE = E[τ_i | complier]. Z_i is an instrument or assignment (default: winning the Oregon lottery). X_i are covariates. Groups indexed by g, time by t; treatment timing g* in the DiD lectures. Estimates carry hats (τ̂), standard errors in parentheses. Always say 'percentage points' for level changes and 'percent' for relative changes. Diagrams: treated units in solid outline, untreated in dashed; time always runs left to right.
