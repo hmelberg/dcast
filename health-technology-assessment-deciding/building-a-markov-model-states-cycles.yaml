@@ -1,0 +1,362 @@
+playlist:
+  title: 'Building a Markov model: states, cycles, transitions and the long tail'
+---
+chapter: The states and the cycle
+---
+title: Six States for SMA
+level: advanced
+voice: female
+template: markov_model
+params:
+  title: Nusinersen vs current care — six states, one-year cycles
+  states:
+    - Pre-symptomatic
+    - Not sitting
+    - Sitting
+    - Walking
+    - Permanent ventilation
+    - Dead
+  transitions:
+    - from: Pre-symptomatic
+      to: Not sitting
+      label: '0.60'
+    - from: Not sitting
+      to: Sitting
+      label: '0.28'
+    - from: Sitting
+      to: Walking
+      label: '0.10'
+    - from: Sitting
+      to: Not sitting
+      label: '0.05'
+    - from: Not sitting
+      to: Permanent ventilation
+      label: '0.08'
+    - from: Permanent ventilation
+      to: Dead
+      label: '0.15'
+    - from: Not sitting
+      to: Dead
+      label: '0.06'
+    - from: Walking
+      to: Dead
+      label: '0.01'
+  self_loops:
+    - state: Pre-symptomatic
+      label: '0.40'
+    - state: Not sitting
+      label: '0.58'
+    - state: Sitting
+      label: '0.85'
+    - state: Walking
+      label: '0.99'
+    - state: Permanent ventilation
+      label: '0.85'
+  layout: circle
+  highlight_state: Permanent ventilation
+elements:
+  - id: note_absorbing
+    type: label
+    text: 'Absorbing: no exit'
+    attach_to: state_dead
+    side: below
+  - id: note_same_state
+    type: label
+    text: Same state, two different futures
+    attach_to: state_sitting
+    side: below-right
+    style:
+      color: '#b5482e'
+  - id: mark_same_state
+    type: annotation
+    target: note_same_state
+    kind: box
+commands:
+  - draw:
+      - title
+    speak: 'Across six figures we will build one Markov model end to end: its states, its cycle, its transition probabilities, its extrapolated tail, and how you validate a model whose future has not happened yet.'
+  - draw:
+      - state_pre_symptomatic
+      - state_label_pre_symptomatic
+    speak: The case is nusinersen in spinal muscular atrophy — six injections in the first year, three every year after, for life, at a list price around a hundred and twenty-five thousand dollars each.
+  - pause: 0.3
+  - draw:
+      - state_not_sitting
+      - state_label_not_sitting
+    speak: An infant with SMA type 1 never sits unaided; untreated, most are dead or permanently ventilated before their second birthday.
+  - draw:
+      - state_sitting
+      - state_label_sitting
+    speak: In the ENDEAR trial about half the treated infants gained a motor milestone and none of the controls did — so sitting unaided has to be a state the model can actually reach.
+  - pause: 0.3
+  - draw:
+      - state_walking
+      - state_label_walking
+    speak: Walking is rarer, but real in later-onset patients, and it carries its own utility and its own care costs — that difference is what earns it a separate state.
+  - draw:
+      - hl_permanent_ventilation
+      - state_permanent_ventilation
+      - state_label_permanent_ventilation
+    speak: 'Permanent ventilation sits here for a reason of evidence, not anatomy: it was half of the trial''s primary endpoint — death or permanent ventilation.'
+  - draw:
+      - state_dead
+      - state_label_dead
+      - note_absorbing
+    speak: 'And dead: absorbing, with no arrow leaving it. Six states, and every patient must be in exactly one of them at every moment.'
+  - pause: 0.5
+  - draw:
+      - t_0
+      - t_label_0
+      - loop_pre_symptomatic
+      - loop_label_pre_symptomatic
+    speak: One cycle is one year. Sixty percent of the pre-symptomatic cohort declines into weakness; the remaining forty percent stay — and those two numbers have to exhaust the row.
+  - draw:
+      - t_1
+      - t_label_1
+    speak: 'On treatment, a share climb: twenty-eight percent of the not-sitting cohort gains sitting within the year.'
+  - draw:
+      - t_2
+      - t_label_2
+      - t_3
+      - t_label_3
+    speak: From sitting, ten percent go on to walk and five percent slide back — motor function moves in both directions, and the model must let it.
+  - draw:
+      - t_4
+      - t_label_4
+      - t_6
+      - t_label_6
+      - t_5
+      - t_label_5
+      - t_7
+      - t_label_7
+    parallel: true
+    speak: 'The remaining routes are the grim ones: to ventilation, and from every living state to death.'
+  - draw:
+      - loop_not_sitting
+      - loop_label_not_sitting
+      - loop_sitting
+      - loop_label_sitting
+      - loop_walking
+      - loop_label_walking
+      - loop_permanent_ventilation
+      - loop_label_permanent_ventilation
+    parallel: true
+    speak: Whatever is left over each year is staying put — every row of P sums to one, and that arithmetic is exhaustiveness made numerical.
+  - pause: 0.5
+  - focus:
+      target:
+        - state_sitting
+        - state_label_sitting
+        - state_permanent_ventilation
+        - state_label_permanent_ventilation
+        - hl_permanent_ventilation
+    speak: 'Now the hard test, mutual exclusivity: a ventilated child who can still sit belongs in one state only, so you must rule — ventilation dominates — and write that rule down.'
+  - focus:
+      target:
+        - state_not_sitting
+        - state_label_not_sitting
+        - state_sitting
+        - state_label_sitting
+        - state_walking
+        - state_label_walking
+    speak: 'Clinical honesty is the third test: these milestones come from motor scales like HINE-2, and a milestone is not a utility — each state still needs a u, and in SMA those utilities are thin and mostly proxy-reported by parents.'
+  - pause: 0.3
+  - speak: Beslutningsforum said no to nusinersen in 2018 and then yes with an age limit — and an age limit is really a claim about which state patients enter the model in.
+    delivery: soft
+  - highlight:
+      target:
+        - state_sitting
+        - state_label_sitting
+      effect: glow
+    speak: 'Which brings us to the uncomfortable question. Two children are in sitting: one climbed here from not sitting last year, one is sliding down from walking.'
+  - draw:
+      - note_same_state
+      - mark_same_state
+    speak: The Markov property forbids the model from telling them apart — the future depends on the state you are in, never on the path that brought you there.
+    delivery: grave
+  - point:
+      at:
+        ref: note_same_state
+      gesture: underline
+    speak: So a state is not a description of a patient; it is the entire memory the model is allowed to keep.
+  - pause: 0.4
+  - speak: 'Everything ahead is repair work on that lost memory: the half-cycle correction, tunnel states, time-dependent transitions, and the extrapolated tail where nusinersen''s whole result actually lives.'
+  - speak: 'Next figure: one year is a long time in an infant''s motor development — so we ask what the cycle length is doing to these six states, and what its half is for.'
+---
+title: The Cycle and Its Half
+level: advanced
+voice: female
+template: survival_curve
+params:
+  time_label: Years (1 cycle = 1 year)
+  show_median: false
+  title: Half-cycle correction
+  arms:
+    - label: Counted at cycle start
+      color: demand
+      survival:
+        - 1
+        - 0.88
+        - 0.774
+        - 0.681
+        - 0.6
+        - 0.528
+        - 0.464
+    - label: Counted at cycle end
+      color: supply
+      survival:
+        - 0.88
+        - 0.774
+        - 0.681
+        - 0.6
+        - 0.528
+        - 0.464
+        - 0.408
+    - label: Half-cycle corrected
+      color: accent
+      survival:
+        - 0.94
+        - 0.827
+        - 0.728
+        - 0.641
+        - 0.564
+        - 0.496
+        - 0.436
+commands:
+  - draw:
+      - axes
+    speak: Now that we have six states for SMA, the model needs a clock — and this part is about the half cycle that clock keeps losing.
+  - draw:
+      - arm_0
+      - arm_label_0
+    speak: 'One cycle is one year, per our notation, so the model only ever looks at the cohort on the anniversaries: a thousand children on nusinersen, then 880, then 774, at a modelled twelve percent annual mortality.'
+  - point:
+      at:
+        ref: arm_0
+      gesture: underline
+    speak: Between two anniversaries the trace is flat, and then it falls off a cliff — the cohort is frozen for a year, then updated all at once.
+  - highlight:
+      target:
+        - arm_0
+      effect: glow
+    speak: 'Cycle length is a real modelling choice: short enough that at most one clinically meaningful event happens inside it, long enough that your data, your costs and the four percent discount rate arrive at that frequency.'
+  - focus:
+      target:
+        - arm_0
+    speak: 'But children do not die on their birthdays: deaths are spread through the year, and this trace credits every one of them with a full extra year of life.'
+  - pause: 0.4
+  - draw:
+      - arm_1
+      - arm_label_1
+    speak: Count at the end of each cycle instead — only the 880 survivors are credited with year one — and the staircase drops to the opposite extreme.
+  - point:
+      at:
+        ref: arm_1
+      gesture: circle
+    speak: Same cohort, same transition matrix; the only thing that changed is where inside the cycle you hold the ruler.
+  - highlight:
+      target:
+        - arm_0
+      effect: glow
+    speak: Sum the upper trace over six years and each child accrues 4.46 life-years.
+  - highlight:
+      target:
+        - arm_1
+      effect: glow
+    speak: Sum the lower one and the very same child accrues 3.93.
+  - speak: 'That gap is 0.54 life-years — over a tenth of the total — and it has a closed form: the starting proportion minus the ending proportion, times one cycle.'
+    delivery: grave
+  - pause: 0.4
+  - draw:
+      - arm_2
+      - arm_label_2
+    speak: 'Half-cycle correction is the compromise between them: average the start and the end of every cycle, which is exactly the trapezoid rule under the survival curve.'
+  - focus:
+      target:
+        - arm_2
+    speak: Its six-year total is 4.195 life-years; the exact integral of the underlying exponential is 4.190 — accurate to within about two days.
+  - speak: So it isn't a fudge factor — it is the claim that events fall mid-cycle on average, so a cohort spends half a cycle in the state it is leaving.
+  - highlight:
+      target:
+        - arm_2
+      effect: pulse
+    speak: 'The same half-cycle shift belongs on costs and on discounting: apply the discount factor to the middle of the cycle, not to its start.'
+  - pause: 0.3
+  - clear:
+      keep:
+        - axes
+        - arm_2
+        - arm_label_2
+    speak: Two moves make this whole argument shrink.
+  - highlight:
+      target:
+        - arm_2
+      effect: glow
+    speak: 'First, shorten the cycle: the error scales with cycle length, so a monthly cycle turns that 0.54 life-year disagreement into roughly 0.04.'
+  - show:
+      - arm_0
+      - arm_label_0
+      - arm_1
+      - arm_label_1
+    speak: Second — Jan Barendregt's argument from 2009 — banish the correction rather than explain it, and integrate the trace properly with a life-table calculation.
+  - focus:
+      target:
+        - arm_0
+        - arm_1
+    speak: 'And here is what catches people out: across two arms the half-cycle errors largely cancel, so plenty of ICERs barely move when you apply it.'
+  - point:
+      at:
+        ref: arm_0
+      gesture: circle
+    speak: 'They cancel only when both curves fall at the same pace — and nusinersen against natural history is precisely the case where they don''t: the untreated cohort loses most of its children in the first two cycles, where the correction bites hardest.'
+    delivery: grave
+  - draw:
+      - title
+    speak: One year is the cycle; half a year is what the model owes every child who dies inside it — and in SMA almost all of that half year lands on the comparator's side of the ICER.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: The ICER, the plane, and why net benefit is easier to think with
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 15 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: The ICER, the plane, and why net benefit is easier to think with'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

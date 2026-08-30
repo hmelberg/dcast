@@ -1,0 +1,806 @@
+playlist:
+  title: 'Showing what you don''t know: from tornado diagrams to acceptability curves'
+---
+title: 'Scenario theatre: best case, worst case'
+level: advanced
+voice: female
+template: two_by_two_table
+params:
+  title: 'Nusinersen ICER: four scenarios (illustrative)'
+  row_label: Effect assumption
+  col_label: Cost assumption
+  row_values:
+    - ΔE = 5.0 QALYs
+    - ΔE = 1.0 QALY
+  col_values:
+    - ΔC = 5 mill kr
+    - ΔC = 12 mill kr
+  cells:
+    - - 1.0 mill kr/QALY
+      - 2.4 mill kr/QALY
+    - - 5.0 mill kr/QALY
+      - 12.0 mill kr/QALY
+  cell_notes:
+    - - Best case
+      - null
+    - - null
+      - Worst case
+  highlight:
+    - - 0
+      - 0
+    - - 1
+      - 1
+domain:
+  x:
+    - 0
+    - 6
+  'y':
+    - 0
+    - 14
+elements:
+  - id: ax
+    type: axes
+    x_label: ΔE — QALYs gained
+    y_label: ΔC — million kr
+  - id: lam
+    type: curve
+    expr: 1.0*x
+    style:
+      color: '#8a5fa8'
+      dash: true
+  - id: lbl_lam
+    type: label
+    text: λ = 1 mill kr per QALY
+    attach_to: lam
+    side: above-left
+    style:
+      color: '#8a5fa8'
+  - id: c_lo
+    type: curve
+    expr: '5'
+    x_from: 1
+    x_to: 5
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: c_hi
+    type: curve
+    expr: '12'
+    x_from: 1
+    x_to: 5
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: box
+    type: region
+    between:
+      - c_lo
+      - c_hi
+    x_from: 1
+    x_to: 5
+    style:
+      fill: '#8f887c'
+      opacity: 0.15
+  - id: p_best
+    type: point
+    at:
+      x: 5
+      'y': 5
+    style:
+      color: '#2f6b8f'
+  - id: lbl_best
+    type: label
+    text: 'Best corner: 1.0'
+    attach_to: p_best
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: p_worst
+    type: point
+    at:
+      x: 1
+      'y': 12
+    style:
+      color: '#b5482e'
+  - id: lbl_worst
+    type: label
+    text: 'Worst corner: 12.0'
+    attach_to: p_worst
+    side: right
+    style:
+      color: '#b5482e'
+  - id: p_a
+    type: point
+    at:
+      x: 5
+      'y': 12
+  - id: lbl_a
+    type: label
+    text: '2.4'
+    attach_to: p_a
+    side: left
+  - id: p_b
+    type: point
+    at:
+      x: 1
+      'y': 5
+  - id: lbl_b
+    type: label
+    text: '5.0'
+    attach_to: p_b
+    side: right
+  - id: p_base
+    type: point
+    at:
+      x: 3
+      'y': 8.5
+    style:
+      color: '#8a5fa8'
+  - id: lbl_base
+    type: label
+    text: 'Base case: 2.8'
+    attach_to: p_base
+    side: right
+    style:
+      color: '#8a5fa8'
+  - id: q_label
+    type: label
+    text: Where inside the box is the probability?
+    attach_to: box
+    side: above
+  - id: q_mark
+    type: annotation
+    target: q_label
+    kind: box
+commands:
+  - draw:
+      - title
+    speak: This series is about showing what a health-economic model does not know — and it starts with the worst common way of doing it.
+  - draw:
+      - grid
+      - row_title
+      - row_header_0
+      - row_header_1
+      - col_title
+      - col_header_0
+      - col_header_1
+    speak: 'Our nusinersen model has two big unknowns: the QALYs the drug adds, and its lifetime cost to the health service.'
+  - draw:
+      - hl_0_0
+      - cell_0_0
+    speak: Take both optimistically — five QALYs for five million kroner — and the ICER is one million kroner per QALY.
+  - pause: 0.4
+  - draw:
+      - hl_1_1
+      - cell_1_1
+    speak: Take both pessimistically — one QALY for twelve million — and the same model reports twelve million per QALY.
+    delivery: grave
+  - draw:
+      - cell_0_1
+      - cell_1_0
+    parallel: true
+    speak: The mixed corners land in between, at two point four and five million per QALY.
+  - highlight:
+      target:
+        - cell_0_0
+      effect: glow
+    speak: Only that first corner reaches the high-severity threshold we have been working with, a million kroner per QALY.
+  - point:
+      at:
+        ref: title
+      gesture: underline
+    speak: 'These numbers are illustrative — the disagreement was not: Beslutningsforum rejected nusinersen, then accepted it with an age limit.'
+  - quiz:
+      intro: A quick check before we move.
+      question: What does this table tell you about how likely each corner is?
+      choices:
+        - Each corner is equally likely
+        - Nothing at all
+        - The base case is most likely
+      correct: 2
+      right: Nothing — a scenario table reports four numbers and attaches no probability to any of them.
+      wrong: Equal likelihood is something readers assume; the table itself carries no probabilities at all.
+  - clear: {}
+  - draw:
+      - ax
+      - lam
+      - lbl_lam
+    speak: 'Same four corners on the plane: effect on the x-axis, cost on the y, and the threshold line through the origin with slope lambda.'
+  - draw:
+      - p_best
+      - lbl_best
+    speak: The best corner lands exactly on that line — even the optimistic story only just buys health at the threshold price.
+  - draw:
+      - p_worst
+      - lbl_worst
+    speak: The worst corner sits far above it, at twelve times the price per QALY.
+  - draw:
+      - p_a
+      - lbl_a
+      - p_b
+      - lbl_b
+      - c_lo
+      - c_hi
+      - box
+    speak: The mixed corners complete a rectangle, and that rectangle is the entire content of the scenario analysis.
+  - draw:
+      - p_base
+      - lbl_base
+    speak: The base case sits in the middle of it, at about two point eight million kroner per QALY.
+  - highlight:
+      target:
+        - p_worst
+      effect: glow
+    speak: For the worst corner to be true, both unknowns must hit their pessimistic bound at once — if each is a one-in-twenty event, the pair is one in four hundred.
+    delivery: grave
+  - quiz:
+      question: Why is the worst-case corner the least trustworthy number in the table?
+      choices:
+        - It uses the wrong threshold
+        - It needs both parameters extreme at the same time
+        - It ignores discounting
+      correct: 2
+      right: It requires both unknowns at their pessimistic bound simultaneously — far rarer than either bound alone.
+      wrong: The threshold and the discount rate are the same in every cell; what changes is that this corner stacks two extremes.
+  - erase:
+      - p_best
+      - lbl_best
+      - p_worst
+      - lbl_worst
+      - p_a
+      - lbl_a
+      - p_b
+      - lbl_b
+    parallel: true
+    speak: Drop the corners, and what is left is a range with no density anywhere in it.
+  - draw:
+      - q_label
+      - q_mark
+    speak: The corners are not the plausible extremes — they are the least likely points in the box, given equal billing with the middle.
+  - speak: 'Best case and worst case is theatre: the next four parts put the probability back, one parameter at a time in the tornado, all of them together in a thousand draws, and finally as a curve.'
+    delivery: brisk
+---
+title: Reading the Tornado
+level: advanced
+voice: female
+template: tornado_diagram
+params:
+  base: -3
+  x_label: Net monetary benefit at λ (million kr per patient)
+  show_values: true
+  title: 'Nusinersen: one-way sensitivity analysis (illustrative)'
+  bars:
+    - label: QALY gain vs. care
+      low: -6.4
+      high: 0.6
+    - label: Annual drug price
+      low: -5.8
+      high: -0.2
+    - label: Years on treatment
+      low: -1.4
+      high: -4.8
+    - label: Utility on treatment
+      low: -4.3
+      high: -1.8
+    - label: Discount rate
+      low: -2.5
+      high: -3.5
+    - label: Care costs averted
+      low: -3.2
+      high: -2.7
+elements:
+  - id: mark_top
+    type: annotation
+    target: bar_label_0
+    kind: box
+commands:
+  - draw:
+      - title
+      - axes
+    speak: Now that we have seen best case and worst case staged as scenario theatre, here is the disciplined version of that instinct — one that tells a committee which assumption the whole decision is hanging on.
+  - draw:
+      - base_line
+    speak: 'Everything pivots on the base case: at the Norwegian threshold, nusinersen''s net monetary benefit sits about three million kroner in the red per patient.'
+  - highlight:
+      target:
+        - base_line
+      effect: glow
+    speak: The magnitudes on this axis are illustrative — the confidential net price is not public — but the ranking and the shape follow the real model's structure.
+  - pause: 0.3
+  - draw:
+      - bar_0
+      - bar_label_0
+    speak: 'Widest bar first: the QALY gain against current care, swept across its plausible range, moves net benefit from six point four million in the red to just above zero.'
+  - draw:
+      - bar_1
+      - bar_label_1
+    speak: Next, the annual drug price — the one lever a negotiation can actually pull — nearly as wide, and never quite reaching black on its own.
+  - draw:
+      - bar_2
+      - bar_label_2
+    speak: Years on treatment swings about three and a half million, because a lifelong intrathecal regimen multiplies price and benefit together.
+  - draw:
+      - bar_3
+      - bar_label_3
+    speak: Utility on treatment — how much better a treated year actually feels — swings two and a half, less than you would expect for a drug sold on quality of life.
+  - draw:
+      - bar_4
+      - bar_label_4
+      - bar_5
+      - bar_label_5
+    parallel: true
+    speak: 'And the tail: the discount rate around the guideline four per cent, and the averted costs of ventilation and care, together barely a million and a half.'
+  - pause: 0.4
+  - focus:
+      target:
+        - bar_0
+        - bar_1
+        - bar_label_0
+        - bar_label_1
+    speak: Two parameters own almost the whole tornado; the bottom four could all be wrong at once and the sign of the answer would not budge.
+  - draw:
+      - mark_top
+    speak: So the effect size is where a decision maker's attention, and any research money, belongs.
+  - quiz:
+      intro: A quick check on how to read this.
+      question: Which bar tells you most about where extra research money should go?
+      choices:
+        - The narrowest bar
+        - The widest bar
+        - The bar nearest zero
+      correct: 2
+      right: The widest bar — here the QALY gain — is the parameter whose resolution could most change the answer.
+      wrong: 'Width is the whole point: the widest bar moves the result furthest, so that uncertainty matters most.'
+  - speak: Run the same exercise on statins in primary prevention and no single bar crosses zero at all — a tornado that stays on one side of the line is itself the finding.
+  - highlight:
+      target:
+        - bar_0
+        - bar_1
+        - bar_2
+        - bar_3
+        - bar_4
+        - bar_5
+      effect: pulse
+    speak: 'Now the structural weakness: every bar moves its parameter alone, with all the others frozen at base case.'
+  - point:
+      at:
+        ref: bar_1
+      gesture: underline
+    speak: Real discounts arrive tied to a duration cap and a stopping rule — move price and years together and the true swing is wider than either bar shows.
+  - pause: 0.3
+  - point:
+      at:
+        ref: bar_0
+      gesture: tap
+    speak: And the ends of a bar are ranges an analyst chose, not outcomes with any likelihood attached.
+  - quiz:
+      question: What can a tornado diagram NOT tell you?
+      choices:
+        - Which parameter swings the result most
+        - How likely each swing is
+        - The base-case result
+      correct: 2
+      right: It shows how far the result can move, never how probable that move is — the bars carry no probabilities.
+      wrong: Ranking and the base case are exactly what it does show; probability is what it withholds.
+  - speak: A tornado names the assumptions a decision hangs on, and by staying silent about probability, shows exactly why one-way analysis can never be the last word.
+    delivery: grave
+  - speak: 'Next: let every parameter move at once, a thousand times over.'
+    delivery: brisk
+---
+title: The Curve and the Claim
+level: advanced
+voice: female
+template: ceac
+params:
+  strategies:
+    - label: Nusinersen
+      midpoint: 790
+      width: 40
+      rising: true
+    - label: Current care
+      midpoint: 790
+      width: 40
+      rising: false
+  thresholds:
+    - 275
+    - 825
+  x_max: 1000
+  title: 'Nusinersen: probability cost-effective (illustrative)'
+commands:
+  - draw:
+      - axes
+    speak: Now that we have seen a thousand draws scattered across the plane, let's squeeze that whole cloud into the one line a decision maker can actually read.
+  - draw:
+      - curve_0
+    speak: 'The recipe is a sweep: fix a threshold lambda, and count how many of the thousand draws have a positive net monetary benefit — lambda times delta E, minus delta C.'
+  - draw:
+      - curve_label_0
+    speak: That share is one height on the curve for nusinersen; sweep lambda from left to right and the shares join up into this line. Read the axis in thousands of kroner per QALY.
+  - pause: 0.3
+  - draw:
+      - half_line
+    speak: 'The dashed line marks a half: above it, the drug has the higher net benefit in more runs than it loses.'
+  - draw:
+      - threshold_0
+    speak: 'At 275,000 kroner per QALY — the ordinary end of the Norwegian range — this illustrative curve sits on the floor: almost no draw makes the drug the better buy.'
+  - pause: 0.3
+  - draw:
+      - threshold_1
+    speak: Push lambda up to 825,000, the top of the severity-adjusted range, and the curve has climbed to roughly seven runs in ten.
+  - draw:
+      - curve_1
+      - curve_label_1
+    speak: 'Current care is the exact mirror image: at every lambda one option has the higher net benefit, so the two probabilities always sum to one.'
+  - highlight:
+      target:
+        - curve_0
+      effect: glow
+    speak: 'And read the shape: flat across most of the axis, turning inside one narrow band — everywhere outside that band, the answer is not close.'
+  - draw:
+      - title
+    speak: 'The device dates from the mid-1990s, invented to dodge a genuine statistical problem: the ICER is a ratio, and when delta E can sit near zero, its confidence interval stops behaving.'
+  - pause: 0.4
+  - focus:
+      target:
+        - curve_0
+        - threshold_1
+    speak: Now the claim itself — probability 0.7 cost-effective — and what it does not say.
+  - speak: 'It is not a clinical probability: it does not say seven in ten children will benefit. The effect size sits inside the model as one uncertain parameter, already averaged over patients.'
+    delivery: grave
+  - highlight:
+      target:
+        - threshold_1
+      effect: pulse
+    speak: 'Nor is it a claim about whether the drug works: a treatment with a rock-solid, well-measured benefit can still read 0.3, purely because its price outruns lambda.'
+  - speak: What the 0.7 counts is our ignorance about the inputs — utilities, transition probabilities, price, discounting — pushed through the model and tallied at one threshold.
+  - quiz:
+      intro: A quick check on the claim.
+      question: The curve reads about 0.7 at lambda = 825,000 kr per QALY. What does that mean?
+      choices:
+        - 70% of treated children will benefit
+        - In 70% of the draws the drug had the higher net benefit
+        - The drug is 70% effective
+      correct: 2
+      right: 'It is a statement about parameter uncertainty: in seven runs out of ten, lambda times delta E exceeded delta C.'
+      wrong: The probability lives in the parameters of the model, not at the bedside.
+  - quiz:
+      question: The manufacturer halves the price. What happens to nusinersen's curve?
+      choices:
+        - It slides left, reaching high probability at a lower lambda
+        - It stays put but gets steeper
+        - It drops toward zero everywhere
+      correct: 1
+      right: A lower delta C raises net benefit at every lambda, so the whole curve shifts left.
+      wrong: Price enters through delta C, which moves the curve sideways rather than flattening it.
+  - highlight:
+      target:
+        - curve_0
+        - curve_1
+      effect: glow
+    speak: 'So the acceptability curve answers one question only: at each price we are willing to pay for a year of health, how confident is the model — not whether the drug works.'
+---
+title: What the Decision Maker Sees
+level: advanced
+voice: female
+template: tornado_diagram
+params:
+  title: What drives the nusinersen result (illustrative)
+  base: -6
+  x_label: Net monetary benefit, million kr per patient (illustrative)
+  show_values: false
+  bars:
+    - label: Duration of effect
+      low: -14
+      high: 3
+    - label: Time horizon
+      low: -12
+      high: 1
+    - label: Drug price
+      low: -11
+      high: -1
+    - label: Discount rate (4%)
+      low: -8
+      high: -4
+    - label: Averted care costs
+      low: -7.5
+      high: -4.5
+elements:
+  - id: t_title
+    type: text
+    text: What each display answers
+    x: 500
+    'y': 700
+    font_size: 30
+  - id: hdr_1
+    type: text
+    text: Display
+    x: 170
+    'y': 635
+    font_size: 22
+  - id: hdr_2
+    type: text
+    text: The question it answers
+    x: 475
+    'y': 635
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: hdr_3
+    type: text
+    text: What it cannot say
+    x: 805
+    'y': 635
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: grid_h
+    type: path
+    points:
+      - - 40
+        - 608
+      - - 960
+        - 608
+    style:
+      color: '#8f887c'
+  - id: grid_v1
+    type: path
+    points:
+      - - 320
+        - 655
+      - - 320
+        - 220
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: grid_v2
+    type: path
+    points:
+      - - 640
+        - 655
+      - - 640
+        - 220
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: n1
+    type: text
+    text: Best / worst case
+    x: 170
+    'y': 555
+    font_size: 22
+  - id: x_scenario
+    type: annotation
+    target: n1
+    kind: strike
+  - id: a1
+    type: text
+    text: Two stories, no middle
+    x: 475
+    'y': 555
+    font_size: 20
+    style:
+      color: '#2f6b8f'
+  - id: l1
+    type: text
+    text: Nothing about likelihood
+    x: 805
+    'y': 555
+    font_size: 20
+    style:
+      color: '#b5482e'
+  - id: n2
+    type: text
+    text: Tornado
+    x: 170
+    'y': 470
+    font_size: 22
+  - id: a2
+    type: text
+    text: Which input matters most
+    x: 475
+    'y': 470
+    font_size: 20
+    style:
+      color: '#2f6b8f'
+  - id: l2
+    type: text
+    text: One at a time, no odds
+    x: 805
+    'y': 470
+    font_size: 20
+    style:
+      color: '#b5482e'
+  - id: n3
+    type: text
+    text: The cloud
+    x: 170
+    'y': 385
+    font_size: 22
+  - id: a3
+    type: text
+    text: How far ΔC and ΔE land
+    x: 475
+    'y': 385
+    font_size: 20
+    style:
+      color: '#2f6b8f'
+  - id: l3
+    type: text
+    text: Only inputs we varied
+    x: 805
+    'y': 385
+    font_size: 20
+    style:
+      color: '#b5482e'
+  - id: n4
+    type: text
+    text: Acceptability curve
+    x: 170
+    'y': 300
+    font_size: 22
+  - id: a4
+    type: text
+    text: P(cost-effective) at λ
+    x: 475
+    'y': 300
+    font_size: 20
+    style:
+      color: '#2f6b8f'
+  - id: l4
+    type: text
+    text: Conditional on the model
+    x: 805
+    'y': 300
+    font_size: 20
+    style:
+      color: '#b5482e'
+  - id: b1
+    type: text
+    text: All four vary the numbers. None vary the model.
+    x: 500
+    'y': 170
+    font_size: 26
+  - id: b1_box
+    type: annotation
+    target: b1
+    kind: box
+commands:
+  - draw:
+      - axes
+      - base_line
+      - title
+    speak: Now that we have seen a cloud of draws collapse into a single probability, let's line up every display this lecture built and ask what each one honestly answers.
+  - draw:
+      - bar_0
+      - bar_label_0
+    speak: Back to the nusinersen model in illustrative numbers — net monetary benefit per patient — and the widest bar is how long the treatment effect is assumed to last.
+  - pause: 0.3
+  - draw:
+      - bar_1
+      - bar_label_1
+      - bar_2
+      - bar_label_2
+      - bar_3
+      - bar_label_3
+      - bar_4
+      - bar_label_4
+    parallel: true
+    speak: Time horizon, price, the four percent discount rate and averted care costs follow, each swing narrower than the one above it.
+  - highlight:
+      target:
+        - bar_0
+      effect: glow
+    speak: Only that top bar reaches far enough to carry the result across into positive net benefit; the bottom two barely move it at all.
+  - quiz:
+      intro: A quick check before we synthesise.
+      question: What does the widest bar of a tornado diagram tell you?
+      choices:
+        - That parameter's most likely value
+        - The result is most sensitive to that parameter
+        - The probability the drug is cost-effective
+      correct: 2
+      right: The widest bar marks the parameter the result is most sensitive to — nothing about how likely its values are.
+      wrong: A tornado bar is a swing between two chosen values, not a likelihood.
+  - clear: {}
+    speak: So set the whole toolkit down in one table, and read it column by column.
+  - draw:
+      - t_title
+      - hdr_1
+      - hdr_2
+      - hdr_3
+      - grid_h
+      - grid_v1
+      - grid_v2
+  - draw:
+      - n1
+      - a1
+      - l1
+    speak: 'Best case and worst case: two stories with nothing in between, and no claim at all about how likely either one is.'
+  - draw:
+      - x_scenario
+    speak: Struck out, because it is the only display here that answers no question a decision maker actually asked.
+  - pause: 0.4
+  - draw:
+      - n2
+      - a2
+      - l2
+    speak: The tornado ranks where to look first — but it moves inputs one at a time, and attaches no probability to any of them.
+  - draw:
+      - n3
+      - a3
+      - l3
+    speak: The cloud of a thousand draws shows how far ΔC and ΔE can land together — but only for the inputs we chose to give a distribution.
+  - draw:
+      - n4
+      - a4
+      - l4
+    speak: 'And the acceptability curve compresses that cloud into one number per threshold: the share of draws in which the new technology wins.'
+  - quiz:
+      intro: One more.
+      question: 'A CEAC reads 0.7 at the severity-weighted λ. That means:'
+      choices:
+        - 70% of patients benefit
+        - 70% of the simulated draws favour the new drug at that λ
+        - We are 70% sure the model is correct
+      correct: 2
+      right: 'It is a property of the simulation: in seven draws out of ten, net benefit at that threshold is positive.'
+      wrong: It counts draws, not patients — and it says nothing about the model itself.
+  - focus:
+      target:
+        - l4
+    speak: 'The real limit sits in that last cell: every one of those draws came from the same structure, the same states, the same extrapolation.'
+  - draw:
+      - b1
+    speak: All four displays vary the numbers inside the model. Not one of them varies the model.
+  - draw:
+      - b1_box
+    speak: For nusinersen that is the decisive gap — a trial measured in months, projected across a childhood, and no distribution on the parameters can widen that assumption.
+    delivery: grave
+  - speak: 'So: scenarios say nothing, the tornado says where to look, the cloud says how wide the answer is, the curve says how often it clears the threshold — and showing what you don''t know still leaves what you never modelled.'
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: If we are unsure, should we decide now or pay to learn?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 19 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: If we are unsure, should we decide now or pay to learn?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

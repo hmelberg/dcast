@@ -1,0 +1,609 @@
+playlist:
+  title: It works. So why is anyone still saying no?
+---
+title: It works. So why is anyone still saying no?
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: The two halves of the question
+  x_label: Incremental effect, ΔE (QALYs)
+  y_label: Incremental cost, ΔC (kr)
+  wtp_threshold: 275000
+  points:
+    - label: Nusinersen (SMA)
+      effect: 2
+      cost: 6000000
+      emphasize: true
+    - label: Hip replacement
+      effect: 1
+      cost: 80000
+elements:
+  - id: mark_lambda
+    type: annotation
+    target: wtp_label
+    kind: box
+commands:
+  - draw:
+      - x_axis
+    speak: 'Over four parts, this series answers one question: when a treatment plainly works, how can a health system still say no? Everything turns on two axes — along here, the health a treatment adds, measured in QALYs.'
+  - draw:
+      - y_axis
+    speak: 'And upward, what it costs. Delta E and delta C: the effect and the cost of a new technology, both measured against current care.'
+  - pause: 1
+  - ask:
+      intro: One question before we begin.
+      question: What should I call you?
+      store: name
+      default: friend
+  - draw:
+      - q_ne
+      - q_nw
+      - q_se
+      - q_sw
+    parallel: true
+    speak: 'Four quadrants, {name}: cheaper or costlier, better or worse than what we already do.'
+  - erase:
+      - q_nw
+      - q_se
+      - q_sw
+    speak: Almost every new drug worth arguing about lands in one of them — the top right, where it works and it costs more.
+  - pause: 1
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Our running example: nusinersen, sold as Spinraza, for spinal muscular atrophy — in its severe infant form, a disease that used to kill or permanently ventilate most children before their second birthday.'
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: 'And it works: in the pivotal infant trial, none of the untreated babies reached the motor milestones, while about half of the treated ones did.'
+  - pause: 1
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: Now the half of the question no efficacy trial asks. This line is lambda — Norway's rough willingness to pay, around 275,000 kroner per QALY for a gain of ordinary alvorlighet, that is, severity.
+  - point:
+      at:
+        ref: pt_0
+      gesture: circle
+    speak: 'Nusinersen sat far above it: at list price, millions of kroner per patient per year, and delta C over delta E — the ICER — landed in the millions per QALY, roughly ten times the line.'
+  - pause: 1
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: For contrast, here, almost hugging the origin, sits a hip replacement — about one QALY gained for something like eighty thousand kroner.
+  - camera:
+      center:
+        ref: pt_1
+      zoom: 3
+    speak: 'Zoom in, and it rests quietly below the line: unglamorous, high-volume, no headlines, and far more health for every krone.'
+  - camera:
+      reset: true
+    speak: Pull back out. The we that pays for the dot up there is one budget — four regional health authorities deciding jointly in Beslutningsforum — so a krone spent here cannot be spent there.
+  - draw:
+      - mark_lambda
+    speak: So the honest question is nytte and ressursbruk together — benefit and resource use — and that binds any payer with a fixed budget, a private clinic as much as a public system.
+  - draw:
+      - title
+    speak: Beslutningsforum first said no to nusinersen, then yes for patients under eighteen once the price came down — the dot moved, the evidence didn't.
+  - pause: 1
+  - speak: 'It works, and someone still says no, because a yes is never a claim about the effect alone — it is a claim about where the effect sits relative to its price. Next: why effect alone can never settle it.'
+    delivery: grave
+level: basic
+---
+title: Effect is not enough
+voice: male
+elements:
+  - id: caption
+    type: text
+    text: Nusinersen (1) vs current care (0) — one patient, lifetime, discounted
+    x: 500
+    'y': 700
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: col0_head
+    type: text
+    text: Current care (0)
+    x: 530
+    'y': 645
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: col1_head
+    type: text
+    text: Nusinersen (1)
+    x: 800
+    'y': 645
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: head_rule
+    type: path
+    points:
+      - - 80
+        - 610
+      - - 930
+        - 610
+    style:
+      color: '#8f887c'
+      stroke_width: 1.5
+  - id: col_divider
+    type: path
+    points:
+      - - 665
+        - 600
+      - - 665
+        - 415
+    style:
+      color: '#8f887c'
+      dash: true
+      stroke_width: 1.2
+  - id: row_e_label
+    type: text
+    text: Effect  E  (QALYs)
+    x: 210
+    'y': 545
+    font_size: 26
+  - id: e0
+    type: text
+    text: '12.0'
+    x: 530
+    'y': 545
+    font_size: 32
+    style:
+      color: '#2f6b8f'
+  - id: e1
+    type: text
+    text: '16.0'
+    x: 800
+    'y': 545
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: row_c_label
+    type: text
+    text: Cost  C  (kr)
+    x: 210
+    'y': 455
+    font_size: 26
+  - id: c0
+    type: text
+    text: 2 mill
+    x: 530
+    'y': 455
+    font_size: 32
+    style:
+      color: '#2f6b8f'
+  - id: c1
+    type: text
+    text: 22 mill
+    x: 800
+    'y': 455
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: mid_rule
+    type: path
+    points:
+      - - 80
+        - 410
+      - - 930
+        - 410
+    style:
+      color: '#8f887c'
+      stroke_width: 1.5
+  - id: dE
+    type: text
+    text: ΔE = +4 QALYs
+    x: 300
+    'y': 355
+    font_size: 30
+  - id: dC
+    type: text
+    text: ΔC = +20 million kr
+    x: 730
+    'y': 355
+    font_size: 30
+  - id: icer
+    type: text
+    text: ICER = ΔC / ΔE ≈ 5 million kr per QALY
+    x: 500
+    'y': 250
+    font_size: 32
+    style:
+      color: '#8a5fa8'
+  - id: same_money
+    type: text
+    text: The same 20 million kroner
+    x: 500
+    'y': 650
+    font_size: 34
+  - id: bar_a
+    type: path
+    points:
+      - - 220
+        - 510
+      - - 232
+        - 510
+    style:
+      color: '#b5482e'
+      stroke_width: 24
+  - id: lab_a
+    type: label
+    text: 4 QALYs — one child on nusinersen
+    attach_to: bar_a
+    side: right
+    style:
+      color: '#b5482e'
+  - id: bar_b
+    type: path
+    points:
+      - - 220
+        - 390
+      - - 820
+        - 390
+    style:
+      color: '#8a5fa8'
+      stroke_width: 24
+  - id: lab_b
+    type: label
+    text: ≈ 200 QALYs — about 200 hip replacements
+    attach_to: bar_b
+    side: above
+    style:
+      color: '#8a5fa8'
+  - id: verdict_text
+    type: text
+    text: A positive ΔE decides nothing on its own
+    x: 500
+    'y': 270
+    font_size: 30
+  - id: verdict_box
+    type: annotation
+    target: verdict_text
+    kind: box
+  - id: clinic
+    type: text
+    text: A private clinic with a fixed budget faces the same arithmetic
+    x: 500
+    'y': 170
+    font_size: 24
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - caption
+      - col0_head
+      - col1_head
+      - head_rule
+      - col_divider
+    speak: Now that we have seen what the question is actually asking, let's run one real drug through it — nusinersen for spinal muscular atrophy, set against current care.
+  - pause: 0.9
+  - draw:
+      - row_e_label
+      - e0
+      - e1
+    speak: 'Effect first, in quality-adjusted life years: about twelve on current care, about sixteen with the drug — round numbers, but close to the spirit of the Norwegian appraisal.'
+  - pause: 1
+  - draw:
+      - dE
+    speak: 'So ΔE is plus four QALYs: a real, visible gain, and nobody in this debate claims the drug does nothing.'
+  - pause: 0.8
+  - ask:
+      intro: A quick check before we go further.
+      question: Nusinersen clearly works. In one word — should the health system pay for it?
+      store: verdict
+      default: 'yes'
+  - point:
+      at:
+        ref: dE
+      gesture: circle
+    speak: You answered '{verdict}'. Hold on to that — because nothing on the canvas so far can justify it, in either direction.
+  - pause: 0.9
+  - draw:
+      - mid_rule
+      - row_c_label
+      - c0
+      - c1
+    speak: 'Here is the other half of the ledger: cost over the same horizon — a couple of million kroner on current care, around twenty-two million with the drug.'
+  - pause: 0.9
+  - draw:
+      - dC
+    speak: ΔC is plus twenty million kroner, for a single patient — a treatment priced in millions per year, continuing for life.
+  - pause: 1
+  - draw:
+      - icer
+    speak: 'Put the two together and you have the ICER: ΔC divided by ΔE, roughly five million kroner for each extra good year of life.'
+  - camera:
+      center:
+        ref: icer
+      zoom: 1.9
+    speak: This number, and not the effect, is what a decision-maker actually sits and stares at.
+    delivery: grave
+  - camera:
+      reset: true
+  - pause: 0.8
+  - clear: {}
+  - draw:
+      - same_money
+    speak: 'So hold that twenty million kroner fixed, and ask the question that comes next: what else would it have bought?'
+  - pause: 0.9
+  - draw:
+      - bar_a
+      - lab_a
+    speak: Spent on nusinersen, it buys those four quality-adjusted life years, for one child.
+  - pause: 0.9
+  - draw:
+      - bar_b
+      - lab_b
+    speak: Spent on hip replacements — roughly a hundred thousand kroner each, about one good year of life each — the very same money buys around two hundred.
+  - highlight:
+      target:
+        - bar_b
+      effect: glow
+    speak: Fifty times the health, from an operation so ordinary that it never makes the news.
+  - pause: 1
+  - draw:
+      - verdict_text
+      - verdict_box
+    speak: 'That is why a positive ΔE settles nothing: the question was never whether it works, but whether it works better per krone than what the krone is already doing.'
+  - pause: 0.8
+  - draw:
+      - clinic
+    speak: And this is no public-sector quirk — a private clinic with a fixed budget and a full operating list runs exactly the same arithmetic, because every yes is a no somewhere else.
+  - pause: 0.9
+  - speak: So when someone still says no to a drug that plainly works, they are not denying the effect — they are pricing it, at five million kroner a year, against everything that money could otherwise have healed.
+    delivery: grave
+level: basic
+---
+title: Who pays, and at what price per QALY
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: What the shared purse is asked to buy
+  x_label: Incremental effect, ΔE (QALYs)
+  y_label: Incremental cost, ΔC (kr)
+  wtp_threshold: 825000
+  points:
+    - label: Hip replacement
+      effect: 2
+      cost: 60000
+    - label: Nusinersen, list price
+      effect: 2.5
+      cost: 20000000
+      emphasize: true
+    - label: Under 18, negotiated price
+      effect: 6
+      cost: 9000000
+elements:
+  - id: mark_yes
+    type: annotation
+    target: pt_label_2
+    kind: box
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    speak: Now that we have seen that a real effect is not enough, the blunt question is who actually pays — and what that payer can carry.
+  - draw:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    parallel: true
+  - draw:
+      - title
+    speak: 'The ''we'' here is a shared purse: tax money, spent through blåresept — the blue-prescription scheme — and, for hospital drugs like this one, by the four regional health trusts sitting in Beslutningsforum.'
+  - pause: 1
+  - ask:
+      question: In kroner, what should a health system be willing to pay for one extra year in full health?
+      intro: Before we put a line on this plane, one question for you.
+      store: limit
+      default: 800 000
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: You said {limit} kroner. Norway's own ceiling — lambda — reaches about 825,000 kroner per QALY, and only for the most severe conditions; that is the slope of this line.
+  - highlight:
+      target:
+        - wtp_line
+      effect: glow
+    speak: Below the line the purse buys a QALY for less than it has said one is worth; above it, it does not — and without such a line, 'worth it' is settled by whoever argues loudest.
+  - pause: 1
+  - draw:
+      - pt_1
+    speak: 'Nusinersen: a list price of roughly 750,000 kroner per injection, six injections in the first year and three every year after — several million kroner per patient, every year.'
+  - draw:
+      - pt_label_1
+    speak: Over the modelled horizon that is something like twenty million kroner more than current care, for around two and a half QALYs gained.
+  - point:
+      at:
+        ref: pt_1
+      gesture: circle
+    speak: 'Delta C over delta E: on these simplified numbers, about eight million kroner per QALY — roughly ten times the highest ceiling Norway has ever written down.'
+    delivery: grave
+  - pause: 1
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: And here, apparently sitting on the origin, is a hip replacement — two good QALYs for a few tens of thousands of kroner.
+  - camera:
+      center:
+        ref: pt_0
+      zoom: 5
+    speak: 'Zoom in, and it separates from zero: comfortably under the line, bought quietly, thousands of times a year, with no headlines.'
+  - camera:
+      reset: true
+    speak: Zoom back out, and the drug's price sets a scale on which an entire operation becomes invisible.
+  - pause: 1
+  - erase:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    speak: In 2017, Beslutningsforum said no to nusinersen — a rejection of a drug that visibly worked, and the country argued about it for a year.
+  - draw:
+      - pt_2
+      - pt_label_2
+    speak: In February 2018 the same forum said yes — but only for patients under eighteen, and only after a negotiated price that remains confidential.
+    delivery: soft
+  - point:
+      at:
+        ref: pt_2
+      gesture: tap
+    speak: 'Two things moved the point: a smaller delta C from the price cut, and a larger delta E, because children treated early gain far more good years than adults do.'
+  - pause: 1
+  - draw:
+      - mark_yes
+    speak: So the yes was not a change of mind about the evidence — it was a change in the price, and in who gets the drug.
+  - speak: The 'we' is a shared budget with a written ceiling, so 'worth it' never means 'does it work' — it means a price per QALY this purse can honestly carry, for these patients, at this price.
+level: basic
+---
+title: What a 'no' actually means
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: What a 'no' actually means
+  wtp_threshold: 275000
+  x_label: ΔE — incremental effect (QALYs)
+  y_label: ΔC — incremental cost (kr)
+  points:
+    - label: Nusinersen (SMA)
+      effect: 3
+      cost: 3000000
+      emphasize: true
+    - label: Hip replacement
+      effect: 1.5
+      cost: 100000
+elements:
+  - id: rule
+    type: text
+    text: NMB = λ × ΔE − ΔC
+    x: 500
+    'y': 48
+    font_size: 30
+  - id: rule_box
+    type: annotation
+    target: rule
+    kind: box
+commands:
+  - draw:
+      - x_axis
+    speak: 'Now that we have seen who the ''we'' is — everyone sharing one fixed budget — we can put the whole argument on a single figure, and answer the question this lecture opened with: it works, so why is anyone still saying no?'
+  - draw:
+      - y_axis
+    speak: 'Horizontally, ΔE: the extra quality-adjusted life years a new technology buys over current care. Vertically, ΔC: the extra kroner it costs. The origin is simply what we do today.'
+  - pause: 1
+  - ask:
+      intro: One small thing before we read it.
+      question: What should I call you?
+      store: name
+      default: friend
+  - draw:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    parallel: true
+    speak: '{name}, almost every interesting decision lands in the top-right quadrant: more effective, and more expensive. That is where the whole discipline earns its keep.'
+  - pause: 1
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Here is nusinersen for spinal muscular atrophy: in round illustrative numbers, about three million kroner more per patient, for roughly three extra quality-adjusted life years.'
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: And the effect is real and visible — infants who would never have sat unaided, sitting. Nobody in the Norwegian debate ever denied that.
+  - pause: 1
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'Now the unglamorous comparison we keep returning to: a hip replacement, around a hundred thousand kroner for perhaps one and a half good years — it barely lifts off the axis.'
+  - pause: 1
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: 'This dashed line through the origin is the threshold, lambda: in Norway around 275,000 kroner per good life year — the rate at which the same money is thought to buy health somewhere else in the system.'
+  - pause: 1
+  - camera:
+      center:
+        ref: pt_0
+      zoom: 1.5
+    speak: Zoom in on the gap. At three QALYs the line stands at roughly eight hundred thousand kroner; the drug asks for three million — and severity, alvorlighet, lifts that line for a child, but nowhere near that far.
+  - pause: 1
+  - camera:
+      reset: true
+    speak: 'Which is exactly what happened: Beslutningsforum said no in 2017, and yes the following year — restricted by age, and only after the price came down.'
+  - erase:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    speak: Strip the quadrants away and one rule is left underneath all of it.
+  - draw:
+      - rule
+      - rule_box
+    speak: 'Net monetary benefit: lambda times ΔE, minus ΔC. Positive, and the purchase buys more health than it displaces; negative, and it does not — and without that arithmetic, the loudest, most photogenic case simply takes the money.'
+  - pause: 1
+  - focus:
+      target:
+        - pt_1
+        - wtp_line
+    speak: So a 'no' is not the claim that the drug does not work, {name}. It is the claim that these same kroner, spent on the dull point down here, would have bought more health for someone else.
+  - pause: 1
+  - draw:
+      - title
+    speak: 'That is the series in one line: ''worth it'' is never effect alone, the ''we'' who pays is a fixed budget, and so every yes is a purchase made with other patients'' health.'
+    delivery: grave
+  - speak: Which leaves the obvious question for next time — who exactly are those patients we never meet?
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'The patients you never meet: opportunity cost as the hidden loser'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 2 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: The patients you never meet: opportunity cost as the hidden loser'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

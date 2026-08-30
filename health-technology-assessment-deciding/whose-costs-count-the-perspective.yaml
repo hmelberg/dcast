@@ -1,0 +1,574 @@
+playlist:
+  title: Whose costs count? The perspective question decides the answer
+---
+title: One Drug, Two Ledgers
+voice: male
+template: cost_effectiveness_plane
+params:
+  y_label: Incremental cost (kr)
+  x_label: Incremental effect (QALYs)
+  wtp_threshold: 275000
+  quadrant_labels: false
+  points:
+    - label: Health-payer view
+      effect: 3
+      cost: 12000000
+      emphasize: true
+    - label: Societal view
+      effect: 3
+      cost: 9000000
+elements:
+  - id: claim_a
+    type: text
+    text: One drug, one verdict
+    x: 265
+    'y': 712
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: strike_a
+    type: annotation
+    target: claim_a
+    kind: strike
+  - id: claim_b
+    type: text
+    text: One drug, two verdicts
+    x: 735
+    'y': 712
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: box_b
+    type: annotation
+    target: claim_b
+    kind: box
+  - id: lambda_label
+    type: label
+    text: λ ≈ 275 000 kr per QALY
+    attach_to: wtp_line
+    side: below
+    style:
+      color: '#8f887c'
+  - id: shift_arrow
+    type: arrow
+    from:
+      ref: pt_0
+    to:
+      ref: pt_1
+    style:
+      color: '#d0865f'
+  - id: shift_label
+    type: label
+    text: Costs moved off the health budget
+    attach_to: shift_arrow
+    side: right
+    style:
+      color: '#d0865f'
+commands:
+  - draw:
+      - claim_a
+    speak: 'Over these four parts we''ll see that a technology''s verdict can turn on a choice made before any evidence is read: whose ledger we write the costs in.'
+  - draw:
+      - claim_b
+    speak: On the left, the intuition — the trial settles it. On the right, the uncomfortable possibility that the same drug earns two honest verdicts.
+  - draw:
+      - x_axis
+      - y_axis
+    parallel: true
+  - draw:
+      - wtp_line
+      - wtp_label
+      - lambda_label
+    speak: Effect sideways, cost upward; below this dashed line a technology buys health at Norway's reference price of roughly 275 000 kroner per good life-year.
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Take nusinersen for spinal muscular atrophy: in a stylized lifetime estimate, three QALYs gained for twelve million kroner of drug and hospital costs.'
+  - point:
+      at:
+        ref: pt_0
+      gesture: tap
+    speak: Four million kroner per QALY — so far above the line that no reasonable threshold rescues it.
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: Beslutningsforum said no, then yes for patients under eighteen once the price came down — the drug worked all along; the ledger was the fight.
+  - pause: 0.4
+  - draw:
+      - shift_arrow
+    speak: 'Now change one thing only: ask not what the health budget pays, but what Norway pays.'
+  - draw:
+      - pt_1
+      - pt_label_1
+      - shift_label
+    speak: Parents back at work, fewer hours of informal care, less municipal help and transport — say three million kroner over a lifetime — and the point drops straight down.
+  - point:
+      at:
+        ref: pt_1
+      gesture: circle
+    speak: 'Same child, same trial, same three QALYs: four million per QALY becomes three, and nothing about the medicine changed.'
+  - quiz:
+      intro: A quick check.
+      question: Moving to the societal ledger, what happened to ΔE, the QALYs gained?
+      choices:
+        - It rose
+        - It was unchanged
+        - It fell
+      correct: 2
+      right: ΔE is unchanged — perspective decides which costs are counted, not how much health is gained.
+      wrong: Only the cost side moved; the health gain measured in the trial is the same either way.
+  - highlight:
+      target:
+        - wtp_line
+      effect: glow
+    speak: Here the drop changes no decision — three million still dwarfs the line — but for the quiet, high-volume technologies that sit near it, that same quarter is the whole difference between yes and no.
+    delivery: grave
+  - clear:
+      keep:
+        - x_axis
+        - y_axis
+        - wtp_line
+        - wtp_label
+        - lambda_label
+        - pt_0
+        - pt_label_0
+        - pt_1
+        - pt_label_1
+        - claim_a
+        - claim_b
+    speak: Keep both points, and follow the money that made the lower one possible.
+  - focus:
+      target:
+        - pt_0
+        - pt_label_0
+    speak: 'The hospital never sees it: NAV carries the sick pay, the municipality the home care, the family the hours — the hospital still signs for twelve million.'
+  - quiz:
+      question: Why doesn't the societal saving relieve the hospital's budget?
+      choices:
+        - The saving is speculative
+        - 'It lands in other budgets: NAV, the municipality, the family'
+        - It arrives only after the patent expires
+      correct: 2
+      right: The money is real, but it accrues to NAV, municipal care and family time — never to the account that buys the drug.
+      wrong: The saving is real enough; it simply lands in budgets the hospital does not hold.
+  - draw:
+      - strike_a
+    speak: So the intuition fails — the arithmetic never contradicted itself, the frame around it did.
+  - draw:
+      - box_b
+    speak: 'Two honest ledgers, two verdicts: picking the ledger is already picking whose costs count, and whose quietly don''t.'
+level: basic
+---
+title: The productivity argument and its critics
+voice: male
+domain:
+  x:
+    - 0
+    - 1
+  'y':
+    - 0
+    - 300000
+elements:
+  - id: claim_a
+    type: text
+    text: 'A: "Production gained is just another cost item."'
+    x: 500
+    'y': 470
+    font_size: 28
+  - id: strike_a
+    type: annotation
+    target: claim_a
+    kind: strike
+  - id: claim_b
+    type: text
+    text: 'B: "Counting it prices patients by their wages."'
+    x: 500
+    'y': 330
+    font_size: 28
+  - id: ax
+    type: axes
+    x_label: ΔE (QALYs gained)
+    y_label: ΔC (kr)
+  - id: thresh
+    type: curve
+    expr: 275000*x
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_thresh
+    type: label
+    text: λ ≈ 275 000 kr/QALY
+    attach_to: thresh
+    side: above
+    style:
+      color: '#8f887c'
+  - id: p_payer
+    type: point
+    at:
+      x: 0.5
+      'y': 200000
+    style:
+      color: '#b5482e'
+  - id: label_payer
+    type: label
+    text: 'Health payer: 400 000 kr/QALY'
+    attach_to: p_payer
+    side: right
+    style:
+      color: '#b5482e'
+  - id: p_soc58
+    type: point
+    at:
+      x: 0.5
+      'y': 110000
+    style:
+      color: '#2f6b8f'
+  - id: arr_prod
+    type: arrow
+    from:
+      ref: p_payer
+    to:
+      ref: p_soc58
+    style:
+      color: '#2f6b8f'
+  - id: label_prod
+    type: label
+    text: − 90 000 kr production regained
+    attach_to: arr_prod
+    side: left
+    style:
+      color: '#2f6b8f'
+  - id: label_soc58
+    type: label
+    text: 'Societal, age 58: 220 000'
+    attach_to: p_soc58
+    side: right
+    style:
+      color: '#2f6b8f'
+  - id: p_friction
+    type: point
+    at:
+      x: 0.5
+      'y': 175000
+    style:
+      color: '#8a5fa8'
+  - id: label_friction
+    type: label
+    text: 'Friction cost: 350 000'
+    attach_to: p_friction
+    side: left
+    style:
+      color: '#8a5fa8'
+  - id: label_75
+    type: label
+    text: 'Age 75, retired: still 400 000'
+    attach_to: p_payer
+    side: above
+commands:
+  - draw:
+      - claim_a
+    speak: Now that we have widened the frame item by item, one item does most of the fighting — the patient's return to work — and one camp says it is nothing special, just another resource line.
+  - draw:
+      - claim_b
+    speak: The other camp answers that counting it quietly prices patients by their wages, and decides who gets treated.
+  - clear: {}
+    speak: Both sound reasonable, so let's settle it with one operation and one plane.
+    delivery: brisk
+  - draw:
+      - ax
+  - draw:
+      - thresh
+      - label_thresh
+    speak: The dashed line is our threshold, lambda — around 275,000 kroner per QALY at low severity; above it we displace more health than we create.
+  - pause: 0.3
+  - draw:
+      - p_payer
+      - label_payer
+    speak: 'Take a rehabilitation package after hip replacement, in stylised numbers: 200,000 kroner of hospital resources for half a QALY — an ICER of 400,000, sitting well above the line.'
+  - pause: 0.3
+  - draw:
+      - arr_prod
+      - label_prod
+      - p_soc58
+      - label_soc58
+    speak: 'Our patient is 58 and goes back to work: 90,000 kroner of production regained, subtracted from the numerator, and the very same operation drops under the threshold at 220,000.'
+  - quiz:
+      intro: A quick check.
+      question: Adding the return to work changed which part of the ICER?
+      choices:
+        - ΔE — the QALYs gained
+        - ΔC — the numerator
+        - The threshold λ
+      correct: 2
+      right: 'It moved ΔC: the health gain is untouched, so the dot fell straight down.'
+      wrong: The dot moved vertically only — nobody gained extra health from the wage.
+  - highlight:
+      target:
+        - arr_prod
+      effect: glow
+    speak: 'The first objection is double counting: if the people who valued this health state were already imagining lost income, the QALY has priced that loss once already.'
+  - draw:
+      - p_friction
+      - label_friction
+    speak: The second is arithmetic — Koopmanschap's friction-cost method assumes a replacement worker arrives within months, so only a fraction of the production counts, and the dot climbs back above the line.
+  - pause: 0.4
+  - draw:
+      - label_75
+    speak: 'The third is the sharpest: same operation, same half QALY, but the patient is 75 and retired — there is nothing to subtract, so the dot never moves.'
+  - highlight:
+      target:
+        - p_payer
+      effect: glow
+    speak: Identical need, identical health gain, opposite verdicts — and the thing that differs is a wage, not a QALY.
+    delivery: grave
+  - quiz:
+      question: Two patients, same operation, same half QALY. Why does only the younger one pass?
+      choices:
+        - He gains more health
+        - His wages offset ΔC
+        - His operation is cheaper
+      correct: 2
+      right: Only his return to work subtracts from the numerator; the health gain is identical.
+      wrong: The health gain and the hospital's bill are the same — what differs is the production counted in ΔC.
+  - focus:
+      target:
+        - p_payer
+        - label_75
+    speak: That is why Norway's priority-setting framework declines to let production gains weigh on the verdict — the losers from that choice are where this series ends.
+  - clear: {}
+  - show:
+      - claim_a
+      - claim_b
+    speak: So which of our two claims survived the figure?
+  - draw:
+      - strike_a
+    speak: 'Not the first: including production is never neutral bookkeeping, because it re-ranks patients whose health gain is exactly the same.'
+  - speak: Whose costs count is not an accounting detail — it decides which patients the analysis is even able to favour.
+level: basic
+---
+title: Choosing a perspective in Norway — and naming the losers
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: Same drug, three ledgers
+  x_label: ΔE (QALYs gained)
+  y_label: ΔC (kroner)
+  wtp_threshold: 1000000
+  quadrant_labels: false
+  points:
+    - label: Societal ledger
+      effect: 6
+      cost: 5400000
+    - label: Hospital budget
+      effect: 6
+      cost: 8000000
+    - label: Extended health-payer
+      effect: 6
+      cost: 7200000
+      emphasize: true
+elements:
+  - id: strike_soc
+    type: annotation
+    target: pt_label_0
+    kind: strike
+  - id: box_guide
+    type: annotation
+    target: pt_label_2
+    kind: box
+  - id: p_narrow
+    type: node
+    shape: rect
+    text: Hospital budget only
+  - id: l_muni
+    type: node
+    shape: rect
+    text: Municipalities and families
+    style:
+      color: '#b5482e'
+  - id: e1
+    type: edge
+    from:
+      ref: p_narrow
+    to:
+      ref: l_muni
+    style:
+      color: '#8f887c'
+  - id: p_soc
+    type: node
+    shape: rect
+    text: Full societal base case
+  - id: l_prod
+    type: node
+    shape: rect
+    text: Patients who don't produce
+    style:
+      color: '#b5482e'
+  - id: e2
+    type: edge
+    from:
+      ref: p_soc
+    to:
+      ref: l_prod
+    style:
+      color: '#8f887c'
+  - id: p_ext
+    type: node
+    shape: rect
+    text: Extended health-payer
+  - id: l_displaced
+    type: node
+    shape: rect
+    text: The displaced patients
+    style:
+      color: '#b5482e'
+  - id: e3
+    type: edge
+    from:
+      ref: p_ext
+    to:
+      ref: l_displaced
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+      - title
+    speak: 'Now that we have seen the productivity argument and the case against it, one question is left: which ledger should a Norwegian decision actually open?'
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: Effect gained runs across, extra cost runs up, and this dashed line is the threshold lambda — say one million kroner per QALY for a condition this severe; below it is a buy.
+  - pause: 0.3
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Some say: count every krone wherever it falls. On our stylized Spinraza figures that is six QALYs for five point four million net — nine hundred thousand per QALY, under the line.'
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'Others say: a hospital can only spend what is in its own budget. The same six QALYs then cost eight million — one point three million per QALY, well above it.'
+  - highlight:
+      target:
+        - pt_0
+        - pt_1
+      effect: glow
+    speak: Same drug, same children, same effect, two opposite verdicts — decided by bookkeeping rather than by evidence.
+  - quiz:
+      intro: A quick check before we resolve it.
+      question: What actually differs between those two points?
+      choices:
+        - The QALYs gained
+        - Which costs were counted
+        - The threshold lambda
+      correct: 2
+      right: Only the cost side moved — ΔE is identical, so the perspective alone flipped the verdict.
+      wrong: The effect and the threshold are the same in both — only the cost side changed.
+  - pause: 0.4
+  - draw:
+      - pt_2
+      - pt_label_2
+    speak: 'Norway takes neither pole: the base case uses an extended health-payer perspective — the health service plus municipal care — which lands here, at seven point two million, or one point two million per QALY.'
+  - draw:
+      - box_guide
+    speak: This is the number a Norwegian decision starts from, because the criterion is ressursbruk, resource use — what the health service gives up, not what society gains.
+  - draw:
+      - strike_soc
+    speak: So the fully societal figure is struck from the base case; the priority-setting white paper was explicit that expected production gains must not decide who gets treated.
+    delivery: grave
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: It is not thrown away, though — it comes back as a sensitivity analysis, printed beside the base case so the decision-maker can see what the wider frame would have said.
+  - quiz:
+      question: Where do productivity gains belong in a Norwegian submission?
+      choices:
+        - In the base-case ICER
+        - In a sensitivity analysis beside it
+        - Nowhere at all
+      correct: 2
+      right: They are shown separately as a sensitivity analysis, so they inform without deciding.
+      wrong: They are excluded from the base case, but still reported — as a sensitivity analysis.
+  - clear: {}
+    speak: So the perspective is settled. But every perspective is also a decision about who is allowed to be invisible.
+  - draw:
+      - p_narrow
+      - l_muni
+      - e1
+    speak: Count only the hospital's budget, and a drug that sends a child home looks cheap — the municipality's nurses and the family's unpaid hours were never in the sum.
+  - draw:
+      - p_soc
+      - l_prod
+      - e2
+    speak: 'Count everything, and the weight drifts toward patients who earn: the retired, the disabled and the not-yet-working become the cheapest people to leave untreated.'
+  - draw:
+      - p_ext
+      - l_displaced
+      - e3
+    speak: And Norway's middle path has its own quiet loser — the budget is fixed, so every krone approved displaces care for patients nobody ever names.
+  - quiz:
+      question: Under a narrow hospital-budget perspective, who absorbs the costs that disappear from the sum?
+      choices:
+        - Nobody — they are genuine savings
+        - Municipalities and families
+        - The manufacturer
+      correct: 2
+      right: The care does not vanish; it moves to municipal services and to unpaid relatives, outside the ledger being read.
+      wrong: The care still happens — it is simply paid for by municipalities and families instead.
+  - highlight:
+      target:
+        - l_muni
+        - l_prod
+        - l_displaced
+      effect: glow
+    speak: 'Across these four parts: perspective is not a technical setting — it decides which costs are real, and every choice hands the bill to someone who is not in the room.'
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: What is a QALY really claiming about you?
+    x: 500
+    'y': 390
+    font_size: 40
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 6 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: What is a QALY really claiming about you?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

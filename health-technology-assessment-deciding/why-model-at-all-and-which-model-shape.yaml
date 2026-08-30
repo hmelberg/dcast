@@ -1,0 +1,950 @@
+playlist:
+  title: Why model at all - and which model shape fits which problem?
+---
+title: The Missing Thirty-Seven Years
+voice: male
+domain:
+  x:
+    - 0
+    - 40
+  'y':
+    - 0
+    - 100
+elements:
+  - id: ax
+    type: axes
+    x_label: Age (years)
+    y_label: Surviving (%)
+  - id: c_untreated_trial
+    type: curve
+    expr: 100*exp(-0.5*x)
+    x_from: 0
+    x_to: 3
+    style:
+      color: '#b5482e'
+  - id: label_untreated
+    type: label
+    text: Natural history, no treatment
+    attach_to: c_untreated_trial
+    side: below-left
+    style:
+      color: '#b5482e'
+  - id: c_treated_trial
+    type: curve
+    expr: 100*exp(-0.09*x)
+    x_from: 0
+    x_to: 3
+    style:
+      color: '#2f6b8f'
+  - id: label_treated
+    type: label
+    text: Nusinersen, trial data
+    attach_to: c_treated_trial
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: gain_trial
+    type: region
+    between:
+      - c_treated_trial
+      - c_untreated_trial
+    x_from: 0
+    x_to: 3
+    style:
+      fill: '#87a878'
+  - id: label_observed
+    type: label
+    text: 'Measured: 3 years'
+    attach_to: gain_trial
+    side: below
+    style:
+      color: '#87a878'
+  - id: trial_line
+    type: arrow
+    from:
+      x: 3
+      'y': 0
+    to:
+      x: 3
+      'y': 100
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_trial
+    type: label
+    text: Trial ends
+    attach_to: trial_line
+    side: right
+    style:
+      color: '#8f887c'
+  - id: c_untreated_ext
+    type: curve
+    expr: 100*exp(-0.5*x)
+    x_from: 3
+    x_to: 40
+    style:
+      color: '#b5482e'
+      dash: true
+  - id: c_treated_ext
+    type: curve
+    expr: 76*exp(-0.02*(x-3))
+    x_from: 3
+    x_to: 40
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: label_hold
+    type: label
+    text: If the effect holds
+    attach_to: c_treated_ext
+    side: above-right
+    style:
+      color: '#2f6b8f'
+  - id: c_treated_pess
+    type: curve
+    expr: 76*exp(-0.06*(x-3))
+    x_from: 3
+    x_to: 40
+    style:
+      color: '#d0865f'
+      dash: true
+  - id: label_wane
+    type: label
+    text: If the effect wanes
+    attach_to: c_treated_pess
+    side: below-right
+    style:
+      color: '#d0865f'
+  - id: gain_model
+    type: region
+    between:
+      - c_treated_ext
+      - c_untreated_ext
+    x_from: 3
+    x_to: 40
+    style:
+      fill: '#f2c14e'
+  - id: label_modelled
+    type: label
+    text: 'Modelled: 37 years'
+    attach_to: gain_model
+    side: above
+    style:
+      color: '#3d3833'
+  - id: mark_model
+    type: annotation
+    target: label_modelled
+    kind: box
+commands:
+  - draw:
+      - ax
+    speak: Over these four parts we ask why health economists build models at all, and which shape of model fits which problem — and the answer starts with a decision someone had to make on evidence that ran out early.
+    voice: a
+  - draw:
+      - c_untreated_trial
+      - label_untreated
+    speak: Nusinersen, for spinal muscular atrophy. Untreated, the infantile form is brutal — most children die or need permanent ventilation within a couple of years.
+    voice: b
+  - pause: 0.3
+  - draw:
+      - c_treated_trial
+      - label_treated
+    speak: 'With the drug the trial saw something real: children alive, and hitting motor milestones nobody expected them to hit.'
+    voice: a
+  - draw:
+      - gain_trial
+      - label_observed
+    speak: That thin green sliver is the benefit somebody actually measured, with patients, under a protocol.
+    voice: b
+  - draw:
+      - trial_line
+      - label_trial
+    speak: And here the evidence simply stops. Three years, and the data runs out.
+    voice: a
+    delivery: grave
+  - pause: 0.5
+  - point:
+      at:
+        x: 22
+        'y': 55
+      gesture: circle
+    speak: The child doesn't stop at three, though. If the drug does what we hope, she's still out here at forty.
+    voice: b
+  - highlight:
+      target:
+        - gain_trial
+      effect: glow
+    speak: So counting only the sliver isn't the cautious choice — it quietly assumes the benefit ends the day the trial ends.
+    voice: a
+  - pause: 0.3
+  - draw:
+      - c_untreated_ext
+    speak: Extrapolating the untreated arm barely needs a model — it's already on the floor.
+    voice: b
+  - draw:
+      - c_treated_ext
+      - label_hold
+    speak: 'The treated line is the whole argument: assume the effect holds, and it drifts down gently for another thirty-seven years.'
+    voice: a
+  - draw:
+      - c_treated_pess
+      - label_wane
+    speak: Or assume it wanes — same drug, same three years of data, a very different life.
+    voice: b
+  - draw:
+      - gain_model
+      - label_modelled
+    speak: Everything between those lines is QALYs, and nearly all of it lies past the last observation.
+    voice: a
+  - highlight:
+      target:
+        - gain_model
+      effect: glow
+    speak: Three years of data doing the work of forty years of life — quite the overtime shift for one dataset.
+    voice: b
+  - pause: 0.3
+  - point:
+      at:
+        x: 34
+        'y': 25
+      gesture: tap
+    speak: Discounting at four percent softens the far end — a QALY at forty is worth about a fifth of one today — but softened is not deleted.
+    voice: a
+  - highlight:
+      target:
+        - c_treated_ext
+        - c_treated_pess
+      effect: pulse
+    speak: When Beslutningsforum said no in 2017 and yes in 2018 with an age limit, the health they were arguing over was almost entirely out here, in the dashed part.
+    voice: b
+  - draw:
+      - mark_model
+    speak: So a model isn't evidence smuggled in — it's the assumption written down where someone can attack it.
+    voice: a
+    delivery: grave
+  - speak: 'You can now see the real question: not whether to extrapolate, but with which structure — and next time we ask when a simple tree is strong enough.'
+    voice: b
+level: advanced
+---
+title: When a Tree Is Enough
+level: advanced
+voice: male
+template: decision_tree
+params:
+  root:
+    id: choice
+    type: decision
+    label: Hip, age 68
+    children:
+      - label: Hip replacement
+        node:
+          id: hip
+          type: chance
+          label: Operate
+          children:
+            - label: Uncomplicated
+              probability: 0.92
+              node:
+                id: ok
+                type: terminal
+                label: New hip works
+                payoff: 8.5
+                cost: 120000
+            - label: Infection / revision
+              probability: 0.08
+              node:
+                id: comp
+                type: terminal
+                label: Revision surgery
+                payoff: 6.8
+                cost: 260000
+      - label: Current care
+        node:
+          id: cons
+          type: terminal
+          label: Physio + painkillers
+          payoff: 6.2
+          cost: 30000
+elements:
+  - id: ev_hip
+    type: label
+    text: E[E] = 8.36 QALYs · E[C] = kr 131 000
+    attach_to: node_hip
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: ev_cons
+    type: label
+    text: 6.2 QALYs · kr 30 000
+    attach_to: node_cons
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: icer_note
+    type: label
+    text: ΔE = 2.16 · ΔC = kr 101 000 → ICER ≈ kr 47 000/QALY
+    attach_to: node_choice
+    side: below-right
+    style:
+      color: '#b5482e'
+  - id: mark_icer
+    type: annotation
+    target: icer_note
+    kind: box
+  - id: t_title
+    type: text
+    text: A tree is enough when…
+    x: 500
+    'y': 610
+    font_size: 34
+  - id: t1
+    type: text
+    text: 1.  Events happen once, in a fixed order
+    x: 500
+    'y': 510
+    font_size: 27
+  - id: t2
+    type: text
+    text: 2.  No state can be re-entered
+    x: 500
+    'y': 445
+    font_size: 27
+  - id: t3
+    type: text
+    text: 3.  The rest of life sums into one number at each tip
+    x: 500
+    'y': 380
+    font_size: 27
+  - id: punch
+    type: text
+    text: Length is not the problem. Repetition is.
+    x: 500
+    'y': 250
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: punch_box
+    type: annotation
+    target: punch
+    kind: box
+commands:
+  - draw:
+      - node_choice
+      - label_choice
+    speak: Now that we've seen the thirty-seven years the trial never watched, the obvious worry is that long horizons demand heavy machinery — so let's take a case where one square and two branches settle it.
+    voice: a
+  - draw:
+      - edge_choice_hip
+      - branchlabel_choice_hip
+      - node_hip
+      - label_hip
+    speak: Our patient is sixty-eight with an end-stage arthritic hip. Replace it — and the circle marks where chance takes over from us.
+    voice: b
+  - draw:
+      - edge_hip_ok
+      - branchlabel_hip_ok
+      - node_ok
+      - label_ok
+      - payoff_ok
+    speak: 'Ninety-two out of a hundred go smoothly: eight and a half discounted QALYs over the remaining years, for about a hundred and twenty thousand kroner.'
+    voice: a
+  - pause: 0.3
+  - draw:
+      - edge_hip_comp
+      - branchlabel_hip_comp
+      - node_comp
+      - label_comp
+      - payoff_comp
+    speak: The other eight percent get an infection or a revision — six point eight QALYs, and the cost more than doubles, to two hundred and sixty thousand.
+    voice: b
+  - pause: 0.3
+  - draw:
+      - edge_choice_cons
+      - branchlabel_choice_cons
+      - node_cons
+      - label_cons
+      - payoff_cons
+    speak: 'And current care as comparator: physiotherapy and painkillers, thirty thousand kroner, six point two QALYs — the arthritis simply stays.'
+    voice: a
+  - point:
+      at:
+        ref: node_hip
+      gesture: circle
+    speak: Everything right of that circle happens once, in one order, and is then finished with.
+    voice: b
+  - draw:
+      - ev_hip
+    speak: 'So we fold it back: nought point nine two times eight point five, plus nought point nought eight times six point eight — 8.36 QALYs, at an expected hundred and thirty-one thousand kroner.'
+    voice: a
+  - draw:
+      - ev_cons
+    speak: Nothing to fold on the other side — six point two QALYs for thirty thousand, flat.
+    voice: b
+  - draw:
+      - icer_note
+      - mark_icer
+    speak: Delta E of 2.16 QALYs, delta C of about a hundred and one thousand — an ICER near forty-seven thousand kroner per QALY.
+    voice: a
+    delivery: grave
+  - highlight:
+      target:
+        - icer_note
+      effect: glow
+    speak: Spectacular value, arrived at with arithmetic you could do on a napkin — and precisely the sort of number that never reaches a front page, unlike our expensive friend nusinersen.
+    voice: b
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - t_title
+      - t1
+    speak: So a tree suffices when the events happen once, in a fixed order.
+    voice: a
+  - draw:
+      - t2
+    speak: When no state can be re-entered — a replaced hip does not quietly go back to being arthritic on a Tuesday.
+    voice: b
+  - draw:
+      - t3
+    speak: And when everything after the last branch collapses into one number sitting at the tip.
+    voice: a
+  - draw:
+      - punch
+      - punch_box
+    speak: 'Which exposes the thing people get backwards: that tree cheerfully carried forty years of life. The horizon was never what defeated it.'
+    voice: b
+    delivery: grave
+  - highlight:
+      target:
+        - punch
+      effect: pulse
+    speak: Repetition is — the moment a patient can fall ill, recover and fall ill again, the tree sprouts branches faster than she can live them, and that is where we go next.
+    voice: a
+---
+title: When Disease Loops Back
+level: advanced
+voice: male
+template: markov_model
+params:
+  title: 'SMA on nusinersen: one year at a time'
+  states:
+    - No milestones
+    - Sits
+    - Dead
+  transitions:
+    - from: No milestones
+      to: Sits
+      label: '0.20'
+    - from: Sits
+      to: No milestones
+      label: '0.05'
+    - from: No milestones
+      to: Dead
+      label: '0.10'
+    - from: Sits
+      to: Dead
+      label: '0.02'
+  self_loops:
+    - state: No milestones
+      label: '0.70'
+    - state: Sits
+      label: '0.93'
+  layout: chain
+elements:
+  - id: p_head
+    type: text
+    text: P — one-year transition probabilities
+    x: 500
+    'y': 650
+    font_size: 32
+  - id: h_no
+    type: text
+    text: 'to: No milestones'
+    x: 470
+    'y': 580
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: h_sits
+    type: text
+    text: 'to: Sits'
+    x: 650
+    'y': 580
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: h_dead
+    type: text
+    text: 'to: Dead'
+    x: 800
+    'y': 580
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: rl_no
+    type: text
+    text: No milestones
+    x: 250
+    'y': 510
+    font_size: 24
+  - id: rl_sits
+    type: text
+    text: Sits
+    x: 250
+    'y': 440
+    font_size: 24
+  - id: rl_dead
+    type: text
+    text: Dead
+    x: 250
+    'y': 370
+    font_size: 24
+  - id: c00
+    type: text
+    text: '0.70'
+    x: 470
+    'y': 510
+    font_size: 28
+  - id: c01
+    type: text
+    text: '0.20'
+    x: 650
+    'y': 510
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: c02
+    type: text
+    text: '0.10'
+    x: 800
+    'y': 510
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: c10
+    type: text
+    text: '0.05'
+    x: 470
+    'y': 440
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: c11
+    type: text
+    text: '0.93'
+    x: 650
+    'y': 440
+    font_size: 28
+  - id: c12
+    type: text
+    text: '0.02'
+    x: 800
+    'y': 440
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: c20
+    type: text
+    text: '0'
+    x: 470
+    'y': 370
+    font_size: 28
+  - id: c21
+    type: text
+    text: '0'
+    x: 650
+    'y': 370
+    font_size: 28
+  - id: c22
+    type: text
+    text: '1'
+    x: 800
+    'y': 370
+    font_size: 28
+  - id: note_rows
+    type: text
+    text: Every row sums to 1 — everyone is somewhere, every year
+    x: 500
+    'y': 300
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: note_tail
+    type: text
+    text: 'Trial: 3 cycles observed  ·  Model: 40 cycles  ·  37 come from P'
+    x: 500
+    'y': 215
+    font_size: 28
+  - id: mark_tail
+    type: annotation
+    target: note_tail
+    kind: box
+  - id: synth
+    type: text
+    text: If the disease loops back, the model must loop back too
+    x: 500
+    'y': 120
+    font_size: 30
+    style:
+      color: '#2f6b8f'
+commands:
+  - draw:
+      - title
+      - state_no_milestones
+      - state_label_no_milestones
+    speak: Now that we have seen a tree handle a one-shot choice, watch what happens when the disease refuses to stay where the tree put it.
+    voice: a
+  - draw:
+      - state_sits
+      - state_label_sits
+    speak: 'Our child with spinal muscular atrophy on nusinersen: down here, no motor milestones; up here, sitting unsupported.'
+    voice: b
+  - draw:
+      - state_dead
+      - state_label_dead
+    speak: And the third state, which is the one guest the hotel never checks out of.
+    voice: a
+  - pause: 0.3
+  - draw:
+      - t_0
+      - t_label_0
+    speak: In a year, twenty percent of children in the lower state gain sitting — that arrow upward is the drug's entire claim.
+    voice: b
+  - draw:
+      - t_1
+      - t_label_1
+    speak: But five percent slide back down, and a decision tree simply cannot draw that arrow; its branches only ever point forward.
+    voice: a
+  - draw:
+      - t_2
+      - t_label_2
+      - t_3
+      - t_label_3
+    speak: Death takes ten percent from the worse state each year, two percent from the better one.
+    voice: b
+  - draw:
+      - loop_no_milestones
+      - loop_label_no_milestones
+      - loop_sits
+      - loop_label_sits
+    speak: And the rest just stay put — the self-loops, which quietly hold most of the probability.
+    voice: a
+  - highlight:
+      target:
+        - state_dead
+        - state_label_dead
+      effect: glow
+    speak: 'Dead is absorbing: arrows in, none out — that''s what lets the model run for forty years and still stop honestly.'
+    voice: b
+  - pause: 0.5
+  - clear:
+      keep: []
+  - draw:
+      - p_head
+    speak: Strip the picture away, and every arrow you just drew is only a number in a table.
+    voice: a
+  - draw:
+      - h_no
+      - h_sits
+      - h_dead
+      - rl_no
+      - rl_sits
+      - rl_dead
+    speak: Rows are where you are now, columns where you are one cycle later — and the cycle here is one year.
+    voice: b
+  - draw:
+      - c00
+      - c01
+      - c02
+    speak: 'From no milestones: seventy percent stay, twenty gain sitting, ten die.'
+    voice: a
+  - draw:
+      - c10
+      - c11
+      - c12
+    speak: 'From sitting: ninety-three stay, five slip back, two die.'
+    voice: b
+  - draw:
+      - c20
+      - c21
+      - c22
+      - note_rows
+    speak: Dead stays dead — and every row sums to one, because nobody falls out of the model.
+    voice: a
+  - pause: 0.4
+  - draw:
+      - note_tail
+      - mark_tail
+    speak: Multiply the cohort by P forty times and you have the forty-year life nobody ever watched.
+    voice: b
+  - highlight:
+      target:
+        - note_tail
+      effect: glow
+    speak: Three cycles came from the trial, thirty-seven from this table — which is why the nusinersen ICER was driven less by the data than by the tail P generated.
+    voice: a
+    delivery: grave
+  - draw:
+      - synth
+    speak: So a tree when the story ends, a Markov when it recurs — and the price of the loop is that most of your answer now lives in P.
+    voice: b
+---
+title: Choosing the Simplest Model That Survives Scrutiny
+level: advanced
+voice: male
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 100
+elements:
+  - id: ax
+    type: axes
+    x_label: 'Realism: how much patient history the model carries'
+    y_label: Transparency
+  - id: p_tree
+    type: point
+    at:
+      x: 18
+      'y': 78
+    style:
+      color: '#2f6b8f'
+  - id: l_tree
+    type: label
+    text: Decision tree
+    attach_to: p_tree
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: note_tree
+    type: label
+    text: One-off event, short horizon
+    attach_to: p_tree
+    side: below-right
+  - id: p_markov
+    type: point
+    at:
+      x: 50
+      'y': 50
+    style:
+      color: '#2f6b8f'
+  - id: l_markov
+    type: label
+    text: Markov model
+    attach_to: p_markov
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: mark_markov
+    type: annotation
+    target: l_markov
+    kind: box
+  - id: note_markov
+    type: label
+    text: States and cycles, no memory
+    attach_to: p_markov
+    side: below-right
+  - id: p_des
+    type: point
+    at:
+      x: 82
+      'y': 20
+    style:
+      color: '#2f6b8f'
+  - id: l_des
+    type: label
+    text: DES / individual-level
+    attach_to: p_des
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: note_des
+    type: label
+    text: Queues, capacity, full histories
+    attach_to: p_des
+    side: below-left
+  - id: a_tm
+    type: arrow
+    from:
+      ref: p_tree
+    to:
+      ref: p_markov
+    curved: true
+    style:
+      color: '#8f887c'
+  - id: a_md
+    type: arrow
+    from:
+      ref: p_markov
+    to:
+      ref: p_des
+    curved: true
+    style:
+      color: '#8f887c'
+  - id: transparency_line
+    type: curve
+    expr: 92 - 0.8*x
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_transp
+    type: label
+    text: Transparency falls as realism rises
+    attach_to: transparency_line
+    side: above
+    style:
+      color: '#8f887c'
+  - id: rule_text
+    type: text
+    text: Climb a rung only when the question forces you.
+    x: 500
+    'y': 700
+    font_size: 30
+    style:
+      color: '#b5482e'
+commands:
+  - draw:
+      - ax
+    speak: 'Now that we''ve seen how disease loops back on itself, the last question is the practical one: which model shape do you reach for, and what does each one cost you?'
+    voice: a
+  - draw:
+      - p_tree
+      - l_tree
+    speak: 'First rung, and the most transparent object we own: the decision tree. Spinraza or standard care, a branch, a probability, a payoff.'
+    voice: b
+  - draw:
+      - note_tree
+    speak: Which is genuinely enough when the story happens once inside the trial window — an operation, a scan result, a single outcome.
+    voice: a
+  - pause: 0.3
+  - draw:
+      - p_markov
+      - a_tm
+      - l_markov
+    speak: But our patient lives forty years and the trial ran three. Ask a tree to handle one event a year for forty years and it needs two to the fortieth branches —
+    voice: b
+  - point:
+      at:
+        ref: p_tree
+      gesture: tap
+    speak: — one point one trillion of them. Nobody is drawing that whiteboard.
+    voice: a
+  - draw:
+      - note_markov
+    speak: The Markov model folds that trillion back into a handful of states and one transition matrix, applied cycle after cycle across the missing thirty-seven years.
+    voice: a
+  - focus:
+      target:
+        - p_markov
+        - l_markov
+        - note_markov
+    speak: And what you hand over for that is memory — a state doesn't know whether this is your first relapse or your fourth; everyone standing in it gets the same future.
+    voice: b
+  - pause: 0.3
+  - draw:
+      - p_des
+      - a_md
+      - l_des
+    speak: 'So you climb again: discrete event simulation, or individual-level models, where every simulated patient carries their own history and their own clock.'
+    voice: a
+  - draw:
+      - note_des
+    speak: Which is what you need when the answer depends on the queue — if the country has one intrathecal injection room and it's booked until Thursday, no state diagram will ever tell you that.
+    voice: b
+  - highlight:
+      target:
+        - p_des
+        - l_des
+      effect: glow
+    speak: Borrowed technology, incidentally — discrete event simulation came out of operations research, modelling factory floors and airport queues long before anyone pointed it at a hospital.
+    voice: a
+  - draw:
+      - transparency_line
+      - label_transp
+    speak: 'And here is the bill for climbing: all three rungs sit on one falling line — every step right buys realism and spends transparency.'
+    voice: b
+  - focus:
+      target:
+        - p_des
+        - note_des
+        - transparency_line
+    speak: Down here you're running thousands of patients, re-running them for every parameter draw, and handing Beslutningsforum a model that maybe three people in the room can actually check.
+    voice: a
+    delivery: grave
+  - pause: 0.4
+  - clear:
+      keep:
+        - ax
+        - transparency_line
+        - label_transp
+        - p_tree
+        - l_tree
+        - p_markov
+        - l_markov
+        - p_des
+        - l_des
+    speak: Right — strip it back to the choosing rule.
+    voice: b
+    delivery: brisk
+  - draw:
+      - rule_text
+    speak: 'Climb one rung only when the question forces you: when time, recurrence, queues or individual histories would otherwise change the ICER.'
+    voice: a
+  - draw:
+      - mark_markov
+    speak: 'For a chronic disease over a forty-year horizon, discounted at four percent, that lands you squarely on the middle rung — which is exactly what we build next time: states, cycles, transitions.'
+    voice: b
+  - highlight:
+      target:
+        - rule_text
+      effect: pulse
+    speak: 'Across all four parts, then: a model isn''t a claim about reality, it''s the cheapest structure that carries a three-year trial past its last follow-up without lying — and the simplest one that survives scrutiny wins.'
+    voice: a
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Building a Markov model: states, cycles, transitions and the long tail'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 14 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Building a Markov model: states, cycles, transitions and the long tail'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

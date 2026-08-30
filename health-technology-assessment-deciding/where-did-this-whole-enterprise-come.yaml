@@ -1,0 +1,193 @@
+playlist:
+  title: Where did this whole enterprise come from?
+---
+title: Cochrane's Awkward Question
+voice: male
+elements:
+  - id: root
+    type: node
+    shape: rect
+    text: A new treatment
+  - id: q_works
+    type: node
+    shape: rect
+    text: Does it work?
+    style:
+      color: '#2f6b8f'
+  - id: q_all
+    type: node
+    shape: rect
+    text: Can everyone get it?
+    style:
+      color: '#b5482e'
+  - id: arr1
+    type: arrow
+    from:
+      ref: root
+    to:
+      ref: q_works
+    curved: true
+    style:
+      color: '#2f6b8f'
+  - id: lbl_eff
+    type: label
+    text: Effectiveness
+    attach_to: arr1
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: arr2
+    type: arrow
+    from:
+      ref: root
+    to:
+      ref: q_all
+    curved: true
+    style:
+      color: '#b5482e'
+  - id: lbl_effic
+    type: label
+    text: Efficiency
+    attach_to: arr2
+    side: below
+    style:
+      color: '#b5482e'
+  - id: cochrane
+    type: portrait
+    of: Archie Cochrane
+    cameo: true
+  - id: case_label
+    type: label
+    text: 'Case: the coronary care unit, 1971'
+    attach_to: root
+    side: above
+  - id: ccu_works
+    type: label
+    text: 'Trial: no better than home care'
+    attach_to: q_works
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: ccu_all
+    type: label
+    text: A unit in every hospital — beds, staff, ambulances
+    attach_to: q_all
+    side: below
+    style:
+      color: '#b5482e'
+  - id: hta_label
+    type: label
+    text: HTA starts here
+    attach_to: q_all
+    side: right
+  - id: mark_hta
+    type: annotation
+    target: hta_label
+    kind: box
+commands:
+  - draw:
+      - root
+    speak: 'Three moments built this field — an idea, an institution and a scandal. Today, the idea: one awkward question asked about any new treatment.'
+  - draw:
+      - arr1
+      - lbl_eff
+      - q_works
+    speak: The first question medicine has always asked is this one — does it work? Effectiveness.
+  - pause: 0.3
+  - draw:
+      - arr2
+      - lbl_effic
+      - q_all
+    speak: 'The second, it mostly didn''t ask: could a health service actually give it to everyone who might benefit? Efficiency.'
+    delivery: grave
+  - pause: 0.5
+  - draw:
+      - cochrane
+    speak: The man who put those two side by side was Archie Cochrane, in a slim 1972 book called Effectiveness and Efficiency.
+  - speak: He came to it the hard way. As a young doctor he spent the war as a prisoner, medical officer in German prisoner-of-war camps, treating hundreds of sick men with almost no drugs.
+    delivery: soft
+  - speak: He wrote later that he had never heard of a randomised trial then — but he knew there was no real evidence that anything he offered helped, and he feared he had shortened some of his friends' lives by treating them.
+    delivery: soft
+  - erase:
+      - cochrane
+    speak: So when he wrote his book he wanted evidence — and then he wanted something more on top of it.
+  - draw:
+      - case_label
+    speak: 'His case in point, and ours, is a piece of technology every hospital wanted: the coronary care unit.'
+  - highlight:
+      target:
+        - q_works
+      effect: glow
+    speak: Through the sixties these units spread fast — monitors, defibrillators, trained staff — on the entirely reasonable assumption that a heart attack is safer in hospital than at home.
+  - draw:
+      - ccu_works
+    speak: Then a trial in Bristol randomised several hundred men with suspected heart attacks either to a coronary care unit or to their own bed, looked after by their family doctor. Survival in hospital was no better.
+    delivery: grave
+  - point:
+      at:
+        ref: ccu_works
+      gesture: underline
+    speak: Cochrane liked to tell how he first showed cardiologists those results with the two columns swapped — they demanded the home-care arm be stopped at once. Then he handed them the real table, and, well… the room went quiet.
+  - pause: 0.4
+  - draw:
+      - ccu_all
+    speak: 'Now his second question, the one that makes this a field about money: a coronary care unit in every district hospital means beds, staff and ambulances — bought, and staffed, forever.'
+  - highlight:
+      target:
+        - q_all
+      effect: glow
+    speak: And every one of those beds comes from somewhere — from care we already know works, for patients nobody will ever name.
+  - draw:
+      - hta_label
+      - mark_hta
+    speak: Cochrane actually named three tests — effectiveness, efficiency, and equality — and that third word comes back in part three, when Britain discovers it is rationing by postcode.
+  - speak: 'So the founding idea is this: proving a treatment works settles only half the decision — the other half is whether a health service can buy it for everyone who could benefit.'
+    delivery: grave
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Norway's priority-setting system, criterion by criterion
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 4 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Norway''s priority-setting system, criterion by criterion'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

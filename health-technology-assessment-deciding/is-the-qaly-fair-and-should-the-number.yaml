@@ -1,0 +1,235 @@
+playlist:
+  title: Is the QALY fair - and should the number decide?
+---
+chapter: The case against the QALY
+---
+title: Two patients, one threshold
+voice: female
+template: cost_effectiveness_plane
+params:
+  title: Two patients, one threshold
+  x_label: Incremental effect (ΔE, QALYs)
+  y_label: Incremental cost (ΔC, million kr)
+  wtp_threshold: 0.275
+  quadrant_labels: false
+  points:
+    - label: Nusinersen (SMA)
+      effect: 5
+      cost: 20
+      emphasize: true
+    - label: Hip replacement
+      effect: 2
+      cost: 0.12
+elements:
+  - id: v_no
+    type: text
+    text: 'February 2018:  NO'
+    x: 270
+    'y': 600
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: v_yes
+    type: text
+    text: 'November 2018:  YES'
+    x: 730
+    'y': 600
+    font_size: 32
+    style:
+      color: '#2f6b8f'
+  - id: v_yes_sub
+    type: text
+    text: — patients under 18
+    x: 730
+    'y': 555
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: v_change
+    type: text
+    text: 'What changed: a negotiated price, and an age limit.'
+    x: 500
+    'y': 470
+    font_size: 25
+  - id: v_change2
+    type: text
+    text: Not the biology. Not the structure of the sum.
+    x: 500
+    'y': 428
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: claim_a
+    type: text
+    text: “It shuts out the rarest.”
+    x: 255
+    'y': 330
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: claim_b
+    type: text
+    text: “It only shows who pays.”
+    x: 745
+    'y': 330
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: claim_c
+    type: text
+    text: “The number decided.”
+    x: 500
+    'y': 200
+    font_size: 30
+    style:
+      color: '#8a5fa8'
+  - id: strike_c
+    type: annotation
+    target: claim_c
+    kind: strike
+  - id: r_head
+    type: text
+    text: What the next five figures ask
+    x: 500
+    'y': 670
+    font_size: 30
+  - id: r1
+    type: text
+    text: 2 · Does it discriminate by construction?
+    x: 500
+    'y': 580
+    font_size: 24
+  - id: r2
+    type: text
+    text: 3 · What were we doing before it?
+    x: 500
+    'y': 510
+    font_size: 24
+  - id: r3
+    type: text
+    text: 4 · Rescue, rarity, the identified life
+    x: 500
+    'y': 440
+    font_size: 24
+  - id: r4
+    type: text
+    text: 5 · Does MCDA repair it — or relocate it?
+    x: 500
+    'y': 370
+    font_size: 24
+  - id: r5
+    type: text
+    text: '6 · Aid, not machine: what the analyst owes'
+    x: 500
+    'y': 300
+    font_size: 24
+  - id: r_close
+    type: text
+    text: The number frames the choice. It does not make it.
+    x: 500
+    'y': 175
+    font_size: 28
+  - id: r_box
+    type: annotation
+    target: r_close
+    kind: box
+commands:
+  - draw:
+      - title
+      - x_axis
+      - y_axis
+    speak: Over six figures we'll ask whether the QALY is fair — and whether a number should ever be the thing that decides. It starts with two patients and one line.
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'The first: a child with spinal muscular atrophy, treated with nusinersen. Illustrative list-price figures — roughly five quality-adjusted life years gained, at something like twenty million kroner.'
+  - pause: 0.3
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: 'And here''s the line we judge it against: Norway''s benchmark of about 275,000 kroner per good life year, lifted for severity — up to around three times that in the most severe cases.'
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: Even at that most generous, severity-weighted version of the line, this point sits about five times above it.
+  - point:
+      at:
+        ref: pt_label_0
+      gesture: underline
+    speak: 'Though — well, the number the public argues about isn''t the number in the room: Norway''s negotiated price is confidential.'
+    delivery: soft
+  - pause: 0.3
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'Now the second patient: a hip replacement. Same axes, same line… and, hmm, where is it? Practically sitting on the origin.'
+  - camera:
+      center:
+        ref: pt_1
+      zoom: 6
+    speak: Zoom in six times and there it is — about two life years gained for roughly a hundred and twenty thousand kroner, sixty thousand per life year.
+  - point:
+      at:
+        ref: wtp_line
+      gesture: underline
+    speak: 'The threshold now runs well above it: cleared four times over, by the patient nobody writes about.'
+  - camera:
+      reset: true
+    speak: 'Pull back out, and the asymmetry is the lecture: at a scale that shows one patient, the other vanishes — one misses the line by a factor of fifteen, the other clears it by four.'
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - v_no
+    speak: So which of the two is the unfair one? Norway has answered — twice. In February 2018, Beslutningsforum said no to nusinersen.
+  - draw:
+      - v_yes
+      - v_yes_sub
+    speak: Nine months later, the same forum said yes — for patients under eighteen.
+  - draw:
+      - v_change
+      - v_change2
+    speak: Between those meetings a price was renegotiated and an age limit appeared. The biology didn't change, and neither did the structure of the sum.
+  - pause: 0.3
+  - draw:
+      - claim_a
+    speak: 'One reading of that: the arithmetic shuts out the rarest patients by construction — few patients, enormous per-patient cost, no ratio that can ever clear.'
+  - draw:
+      - claim_b
+    speak: 'The other: it shuts out nobody. It just makes visible the patients whose care gets displaced whenever we say yes.'
+  - highlight:
+      target:
+        - claim_a
+        - claim_b
+      effect: glow
+    speak: 'This is genuinely unresolved. In the United States it was settled by statute rather than by economics: federal law bars Medicare from using a cost-per-QALY threshold in coverage decisions — a disability-rights argument written into law.'
+  - draw:
+      - claim_c
+    speak: But there's a third claim in the room, and it's the one this series is really about — that the number decided.
+  - draw:
+      - strike_c
+    speak: The record rules that one out. The same kind of ratio produced both answers; people, meeting twice, produced the difference.
+    delivery: grave
+  - pause: 0.5
+  - clear: {}
+    speak: So the question isn't quite whether the ratio is fair. It's what the ratio is for — and who answers for everything it leaves out.
+    delivery: brisk
+  - draw:
+      - r_head
+      - r1
+      - r2
+    speak: 'Figure two takes the discrimination charge seriously: age, disability, chronic illness, and what the weights do to them. Figure three asks what we did before the QALY — fairer, or merely less visible?'
+  - draw:
+      - r3
+      - r4
+    speak: 'Figure four is where the arithmetic genuinely breaks: the rule of rescue, ultra-rare disease, the identified life we can name against the statistical lives we can''t. Figure five asks whether multi-criteria analysis and deliberation repair that — or just move the judgement somewhere less examined.'
+  - draw:
+      - r5
+    speak: 'And figure six lands where you''ll be standing: if the analysis is a decision aid and not a decision machine, what exactly is the analyst accountable for?'
+  - draw:
+      - r_close
+      - r_box
+    speak: 'Here''s the promise and its limit: nothing in the next five figures will tell you whether the child or the hip should win.'
+  - speak: What they will tell you is this — the threshold line drew the question, twenty million kroner against a hundred and twenty thousand, and the people in the room, twice, drew the answer.
+    delivery: grave
+level: basic

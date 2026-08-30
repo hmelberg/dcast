@@ -1,0 +1,196 @@
+playlist:
+  title: If we are unsure, should we decide now or pay to learn?
+---
+title: The Price of Being Wrong
+level: advanced
+voice: male
+template: distribution_curve
+params:
+  kind: normal
+  mean_label: E[NMB] > 0
+  show_sd_ticks: false
+  shade:
+    from: 0.75
+    side: lower
+    label: We adopt — and we were wrong
+  title: 'Nusinersen: net monetary benefit across the PSA'
+elements:
+  - id: evpi_note
+    type: text
+    text: EVPI × N = ceiling on any study
+    x: 280
+    'y': 615
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+commands:
+  - draw:
+      - title
+      - axis
+      - curve
+      - mean_line
+    speak: This series asks when a payer should decide now and when it should pay to learn, and it begins with nusinersen, whose probabilistic analysis returns not one net monetary benefit but this whole distribution.
+  - draw:
+      - shade
+      - shade_label
+    speak: Expected NMB is positive at the severity-adjusted threshold, so the decision is adopt — but in this tail adoption destroys health, and the loss is the net benefit we gave up.
+  - highlight:
+      target:
+        - shade
+      effect: glow
+    speak: 'The expected value of perfect information is exactly that: the probability of being wrong times the size of the error, and nothing else — a study that resolves all uncertainty and confirms the decision you already took is worth precisely zero.'
+  - draw:
+      - evpi_note
+    speak: 'Multiply that per-patient loss by everyone the decision covers, and you have the ceiling: no trial, however definitive, can be worth more than the cost of being wrong.'
+---
+title: Which parameter deserves a study?
+level: advanced
+voice: male
+template: tornado_diagram
+params:
+  title: Which parameter is worth a study?
+  x_label: Population EVPPI (million kr)
+  base: 0
+  show_values: true
+  bars:
+    - label: Long-term survival
+      low: 0
+      high: 180
+    - label: Motor-function utility
+      low: 0
+      high: 60
+    - label: Drug price
+      low: 0
+      high: 0
+commands:
+  - draw:
+      - axes
+      - base_line
+    speak: 'Now that we have seen what the whole of our uncertainty is worth, we can split that price by parameter: EVPPI asks what the nusinersen decision would gain if one input alone were resolved perfectly, the rest left exactly as uncertain as it is.'
+  - draw:
+      - bar_label_0
+      - bar_0
+    speak: Long-term survival on treatment dominates — around 180 million kroner of expected decision value, because it is the one parameter whose plausible range flips net monetary benefit across the threshold.
+  - draw:
+      - bar_label_1
+      - bar_1
+      - bar_label_2
+      - bar_2
+    speak: Motor-function utility is worth a third of that, and the drug price is worth nothing at all to learn about, since it is not uncertain — it is negotiated.
+  - highlight:
+      target:
+        - bar_0
+      effect: glow
+    speak: 'So the ranking is a research budget: a registry follow-up costing perhaps fifteen million clears a 180-million EVPPI comfortably, a utility study never could, and no single bar can exceed the overall EVPI that bounds them all.'
+    delivery: grave
+---
+title: Approve, reject, or buy information
+level: advanced
+voice: male
+template: two_by_two_table
+params:
+  title: Approve, reject, or buy information
+  row_label: Expected NMB at λ
+  col_label: Population EVPI vs. cost of the study
+  row_values:
+    - NMB > 0
+    - NMB < 0
+  col_values:
+    - EVPI > study cost
+    - EVPI < study cost
+  cells:
+    - - Approve only in research
+      - Approve
+    - - Reject, fund research
+      - Reject
+  cell_notes:
+    - - managed entry, price–volume, age limit
+      - decide now
+    - - conditional on new data
+      - no study will change this
+  highlight:
+    - - 0
+      - 0
+elements:
+  - id: mark_air
+    type: annotation
+    target: cell_0_0
+    kind: box
+commands:
+  - draw:
+      - grid
+      - row_title
+      - col_title
+      - row_header_0
+      - row_header_1
+      - col_header_0
+      - col_header_1
+    speak: Now that we have seen which single parameter deserves a study, notice that yes and no were never the only two things a committee could say.
+  - draw:
+      - cell_0_1
+      - cell_1_1
+    speak: 'Down the right column the population EVPI is smaller than the study would cost — the residual uncertainty is cheaper than resolving it, so you decide now: approve above the threshold, reject below it.'
+  - pause: 0.3
+  - draw:
+      - cell_0_0
+      - cell_1_0
+    speak: Down the left column the price of being wrong exceeds the price of finding out, and the decision is taken conditionally, with data still accruing.
+  - draw:
+      - hl_0_0
+      - mark_air
+      - title
+    speak: This top-left cell is approval only in research — every managed entry agreement, every price–volume deal, and nusinersen's age limit, which bounds the population exposed to the mistake while the evidence arrives.
+  - highlight:
+      target:
+        - cell_1_1
+      effect: glow
+    speak: 'And the quiet one is bottom right: a no that no study will ever overturn, which is the only honest place to stop asking for more data.'
+  - speak: EVPI prices the mistake, EVPPI names the study, and this map decides whether you buy the information or take the risk — Beslutningsforum does not phrase it as arithmetic, but it is arithmetic all the same.
+    delivery: grave
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Is the QALY fair - and should the number decide?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 20 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Is the QALY fair - and should the number decide?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

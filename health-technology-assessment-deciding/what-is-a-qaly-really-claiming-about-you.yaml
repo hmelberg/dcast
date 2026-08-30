@@ -1,0 +1,902 @@
+playlist:
+  title: What is a QALY really claiming about you?
+---
+title: Ten Years in a Wheelchair
+voice: female
+domain:
+  x:
+    - 0
+    - 12
+  'y':
+    - -0.4
+    - 1.2
+elements:
+  - id: ax
+    type: axes
+    x_label: Time (years)
+    y_label: Health utility  u
+  - id: line_full
+    type: curve
+    expr: '1'
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_full
+    type: label
+    text: u = 1  full health
+    attach_to: line_full
+    side: above
+    style:
+      color: '#8f887c'
+  - id: line_dead
+    type: curve
+    expr: '0'
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_dead
+    type: label
+    text: u = 0  dead
+    attach_to: line_dead
+    side: below-left
+    style:
+      color: '#8f887c'
+  - id: neg_arrow
+    type: arrow
+    from:
+      x: 11
+      'y': -0.02
+    to:
+      x: 11
+      'y': -0.33
+    style:
+      color: '#8a5fa8'
+  - id: label_neg
+    type: label
+    text: 'worse than dead: u < 0'
+    attach_to: neg_arrow
+    side: left
+    style:
+      color: '#8a5fa8'
+  - id: wheel
+    type: curve
+    expr: '0.6'
+    x_from: 0
+    x_to: 10
+    style:
+      color: '#2f6b8f'
+  - id: label_wheel
+    type: label
+    text: u = 0.6
+    attach_to: wheel
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: block_a
+    type: region
+    between:
+      - wheel
+      - line_dead
+    x_from: 0
+    x_to: 10
+    style:
+      fill: '#87a878'
+  - id: label_a
+    type: label
+    text: 10 years × 0.6 = 6 QALYs
+    attach_to: block_a
+    side: above
+  - id: full_seg
+    type: curve
+    expr: '1'
+    x_from: 0
+    x_to: 6
+    style:
+      color: '#b5482e'
+  - id: block_b
+    type: region
+    between:
+      - full_seg
+      - line_dead
+    x_from: 0
+    x_to: 6
+    style:
+      fill: '#87a878'
+  - id: verdict
+    type: label
+    text: 6 years × 1.0 = 6 QALYs
+    attach_to: block_b
+    side: right
+  - id: mark
+    type: annotation
+    target: verdict
+    kind: box
+commands:
+  - draw:
+      - ax
+    speak: Every yes and no from Beslutningsforum rests on one number — so across four parts we take the QALY apart and ask what it quietly claims about your life.
+  - draw:
+      - line_full
+      - label_full
+    speak: 'It is built on a ruler with two anchors. Up here, u equals one: a year lived in full health.'
+  - pause: 1
+  - draw:
+      - line_dead
+      - label_dead
+    speak: Down here, u equals zero — which does not mean no symptoms, it means being dead.
+  - pause: 1
+  - draw:
+      - neg_arrow
+      - label_neg
+    speak: 'And zero is not the floor: states people judge worse than being dead are allowed to take negative values.'
+  - pause: 1
+  - highlight:
+      target:
+        - line_full
+        - line_dead
+      effect: glow
+    speak: Every health state a person can be in gets one number on this ruler. So how does ten years in a wheelchair become a single number?
+  - pause: 1
+  - draw:
+      - wheel
+      - label_wheel
+    speak: Say that state has been valued at zero point six, and the person lives ten years in it.
+  - pause: 1
+  - draw:
+      - block_a
+    speak: The QALY is simply the area under that line — quality multiplied by time.
+  - pause: 1
+  - draw:
+      - label_a
+    speak: Ten years, each counted as six tenths of a healthy year, add up to six QALYs.
+  - pause: 1
+  - erase:
+      - block_a
+      - wheel
+      - label_wheel
+      - label_a
+    speak: Now hold on to that six, and reshape it.
+  - pause: 0.5
+  - draw:
+      - full_seg
+      - block_b
+    speak: Six years in perfect health — taller, and shorter — covers exactly the same area.
+  - pause: 1
+  - draw:
+      - verdict
+    speak: Six QALYs either way.
+  - draw:
+      - mark
+    speak: 'That is the claim: ten years using a wheelchair counts the same as six years of full health followed by nothing.'
+    delivery: grave
+  - pause: 1
+  - highlight:
+      target:
+        - block_b
+      effect: glow
+    speak: Nobody ever observed that equality — it is an assumption smuggled in by the multiplication.
+  - highlight:
+      target:
+        - line_full
+        - line_dead
+      effect: pulse
+    speak: It is also the trick that lets nusinersen for spinal muscular atrophy and a routine hip replacement be weighed on one single ruler.
+  - speak: 'So: a life becomes one number by multiplying quality by time — and whether you would accept that trade for yourself is what the rest of this series asks.'
+    delivery: soft
+level: basic
+---
+title: Building the Number
+voice: female
+template: qaly_profiles
+params:
+  x_label: Age (years)
+  y_label: Health utility u
+  x_max: 26
+  profiles:
+    - id: current
+      label: Current care (0)
+      waypoints:
+        - t: 0
+          u: 0.18
+        - t: 0.5
+          u: 0.12
+        - t: 1.8
+          u: 0.08
+      death_at: 2
+    - id: nusi
+      label: With nusinersen (1)
+      waypoints:
+        - t: 0
+          u: 0.18
+        - t: 0.5
+          u: 0.15
+        - t: 0.6
+          u: 0.42
+          step: true
+        - t: 5
+          u: 0.45
+        - t: 20
+          u: 0.42
+      death_at: 24
+  shade_between:
+    a: nusi
+    b: current
+    gain_label: ΔE
+    loss_label: ''
+elements:
+  - id: calc_head
+    type: text
+    text: E = Σ u_t × time_t
+    x: 500
+    'y': 650
+    font_size: 36
+  - id: line_e0
+    type: text
+    text: 'Current care:  0.13 × 2 years ≈ 0.3 QALYs'
+    x: 500
+    'y': 550
+    font_size: 28
+  - id: line_e1
+    type: text
+    text: 'Nusinersen:  0.42 × 24 years ≈ 10 QALYs'
+    x: 500
+    'y': 470
+    font_size: 28
+  - id: line_disc
+    type: text
+    text: 'At r = 4%: 24 years count as 15.2  →  E₁ ≈ 6.4'
+    x: 500
+    'y': 390
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: line_de
+    type: text
+    text: ΔE = E₁ − E₀ ≈ 6 QALYs
+    x: 500
+    'y': 280
+    font_size: 38
+    style:
+      color: '#b5482e'
+  - id: mark_de
+    type: annotation
+    target: line_de
+    kind: box
+  - id: hip_head
+    type: text
+    text: QALYs bought per million kroner
+    x: 500
+    'y': 640
+    font_size: 34
+  - id: hip_label
+    type: text
+    text: Hip replacement  ≈ 20 QALYs
+    x: 500
+    'y': 560
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: bar_hip
+    type: path
+    points:
+      - - 260
+        - 470
+      - - 760
+        - 470
+      - - 760
+        - 520
+      - - 260
+        - 520
+    closed: true
+    style:
+      fill: '#87a878'
+      color: '#3d3833'
+  - id: nusi_label
+    type: text
+    text: Nusinersen at list price  < 1 QALY
+    x: 500
+    'y': 435
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: bar_nusi
+    type: path
+    points:
+      - - 260
+        - 350
+      - - 276
+        - 350
+      - - 276
+        - 400
+      - - 260
+        - 400
+    closed: true
+    style:
+      fill: '#c96567'
+      color: '#3d3833'
+  - id: scale_note
+    type: text
+    text: Order of magnitude, same scale, same krone.
+    x: 500
+    'y': 270
+    font_size: 24
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - axes
+      - full_health_line
+    speak: 'Now that we have seen how ten years in a wheelchair becomes one number, let us build that number for a decision Beslutningsforum actually had to make: nusinersen for spinal muscular atrophy.'
+  - pause: 1
+  - draw:
+      - curve_current
+      - label_current
+    speak: 'Current care, option zero: an infant with severe spinal muscular atrophy, a utility around one tenth of full health, and life measured in a couple of years.'
+  - pause: 1
+  - draw:
+      - curve_nusi
+      - label_nusi
+    speak: With nusinersen, option one, the health state lifts to roughly zero point four, and the life stretches on for decades.
+  - pause: 1
+  - draw:
+      - gain_regions
+      - label_gain
+    speak: The green area between the two curves is everything the drug adds — height times width, quality times time.
+  - pause: 1
+  - focus:
+      target:
+        - gain_regions
+    speak: 'And it is won two ways at once: a little more quality in each year, and many more years to have it in.'
+  - pause: 1
+  - clear: {}
+  - draw:
+      - calc_head
+    speak: 'An area on a chart is not yet a number, so we count it: the utility in each year, multiplied by that year, added up.'
+  - pause: 1
+  - draw:
+      - line_e0
+    speak: Current care buys about zero point one three of full health for two years — roughly zero point three QALYs.
+  - pause: 1
+  - draw:
+      - line_e1
+    speak: Nusinersen buys about zero point four two for twenty-four years — call it ten QALYs, before discounting.
+  - pause: 1
+  - draw:
+      - line_disc
+    speak: But the Norwegian guideline discounts at four percent, so health far in the future counts for less today, and twenty-four years shrink to about fifteen — E one falls to six point four.
+  - pause: 1
+  - highlight:
+      target:
+        - line_disc
+      effect: glow
+    speak: A third of this child's health disappeared into the discount rate, without anyone making a clinical claim at all.
+  - pause: 1
+  - draw:
+      - line_de
+      - mark_de
+    speak: 'Subtract, and a whole childhood becomes one figure: delta E, about six QALYs.'
+    delivery: grave
+  - pause: 1
+  - clear: {}
+  - draw:
+      - hip_head
+    speak: Six QALYs sounds large — until you ask what else six QALYs would have cost.
+  - pause: 1
+  - draw:
+      - bar_hip
+      - hip_label
+    speak: A hip replacement runs to something like a hundred thousand kroner for a couple of QALYs, so a million kroner buys roughly twenty of them.
+  - pause: 1
+  - draw:
+      - bar_nusi
+      - nusi_label
+    speak: Nusinersen at list price runs to millions of kroner per QALY, so the same million buys less than one.
+  - highlight:
+      target:
+        - bar_nusi
+      effect: glow
+    speak: That sliver is not a drawing error — it is the same money, drawn on the same scale.
+  - pause: 1
+  - draw:
+      - scale_note
+    speak: These are orders of magnitude rather than exact figures, and Beslutningsforum's eventual yes came with a confidential price and an age limit, not at the list price on this chart.
+  - speak: 'So a QALY claims this much about you: your health is a height, your life is a width, and their product is comparable to everyone else''s — which is exactly what makes the boring hip replacement so hard to argue with.'
+level: basic
+---
+title: The trade hidden in the multiplication
+voice: female
+template: qaly_profiles
+params:
+  x_label: Years from now
+  y_label: Health utility (u)
+  x_max: 12
+  profiles:
+    - id: chair
+      label: Wheelchair — 6 QALYs
+      color: '#2f6b8f'
+      waypoints:
+        - t: 0
+          u: 0.6
+        - t: 10
+          u: 0.6
+      death_at: 10
+    - id: short
+      label: Six full years — 6 QALYs
+      color: '#b5482e'
+      waypoints:
+        - t: 0
+          u: 1
+        - t: 6
+          u: 1
+      death_at: 6
+    - id: decline
+      label: Good, then poor — 6 QALYs
+      color: '#8a5fa8'
+      waypoints:
+        - t: 0
+          u: 0.9
+        - t: 4
+          u: 0.9
+        - t: 4
+          u: 0.4
+          step: true
+        - t: 10
+          u: 0.4
+      death_at: 10
+  shade_between: null
+elements:
+  - id: panel_axes
+    type: path
+    points:
+      - - 200
+        - 620
+      - - 200
+        - 180
+      - - 880
+        - 180
+  - id: cap_x
+    type: text
+    x: 540
+    'y': 135
+    text: Years spent in the health state
+    font_size: 22
+  - id: cap_y
+    type: text
+    x: 400
+    'y': 660
+    text: Share of remaining life you would give up
+    font_size: 22
+  - id: flat_line
+    type: path
+    points:
+      - - 215
+        - 430
+      - - 870
+        - 430
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: label_flat
+    type: label
+    text: What the multiplication assumes
+    attach_to: flat_line
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: data_curve
+    type: path
+    points:
+      - - 215
+        - 235
+      - - 300
+        - 300
+      - - 400
+        - 365
+      - - 520
+        - 412
+      - - 640
+        - 442
+      - - 760
+        - 458
+      - - 870
+        - 468
+    style:
+      color: '#b5482e'
+  - id: label_data
+    type: label
+    text: What people actually answer
+    attach_to: data_curve
+    side: above
+    style:
+      color: '#b5482e'
+  - id: mark
+    type: annotation
+    target: label_data
+    kind: box
+commands:
+  - draw:
+      - axes
+      - full_health_line
+    speak: Now that we have seen how the number is built, watch what the multiplication itself quietly claims — because that claim is about you, and it decides which drugs Beslutningsforum buys.
+  - draw:
+      - curve_chair
+      - label_chair
+    speak: 'Ten years in a wheelchair, weighted 0.6: ten times zero point six, six QALYs.'
+  - pause: 1
+  - draw:
+      - curve_short
+      - label_short
+    speak: And here is what those same six QALYs also buy — six years in perfect health, then nothing.
+  - pause: 1
+  - point:
+      at:
+        ref: curve_short
+      gesture: circle
+    speak: The arithmetic holds these two lives exactly equal. Would you hand over four years of your life to leave the wheelchair?
+  - pause: 1
+  - draw:
+      - curve_decline
+      - label_decline
+    speak: 'A third life: four years at 0.9, then six at 0.4 — three point six plus two point four, six again.'
+  - focus:
+      target:
+        - curve_chair
+        - curve_short
+        - curve_decline
+    speak: Three quite different lives, and the number cannot tell them apart.
+  - pause: 1
+  - focus:
+      target:
+        - curve_chair
+        - curve_short
+    speak: 'Equating the first two assumes a constant proportional trade-off: the share of remaining life you''d trade for health doesn''t depend on how much life is on the table.'
+  - focus:
+      target:
+        - curve_decline
+    speak: Adding the years up assumes order is irrelevant — good health early or late, a slow decline or a steady state, only the sum survives.
+  - highlight:
+      target:
+        - label_chair
+      effect: pulse
+    speak: And that single weight, 0.6, stands in for everyone in the state, whatever a particular person would say about their own wheelchair.
+  - speak: In 1980, Pliskin, Shepard and Weinstein wrote down exactly which conditions your preferences must satisfy for these sums to be a valid utility measure — constant proportional trade-off among them.
+    delivery: soft
+  - clear: {}
+    speak: Which makes it testable. So do real people trade the way the formula says?
+  - draw:
+      - panel_axes
+      - cap_x
+      - cap_y
+  - draw:
+      - flat_line
+      - label_flat
+    speak: 'Constant proportional trade-off predicts this flat line: the same share of remaining life surrendered, whatever the duration.'
+  - pause: 1
+  - draw:
+      - data_curve
+      - label_data
+    speak: Time trade-off studies keep finding this instead — over a short horizon people will barely trade at all, and the share grows as the horizon lengthens.
+  - pause: 1
+  - point:
+      at:
+        x: 300
+        'y': 365
+      gesture: circle
+    speak: Where the lines part, the assumption is failing — and it fails hardest for short horizons, exactly where a drug like nusinersen is judged.
+  - draw:
+      - mark
+    speak: In the very worst states some people answer that more time is worse than less — something the multiplication cannot express at all.
+  - speak: 'So: would you take that trade? Most people, asked directly, will not — which is why the QALY is not a discovery about you, but a convention, with its assumptions written down where they can be argued with.'
+    delivery: grave
+level: basic
+---
+title: Why One Currency at All
+voice: female
+elements:
+  - id: head_a
+    type: text
+    text: Nusinersen for SMA
+    x: 270
+    'y': 665
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: a1
+    type: text
+    text: Motor milestones gained
+    x: 270
+    'y': 595
+    font_size: 22
+  - id: a2
+    type: text
+    text: Months free of a ventilator
+    x: 270
+    'y': 548
+    font_size: 22
+  - id: a3
+    type: text
+    text: Sitting unsupported at age two
+    x: 270
+    'y': 501
+    font_size: 22
+  - id: head_b
+    type: text
+    text: Hip replacement
+    x: 740
+    'y': 665
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: b1
+    type: text
+    text: Pain score down four points
+    x: 740
+    'y': 595
+    font_size: 22
+  - id: b2
+    type: text
+    text: Walking 300 metres further
+    x: 740
+    'y': 548
+    font_size: 22
+  - id: b3
+    type: text
+    text: Back at work in three months
+    x: 740
+    'y': 501
+    font_size: 22
+  - id: qmark
+    type: text
+    text: '?'
+    x: 505
+    'y': 548
+    font_size: 64
+    style:
+      color: '#8a5fa8'
+  - id: qline
+    type: text
+    text: Which list is worth more?
+    x: 500
+    'y': 400
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: note
+    type: text
+    text: illustrative round numbers
+    x: 500
+    'y': 706
+    font_size: 18
+    style:
+      color: '#8f887c'
+  - id: e_a
+    type: text
+    text: ΔE ≈ 3.0 QALYs
+    x: 270
+    'y': 580
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: e_b
+    type: text
+    text: ΔE ≈ 1.5 QALYs
+    x: 740
+    'y': 580
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: c_a
+    type: text
+    text: ΔC ≈ 6 000 000 kr
+    x: 270
+    'y': 515
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: c_b
+    type: text
+    text: ΔC ≈ 90 000 kr
+    x: 740
+    'y': 515
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: icer_a
+    type: text
+    text: ICER ≈ 2 000 000 kr / QALY
+    x: 270
+    'y': 450
+    font_size: 24
+  - id: icer_b
+    type: text
+    text: ICER ≈ 60 000 kr / QALY
+    x: 740
+    'y': 450
+    font_size: 24
+  - id: mline
+    type: text
+    text: 'The same 1 000 000 kr buys:'
+    x: 500
+    'y': 350
+    font_size: 26
+  - id: buy_a
+    type: text
+    text: 0.5 QALYs
+    x: 270
+    'y': 270
+    font_size: 36
+    style:
+      color: '#b5482e'
+  - id: buy_b
+    type: text
+    text: 17 QALYs
+    x: 740
+    'y': 270
+    font_size: 36
+    style:
+      color: '#2f6b8f'
+  - id: mark_b
+    type: annotation
+    target: buy_b
+    kind: box
+  - id: t3
+    type: text
+    text: What the single number cannot say
+    x: 500
+    'y': 620
+    font_size: 30
+  - id: p1
+    type: text
+    text: Who gained — a child, or a pensioner
+    x: 500
+    'y': 530
+    font_size: 24
+  - id: p2
+    type: text
+    text: How bad they were to begin with — alvorlighet, severity
+    x: 500
+    'y': 470
+    font_size: 24
+  - id: p3
+    type: text
+    text: Whose values fixed u in the first place
+    x: 500
+    'y': 410
+    font_size: 24
+  - id: final
+    type: text
+    text: One currency makes comparison possible — not automatically right.
+    x: 500
+    'y': 300
+    font_size: 24
+  - id: mark_final
+    type: annotation
+    target: final
+    kind: box
+commands:
+  - draw:
+      - head_a
+    speak: 'Now that we have seen the trade hidden inside quality times time, one question is left: why force everything into a single number at all?'
+  - draw:
+      - a1
+      - a2
+      - a3
+    speak: 'Nusinersen''s effect in spinal muscular atrophy arrives as a list: milestones reached, months off a ventilator, a child sitting unsupported at two.'
+  - pause: 1
+  - draw:
+      - head_b
+      - b1
+      - b2
+      - b3
+    speak: 'A hip replacement arrives as a different list: four points less pain, three hundred metres more walking, back at work by spring.'
+  - pause: 1
+  - draw:
+      - qmark
+    speak: Now subtract one list from the other — there is no operation that does it, because the two share no unit.
+  - pause: 1
+  - draw:
+      - qline
+    speak: Yet one budget must choose between them, and without a shared unit the choice falls to whoever argues most persuasively in the room.
+    delivery: grave
+  - pause: 1
+  - clear:
+      keep:
+        - head_a
+        - head_b
+    speak: 'So we impose a unit: every outcome in either list is re-expressed as utility multiplied by time.'
+  - draw:
+      - note
+      - e_a
+      - e_b
+    speak: Three quality-adjusted life years for the child; about one and a half for the hip, on illustrative round numbers.
+  - pause: 1
+  - draw:
+      - c_a
+      - c_b
+    speak: Their incremental costs, delta C, differ by nearly two orders of magnitude.
+  - draw:
+      - icer_a
+      - icer_b
+    speak: 'Divide cost by effect and each becomes a price per QALY: two million kroner against sixty thousand.'
+  - pause: 1
+  - draw:
+      - mline
+      - buy_a
+      - buy_b
+    speak: Read it the other way round — the same million kroner buys half a healthy year here, and seventeen there.
+  - draw:
+      - mark_b
+    speak: 'That is opportunity cost made visible: the patients you never meet, finally on the same page as the ones you do.'
+  - highlight:
+      target:
+        - e_a
+        - e_b
+      effect: glow
+    speak: This is what the common currency buys us — nytte, benefit, made comparable across diseases that have nothing else in common.
+  - pause: 1
+  - clear: {}
+    speak: But a currency charges its own exchange fee.
+  - draw:
+      - t3
+      - p1
+    speak: 'The number cannot say who gained: three QALYs for an infant and three for a pensioner are the same three.'
+  - draw:
+      - p2
+    speak: It cannot say how bad they were to begin with — alvorlighet, severity, has to be added back afterwards as a separate criterion, which is why nusinersen was first refused and later accepted with an age limit rather than by its ICER alone.
+  - draw:
+      - p3
+    speak: And it cannot say whose values fixed u in the first place, which is exactly where we go next.
+  - pause: 1
+  - draw:
+      - final
+      - mark_final
+    speak: 'Across these four parts: ten years in a wheelchair became a utility, utility times time became a QALY, the multiplication hid a trade you might not accept for yourself — and this one number is what lets a health system see everyone it could have helped instead.'
+    delivery: grave
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: How can you possibly measure how bad an illness feels? A map of the methods
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 7 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: How can you possibly measure how bad an illness feels? A map of the methods'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

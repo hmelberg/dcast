@@ -1,0 +1,979 @@
+playlist:
+  title: What counts as a cost, and why does the future cost less?
+---
+title: The Price Tag Is Not the Cost
+voice: female
+elements:
+  - id: t_title
+    type: text
+    text: The price tag is not the cost
+    x: 500
+    'y': 690
+    font_size: 32
+  - id: tag
+    type: shape
+    shape: rect
+    x: 500
+    'y': 460
+    width: 460
+    height: 120
+  - id: tag_price
+    type: text
+    text: kr 700 000
+    x: 500
+    'y': 490
+    font_size: 44
+    style:
+      color: '#b5482e'
+  - id: tag_sub
+    type: text
+    text: one dose of nusinersen (list price)
+    x: 500
+    'y': 435
+    font_size: 22
+  - id: regimen
+    type: text
+    text: 6 doses in year 1, then 3 a year  ≈  kr 4 mill. per year
+    x: 500
+    'y': 345
+    font_size: 24
+  - id: dc_line
+    type: text
+    text: ΔC = C₁ − C₀
+    x: 500
+    'y': 240
+    font_size: 36
+  - id: dc_note
+    type: text
+    text: spent with the drug  −  spent without it
+    x: 500
+    'y': 190
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: led_title
+    type: text
+    text: One child, one year — the ΔC ledger (kr)
+    x: 500
+    'y': 690
+    font_size: 28
+  - id: r1a
+    type: text
+    text: Drug acquisition
+    x: 330
+    'y': 600
+    font_size: 24
+  - id: r1b
+    type: text
+    text: + 4 200 000
+    x: 770
+    'y': 600
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: r2a
+    type: text
+    text: 'Injection: theatre, sedation, imaging'
+    x: 330
+    'y': 530
+    font_size: 22
+  - id: r2b
+    type: text
+    text: + 150 000
+    x: 770
+    'y': 530
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: r3a
+    type: text
+    text: 'Monitoring: motor tests, labs, visits'
+    x: 330
+    'y': 460
+    font_size: 22
+  - id: r3b
+    type: text
+    text: + 80 000
+    x: 770
+    'y': 460
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: r4a
+    type: text
+    text: Ventilation and ICU avoided
+    x: 330
+    'y': 390
+    font_size: 22
+  - id: r4b
+    type: text
+    text: − 300 000
+    x: 770
+    'y': 390
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: r5a
+    type: text
+    text: Informal care by the family
+    x: 330
+    'y': 320
+    font_size: 22
+  - id: r5b
+    type: text
+    text: + ?
+    x: 770
+    'y': 320
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: r6a
+    type: text
+    text: Future unrelated health care
+    x: 330
+    'y': 250
+    font_size: 22
+  - id: r6b
+    type: text
+    text: + ?
+    x: 770
+    'y': 250
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: rule
+    type: path
+    points:
+      - - 170
+        - 210
+      - - 830
+        - 210
+    style:
+      color: '#8f887c'
+  - id: led_total
+    type: text
+    text: ΔC ≈ 4 130 000  +  two question marks
+    x: 500
+    'y': 160
+    font_size: 28
+  - id: mark_total
+    type: annotation
+    target: led_total
+    kind: box
+  - id: q_title
+    type: text
+    text: Four questions in this series
+    x: 500
+    'y': 690
+    font_size: 30
+  - id: q1
+    type: text
+    text: 1.  Where do unit costs come from?
+    x: 500
+    'y': 570
+    font_size: 26
+  - id: q2
+    type: text
+    text: 2.  Should lost production count?
+    x: 500
+    'y': 480
+    font_size: 26
+  - id: q3
+    type: text
+    text: 3.  Why does the future cost less?
+    x: 500
+    'y': 390
+    font_size: 26
+  - id: q4
+    type: text
+    text: 4.  Which costs never get booked?
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: closing
+    type: text
+    text: A price is one line. ΔC is the whole page.
+    x: 500
+    'y': 170
+    font_size: 26
+  - id: mark_closing
+    type: annotation
+    target: closing
+    kind: box
+commands:
+  - draw:
+      - t_title
+      - tag
+    speak: A committee that argues about a price tag is arguing about the wrong number — so this series takes one price apart into everything a decision must actually pay for, and then asks why a krone spent in the future counts for less than one spent today.
+  - draw:
+      - tag_price
+      - tag_sub
+      - regimen
+    speak: 'Nusinersen for spinal muscular atrophy: around seven hundred thousand kroner a dose at list price, six doses in the first year and three a year after — roughly four million kroner, annually, per child.'
+  - point:
+      at:
+        ref: tag_price
+      gesture: circle
+    speak: That is the number that made the newspapers, and the number Beslutningsforum was accused of hiding behind. It is not the number the analysis uses.
+  - pause: 0.4
+  - draw:
+      - dc_line
+      - dc_note
+    speak: 'The analysis needs delta C: the difference in ressursbruk — resource use — between the new technology and current care.'
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - led_title
+    speak: So open the ledger, for one child, for one year.
+  - draw:
+      - r1a
+      - r1b
+    speak: 'Line one, the drug itself: six doses at seven hundred thousand, four point two million kroner.'
+  - draw:
+      - r2a
+      - r2b
+      - r3a
+      - r3b
+    speak: It does not administer itself — each dose goes into the spinal fluid, in theatre, under sedation — and the treatment obliges motor testing, blood work and clinic visits.
+  - pause: 0.3
+  - highlight:
+      target:
+        - r4a
+        - r4b
+      effect: glow
+    speak: Then a line that points the other way.
+  - draw:
+      - r4a
+      - r4b
+    speak: Ventilator hours and intensive care this child no longer needs are subtracted, because delta C is a difference, not a bill — a treatment can buy back some of its own price.
+  - pause: 0.3
+  - draw:
+      - r5a
+      - r5b
+      - r6a
+      - r6b
+    speak: 'And two lines nobody invoices: the parents'' hours of care, and the health care a longer life will use for things entirely unrelated to this disease.'
+  - draw:
+      - rule
+      - led_total
+    speak: Four point one million kroner in year one — plus two question marks we never priced.
+  - draw:
+      - mark_total
+    speak: The headline price was one line of this page.
+    delivery: grave
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - q_title
+      - q1
+    speak: Four questions follow. Where does a unit cost even come from — micro-costing every minute and syringe, or the DRG average the funding system already pays per hospital stay?
+  - draw:
+      - q2
+    speak: When a parent leaves work, does that lost production belong in delta C — and does human capital or friction cost describe what society actually loses?
+  - draw:
+      - q3
+    speak: Norway discounts costs and health effects at four percent a year, which halves a QALY arriving eighteen years from now — and a child's benefits arrive decades away.
+  - draw:
+      - q4
+    speak: 'And which costs never get booked at all: informal care, unrelated future treatment, and the assessment itself, which is also not free.'
+  - draw:
+      - closing
+      - mark_closing
+    speak: A price is one line; delta C is the whole page — and the page is dated.
+level: basic
+---
+title: Micro-Costing or DRG Average?
+voice: female
+domain:
+  x:
+    - 0
+    - 40
+  'y':
+    - 0
+    - 1
+elements:
+  - id: t_title
+    type: text
+    text: One intrathecal administration, built from the bottom
+    x: 500
+    'y': 690
+    font_size: 30
+  - id: r1_item
+    type: text
+    text: Neurologist, 45 min
+    x: 340
+    'y': 600
+    font_size: 26
+  - id: r1_cost
+    type: text
+    text: kr 1,100
+    x: 710
+    'y': 600
+    font_size: 26
+  - id: r2_item
+    type: text
+    text: Two nurses, 60 min
+    x: 340
+    'y': 545
+    font_size: 26
+  - id: r2_cost
+    type: text
+    text: kr 900
+    x: 710
+    'y': 545
+    font_size: 26
+  - id: r3_item
+    type: text
+    text: Procedure room, 60 min
+    x: 340
+    'y': 490
+    font_size: 26
+  - id: r3_cost
+    type: text
+    text: kr 2,400
+    x: 710
+    'y': 490
+    font_size: 26
+  - id: r4_item
+    type: text
+    text: LP tray, drapes, ultrasound
+    x: 340
+    'y': 435
+    font_size: 26
+  - id: r4_cost
+    type: text
+    text: kr 700
+    x: 710
+    'y': 435
+    font_size: 26
+  - id: r5_item
+    type: text
+    text: Observation, 4 hours
+    x: 340
+    'y': 380
+    font_size: 26
+  - id: r5_cost
+    type: text
+    text: kr 1,400
+    x: 710
+    'y': 380
+    font_size: 26
+  - id: rule
+    type: path
+    points:
+      - - 190
+        - 345
+      - - 800
+        - 345
+    style:
+      color: '#8f887c'
+  - id: total_item
+    type: text
+    text: Micro-costed total
+    x: 340
+    'y': 300
+    font_size: 30
+    style:
+      color: '#2f6b8f'
+  - id: total_cost
+    type: text
+    text: kr 6,500
+    x: 710
+    'y': 300
+    font_size: 34
+    style:
+      color: '#2f6b8f'
+  - id: box_micro
+    type: shape
+    shape: rect
+    x: 150
+    'y': 430
+    width: 300
+    height: 160
+    style:
+      color: '#2f6b8f'
+  - id: micro_title
+    type: text
+    text: Micro-costed
+    x: 300
+    'y': 552
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: micro_num
+    type: text
+    text: kr 6,500
+    x: 300
+    'y': 492
+    font_size: 38
+    style:
+      color: '#2f6b8f'
+  - id: box_drg
+    type: shape
+    shape: rect
+    x: 550
+    'y': 430
+    width: 300
+    height: 160
+    style:
+      color: '#b5482e'
+  - id: drg_title
+    type: text
+    text: DRG tariff (ISF)
+    x: 700
+    'y': 552
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: drg_num
+    type: text
+    text: kr 11,300
+    x: 700
+    'y': 492
+    font_size: 38
+    style:
+      color: '#b5482e'
+  - id: gap_arrow
+    type: arrow
+    from:
+      ref: box_micro
+    to:
+      ref: box_drg
+    style:
+      color: '#8f887c'
+  - id: gap_label
+    type: label
+    text: kr 4,800 apart
+    attach_to: gap_arrow
+    side: below
+    style:
+      color: '#8f887c'
+  - id: note1
+    type: text
+    text: A DRG weight × a national unit price
+    x: 500
+    'y': 320
+    font_size: 26
+  - id: note2
+    type: text
+    text: Built to finance hospitals, not to describe a patient
+    x: 500
+    'y': 265
+    font_size: 26
+  - id: note3
+    type: text
+    text: '= a reimbursement price, not resource use'
+    x: 500
+    'y': 200
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: ax3
+    type: axes
+    x_label: Cost of one administration (kr 1,000s)
+    y_label: Patients
+  - id: baseline
+    type: curve
+    expr: '0'
+    style:
+      color: '#8f887c'
+      opacity: 0.15
+  - id: cost_curve
+    type: curve
+    expr: 0.166*x*x*exp(-x/3.25)
+  - id: pt_typical
+    type: point
+    at:
+      x: 6.5
+      'y': 0.95
+    style:
+      color: '#2f6b8f'
+  - id: lbl_typical
+    type: label
+    text: Straightforward puncture ≈ kr 6,500
+    attach_to: pt_typical
+    side: above-right
+    style:
+      color: '#2f6b8f'
+  - id: pt_avg
+    type: point
+    at:
+      x: 11.3
+      'y': 0.65
+    guides: true
+    style:
+      color: '#b5482e'
+  - id: lbl_avg
+    type: label
+    text: 'DRG rate: kr 11,300'
+    attach_to: pt_avg
+    side: right
+    style:
+      color: '#b5482e'
+  - id: tail_region
+    type: region
+    between:
+      - cost_curve
+      - baseline
+    x_from: 18
+    x_to: 40
+    style:
+      fill: '#c96567'
+      opacity: 0.3
+  - id: lbl_tail
+    type: label
+    text: Unusual patients live here
+    attach_to: tail_region
+    side: below-right
+    style:
+      color: '#8f887c'
+  - id: pt_sma
+    type: point
+    at:
+      x: 26
+      'y': 0.04
+    style:
+      color: '#8a5fa8'
+  - id: lbl_sma
+    type: label
+    text: Our SMA child ≈ kr 26,000
+    attach_to: pt_sma
+    side: above-right
+    style:
+      color: '#8a5fa8'
+  - id: mark_sma
+    type: annotation
+    target: lbl_sma
+    kind: box
+commands:
+  - draw:
+      - t_title
+    speak: Now that we have seen that a price tag is not a cost, someone has to put a number on one procedure — and the two available routes can disagree by a factor of two.
+  - draw:
+      - r1_item
+      - r1_cost
+      - r2_item
+      - r2_cost
+    speak: 'The bottom-up route, micro-costing, counts ingredients: a neurologist for the forty-five minute lumbar puncture, two nurses for the hour.'
+  - draw:
+      - r3_item
+      - r3_cost
+      - r4_item
+      - r4_cost
+    speak: An hour of staffed, sterile procedure room is the biggest line, two thousand four hundred; the tray, drapes and ultrasound gel add seven hundred.
+  - draw:
+      - r5_item
+      - r5_cost
+    speak: Then four hours of observation, because a child who has had nusinersen injected into the spine does not go straight home.
+  - draw:
+      - rule
+      - total_item
+      - total_cost
+    speak: Six thousand five hundred kroner to deliver one dose — the price of the vial itself is a separate, and confidential, conversation.
+  - pause: 0.4
+  - highlight:
+      target:
+        - total_cost
+      effect: glow
+    speak: Every row is a quantity times a unit price, so a reviewer can argue with any single line, and you can re-cost the whole thing when the protocol changes.
+  - clear: {}
+    speak: The top-down route skips all of that.
+  - draw:
+      - box_drg
+      - drg_title
+      - drg_num
+    speak: You take the DRG the case is coded to, multiply its weight by the national unit price set each year in the state budget, and read off eleven thousand three hundred kroner.
+  - draw:
+      - box_micro
+      - micro_title
+      - micro_num
+      - gap_arrow
+      - gap_label
+    speak: Same patient, same hour, nearly five thousand kroner apart.
+  - pause: 0.4
+  - draw:
+      - note1
+      - note2
+    speak: The gap is not sloppiness — the DRG system was built at Yale in the nineteen-seventies to pay hospitals per case, so the tariff carries ward overhead and a share of everything else the hospital does.
+  - draw:
+      - note3
+    speak: 'Which makes it a negotiated reimbursement price: an opinion about financing, not a measurement of what this patient consumed.'
+  - clear: {}
+    speak: So when is the shelf number good enough?
+  - draw:
+      - ax3
+      - baseline
+  - draw:
+      - cost_curve
+    speak: Here is what one administration really costs across everyone coded into that same DRG — the numbers are illustrative, the shape is not.
+  - draw:
+      - pt_typical
+      - lbl_typical
+    speak: 'Most sit near the hump: an uncomplicated puncture in a cooperative patient, close to our six and a half thousand.'
+  - draw:
+      - pt_avg
+      - lbl_avg
+    speak: The tariff sits further right, pulled there by overhead and by the difficult cases it also has to cover.
+  - draw:
+      - tail_region
+      - lbl_tail
+      - pt_sma
+      - lbl_sma
+    speak: 'And out in the tail is our SMA child with scoliosis and spinal rods: sedation, an anaesthetist, image guidance — around twenty-six thousand every dose.'
+  - pause: 0.4
+  - draw:
+      - mark_sma
+    speak: For a hospital's accounts the average is fine; for this child the tariff understates real resource use by more than half — and understates it in the direction that flatters the new technology.
+    delivery: grave
+  - speak: The average is a fair description of nobody in particular, so micro-cost the few items your decision turns on, take the tariff for the rest, and say which you took where.
+level: basic
+---
+title: Does Lost Production Count?
+voice: female
+domain:
+  x:
+    - 0
+    - 20
+  'y':
+    - 0
+    - 700
+elements:
+  - id: ax
+    type: axes
+    x_label: Years after leaving work
+    y_label: Lost output (1000 kr per year)
+  - id: zero_line
+    type: curve
+    expr: '0'
+    style:
+      color: '#8f887c'
+      dash: true
+      opacity: 0.35
+  - id: hc_curve
+    type: curve
+    expr: 650*exp(-0.0392*x)
+    style:
+      color: '#b5482e'
+  - id: label_hc
+    type: label
+    text: Her yearly output, discounted
+    attach_to: hc_curve
+    side: above
+    style:
+      color: '#b5482e'
+  - id: hc_region
+    type: region
+    between:
+      - hc_curve
+      - zero_line
+    x_from: 0
+    x_to: 20
+    style:
+      fill: '#c96567'
+      opacity: 0.22
+  - id: label_hc_total
+    type: label
+    text: Human capital ≈ 8.8 mill. kr
+    attach_to: hc_region
+    side: below-right
+    style:
+      color: '#b5482e'
+  - id: friction_line
+    type: arrow
+    from:
+      x: 0.25
+      'y': 0
+    to:
+      x: 0.25
+      'y': 690
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: friction_region
+    type: region
+    between:
+      - hc_curve
+      - zero_line
+    x_from: 0
+    x_to: 0.25
+    style:
+      fill: '#2f6b8f'
+      opacity: 0.55
+  - id: label_friction
+    type: label
+    text: 'Friction period: 3 months'
+    attach_to: friction_line
+    side: above-right
+    style:
+      color: '#2f6b8f'
+  - id: label_friction_total
+    type: label
+    text: Friction cost ≈ 160 000 kr
+    attach_to: friction_region
+    side: right
+    style:
+      color: '#2f6b8f'
+  - id: n_child
+    type: node
+    shape: person
+    text: Child with SMA
+  - id: n_parent
+    type: node
+    shape: person
+    text: Parent
+  - id: n_loss
+    type: node
+    shape: rect
+    text: Production loss
+  - id: e1
+    type: edge
+    from:
+      ref: n_child
+    to:
+      ref: n_parent
+  - id: label_e1
+    type: label
+    text: Care at home
+    attach_to: e1
+    side: above
+  - id: e2
+    type: edge
+    from:
+      ref: n_parent
+    to:
+      ref: n_loss
+  - id: label_e2
+    type: label
+    text: Leaves or cuts paid work
+    attach_to: e2
+    side: above
+  - id: mark_loss
+    type: annotation
+    target: n_loss
+    kind: box
+commands:
+  - draw:
+      - ax
+      - zero_line
+    speak: 'Now that we have seen a procedure''s price built up bottom-up or read off the DRG average, we turn to a cost that appears in no hospital ledger at all: the work the patient stops doing.'
+  - draw:
+      - hc_curve
+      - label_hc
+    speak: Our patient is a 45-year-old machine operator who leaves the labour force after a stroke, twenty years before retirement, on 650 000 kroner a year — this line is the output she no longer produces, discounted at four per cent.
+  - draw:
+      - hc_region
+      - label_hc_total
+    speak: 'The human capital approach counts the whole shaded block: every remaining working year, about 8.8 million kroner in present value.'
+  - pause: 0.4
+  - highlight:
+      target:
+        - hc_region
+      effect: glow
+    speak: On this accounting one stroke costs society an entire career, which quietly assumes her chair stays empty until 2045.
+  - draw:
+      - friction_line
+      - label_friction
+    speak: 'The friction cost approach asks a narrower question: how long is the chair actually empty?'
+  - draw:
+      - friction_region
+    speak: With people looking for work, the post is advertised, filled and trained in roughly three months — so the loss is only this sliver at the left edge.
+  - camera:
+      center:
+        ref: friction_region
+      zoom: 5
+  - draw:
+      - label_friction_total
+    speak: 'Close up, the sliver has a value: about 160 000 kroner, recruitment and training included.'
+  - camera:
+      reset: true
+    speak: 'Same patient, same stroke: 8.8 million, or 160 000 — a factor of fifty, settled by a modelling convention rather than by anything that happened to her.'
+  - pause: 0.4
+  - highlight:
+      target:
+        - friction_region
+      effect: pulse
+    speak: The sliver's logic comes from Rotterdam in the mid-nineties, where Koopmanschap and colleagues argued that if unemployed workers exist, production returns once the vacancy is filled — so society loses the transition, not the career.
+  - point:
+      at:
+        ref: hc_region
+      gesture: underline
+    speak: Human capital assumes nobody ever takes her place; friction assumes someone always can — neither is true everywhere, so the method is chosen, not derived.
+  - highlight:
+      target:
+        - label_hc_total
+      effect: glow
+    speak: 'And human capital carries an uncomfortable corollary: it makes the identical stroke cheap in a pensioner and expensive in a lawyer.'
+  - clear: {}
+    speak: Norwegian guidance therefore keeps production changes out of the base-case ICER and asks for them separately, so a decision never hinges on the patient's payslip.
+  - draw:
+      - n_child
+    speak: 'Now put our running case in the same frame: an infant with spinal muscular atrophy, who earns nothing and will not for two decades.'
+  - draw:
+      - e1
+      - label_e1
+      - n_parent
+    speak: So the patient's own production loss is zero under either method — yet the loss is real, and it sits one household member away.
+  - draw:
+      - e2
+      - label_e2
+      - n_loss
+    speak: A parent drops to part time, or leaves work entirely, to provide care at home; that is where the production loss in the SMA case actually lands.
+  - draw:
+      - mark_loss
+    speak: Count that box and nusinersen looks better, because a treated child means a parent back at work; leave it out and the same drug looks worse — nothing about the child changed.
+  - speak: 'Lost production is not a measurement but an assumption about what society is short of, workers or time: so state the method, state whose earnings you counted, and show the ICER both ways.'
+    delivery: grave
+level: basic
+---
+title: The Costs Nobody Books
+voice: female
+template: tornado_diagram
+params:
+  title: Which omission moves the ratio?
+  x_label: ICER (million kr per QALY)
+  base: 3.5
+  show_values: true
+  bars:
+    - label: Informal care
+      low: 2.75
+      high: 3.5
+    - label: Unrelated future costs
+      low: 3.5
+      high: 3.9
+    - label: Production loss
+      low: 3.2
+      high: 3.5
+    - label: Cost of the assessment
+      low: 3.49
+      high: 3.51
+elements:
+  - id: mark_informal
+    type: annotation
+    target: bar_label_0
+    kind: box
+commands:
+  - draw:
+      - axes
+      - base_line
+    speak: 'Now that we have seen what four percent a year does to a child''s future health, one question is left: which costs never got booked at all.'
+  - highlight:
+      target:
+        - base_line
+      effect: glow
+    speak: Our nusinersen base case sits on this line — an illustrative three and a half million kroner per QALY, counting only what the guideline asks us to count.
+  - pause: 0.3
+  - draw:
+      - bar_label_0
+      - bar_0
+    speak: Parents of an untreated child with spinal muscular atrophy hand over hours that no invoice records; book that informal care and the comparator arm gets dearer, so DeltaC shrinks and the ratio falls toward two and three quarter million.
+  - pause: 0.4
+  - draw:
+      - bar_label_1
+      - bar_1
+    speak: The treated child also lives longer, and those added years contain hip replacements, pneumonias, everything unrelated to the disease; book those unrelated future medical costs and the ratio climbs the other way.
+  - highlight:
+      target:
+        - bar_0
+        - bar_1
+      effect: glow
+    speak: The two biggest omissions point in opposite directions, because one lands in the comparator arm and the other in the treated one.
+    delivery: grave
+  - pause: 0.3
+  - draw:
+      - bar_label_2
+      - bar_2
+    speak: Lost production, the argument of part three, belongs here to the parents rather than the patient, and shifts the ratio less than their care hours do.
+  - draw:
+      - bar_label_3
+      - bar_3
+    speak: And the cost of the assessment itself — the analysts, the submissions, the Beslutningsforum agenda item.
+  - camera:
+      center:
+        ref: bar_3
+      zoom: 2.5
+    speak: It is the thin one.
+    delivery: soft
+  - camera:
+      reset: true
+    speak: Worth knowing once for the system's own accounts, and worth almost nothing inside this ratio.
+  - focus:
+      target:
+        - bar_0
+        - bar_1
+    speak: 'So the rule is not count everything: an omission moves the ratio only when it falls unevenly on the two arms.'
+  - highlight:
+      target:
+        - base_line
+      effect: pulse
+    speak: A cost both arms carry alike — the same GP visits, the same travel — cancels inside DeltaC whether you write it down or not.
+  - point:
+      at:
+        ref: bar_0
+      gesture: underline
+    speak: For the boring comparator — a hip replacement at a few hundred thousand kroner per QALY — that same informal-care column is a large share of a small DeltaC, so leaving it out can reorder the whole list.
+  - pause: 0.4
+  - clear:
+      keep:
+        - axes
+        - base_line
+        - bar_0
+        - bar_label_0
+        - bar_1
+        - bar_label_1
+    speak: Strip out what cannot move it, and two columns are left.
+  - draw:
+      - mark_informal
+    speak: Informal care is the larger of them, and the one a Norwegian base case most often leaves off the sheet — which is exactly why it belongs in its own visible row.
+  - draw:
+      - title
+    speak: 'Across all five parts: a cost is the ressursbruk — the resource use — that something else could have had, micro-costed or DRG-averaged, discounted at four percent, and booked even when nobody sends an invoice; what decides the ratio is never the price tag, but the difference between two arms.'
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: CEA, CUA, CBA - and why cost-of-illness answers a different question entirely
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 11 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: CEA, CUA, CBA - and why cost-of-illness answers a different question entirely'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

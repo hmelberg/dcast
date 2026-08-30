@@ -1,0 +1,620 @@
+playlist:
+  title: The ICER, the plane, and why net benefit is easier to think with
+---
+title: One picture, two drugs
+level: advanced
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: One picture, two drugs
+  x_label: Incremental effect ΔE (QALYs)
+  y_label: Incremental cost ΔC (million kr)
+  wtp_threshold: 0.5
+  quadrant_labels: false
+  points:
+    - label: Current care
+      effect: 0
+      cost: 0
+    - label: Nusinersen
+      effect: 3
+      cost: 6
+      emphasize: true
+    - label: Hip replacement
+      effect: 1.5
+      cost: 0.12
+elements:
+  - id: arrow_nus
+    type: arrow
+    from:
+      ref: pt_0
+    to:
+      ref: pt_1
+    style:
+      color: '#b5482e'
+  - id: arrow_hip
+    type: arrow
+    from:
+      ref: pt_0
+    to:
+      ref: pt_2
+    style:
+      color: '#2f6b8f'
+  - id: slope_note
+    type: label
+    text: λ = 500 000 kr per QALY
+    attach_to: wtp_line
+    side: above-left
+    style:
+      color: '#8f887c'
+  - id: mark
+    type: annotation
+    target: slope_note
+    kind: box
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    speak: Over the next five parts we'll read the cost-effectiveness plane, watch the ICER misbehave, and replace it with net benefit — starting today with two Norwegian decisions on one picture.
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Everything here is incremental, so current care sits at the origin: zero extra cost, zero extra QALYs, by construction.'
+  - pause: 0.3
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'Nusinersen for spinal muscular atrophy: with rounded teaching numbers, about three extra QALYs per patient for roughly six million kroner more.'
+  - pause: 0.3
+  - draw:
+      - pt_2
+      - pt_label_2
+    speak: 'And the unglamorous comparison: a hip replacement, about one and a half QALYs for a hundred and twenty thousand kroner — it barely lifts off the horizontal axis.'
+  - camera:
+      center:
+        ref: pt_2
+      zoom: 2.2
+    speak: Zoom in and it is a real point with real people in it; it only looks like nothing beside six million.
+  - camera:
+      reset: true
+      duration: 1
+  - draw:
+      - arrow_nus
+    speak: 'Now the move that makes the whole picture readable: draw the arrow from the origin out to a point, and the ICER is just its slope — extra cost over extra effect.'
+  - point:
+      at:
+        ref: pt_1
+      gesture: tap
+    speak: 'Six million kroner divided by three QALYs: two million kroner per quality-adjusted life year.'
+  - pause: 0.3
+  - draw:
+      - arrow_hip
+    speak: 'The hip arrow is almost flat: a hundred and twenty thousand over one and a half QALYs, about eighty thousand kroner each.'
+  - quiz:
+      intro: A quick check.
+      question: What does the steepness of the arrow from the origin to a point measure?
+      choices:
+        - The ICER
+        - The net monetary benefit
+        - The number of patients treated
+      correct: 1
+      right: The slope is ΔC divided by ΔE — the ICER itself, in kroner per QALY.
+      wrong: 'Read the arrow as a rise over a run: cost over effect.'
+  - draw:
+      - wtp_line
+      - wtp_label
+      - slope_note
+    speak: The threshold is a slope as well — a line through the origin at, for illustration, half a million kroner per QALY.
+  - quiz:
+      question: Which point lies above the threshold line?
+      choices:
+        - Nusinersen
+        - Hip replacement
+        - Neither
+      correct: 1
+      right: Nusinersen's slope is roughly two million per QALY — about four times steeper than the line.
+      wrong: Compare each arrow's steepness with the line's, not the height of the point alone.
+  - highlight:
+      target:
+        - pt_2
+      effect: glow
+    speak: Below the line, hips buy health more cheaply than we have said health is worth.
+  - highlight:
+      target:
+        - pt_1
+      effect: glow
+    speak: Above it sits nusinersen — which is why Beslutningsforum first said no, and then yes only for patients under eighteen.
+  - erase:
+      - arrow_nus
+      - arrow_hip
+    speak: 'Notice how little arithmetic we actually did: two slopes, compared against one slope.'
+  - draw:
+      - mark
+    speak: That single number, lambda, is what turns a picture of costs and effects into a decision.
+  - speak: But this tidy geometry rested on both arrows pointing up and to the right — a ratio of two positive numbers. Move a point into another quadrant and the same ratio starts telling lies.
+    delivery: grave
+  - draw:
+      - title
+    speak: 'One picture, two drugs: the ICER is nothing but the steepness of an arrow, and the threshold is the steepness we have agreed to accept.'
+---
+title: The Four Quadrants
+level: advanced
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: The four quadrants of the plane
+  x_label: ΔE — incremental QALYs
+  y_label: ΔC — incremental cost (1000 kr)
+  wtp_threshold: 275
+  quadrant_labels: true
+  points:
+    - label: Hip replacement
+      effect: 1.5
+      cost: 120
+      emphasize: true
+    - label: Costly new drug
+      effect: 0.6
+      cost: 400
+    - label: Older branded option
+      effect: -0.4
+      cost: 150
+    - label: Generic switch
+      effect: 0.25
+      cost: -60
+    - label: Withdraw low-value service
+      effect: -0.35
+      cost: -250
+elements:
+  - id: sw_mark
+    type: annotation
+    target: pt_label_4
+    kind: box
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    parallel: true
+    speak: Now that we have seen two drugs land on the same picture, let's read the whole map — because only half of it can be decided without naming a price for health.
+  - draw:
+      - q_se
+      - pt_3
+      - pt_label_3
+    speak: 'Start south-east, the comfortable corner: moving a patient group onto a generic saves about 60 000 kroner each and gains a fraction of a QALY — cheaper and better, what we call dominant.'
+  - pause: 0.3
+  - draw:
+      - q_nw
+      - pt_2
+      - pt_label_2
+    speak: 'North-west is its mirror: an older branded option costing 150 000 more and delivering 0.4 QALYs less — dominated, and rejecting it needs no threshold at all.'
+  - quiz:
+      intro: A quick check before we go on.
+      question: Which cases can be decided without naming any threshold?
+      choices:
+        - The north-east point
+        - The dominant and dominated points
+        - Only the south-west point
+      correct: 2
+      right: Dominant and dominated cases settle themselves — better and cheaper, or worse and dearer, needs no price of health.
+      wrong: 'Look again at south-east and north-west: those two are settled by dominance alone.'
+  - draw:
+      - q_ne
+      - pt_0
+      - pt_label_0
+    speak: 'North-east is where almost everything real lives: a hip replacement costs about 120 000 kroner more and buys roughly 1.5 extra QALYs.'
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: To judge it you must commit to a price of health — lambda, drawn as a line through the origin, here 275 000 kroner per QALY.
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: 'The hip sits below that line: the health it buys is worth more than the resources it consumes.'
+  - pause: 0.4
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: A costlier drug lands above the line — it buys real health too, it simply asks more per QALY than we have said we will pay; nusinersen, from the last part, sits far above the top of this frame.
+  - erase:
+      - q_se
+      - q_nw
+      - q_ne
+    speak: Three quadrants down. The fourth is the one committees quietly hate.
+  - draw:
+      - q_sw
+      - pt_4
+      - pt_label_4
+    speak: 'South-west: withdrawing a low-value service releases about 250 000 kroner per patient and costs roughly 0.35 QALYs — you are giving up health to free resources.'
+  - focus:
+      target:
+        - pt_4
+        - wtp_line
+    speak: The same rule holds, and it inverts your intuition — below the line here means the money released is worth more than the health surrendered, so this disinvestment is acceptable.
+  - quiz:
+      intro: One more.
+      question: A disinvestment sits below the threshold line in the south-west. What does that mean?
+      choices:
+        - It releases more money than the lost health is worth
+        - It is dominated
+        - It saves money and adds health
+      correct: 1
+      right: Below the line in the south-west means the resources freed outweigh the QALYs given up — acceptable, if uncomfortable.
+      wrong: 'It cannot be dominant or dominated: health falls, so the trade-off is against the money released.'
+  - draw:
+      - sw_mark
+    speak: 'Yet a system like Beslutningsforum almost never signs a decision in this corner: it can say no to a new drug, while low-value care already inside the budget is displaced silently, through queues rather than minutes.'
+  - pause: 0.4
+  - draw:
+      - title
+    speak: Two quadrants decide themselves; the other two only decide once you name a price for a QALY — and in the south-west, naming it means selling health for money.
+    delivery: grave
+---
+title: Why the ICER Lies
+level: advanced
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: Why the ICER lies
+  x_label: ΔE (QALYs)
+  y_label: ΔC (kr)
+  quadrant_labels: true
+  points:
+    - label: 'A: +2 QALYs, −400 000 kr'
+      effect: 2
+      cost: -400000
+      emphasize: true
+    - label: 'B: −2 QALYs, +400 000 kr'
+      effect: -2
+      cost: 400000
+      emphasize: true
+    - label: 'Trial 1: ΔE = +0.02'
+      effect: 0.02
+      cost: 500000
+    - label: 'Trial 2: ΔE = −0.02'
+      effect: -0.02
+      cost: 500000
+    - label: 'X: +1 QALY, +300 000 kr'
+      effect: 1
+      cost: 300000
+    - label: 'Y: +2 QALYs, +500 000 kr'
+      effect: 2
+      cost: 500000
+elements:
+  - id: calc1
+    type: text
+    text: 'Both: ΔC / ΔE = −200 000 kr per QALY'
+    x: 500
+    'y': 45
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: calc2
+    type: text
+    text: +25 000 000   and   −25 000 000 kr per QALY
+    x: 500
+    'y': 45
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: calc3
+    type: text
+    text: 'Y vs X: 200 000 / 1 = 200 000 kr per QALY'
+    x: 500
+    'y': 45
+    font_size: 26
+    style:
+      color: '#b5482e'
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    speak: Now that we have read the four quadrants, let's put the ICER itself under suspicion — because a committee that ranks technologies by delta C over delta E can approve the wrong one.
+  - draw:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    parallel: true
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Option A saves four hundred thousand kroner and gains two QALYs: cheaper and better, sitting in the southeast — it dominates current care.'
+  - pause: 0.3
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'Option B costs four hundred thousand more and loses two QALYs: the northwest, dominated, everything you never want to buy.'
+  - pause: 0.3
+  - draw:
+      - calc1
+    speak: Now divide. Minus four hundred thousand over plus two; plus four hundred thousand over minus two. Both come out as minus two hundred thousand kroner per QALY.
+  - highlight:
+      target:
+        - pt_0
+        - pt_1
+      effect: glow
+    speak: The best result in the whole plane and the worst carry the same ICER, because a ratio keeps the signs only as their product.
+    delivery: grave
+  - pause: 0.5
+  - clear:
+      keep:
+        - x_axis
+        - y_axis
+        - q_nw
+        - q_ne
+        - q_sw
+        - q_se
+    speak: Which is why the reporting guidelines of most agencies forbid printing a negative ICER at all — you write the word dominant, or dominated, and let the number go.
+  - draw:
+      - pt_2
+      - pt_label_2
+      - pt_3
+      - pt_label_3
+    parallel: true
+    speak: 'The second failure lives where delta E is almost nothing: two analyses of the same drug, a gain of two hundredths of a QALY and a loss of the same size, half a million kroner either way.'
+  - camera:
+      center:
+        ref: pt_2
+      zoom: 2.4
+    speak: To the eye they are one dot — about a week of healthy life, far inside any confidence interval.
+  - draw:
+      - calc2
+    speak: 'But the ratio reads plus twenty-five million per QALY, then minus twenty-five million: the denominator crossing zero throws the number out to infinity and back.'
+  - camera:
+      reset: true
+    speak: So an ICER has no honest confidence interval — it blows up precisely where the effect is uncertain, which is precisely where a decision-maker needs help.
+  - pause: 0.4
+  - clear:
+      keep:
+        - x_axis
+        - y_axis
+        - q_nw
+        - q_ne
+        - q_sw
+        - q_se
+    speak: 'Third failure: ICERs cannot be lined up against each other.'
+  - draw:
+      - pt_4
+      - pt_label_4
+    speak: Treatment X against current care buys one QALY for three hundred thousand kroner — an ICER of three hundred thousand.
+  - draw:
+      - pt_5
+      - pt_label_5
+    speak: Treatment Y buys two QALYs for five hundred thousand — two hundred and fifty thousand per QALY, so by the league table Y is the better buy.
+  - draw:
+      - calc3
+    speak: Yet if X is already on the table, moving from X to Y costs two hundred thousand more for one more QALY — a third number, and the only one that answers the choice actually in front of you.
+  - highlight:
+      target:
+        - pt_4
+        - pt_5
+      effect: pulse
+    speak: Every ICER belongs to a pair of options, never to one, so a column of ICERs against placebo is arithmetic without meaning.
+  - quiz:
+      intro: One check before we close.
+      question: An ICER of −400 000 kr per QALY — which quadrant is that technology in?
+      choices:
+        - 'Southeast: cheaper and better'
+        - 'Northwest: costlier and worse'
+        - Either one — the sign can't tell you
+      correct: 3
+      right: 'A negative ratio only says ΔC and ΔE have opposite signs: it fits the dominant southeast and the dominated northwest equally well.'
+      wrong: Both of those quadrants produce a negative ratio, so the number alone cannot separate them.
+      required: false
+  - draw:
+      - title
+    speak: A sign it cannot defend, a denominator it cannot survive, and no place in a ranking — next time we replace it with net monetary benefit, which has none of those faults.
+    delivery: grave
+---
+title: Net Benefit Straightens It Out
+level: advanced
+voice: male
+template: cost_effectiveness_plane
+params:
+  wtp_threshold: 275000
+  x_label: Incremental effect ΔE (QALYs)
+  y_label: Incremental cost ΔC (kr)
+  points:
+    - label: Hip replacement
+      effect: 1.2
+      cost: 90000
+    - label: Rehab programme
+      effect: 0.3
+      cost: -40000
+    - label: New drug
+      effect: 0.9
+      cost: 400000
+elements:
+  - id: formula
+    type: text
+    text: NMB = λ·ΔE − ΔC
+    x: 500
+    'y': 712
+    font_size: 32
+  - id: nmb_head
+    type: text
+    text: Net monetary benefit at λ = 825 000 kr/QALY
+    x: 500
+    'y': 600
+    font_size: 30
+  - id: nmb_1
+    type: text
+    text: 'Hip replacement:   + 900 000 kr'
+    x: 500
+    'y': 515
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: nmb_2
+    type: text
+    text: 'New drug:   + 342 500 kr'
+    x: 500
+    'y': 455
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: nmb_3
+    type: text
+    text: 'Rehab programme:   + 287 500 kr'
+    x: 500
+    'y': 395
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: nmb_4
+    type: text
+    text: 'Nusinersen:   − 7 515 000 kr'
+    x: 500
+    'y': 320
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: mark
+    type: annotation
+    target: nmb_4
+    kind: box
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    speak: Now that we have seen how the ICER lies — negative ratios, dominance, extended dominance — let's rewrite the same plane in a number that cannot misbehave that way.
+  - draw:
+      - q_ne
+      - q_nw
+      - q_se
+      - q_sw
+    parallel: true
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'A hip replacement: 1.2 QALYs gained for 90 000 kroner more per patient.'
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'A rehab programme: 0.3 QALYs, and it saves 40 000 kroner — the case whose ICER came out negative and meaningless.'
+  - draw:
+      - pt_2
+      - pt_label_2
+    speak: 'And a new drug: 0.9 QALYs for 400 000 kroner, an ICER of about 444 000 per QALY.'
+  - pause: 0.3
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: Take the threshold as given for now — 275 000 kroner per QALY, Norway's low-severity level; where that number comes from is next lecture's problem.
+  - draw:
+      - formula
+    speak: Net monetary benefit converts the health gain into kroner at that price, then subtracts what it cost.
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: 'The hip: 275 000 times 1.2 is 330 000 kroner of health, minus 90 000 spent — plus 240 000.'
+  - highlight:
+      target:
+        - pt_1
+      effect: glow
+    speak: 'The rehab programme: 82 500 of health, plus the 40 000 it saves — plus 122 500, and nothing was divided by anything.'
+  - highlight:
+      target:
+        - pt_2
+      effect: glow
+    speak: 'The drug: 247 500 of health against 400 000 of cost — minus 152 500.'
+  - point:
+      at:
+        ref: wtp_line
+      gesture: underline
+    speak: The threshold line is exactly the set of points whose net benefit is zero — so net benefit is the vertical distance from that line, read off in kroner.
+  - quiz:
+      intro: A quick check.
+      question: 'A point sitting ABOVE the threshold line has:'
+      choices:
+        - Positive net benefit
+        - Negative net benefit
+        - An undefined ICER
+      correct: 2
+      right: Above the line the extra cost exceeds λ times the health gained, so NMB is negative.
+      wrong: Above the line means you paid more than the health is worth at λ — that is a negative net benefit.
+  - animate:
+      wtp_threshold: 825000
+    duration: 3
+    speak: 'Now apply severity: for the most severe conditions the accepted λ rises to 825 000, and the whole line pivots.'
+  - highlight:
+      target:
+        - pt_2
+        - pt_1
+      effect: glow
+    speak: The drug's net benefit turns positive, plus 342 500 — and it now outranks the rehab programme's 287 500, so the ordering itself moved with λ.
+  - quiz:
+      question: So what does net benefit still require of you?
+      choices:
+        - A value of λ, committed to before you look at the data
+        - Nothing — it is threshold-free
+        - Only that ΔE is positive
+      correct: 1
+      right: 'Net benefit removes the division, not the judgement: λ must be chosen up front, and the ranking depends on it.'
+      wrong: The pivot just showed it — change λ and the signs and the ranking change with it.
+  - clear: {}
+    speak: Strip the picture away, and every option collapses into one signed number — Stinnett and Mullahy's 1998 fix for a statistics problem, since a ratio of two uncertain quantities has no well-behaved confidence interval and a difference does.
+  - draw:
+      - nmb_head
+    speak: Fix λ at the high-severity level, and each intervention gets a value in kroner.
+  - draw:
+      - nmb_1
+      - nmb_2
+      - nmb_3
+    parallel: true
+    speak: They rank straight down the column, and each is comparable with every other — not merely with placebo.
+  - draw:
+      - nmb_4
+    speak: 'Nusinersen: 1.8 QALYs for roughly nine million kroner per patient — minus 7.5 million, even at the most generous threshold Norway allows.'
+  - draw:
+      - mark
+    speak: And because these are kroner, they add up — across patients, across programmes, across a whole budget; ICERs never could.
+  - speak: 'Net benefit doesn''t abolish the hard judgement, it moves it to the front: name the price of a QALY first, and the arithmetic stops fighting you.'
+    delivery: grave
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Where does the threshold come from - willingness to pay, or what we displace?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 16 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Where does the threshold come from - willingness to pay, or what we displace?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

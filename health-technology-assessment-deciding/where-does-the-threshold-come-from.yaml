@@ -1,0 +1,807 @@
+playlist:
+  title: Where does the threshold come from - willingness to pay, or what we displace?
+---
+title: The Line You Have Been Drawing
+level: advanced
+voice: female
+template: cost_effectiveness_plane
+params:
+  title: The line you have been drawing
+  wtp_threshold: 275000
+  x_label: ΔE — QALYs gained
+  y_label: ΔC — incremental cost (kr)
+  points:
+    - label: Nusinersen (SMA)
+      effect: 2.5
+      cost: 5000000
+      emphasize: true
+    - label: Hip replacement
+      effect: 1
+      cost: 100000
+elements:
+  - id: head
+    type: text
+    text: Where does λ come from?
+    x: 500
+    'y': 630
+    font_size: 34
+  - id: r1
+    type: text
+    text: Demand side — what society will pay
+    x: 500
+    'y': 530
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: r2
+    type: text
+    text: Supply side — what the marginal krone buys
+    x: 500
+    'y': 455
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: r3
+    type: text
+    text: £20–30,000 against £13,000
+    x: 500
+    'y': 380
+    font_size: 26
+  - id: r4
+    type: text
+    text: The WHO rule its authors withdrew
+    x: 500
+    'y': 305
+    font_size: 26
+  - id: r5
+    type: text
+    text: Who dies when λ is set too high
+    x: 500
+    'y': 230
+    font_size: 26
+commands:
+  - draw:
+      - title
+      - x_axis
+      - y_axis
+    speak: You have been drawing a threshold line through this plane for fifteen lectures — this series asks where its slope actually came from, because that one number decides who gets treated.
+  - draw:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    parallel: true
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Take nusinersen for spinal muscular atrophy: on the order of two to three QALYs per patient, at a list price of seven hundred and fifty thousand dollars in the first year and three hundred and seventy-five thousand every year after.'
+  - pause: 0.3
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: And here, almost hugging the origin, a hip replacement — roughly one QALY for about a hundred thousand kroner.
+  - point:
+      at:
+        ref: pt_1
+      gesture: circle
+    speak: Same plane, same currency, two orders of magnitude apart in what a krone buys.
+  - pause: 0.4
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: The line between them has slope lambda — around two hundred and seventy-five thousand kroner per QALY, the alternative-cost figure the Magnussen group proposed in 2015, which severity can lift to roughly three times that.
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: Below the line you buy, above it you don't, and nusinersen sits far above — which is why Beslutningsforum said no in 2017, then yes in 2018 with an age limit.
+  - pause: 0.5
+  - animate:
+      wtp_threshold: 2200000
+    duration: 3
+    speak: 'Now watch a steeper slope: the same drug, the same evidence, quietly becomes cost-effective.'
+  - animate:
+      wtp_threshold: 275000
+    duration: 2.5
+    speak: Let it fall back and those same children are unaffordable again — nothing about the medicine moved, only a number no trial ever measured.
+    delivery: grave
+  - focus:
+      target:
+        - wtp_line
+        - wtp_label
+    speak: 'Which is why the slope is fought over: NICE''s famous twenty to thirty thousand pounds per QALY was never derived from data, while Claxton and colleagues, estimating what the NHS actually buys at the margin, arrived at about thirteen thousand.'
+  - pause: 0.5
+  - clear: {}
+    speak: So four answers are owed to you, one for each part still to come.
+  - draw:
+      - head
+      - r1
+      - r2
+    speak: 'Either lambda is demand-side — what society is willing to pay for a year of health — or supply-side: what the marginal krone already buys somewhere else in the budget.'
+  - draw:
+      - r3
+    speak: Then the collision, and what a system should do when its own line is twice as generous as its own productivity.
+  - draw:
+      - r4
+    speak: Then the WHO's rule of one to three times GDP per capita — a threshold its own authors publicly asked the world to stop using.
+  - draw:
+      - r5
+    speak: And the patients on the far side of the line, who lose health whenever we overpay, and whom no registry ever names.
+  - highlight:
+      target:
+        - head
+      effect: glow
+    speak: So lambda was never a statement about money we are willing to spend — it is a claim about the health we are about to destroy.
+---
+title: Two Ways to Justify Lambda
+level: advanced
+voice: female
+template: pathway
+params:
+  title: Two ways to justify lambda
+  edges: Threshold lambda -> Demand side; Demand side -> Over 1 million kr per QALY; Threshold lambda -> Supply side; Supply side -> About 275 000 kr per QALY
+  node_types:
+    Threshold lambda: gene
+elements:
+  - id: t_head
+    type: text
+    x: 500
+    'y': 665
+    text: Say yes at 1 000 000 kr per QALY
+    font_size: 30
+  - id: t_spend
+    type: text
+    x: 500
+    'y': 615
+    text: 10 million kroner, out of a fixed budget
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: bar_gain
+    type: path
+    points:
+      - - 180
+        - 520
+      - - 280
+        - 520
+      - - 280
+        - 560
+      - - 180
+        - 560
+    closed: true
+    style:
+      fill: '#87a878'
+  - id: lbl_gain
+    type: label
+    text: 10 QALYs gained
+    attach_to: bar_gain
+    side: right
+    style:
+      color: '#87a878'
+  - id: bar_lost
+    type: path
+    points:
+      - - 180
+        - 430
+      - - 540
+        - 430
+      - - 540
+        - 470
+      - - 180
+        - 470
+    closed: true
+    style:
+      fill: '#c96567'
+  - id: lbl_lost
+    type: label
+    text: 36 QALYs displaced
+    attach_to: bar_lost
+    side: right
+    style:
+      color: '#c96567'
+  - id: t_net
+    type: text
+    x: 500
+    'y': 335
+    text: 'Net: 26 QALYs destroyed'
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: mark_net
+    type: annotation
+    target: t_net
+    kind: box
+  - id: t_close
+    type: text
+    x: 500
+    'y': 235
+    text: 'Nusinersen: no in 2017, yes in 2018 — age limit, negotiated price'
+    font_size: 22
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - title
+      - node_threshold_lambda
+      - node_label_threshold_lambda
+    speak: Now that we have seen the threshold drawn as a line through the origin, the honest question is where its slope, lambda, actually comes from — because two respectable ways of answering give numbers four times apart.
+  - draw:
+      - edge_0
+      - node_demand_side
+      - node_label_demand_side
+    speak: 'One answer looks outward, at society: how much are we willing to pay for a quality-adjusted life year?'
+  - draw:
+      - edge_1
+      - node_over_1_million_kr_per_qaly
+      - node_label_over_1_million_kr_per_qaly
+    speak: Norwegian cost-benefit guidance values a statistical life at thirty million kroner — spread over the life years behind that figure, more than a million kroner per life year.
+  - pause: 0.4
+  - draw:
+      - edge_2
+      - node_supply_side
+      - node_label_supply_side
+    speak: 'The other answer looks inward, at the budget we already have: what does the last krone in it currently buy?'
+  - draw:
+      - edge_3
+      - node_about_275_000_kr_per_qaly
+      - node_label_about_275_000_kr_per_qaly
+    speak: Norway's 275,000 kroner per good life year was defended as an estimate of exactly that — the health quietly produced at the margin.
+  - focus:
+      target:
+        - node_demand_side
+        - node_label_demand_side
+        - node_over_1_million_kr_per_qaly
+        - node_label_over_1_million_kr_per_qaly
+        - edge_0
+        - edge_1
+    speak: The left branch is a statement about values — what a life year ought to be worth to us.
+  - focus:
+      target:
+        - node_supply_side
+        - node_label_supply_side
+        - node_about_275_000_kr_per_qaly
+        - node_label_about_275_000_kr_per_qaly
+        - edge_2
+        - edge_3
+    speak: The right branch is a measurement — how much health the system loses when that money goes somewhere else.
+  - clear: {}
+    speak: Two different questions, so no reason their answers should agree — and the gap between them is not academic.
+  - draw:
+      - t_head
+      - t_spend
+    speak: Say we approve a treatment priced at a million kroner per QALY, costing the system ten million.
+  - draw:
+      - bar_gain
+      - lbl_gain
+    speak: Ten million at a million per QALY buys ten quality-adjusted life years, for patients with names and faces.
+  - pause: 0.3
+  - draw:
+      - bar_lost
+      - lbl_lost
+    speak: 'But that money was already busy: at 275,000 kroner per QALY, the services it leaves behind were producing thirty-six.'
+  - draw:
+      - t_net
+      - mark_net
+    speak: So the yes is not a gain of ten — it is a net loss of twenty-six life years.
+    delivery: grave
+  - highlight:
+      target:
+        - bar_lost
+      effect: glow
+    speak: 'That is the supply-side case, made by Claxton, Culyer and colleagues: with a fixed budget, any lambda above the margin makes the health service destroy health.'
+  - point:
+      at:
+        ref: t_head
+      gesture: underline
+    speak: 'The demand-side reply stings: a supply-side threshold can only ratify whatever budget politicians happened to set, and can never argue that the budget itself is too small.'
+  - draw:
+      - t_close
+    speak: Nusinersen shows how the argument actually ends — Beslutningsforum said no in 2017 and yes in 2018, with an age limit and a negotiated price, while the threshold itself never moved.
+  - speak: Demand-side lambda asks what a life year is worth to us; supply-side lambda asks what it costs the patients we displace — and only the second number can tell you when a yes does harm.
+---
+title: 20–30,000 vs 13,000
+level: advanced
+voice: female
+domain:
+  x:
+    - 0
+    - 1
+  'y':
+    - 0
+    - 30000
+elements:
+  - id: ax
+    type: axes
+    x_label: ΔE — QALYs gained per patient
+    y_label: ΔC — extra cost (£)
+  - id: nice_high
+    type: curve
+    expr: 30000*x
+    style:
+      color: '#2f6b8f'
+  - id: nice_low
+    type: curve
+    expr: 20000*x
+    style:
+      color: '#2f6b8f'
+  - id: nice_band
+    type: region
+    between:
+      - nice_low
+      - nice_high
+    style:
+      fill: '#2f6b8f'
+      opacity: 0.12
+  - id: label_nice
+    type: label
+    text: 'NICE: £20 000–30 000 per QALY'
+    attach_to: nice_high
+    side: above-left
+    style:
+      color: '#2f6b8f'
+  - id: claxton_line
+    type: curve
+    expr: 13000*x
+    style:
+      color: '#b5482e'
+  - id: label_claxton
+    type: label
+    text: 'Claxton et al. 2015: ≈ £13 000 per QALY'
+    attach_to: claxton_line
+    side: below-right
+    style:
+      color: '#b5482e'
+  - id: loss_wedge
+    type: region
+    between:
+      - claxton_line
+      - nice_low
+    style:
+      fill: '#c96567'
+      opacity: 0.18
+  - id: drug
+    type: point
+    at:
+      x: 0.5
+      'y': 10000
+    guides: true
+  - id: label_drug
+    type: label
+    text: 'New drug: ΔE = 0.5, ΔC = £10 000'
+    attach_to: drug
+    side: above-left
+  - id: displaced
+    type: point
+    at:
+      x: 0.769
+      'y': 10000
+    style:
+      color: '#b5482e'
+  - id: label_displaced
+    type: label
+    text: 0.77 QALYs displaced
+    attach_to: displaced
+    side: right
+    style:
+      color: '#b5482e'
+  - id: nmb_arrow
+    type: arrow
+    from:
+      x: 0.5
+      'y': 6500
+    to:
+      x: 0.5
+      'y': 10000
+    style:
+      color: '#b5482e'
+  - id: label_nmb
+    type: label
+    text: 'NMB at λ = 13 000: −£3 500'
+    attach_to: nmb_arrow
+    side: left
+    style:
+      color: '#b5482e'
+  - id: mark_nmb
+    type: annotation
+    target: label_nmb
+    kind: box
+  - id: label_norway
+    type: label
+    text: 'Norway: ≈ 275 000 kr per QALY, before severity weighting'
+    attach_to: claxton_line
+    side: right
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - ax
+    speak: Now that we have seen the two ways to justify lambda — what society says it will pay, and what the budget's last pound already buys — let's put real numbers on both.
+  - draw:
+      - nice_low
+      - nice_high
+      - nice_band
+      - label_nice
+    speak: 'This blue band is England''s stated number: NICE has judged technologies against twenty to thirty thousand pounds per QALY since 2004.'
+  - pause: 0.3
+  - draw:
+      - claxton_line
+      - label_claxton
+    speak: 'And this red line is the other kind of number: in 2015 Karl Claxton and colleagues at York estimated what NHS spending actually produces at the margin — about thirteen thousand pounds per QALY.'
+  - draw:
+      - loss_wedge
+    speak: Between them sits a wedge of technologies England approves at a price its own health service cannot produce health for.
+  - pause: 0.5
+  - draw:
+      - drug
+      - label_drug
+    speak: 'Take a concrete case: a drug gaining half a QALY per patient at ten thousand pounds more than current care.'
+  - highlight:
+      target:
+        - nice_low
+      effect: glow
+    speak: Its ICER — ten thousand divided by nought point five — is twenty thousand pounds per QALY, exactly on the lower edge of the range, so it passes.
+  - pause: 0.3
+  - draw:
+      - displaced
+      - label_displaced
+    speak: But that ten thousand pounds comes out of a budget producing health at thirteen thousand a QALY, so spending it here removes about nought point seven seven QALYs from patients nobody names.
+  - draw:
+      - nmb_arrow
+      - label_nmb
+    speak: 'Half a QALY bought, three quarters lost: net monetary benefit at lambda thirteen thousand is minus three thousand five hundred pounds per patient.'
+  - draw:
+      - mark_nmb
+    speak: Approved and health-destroying at the same time — the difference is entirely which lambda you believe.
+    delivery: grave
+  - pause: 0.5
+  - focus:
+      target:
+        - claxton_line
+        - label_claxton
+    speak: 'So what should move when the two disagree? Claxton''s answer is blunt: if the service produces at thirteen thousand, that is the threshold, and the stated range is simply too high.'
+  - focus:
+      target:
+        - nice_low
+        - nice_high
+        - nice_band
+        - label_nice
+    speak: NICE has not moved its range, and critics of the estimate argue it leans on strong assumptions — that tightening budgets cut the least productive services first, and that national spending data can be read as causal.
+  - highlight:
+      target:
+        - loss_wedge
+      effect: glow
+    speak: 'Culyer and colleagues offered a third reading: a threshold is something to be searched for, not chosen — and if society truly values a QALY at thirty thousand, the gap argues for a bigger budget, not for ignoring the displacement.'
+  - draw:
+      - label_norway
+    speak: 'Norway took the supply-side route explicitly: an estimated alternative cost of roughly 275 000 kroner per good year, then scaled upward with alvorlighet — severity.'
+  - highlight:
+      target:
+        - drug
+      effect: pulse
+    speak: Nusinersen, our running example, sat far above every line on this figure — which is why that fight was about price and severity, never about which threshold was right.
+  - speak: 'A threshold is not a preference: it is a claim about what the last krone in the budget is already producing — and every approval above it is financed in health that never appears in anyone''s data.'
+    delivery: grave
+---
+title: The Patients You Never Meet, Counted
+voice: female
+elements:
+  - id: title
+    type: text
+    x: 500
+    'y': 700
+    text: One hundred million kroner, two ways to spend it
+    font_size: 30
+  - id: divider
+    type: path
+    points:
+      - - 500
+        - 400
+      - - 500
+        - 660
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: left_head
+    type: text
+    x: 255
+    'y': 630
+    text: The decision you see
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: l1
+    type: text
+    x: 255
+    'y': 575
+    text: 100 million kr for a new drug
+    font_size: 22
+  - id: l2
+    type: text
+    x: 255
+    'y': 530
+    text: ICER ≈ 1,000,000 kr / QALY
+    font_size: 22
+  - id: l3
+    type: text
+    x: 255
+    'y': 460
+    text: '= 100 QALYs gained'
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: right_head
+    type: text
+    x: 745
+    'y': 630
+    text: The decision you don't
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: r1
+    type: text
+    x: 745
+    'y': 575
+    text: The same 100 million kr
+    font_size: 22
+  - id: r2
+    type: text
+    x: 745
+    'y': 530
+    text: Margin ≈ 275,000 kr / QALY
+    font_size: 22
+  - id: r3
+    type: text
+    x: 745
+    'y': 460
+    text: '= 364 QALYs forgone'
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: net_text
+    type: text
+    x: 500
+    'y': 330
+    text: 'Net: −264 QALYs'
+    font_size: 36
+    style:
+      color: '#c96567'
+  - id: mark_net
+    type: annotation
+    target: net_text
+    kind: box
+  - id: debate_1
+    type: text
+    x: 500
+    'y': 660
+    text: 'NICE: £20,000–30,000 per QALY'
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: debate_2
+    type: text
+    x: 500
+    'y': 610
+    text: 'Claxton et al. 2015: NHS margin ≈ £12,936'
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: head2
+    type: text
+    x: 500
+    'y': 520
+    text: Who are the 264?
+    font_size: 30
+  - id: p_named
+    type: shape
+    shape: person
+    x: 140
+    'y': 260
+    style:
+      color: '#b5482e'
+  - id: label_named
+    type: label
+    text: One named child
+    attach_to: p_named
+    side: below
+    style:
+      color: '#b5482e'
+  - id: c1
+    type: shape
+    shape: person
+    x: 400
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c2
+    type: shape
+    shape: person
+    x: 460
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c3
+    type: shape
+    shape: person
+    x: 520
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c4
+    type: shape
+    shape: person
+    x: 580
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c5
+    type: shape
+    shape: person
+    x: 640
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c6
+    type: shape
+    shape: person
+    x: 700
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c7
+    type: shape
+    shape: person
+    x: 760
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: c8
+    type: shape
+    shape: person
+    x: 820
+    'y': 260
+    style:
+      color: '#8f887c'
+  - id: label_crowd
+    type: label
+    text: 264 QALYs' worth of people, no names
+    attach_to: c4
+    side: below
+    style:
+      color: '#8f887c'
+  - id: closing
+    type: text
+    x: 500
+    'y': 95
+    text: Above the margin, you are choosing to buy less health.
+    font_size: 26
+  - id: mark_closing
+    type: annotation
+    target: closing
+    kind: box
+commands:
+  - draw:
+      - title
+      - divider
+    speak: 'Now that we have seen the WHO''s own authors withdraw their GDP rule, let''s do the arithmetic they were avoiding: what an inflated lambda costs, counted in health.'
+  - draw:
+      - left_head
+      - l1
+      - l2
+    speak: 'On the left, the decision everyone sees: a hundred million kroner for a new drug at roughly a million kroner per QALY — the order of magnitude published analyses report for nusinersen at list price.'
+  - draw:
+      - l3
+    speak: That buys a hundred quality-adjusted life years, in children we can name.
+  - pause: 0.4
+  - draw:
+      - right_head
+      - r1
+      - r2
+    speak: 'On the right, the decision nobody reports: in a fixed budget that money leaves care already running at the margin — Norway''s 2016 white paper set the reference value at 275,000 kroner per good life year.'
+  - draw:
+      - r3
+    speak: Left where it was, the same hundred million produces about three hundred and sixty-four QALYs — statins started, hips replaced, the boring high-volume work.
+  - draw:
+      - net_text
+      - mark_net
+    speak: So the approval is not a gain of a hundred life years. It is a net loss of two hundred and sixty-four.
+    delivery: grave
+  - point:
+      at:
+        ref: net_text
+      gesture: underline
+    speak: Every lambda above the margin runs this subtraction, whether or not anyone writes it down.
+  - clear:
+      keep:
+        - net_text
+        - mark_net
+  - draw:
+      - head2
+      - p_named
+      - label_named
+    speak: 'One side of it we can see: a named child, a photograph, a hearing — Beslutningsforum said no in 2017, then yes in 2018 with an age limit.'
+  - draw:
+      - c1
+      - c2
+      - c3
+      - c4
+      - c5
+      - c6
+      - c7
+      - c8
+    parallel: true
+    speak: 'The other side we cannot: the displaced health is thin and scattered, a delayed hip here, a statin never started there.'
+  - draw:
+      - label_crowd
+    speak: Not one of them will ever appear in a record as the person who lost a life year to this decision.
+  - focus:
+      target:
+        - c1
+        - c2
+        - c3
+        - c4
+        - c5
+        - c6
+        - c7
+        - c8
+        - label_crowd
+    speak: 'Thomas Schelling named this in 1968: the identified life gets a headline, the statistical life gets nothing — though it is just as dead.'
+  - draw:
+      - debate_1
+    speak: 'And the field genuinely splits here: NICE has held twenty to thirty thousand pounds since the early 2000s, a range never derived from evidence about what actually gets displaced.'
+  - draw:
+      - debate_2
+    speak: Claxton and colleagues measured the NHS margin at about thirteen thousand; critics call the estimate fragile, extrapolating from mortality to quality of life — the authors answer that even a wide error band leaves NICE above the margin. Unresolved.
+  - draw:
+      - closing
+      - mark_closing
+    speak: 'Which leaves a modest obligation: if you set lambda above the margin, say out loud that you are buying less health, and say what you are buying instead — severity, rarity, a promise kept.'
+  - speak: 'Across this series: the threshold is not what society says it will pay, it is what the next krone already buys — and everything approved above it is paid for by patients you will never meet.'
+    delivery: grave
+level: advanced
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Which uncertainties can more money actually fix?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 17 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Which uncertainties can more money actually fix?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

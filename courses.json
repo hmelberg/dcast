@@ -27,6 +27,36 @@
         "causal-inference-in-economics-evidence-from-health-and-health-care/README.md"
       ],
       "updated": "2026-08-30"
+    },
+    {
+      "slug": "health-technology-assessment-deciding",
+      "title": "Health Technology Assessment: Deciding What a Health System Should Buy",
+      "files": [
+        "health-technology-assessment-deciding/it-works-so-why-is-anyone-still-saying.yaml",
+        "health-technology-assessment-deciding/the-patients-you-never-meet-opportunity.yaml",
+        "health-technology-assessment-deciding/where-did-this-whole-enterprise-come.yaml",
+        "health-technology-assessment-deciding/norway-s-priority-setting-system.yaml",
+        "health-technology-assessment-deciding/whose-costs-count-the-perspective.yaml",
+        "health-technology-assessment-deciding/what-is-a-qaly-really-claiming-about-you.yaml",
+        "health-technology-assessment-deciding/how-can-you-possibly-measure-how-bad-an.yaml",
+        "health-technology-assessment-deciding/time-trade-off-and-standard-gamble-whose.yaml",
+        "health-technology-assessment-deciding/severity-absolute-shortfall-proportional.yaml",
+        "health-technology-assessment-deciding/what-counts-as-a-cost-and-why-does-the.yaml",
+        "health-technology-assessment-deciding/cea-cua-cba-and-why-cost-of-illness.yaml",
+        "health-technology-assessment-deciding/what-is-a-life-worth-in-money-and-who.yaml",
+        "health-technology-assessment-deciding/why-model-at-all-and-which-model-shape.yaml",
+        "health-technology-assessment-deciding/building-a-markov-model-states-cycles.yaml",
+        "health-technology-assessment-deciding/the-icer-the-plane-and-why-net-benefit.yaml",
+        "health-technology-assessment-deciding/where-does-the-threshold-come-from.yaml",
+        "health-technology-assessment-deciding/which-uncertainties-can-more-money.yaml",
+        "health-technology-assessment-deciding/showing-what-you-don-t-know-from-tornado.yaml",
+        "health-technology-assessment-deciding/if-we-are-unsure-should-we-decide-now-or.yaml",
+        "health-technology-assessment-deciding/is-the-qaly-fair-and-should-the-number.yaml",
+        "health-technology-assessment-deciding/course.md",
+        "health-technology-assessment-deciding/index.html",
+        "health-technology-assessment-deciding/README.md"
+      ],
+      "updated": "2026-08-30"
     }
   ]
 }

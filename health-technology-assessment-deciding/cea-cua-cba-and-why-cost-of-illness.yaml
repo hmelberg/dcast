@@ -1,0 +1,1149 @@
+playlist:
+  title: CEA, CUA, CBA - and why cost-of-illness answers a different question entirely
+---
+title: Same Drug, Four Questions
+voice: male
+elements:
+  - id: q_top
+    type: text
+    text: Which should the health system buy?
+    x: 500
+    'y': 655
+    font_size: 30
+  - id: n_head
+    type: text
+    text: Nusinersen for SMA
+    x: 250
+    'y': 555
+    font_size: 27
+    style:
+      color: '#b5482e'
+  - id: n_c
+    type: text
+    text: ΔC ≈ 5 000 000 kr
+    x: 250
+    'y': 495
+    font_size: 24
+  - id: n_e
+    type: text
+    text: ΔE ≈ 1.5 QALYs
+    x: 250
+    'y': 450
+    font_size: 24
+  - id: s_head
+    type: text
+    text: Statins for prevention
+    x: 690
+    'y': 555
+    font_size: 27
+    style:
+      color: '#2f6b8f'
+  - id: s_c
+    type: text
+    text: ΔC ≈ 1 500 kr
+    x: 690
+    'y': 495
+    font_size: 24
+  - id: s_e
+    type: text
+    text: ΔE ≈ 0.05 QALYs
+    x: 690
+    'y': 450
+    font_size: 24
+  - id: decision
+    type: node
+    shape: rect
+    text: Nusinersen or statins?
+  - id: q_cea
+    type: node
+    shape: rect
+    text: 'CEA: cost per natural unit'
+  - id: q_cua
+    type: node
+    shape: rect
+    text: 'CUA: cost per QALY'
+  - id: q_cba
+    type: node
+    shape: rect
+    text: 'CBA: benefit minus cost, in kroner'
+  - id: q_coi
+    type: node
+    shape: rect
+    text: 'COI: what the illness costs us'
+    style:
+      color: '#b5482e'
+  - id: e_cea
+    type: edge
+    from:
+      ref: decision
+    to:
+      ref: q_cea
+  - id: e_cua
+    type: edge
+    from:
+      ref: decision
+    to:
+      ref: q_cua
+  - id: e_cba
+    type: edge
+    from:
+      ref: decision
+    to:
+      ref: q_cba
+  - id: e_coi
+    type: edge
+    from:
+      ref: decision
+    to:
+      ref: q_coi
+    style:
+      color: '#b5482e'
+  - id: lab_cea
+    type: label
+    text: milestones vs heart attacks
+    attach_to: q_cea
+    side: above
+  - id: lab_cua
+    type: label
+    text: 3.3 mill. vs 30 000 kr per QALY
+    attach_to: q_cua
+    side: below
+  - id: mark_coi
+    type: annotation
+    target: q_coi
+    kind: cross
+  - id: mark_cua
+    type: annotation
+    target: q_cua
+    kind: box
+commands:
+  - draw:
+      - q_top
+    speak: This series is about four different ways of asking whether a health technology is worth buying — pick the wrong one and the numbers you produce cannot answer the question you were asked.
+  - draw:
+      - n_head
+      - n_c
+      - n_e
+    speak: 'Take nusinersen for spinal muscular atrophy: with illustrative numbers, about five million kroner extra per patient, buying roughly one and a half quality-adjusted life years.'
+  - pause: 0.3
+  - draw:
+      - s_head
+      - s_c
+      - s_e
+    speak: 'And the unglamorous comparison: statins in primary prevention, some fifteen hundred kroner per patient, buying about five hundredths of a QALY.'
+  - highlight:
+      target:
+        - n_c
+        - n_e
+        - s_c
+        - s_e
+      effect: glow
+    speak: Both are real interventions with real effects, and so far these four numbers tell you nothing about which one the system should buy.
+  - pause: 0.5
+  - clear: {}
+    speak: Because the answer depends entirely on which question you put to them.
+  - draw:
+      - decision
+    speak: Here is the choice — and here are the four questions an economist can ask about it.
+  - draw:
+      - e_cea
+      - q_cea
+      - lab_cea
+    speak: 'First, cost-effectiveness analysis proper: cost per natural unit of health — kroner per motor milestone gained, kroner per heart attack avoided.'
+  - focus:
+      target:
+        - q_cea
+        - lab_cea
+    speak: It needs only an outcome you can count, which makes it transparent and hard to argue with — but milestones and heart attacks share no scale, so it can never rank these two against each other.
+  - draw:
+      - e_cua
+      - q_cua
+      - lab_cua
+    speak: 'Second, cost-utility analysis, which converts every effect into QALYs: three point three million kroner per QALY for nusinersen, about thirty thousand for the statin.'
+  - highlight:
+      target:
+        - lab_cua
+      effect: glow
+    speak: On that single scale the boring intervention buys over a hundred times more health per krone — the comparison a health system actually needs.
+  - point:
+      at:
+        ref: q_cua
+      gesture: circle
+    speak: 'Its strength is exactly that: everything becomes comparable. Its weakness is that it assumes a QALY counts the same whoever receives it — which is why Norway bolts alvorlighet, severity, on top of it.'
+  - pause: 0.4
+  - draw:
+      - e_cba
+      - q_cba
+    speak: Third, cost-benefit analysis, which puts the health gain itself into kroner, so health can be weighed against roads and schools — at the price of having to name what a life year is worth in money.
+  - draw:
+      - e_coi
+      - q_coi
+    speak: 'And fourth, the odd one out: a cost-of-illness study, adding up what spinal muscular atrophy costs Norway each year in treatment, care and lost work.'
+  - draw:
+      - mark_coi
+    speak: There is no alternative inside it, no comparison, no decision — it measures a burden, and it can rank nothing at all.
+    delivery: grave
+  - speak: Yet it is the figure that reaches ministries and newspapers, quoted as if a large burden by itself proved a treatment worth funding.
+  - draw:
+      - mark_cua
+    speak: Four questions, four answers — and only this one can rank a rare drug against a common one. The method you pick decides what you are even allowed to conclude.
+level: basic
+---
+title: CEA, CUA, CBA side by side
+voice: male
+elements:
+  - id: title
+    type: text
+    x: 500
+    'y': 712
+    text: CEA, CUA, CBA — side by side
+    font_size: 30
+  - id: vline1
+    type: path
+    points:
+      - - 270
+        - 660
+      - - 270
+        - 190
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: vline2
+    type: path
+    points:
+      - - 505
+        - 660
+      - - 505
+        - 190
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: vline3
+    type: path
+    points:
+      - - 740
+        - 660
+      - - 740
+        - 190
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: hhead
+    type: path
+    points:
+      - - 35
+        - 600
+      - - 975
+        - 600
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: h1
+    type: path
+    points:
+      - - 35
+        - 512
+      - - 975
+        - 512
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: h2
+    type: path
+    points:
+      - - 35
+        - 412
+      - - 975
+        - 412
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: h3
+    type: path
+    points:
+      - - 35
+        - 312
+      - - 975
+        - 312
+    style:
+      color: '#8f887c'
+      stroke_width: 1.4
+  - id: h_cea
+    type: text
+    x: 387
+    'y': 640
+    text: CEA
+    font_size: 30
+    style:
+      color: '#2f6b8f'
+  - id: h_cua
+    type: text
+    x: 622
+    'y': 640
+    text: CUA
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: h_cba
+    type: text
+    x: 857
+    'y': 640
+    text: CBA
+    font_size: 30
+    style:
+      color: '#8a5fa8'
+  - id: rl1
+    type: text
+    x: 150
+    'y': 556
+    text: What it compares
+    font_size: 20
+  - id: rl2
+    type: text
+    x: 150
+    'y': 462
+    text: What you must measure
+    font_size: 20
+  - id: rl3
+    type: text
+    x: 150
+    'y': 362
+    text: Decision it supports
+    font_size: 20
+  - id: rl4
+    type: text
+    x: 150
+    'y': 258
+    text: The nusinersen case
+    font_size: 20
+  - id: c1_cea1
+    type: text
+    x: 387
+    'y': 572
+    text: Two options,
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c1_cea2
+    type: text
+    x: 387
+    'y': 542
+    text: one clinical outcome
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c1_cua1
+    type: text
+    x: 622
+    'y': 572
+    text: Two options,
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: c1_cua2
+    type: text
+    x: 622
+    'y': 542
+    text: health as a whole
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: c1_cba1
+    type: text
+    x: 857
+    'y': 572
+    text: Any two uses
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c1_cba2
+    type: text
+    x: 857
+    'y': 542
+    text: of the same money
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c2_cea1
+    type: text
+    x: 387
+    'y': 478
+    text: A natural unit
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c2_cea2
+    type: text
+    x: 387
+    'y': 448
+    text: you can count
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c2_cua1
+    type: text
+    x: 622
+    'y': 478
+    text: Utilities u, then
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: c2_cua2
+    type: text
+    x: 622
+    'y': 448
+    text: QALYs = sum of u·time
+    font_size: 18
+    style:
+      color: '#b5482e'
+  - id: c2_cba1
+    type: text
+    x: 857
+    'y': 478
+    text: Every effect priced
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c2_cba2
+    type: text
+    x: 857
+    'y': 448
+    text: in kroner
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c3_cea1
+    type: text
+    x: 387
+    'y': 378
+    text: Best buy within
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c3_cea2
+    type: text
+    x: 387
+    'y': 348
+    text: one disease area
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c3_cua1
+    type: text
+    x: 622
+    'y': 378
+    text: Any health gain vs
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: c3_cua2
+    type: text
+    x: 622
+    'y': 348
+    text: any other, vs threshold
+    font_size: 18
+    style:
+      color: '#b5482e'
+  - id: c3_cba1
+    type: text
+    x: 857
+    'y': 378
+    text: Worth doing at all?
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c3_cba2
+    type: text
+    x: 857
+    'y': 348
+    text: Net benefit > 0
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c4_cea1
+    type: text
+    x: 387
+    'y': 275
+    text: kr per motor
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c4_cea2
+    type: text
+    x: 387
+    'y': 245
+    text: milestone gained
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c4_cua1
+    type: text
+    x: 622
+    'y': 275
+    text: ≈ 7.5 mill. kr
+    font_size: 20
+    style:
+      color: '#b5482e'
+  - id: c4_cua2
+    type: text
+    x: 622
+    'y': 245
+    text: per QALY
+    font_size: 20
+    style:
+      color: '#b5482e'
+  - id: mark_icer
+    type: annotation
+    target: c4_cua1
+    kind: box
+  - id: c4_cba1
+    type: text
+    x: 857
+    'y': 275
+    text: Is that gain worth
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: c4_cba2
+    type: text
+    x: 857
+    'y': 245
+    text: its price in kroner?
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: cmp1
+    type: text
+    x: 500
+    'y': 150
+    text: 'Hip replacement: ≈ kr 60 000 per QALY'
+    font_size: 22
+    style:
+      color: '#d0865f'
+  - id: cmp2
+    type: text
+    x: 500
+    'y': 115
+    text: same unit, same page, same decision
+    font_size: 19
+    style:
+      color: '#d0865f'
+  - id: k_cea
+    type: text
+    x: 500
+    'y': 520
+    text: CEA — the best buy inside one problem
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: k_cua
+    type: text
+    x: 500
+    'y': 440
+    text: CUA — every health gain in one unit
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: k_cba
+    type: text
+    x: 500
+    'y': 360
+    text: CBA — health against everything else
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: k_syn
+    type: text
+    x: 500
+    'y': 250
+    text: Widening what you can compare raises what you must value.
+    font_size: 23
+  - id: mark_syn
+    type: annotation
+    target: k_syn
+    kind: box
+commands:
+  - draw:
+      - title
+    speak: Now that we have seen one drug asked four different questions, the practical problem is which of those answers a committee can actually act on.
+  - draw:
+      - vline1
+      - vline2
+      - vline3
+      - hhead
+      - h1
+      - h2
+      - h3
+    parallel: true
+  - draw:
+      - h_cea
+      - h_cua
+      - h_cba
+    parallel: true
+    speak: Cost-effectiveness, cost-utility, cost-benefit — the arithmetic is identical in all three; only the unit in the denominator changes.
+  - pause: 0.3
+  - draw:
+      - rl1
+      - c1_cea1
+      - c1_cea2
+    speak: 'Row one: what is compared. Cost-effectiveness sets two options against a single clinical outcome — infections avoided, cases detected, motor milestones reached.'
+  - draw:
+      - c1_cua1
+      - c1_cua2
+    speak: 'Cost-utility takes the same two options but scores health as a whole: years of life weighted by the utility of living them.'
+  - draw:
+      - c1_cba1
+      - c1_cba2
+    speak: Cost-benefit compares any two uses of the same money — a drug against a road, if you like.
+  - pause: 0.4
+  - draw:
+      - rl2
+      - c2_cea1
+      - c2_cea2
+      - c2_cua1
+      - c2_cua2
+      - c2_cba1
+      - c2_cba2
+    speak: 'Each buys that reach with a measurement: something you can simply count, utilities that build into QALYs, or a price in kroner for every single consequence.'
+  - draw:
+      - rl3
+      - c3_cea1
+      - c3_cea2
+      - c3_cua1
+      - c3_cua2
+      - c3_cba1
+      - c3_cba2
+    speak: 'So each supports a different decision: the best buy inside one disease, any health gain against any other, or whether the thing is worth doing at all.'
+  - pause: 0.5
+  - draw:
+      - rl4
+      - c4_cea1
+      - c4_cea2
+    speak: Take nusinersen. In the CEA column the answer is kroner per motor milestone gained — clinically precise, and useless the moment you leave spinal muscular atrophy.
+  - draw:
+      - c4_cua1
+      - c4_cua2
+    speak: In the CUA column it collapses to one number — illustratively, something like seven and a half million kroner per QALY.
+  - draw:
+      - cmp1
+      - cmp2
+    speak: 'And now the contrast case can stand beside it: a hip replacement buys a QALY for roughly sixty thousand kroner.'
+  - draw:
+      - mark_icer
+    speak: Only this column lets those two numbers sit on the same page — over a hundred times more health per krone, bought by the boring operation nobody writes about.
+    delivery: grave
+  - focus:
+      target:
+        - h_cua
+        - c1_cua1
+        - c1_cua2
+        - c2_cua1
+        - c2_cua2
+        - c3_cua1
+        - c3_cua2
+        - c4_cua1
+        - c4_cua2
+        - mark_icer
+    speak: 'That comparability is CUA''s real strength — and its blind spot: it is deaf to anything that is not health, to dignity, to waiting time, to the school the same krone could have built.'
+  - draw:
+      - c4_cba1
+      - c4_cba2
+    speak: Cost-benefit hears all of that, and pays for it by having to put a money value on the health gain itself — which is exactly where its legitimacy gets thin, and where the next lecture starts.
+  - pause: 0.4
+  - clear:
+      keep:
+        - title
+  - draw:
+      - k_cea
+      - k_cua
+      - k_cba
+    parallel: true
+    speak: 'One line each: CEA finds the best buy inside one problem, CUA puts every health gain in one unit, CBA puts health up against everything else.'
+  - draw:
+      - k_syn
+      - mark_syn
+    speak: Each step widens what you can compare — and raises what you must be willing to value.
+    delivery: grave
+level: basic
+---
+title: 'Cost-minimisation: the hidden assumption'
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: One saving, three possible effects
+  wtp_threshold: 275000
+  points:
+    - label: CMA assumes ΔE = 0
+      effect: 0
+      cost: -20000
+      emphasize: true
+    - label: ΔE = −0.15 QALY
+      effect: -0.15
+      cost: -20000
+    - label: ΔE = +0.19 QALY
+      effect: 0.19
+      cost: -20000
+elements:
+  - id: nmb_title
+    type: text
+    text: NMB = λ·ΔE − ΔC,   λ = 275 000 kr per QALY
+    x: 500
+    'y': 620
+    font_size: 30
+  - id: nmb_a
+    type: text
+    text: 'ΔE = 0:      0 + 20 000  =  +20 000 kr'
+    x: 500
+    'y': 495
+    font_size: 27
+  - id: nmb_b
+    type: text
+    text: 'ΔE = −0.15:   −41 250 + 20 000  =  −21 250 kr'
+    x: 500
+    'y': 410
+    font_size: 27
+    style:
+      color: '#b5482e'
+  - id: nmb_c
+    type: text
+    text: 'ΔE = +0.19:   +52 250 + 20 000  =  +72 250 kr'
+    x: 500
+    'y': 325
+    font_size: 27
+    style:
+      color: '#2f6b8f'
+  - id: verdict
+    type: text
+    text: The sign of the answer is unknown — and CMA never asks
+    x: 500
+    'y': 195
+    font_size: 28
+  - id: verdict_box
+    type: annotation
+    target: verdict
+    kind: box
+  - id: caveat
+    type: text
+    text: Equivalence must be designed in, never inferred from p > 0.05
+    x: 500
+    'y': 105
+    font_size: 23
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    speak: Now that we have seen CEA, CUA and CBA side by side, here is the fourth label on the list — the one that claims to need no effect measure at all.
+  - draw:
+      - q_ne
+      - q_nw
+      - q_se
+      - q_sw
+    parallel: true
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'Our new formulation lands here: twenty thousand kroner cheaper per patient, and — by assumption — exactly no difference in health.'
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: 'Sitting precisely on the vertical axis is a very strong claim: with ΔE zero there is no ratio to compute and nothing to weigh, so you simply buy the cheaper one.'
+  - pause: 0.5
+  - draw:
+      - pt_1
+      - pt_label_1
+      - pt_2
+      - pt_label_2
+    speak: But that zero came from a trial, and its confidence interval ran from a loss of 0.15 QALYs to a gain of 0.19 — every point along this stretch fits the data equally well.
+  - focus:
+      target:
+        - pt_1
+        - pt_2
+        - pt_label_1
+        - pt_label_2
+    speak: A p-value of 0.62 says we failed to detect a difference; it does not say we established there is none — the study was simply too small to tell a seventh of a life-year from zero.
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: Bring in the threshold, 275 000 kroner per quality-adjusted life year, and that stretch stops being abstract.
+  - highlight:
+      target:
+        - pt_1
+      effect: glow
+    speak: 'At the lower limit the point sits above the threshold line: we would be surrendering health worth more than the money we saved.'
+  - clear: {}
+  - draw:
+      - nmb_title
+    speak: 'Net monetary benefit makes the same comparison in kroner: the health difference valued at the threshold, minus the extra cost.'
+  - draw:
+      - nmb_a
+    speak: If the effects truly are identical, the new formulation is worth twenty thousand kroner per patient — and cost-minimisation's answer is the right one.
+  - draw:
+      - nmb_b
+    speak: At the bottom of the interval, the health given up is worth forty-one thousand, so the saving no longer covers it and net benefit turns negative.
+  - draw:
+      - nmb_c
+    speak: At the top it is cheaper and better — seventy-two thousand kroner of net benefit, a clear yes.
+  - draw:
+      - verdict
+      - verdict_box
+    speak: One trial, and it supports a confident yes and a confident no; cost-minimisation reports the middle number and calls the matter settled.
+    delivery: grave
+  - draw:
+      - caveat
+    speak: It is not always wrong — when equivalence is built into the design, a biosimilar with a formal equivalence trial, or the same infusion given at home instead of in hospital, comparing resource use alone is honest and quick.
+  - speak: Applied to a non-significant result, though, it asserts an equivalence nobody ever tested — which is why Briggs and O'Brien asked, in a 2001 paper, whether cost-minimisation analysis was dead.
+  - speak: 'So run the full analysis and show the uncertainty: a zero you assumed is not a zero you measured.'
+level: basic
+---
+title: Cost-of-Illness Answers Nothing
+voice: male
+elements:
+  - id: direct
+    type: node
+    shape: rect
+    text: 'Hospital care & drugs: kr 400 m'
+  - id: prod
+    type: node
+    shape: rect
+    text: 'Lost production: kr 150 m'
+  - id: care
+    type: node
+    shape: rect
+    text: 'Unpaid care at home: kr 250 m'
+  - id: burden
+    type: node
+    shape: rect
+    text: 'SMA burden: kr 800 m per year'
+    style:
+      color: '#8a5fa8'
+  - id: e_direct
+    type: arrow
+    from:
+      ref: direct
+    to:
+      ref: burden
+  - id: e_prod
+    type: arrow
+    from:
+      ref: prod
+    to:
+      ref: burden
+  - id: e_care
+    type: arrow
+    from:
+      ref: care
+    to:
+      ref: burden
+  - id: q_label
+    type: label
+    text: Compared with what?
+    attach_to: burden
+    side: below
+    style:
+      color: '#b5482e'
+  - id: care0
+    type: node
+    shape: rect
+    text: 'Current care (0): C0, E0'
+  - id: drug1
+    type: node
+    shape: rect
+    text: 'Nusinersen (1): C1, E1'
+  - id: a_dc
+    type: arrow
+    from:
+      ref: care0
+    to:
+      ref: drug1
+    curved: true
+    style:
+      color: '#b5482e'
+  - id: lbl_dc
+    type: label
+    text: ΔC = kr 20 million
+    attach_to: a_dc
+    side: above
+    style:
+      color: '#b5482e'
+  - id: a_de
+    type: arrow
+    from:
+      ref: care0
+    to:
+      ref: drug1
+    style:
+      color: '#2f6b8f'
+  - id: lbl_de
+    type: label
+    text: ΔE = 4 QALYs
+    attach_to: a_de
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: lbl_icer
+    type: label
+    text: ICER = ΔC / ΔE ≈ kr 5 m per QALY
+    attach_to: drug1
+    side: right
+  - id: ann_icer
+    type: annotation
+    target: lbl_icer
+    kind: box
+  - id: lbl_use
+    type: label
+    text: Shows where money already goes
+    attach_to: burden
+    side: right
+    style:
+      color: '#87a878'
+  - id: lbl_misuse
+    type: label
+    text: Big burden ≠ big opportunity
+    attach_to: burden
+    side: left
+    style:
+      color: '#b5482e'
+  - id: lbl_verdict
+    type: label
+    text: Describes a problem. Ranks nothing.
+    attach_to: burden
+    side: above
+  - id: ann_verdict
+    type: annotation
+    target: lbl_verdict
+    kind: box
+commands:
+  - draw:
+      - direct
+    speak: 'Now that we have seen cost-minimisation hide an assumption, let''s count something else entirely: what spinal muscular atrophy costs Norway in a year, starting with hospital care and the drugs themselves — four hundred million kroner.'
+  - draw:
+      - prod
+      - care
+    parallel: true
+    speak: 'Then the production lost by patients and by parents who cut their hours, and the unpaid care given at home: a hundred and fifty million, and two hundred and fifty.'
+  - pause: 0.3
+  - draw:
+      - burden
+      - e_direct
+      - e_prod
+      - e_care
+    speak: Add them up and you have the headline — eight hundred million kroner a year; my figures are illustrative, but the shape of this study is exactly real.
+  - pause: 0.5
+  - draw:
+      - q_label
+    speak: 'And here is the question this figure cannot answer: compared with what?'
+  - focus:
+      target:
+        - burden
+    speak: There is no second world here — no alternative Norway, doing something else — so nothing on this canvas is a difference, and without a difference there is no ΔC, no ΔE, and nothing to divide.
+    delivery: grave
+  - clear: {}
+    speak: Set the burden aside and look at the shape every economic evaluation actually has.
+  - draw:
+      - care0
+    speak: 'One world: a child with spinal muscular atrophy on current care, with cost C-zero and health E-zero.'
+  - draw:
+      - drug1
+    speak: 'A second world: the same child on nusinersen, with cost C-one and health E-one.'
+  - pause: 0.3
+  - draw:
+      - a_dc
+      - lbl_dc
+    speak: Subtract on the cost side, and the extra spending appears — roughly twenty million kroner more over that child's lifetime.
+  - draw:
+      - a_de
+      - lbl_de
+    speak: Subtract on the health side, and say four extra quality-adjusted life years appear.
+  - draw:
+      - lbl_icer
+      - ann_icer
+    speak: Divide one by the other and you get an ICER, around five million kroner per QALY — a number Beslutningsforum can argue about, because it is a comparison.
+  - clear: {}
+    speak: So why does that eight-hundred-million figure keep turning up in arguments about whether to buy the drug?
+  - show:
+      - burden
+    speak: Because a big number persuades, and burden studies are usually commissioned by exactly those who want attention for the disease.
+  - draw:
+      - lbl_use
+    speak: 'They do one job genuinely well: they show where money and carers'' hours already go, which helps plan services and reveals a condition nobody has been counting.'
+  - show:
+      - prod
+      - care
+      - e_prod
+      - e_care
+    speak: But the totals inflate easily — value a parent's lost wages here, then the same hours again as unpaid care, and you have counted them twice.
+  - draw:
+      - lbl_misuse
+    speak: 'And a large burden is not an opportunity: a disease can cost a fortune and still have nothing effective available to buy.'
+  - pause: 0.4
+  - draw:
+      - lbl_verdict
+      - ann_verdict
+    speak: Cost-of-illness measures the size of a problem; only a comparison of two worlds can tell you what to do about it.
+    delivery: grave
+level: basic
+---
+title: Picking the right tool
+voice: male
+template: decision_tree
+params:
+  root:
+    id: q
+    type: decision
+    label: What must compete?
+    children:
+      - label: One fixed goal
+        node:
+          id: cea
+          type: terminal
+          label: Cost per case detected
+      - label: All options compete
+        node:
+          id: cua
+          type: terminal
+          label: Cost per QALY
+      - label: Benefit leaves health
+        node:
+          id: cba
+          type: terminal
+          label: Costs and benefits in kroner
+      - label: Nothing compared
+        node:
+          id: coi
+          type: terminal
+          label: Cost of illness
+elements:
+  - id: strike_coi
+    type: annotation
+    target: label_coi
+    kind: strike
+  - id: box_q
+    type: annotation
+    target: label_q
+    kind: box
+commands:
+  - draw:
+      - node_q
+      - label_q
+    speak: Now that we have seen a cost-of-illness study name a burden without ever comparing two options, the method you should have used was settled long before the costing began — at this square.
+  - pause: 0.3
+  - draw:
+      - edge_q_cea
+      - branchlabel_q_cea
+      - node_cea
+      - label_cea
+    speak: 'First branch: the objective is fixed and single — find latent tuberculosis among new arrivals — and every option you weigh produces that one thing and nothing else.'
+  - highlight:
+      target:
+        - node_cea
+        - label_cea
+      effect: glow
+    speak: 'Then the honest denominator is the natural unit: kr 12 000 per case detected by one strategy against kr 30 000 by another, with no utility weights in sight.'
+  - point:
+      at:
+        ref: label_cea
+      gesture: underline
+    speak: 'But the number comes with a fence around it: cost per infection avoided cannot be laid beside cost per hip replaced, so it ranks options only inside its own programme.'
+  - pause: 0.4
+  - draw:
+      - edge_q_cua
+      - branchlabel_q_cua
+      - node_cua
+      - label_cua
+    speak: 'Second branch: the options do different kinds of good and reach into the same budget — so they need a common currency, and that currency is the QALY.'
+  - highlight:
+      target:
+        - node_cua
+        - label_cua
+      effect: glow
+    speak: Nusinersen came in at millions of kroner per QALY; a hip replacement buys one for a small fraction of that — only cost per QALY puts them on the same page for Beslutningsforum.
+  - focus:
+      target:
+        - node_cua
+        - label_cua
+    speak: The price of that reach is compression — everything a treatment does squeezed into one utility number — which is exactly why the QALY's fairness stays contested.
+  - pause: 0.3
+  - draw:
+      - edge_q_cba
+      - branchlabel_q_cba
+      - node_cba
+      - label_cba
+    speak: 'Third branch: when the benefit leaves health altogether — time saved, a cleaner river — only cost-benefit analysis can hold it, because it prices the benefit in kroner too.'
+  - draw:
+      - edge_q_coi
+      - branchlabel_q_coi
+      - node_coi
+      - label_coi
+    speak: 'And the fourth branch is not really a branch: cost-of-illness compares nothing with nothing.'
+  - draw:
+      - strike_coi
+    speak: It ranks problems by size, which is why a big burden number travels so well in a press release — but it can never show that spending here buys more health than spending there.
+  - highlight:
+      target:
+        - node_q
+      effect: pulse
+    speak: 'Cost-minimisation fails the same way one level up: it crowns the cheaper option by assuming DeltaE is zero rather than demonstrating it.'
+  - pause: 0.4
+  - focus:
+      target:
+        - node_cea
+        - label_cea
+        - node_cua
+        - label_cua
+    speak: 'So the choice is never about which method is most sophisticated — it is about how wide the comparison must be: one programme, or the whole budget.'
+  - draw:
+      - box_q
+    speak: What must compete with what chooses the method, before a single cost is collected.
+    delivery: grave
+  - speak: 'Four questions, four answers: natural units when the goal is fixed, QALYs when everything competes for the same krone, kroner when the benefit leaves health — and cost-of-illness, which answers none of them, because it never names an alternative.'
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: What is a life worth in money, and who decided that?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 12 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: What is a life worth in money, and who decided that?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

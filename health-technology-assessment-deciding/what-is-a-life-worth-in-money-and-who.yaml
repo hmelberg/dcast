@@ -1,0 +1,466 @@
+playlist:
+  title: What is a life worth in money, and who decided that?
+---
+title: When You Just Ask People
+voice: female
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 160
+elements:
+  - id: ax
+    type: axes
+    x_label: Scale of the good (birds saved)
+    y_label: Stated WTP ($ per household)
+  - id: expected
+    type: curve
+    expr: 80 + 1.05*(x - 15)
+    x_from: 15
+    x_to: 85
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_expected
+    type: label
+    text: If scope mattered
+    attach_to: expected
+    side: above-left
+    style:
+      color: '#8f887c'
+  - id: p1
+    type: point
+    at:
+      x: 15
+      'y': 80
+    style:
+      color: '#b5482e'
+  - id: l1
+    type: label
+    text: '2,000 birds: $80'
+    attach_to: p1
+    side: below
+    style:
+      color: '#b5482e'
+  - id: p2
+    type: point
+    at:
+      x: 50
+      'y': 78
+    style:
+      color: '#b5482e'
+  - id: l2
+    type: label
+    text: '20,000 birds: $78'
+    attach_to: p2
+    side: below
+    style:
+      color: '#b5482e'
+  - id: p3
+    type: point
+    at:
+      x: 85
+      'y': 88
+    style:
+      color: '#b5482e'
+  - id: l3
+    type: label
+    text: '200,000 birds: $88'
+    attach_to: p3
+    side: below
+    style:
+      color: '#b5482e'
+  - id: actual
+    type: curve
+    expr: '82'
+    x_from: 15
+    x_to: 85
+    style:
+      color: '#b5482e'
+  - id: label_actual
+    type: label
+    text: What people actually said
+    attach_to: actual
+    side: above
+    style:
+      color: '#b5482e'
+  - id: n_q
+    type: node
+    shape: rect
+    text: What would you pay?
+  - id: n_warm
+    type: node
+    shape: rect
+    text: Warm glow
+    style:
+      color: '#b5482e'
+  - id: n_protest
+    type: node
+    shape: rect
+    text: Protest zero
+    style:
+      color: '#b5482e'
+  - id: n_hypo
+    type: node
+    shape: rect
+    text: Hypothetical yes
+    style:
+      color: '#b5482e'
+  - id: e_warm
+    type: edge
+    from:
+      ref: n_q
+    to:
+      ref: n_warm
+  - id: e_protest
+    type: edge
+    from:
+      ref: n_q
+    to:
+      ref: n_protest
+  - id: e_hypo
+    type: edge
+    from:
+      ref: n_q
+    to:
+      ref: n_hypo
+  - id: l_hypo
+    type: label
+    text: 'Median: 1.35x the real payment'
+    attach_to: n_hypo
+    side: below
+    style:
+      color: '#b5482e'
+  - id: n_dh
+    type: node
+    shape: rect
+    text: Diamond & Hausman (1994)
+    style:
+      color: '#b5482e'
+  - id: l_dh
+    type: label
+    text: Moral satisfaction, not value
+    attach_to: n_dh
+    side: below
+    style:
+      color: '#b5482e'
+  - id: n_han
+    type: node
+    shape: rect
+    text: Hanemann (1994)
+    style:
+      color: '#2f6b8f'
+  - id: l_han
+    type: label
+    text: Zero is also a number
+    attach_to: n_han
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: n_noaa
+    type: node
+    shape: rect
+    text: NOAA panel (1993)
+    style:
+      color: '#8a5fa8'
+  - id: l_noaa
+    type: label
+    text: Usable, under strict rules
+    attach_to: n_noaa
+    side: above
+    style:
+      color: '#8a5fa8'
+  - id: e_noaa_dh
+    type: edge
+    from:
+      ref: n_noaa
+    to:
+      ref: n_dh
+  - id: e_noaa_han
+    type: edge
+    from:
+      ref: n_noaa
+    to:
+      ref: n_han
+  - id: verdict
+    type: text
+    text: A hypothetical question buys a hypothetical price
+    x: 500
+    'y': 95
+    font_size: 28
+  - id: mark_verdict
+    type: annotation
+    target: verdict
+    kind: box
+commands:
+  - draw:
+      - ax
+    speak: 'Now that we have read a price of life off a payslip, let''s try the obvious alternative: simply asking people what a benefit is worth.'
+  - draw:
+      - expected
+      - label_expected
+    speak: If people were pricing the good on offer, willingness to pay should climb steeply as the good gets bigger — like this dashed line.
+  - draw:
+      - p1
+      - l1
+    speak: 'A real experiment: American households were asked what they would pay to stop migratory birds drowning in uncovered oil ponds — two thousand birds, about eighty dollars a household.'
+  - pause: 0.3
+  - draw:
+      - p2
+      - l2
+      - p3
+      - l3
+    speak: 'Ten times the birds: seventy-eight dollars. A hundred times the birds: eighty-eight.'
+  - draw:
+      - actual
+      - label_actual
+    speak: Desvousges and colleagues found the answers flat — scope insensitivity, the single most damaging finding about contingent valuation.
+    delivery: grave
+  - quiz:
+      intro: A quick check.
+      question: Raising the birds at risk a hundredfold changed stated willingness to pay by how much?
+      choices:
+        - Roughly a hundredfold
+        - Roughly double
+        - Essentially not at all
+      correct: 3
+      right: Essentially not at all — eighty dollars for two thousand birds, eighty-eight for two hundred thousand.
+      wrong: The whole force of the study is that the number barely moved.
+  - focus:
+      target:
+        - p1
+        - p2
+        - p3
+        - actual
+    speak: What is being priced is the warm glow of helping birds, and one purchase of moral satisfaction costs about what another does.
+  - pause: 0.4
+  - clear: {}
+  - draw:
+      - n_q
+    speak: 'The failures are patterned, and they follow from what the question asks of a respondent: name a price, on the spot, for something you will never be billed for.'
+  - draw:
+      - n_warm
+      - e_warm
+    speak: 'Route one, the warm glow: you answer how much you care, not what the thing delivers.'
+  - draw:
+      - n_protest
+      - e_protest
+    speak: 'Route two, the protest zero: some refuse to name a price at all, meaning wrong question, not worthless — drop those answers and the mean rises, keep them and it falls, and no rule tells you which.'
+  - draw:
+      - n_hypo
+      - e_hypo
+    speak: 'Route three, hypothetical bias: nothing leaves the wallet, so the answer is free to be generous.'
+  - draw:
+      - l_hypo
+    speak: List and Gallet's meta-analysis of twenty-nine experiments put the median hypothetical value at about one point three five times the real payment, with the mean near three — a long tail of wild overstatement.
+  - quiz:
+      question: 'Compared with real payments, hypothetical answers are usually:'
+      choices:
+        - Lower
+        - About the same
+        - Higher
+      correct: 3
+      right: Higher — the median study overstates by about a third, the average by roughly threefold.
+      wrong: 'They run high: talk is cheaper than money.'
+  - pause: 0.4
+  - clear: {}
+  - draw:
+      - n_dh
+      - l_dh
+    speak: Diamond and Hausman, in 1994, argued that these surveys measure moral satisfaction, and that no number is better than a bad number.
+  - draw:
+      - n_han
+      - l_han
+    speak: Hanemann replied in the same journal issue that ordinary markets misbehave too, and that refusing to estimate simply sets the value of a species — or a life — to zero by default.
+  - draw:
+      - n_noaa
+      - e_noaa_dh
+      - e_noaa_han
+      - l_noaa
+    speak: After the Exxon Valdez spill, a panel chaired by Kenneth Arrow and Robert Solow had already ruled in 1993 that the method could be reliable enough for court — but only under strict rules, including a test that answers respond to scope.
+  - pause: 0.4
+  - draw:
+      - verdict
+      - mark_verdict
+    speak: 'So asking Norwegians what they would pay for nusinersen would measure their compassion honestly, and the drug''s value not at all: a hypothetical question buys a hypothetical price.'
+level: basic
+---
+title: What the QALY Cannot Hold
+voice: female
+template: venn_diagram
+params:
+  sets:
+    - label: 'Cost-utility: QALYs'
+      only_label: Every QALY counts equally
+    - label: 'Cost-benefit: kroner'
+      only_label: Dignity · Information · Process
+  overlap_labels:
+    ab: Health gains
+  shade:
+    - ab
+    - b
+  universe_box: true
+  title: What each method can hold
+elements:
+  - id: card_title
+    type: text
+    text: Reading any life-value in money
+    x: 500
+    'y': 560
+    font_size: 34
+  - id: q1
+    type: text
+    text: 1. Whose preferences, from what choice?
+    x: 500
+    'y': 450
+    font_size: 28
+  - id: q2
+    type: text
+    text: 2. Health — or ability to pay?
+    x: 500
+    'y': 370
+    font_size: 28
+  - id: q3
+    type: text
+    text: 3. What is displaced to honour it?
+    x: 500
+    'y': 290
+    font_size: 28
+  - id: mark_q3
+    type: annotation
+    target: q3
+    kind: box
+commands:
+  - draw:
+      - universe
+      - title
+    speak: Now that we've seen the road and the clinic price the same life differently, the question is which method can even hold what we care about.
+  - draw:
+      - set_0
+      - set_label_0
+    speak: 'Cost-utility counts in one currency only: QALYs.'
+  - pause: 0.3
+  - draw:
+      - set_1
+      - set_label_1
+    speak: Cost-benefit draws a wider circle — anything people will pay kroner for, health or not.
+  - pause: 0.3
+  - draw:
+      - shade_ab
+      - region_label_ab
+    speak: They overlap on health gains, and for most appraisals that overlap is the whole analysis.
+  - highlight:
+      target:
+        - shade_ab
+      effect: glow
+    speak: 'Nusinersen for spinal muscular atrophy lives here: real motor function and survival, against a list price near 750,000 dollars in year one and 375,000 a year after.'
+  - focus:
+      target:
+        - shade_ab
+        - region_label_ab
+    speak: Beslutningsforum's no in 2017, and the later yes for patients under eighteen, was argued almost entirely inside this overlap.
+  - pause: 0.5
+  - draw:
+      - shade_b
+      - region_label_b
+    speak: 'But out here sits everything cost-benefit will still price and the QALY simply cannot: dignity, information, the process of care itself.'
+  - focus:
+      target:
+        - region_label_b
+        - shade_b
+    speak: A test that changes no treatment yields zero QALYs — yet parents who finally have a name for their child's condition will pay for that answer, and a willingness-to-pay study records it.
+  - point:
+      at:
+        ref: region_label_b
+      gesture: underline
+    speak: 'Process utility is the same trick: being told, being asked, waiting less — value in how care is delivered, not only in what it delivers.'
+  - highlight:
+      target:
+        - set_1
+      effect: glow
+    speak: That breadth is why a transport regulator is comfortable with enormous money values — the US Department of Transportation used about 11.6 million dollars per statistical life in 2021 — while health agencies stay in a health-only currency.
+  - quiz:
+      intro: A quick check.
+      question: Which of these does a cost-utility analysis, by construction, leave out?
+      choices:
+        - A gain in life expectancy
+        - A diagnosis that changes no treatment
+        - A drop in quality of life
+      correct: 2
+      right: Information with no treatment consequence produces no QALYs, so cost-utility records nothing — while a willingness-to-pay study can put kroner on it.
+      wrong: The other two are health changes, and QALYs were built precisely to capture those.
+  - draw:
+      - region_label_a
+    speak: 'And the breadth has a price of its own: a QALY counts the same whoever gains it, while willingness to pay rises with income.'
+  - highlight:
+      target:
+        - set_0
+        - set_1
+      effect: pulse
+    speak: Welfarists say only money can compare health against roads and schools; extra-welfarists reply that willingness to pay smuggles the income distribution into the decision — unresolved, so Norway runs both systems side by side.
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - card_title
+      - q1
+    speak: 'So a rule of thumb for any monetary life-value you meet. First: whose preferences, and from which choice — a wage premium, a survey, or a budget?'
+  - draw:
+      - q2
+    speak: 'Second: is it pricing health, or ability to pay?'
+  - draw:
+      - q3
+    speak: 'Third: what gets displaced to honour it — the patients you never meet.'
+  - draw:
+      - mark_q3
+    speak: 'Across this series: money holds what the QALY drops, but only in a currency nobody agrees on. A price on a life was never a fact about the life — it records who was asked, and what they had to give up.'
+    delivery: grave
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Why model at all - and which model shape fits which problem?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 13 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Why model at all - and which model shape fits which problem?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

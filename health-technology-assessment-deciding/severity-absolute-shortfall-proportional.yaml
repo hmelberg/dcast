@@ -1,0 +1,363 @@
+playlist:
+  title: 'Severity: absolute shortfall, proportional shortfall, or something else?'
+---
+title: 'Absolutt prognosetap: the years you lose'
+voice: male
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 24
+elements:
+  - id: claim_a
+    type: node
+    shape: rect
+    text: 'Age-neutral: the disease sets severity'
+  - id: claim_b
+    type: node
+    shape: rect
+    text: 'Age-graded: the young lose more QALYs'
+  - id: strike_a
+    type: annotation
+    target: claim_a
+    kind: strike
+  - id: ax
+    type: axes
+    x_label: Age at diagnosis (years)
+    y_label: Remaining discounted QALYs
+  - id: healthy_curve
+    type: curve
+    expr: 20*exp(-0.02*(x-20))
+    x_from: 15
+    x_to: 95
+    style:
+      color: '#2f6b8f'
+  - id: label_healthy
+    type: label
+    text: Healthy expectation (age-matched)
+    attach_to: healthy_curve
+    side: above-right
+    style:
+      color: '#2f6b8f'
+  - id: prognosis_curve
+    type: curve
+    expr: '1.5'
+    x_from: 15
+    x_to: 95
+    style:
+      color: '#b5482e'
+  - id: label_prog
+    type: label
+    text: Prognosis with current care
+    attach_to: prognosis_curve
+    side: below
+    style:
+      color: '#b5482e'
+  - id: p20_h
+    type: point
+    at:
+      x: 20
+      'y': 20
+    guides: true
+    style:
+      color: '#2f6b8f'
+  - id: p20_d
+    type: point
+    at:
+      x: 20
+      'y': 1.5
+    style:
+      color: '#b5482e'
+  - id: gap20
+    type: arrow
+    from:
+      x: 20
+      'y': 1.5
+    to:
+      x: 20
+      'y': 20
+    style:
+      color: '#8a5fa8'
+  - id: label_gap20
+    type: label
+    text: APT ≈ 18.5 QALYs
+    attach_to: gap20
+    side: right
+    style:
+      color: '#8a5fa8'
+  - id: p80_h
+    type: point
+    at:
+      x: 80
+      'y': 6
+    guides: true
+    style:
+      color: '#2f6b8f'
+  - id: p80_d
+    type: point
+    at:
+      x: 80
+      'y': 1.5
+    style:
+      color: '#b5482e'
+  - id: gap80
+    type: arrow
+    from:
+      x: 80
+      'y': 1.5
+    to:
+      x: 80
+      'y': 6
+    style:
+      color: '#8a5fa8'
+  - id: label_gap80
+    type: label
+    text: APT ≈ 4.5 QALYs
+    attach_to: gap80
+    side: right
+    style:
+      color: '#8a5fa8'
+commands:
+  - draw:
+      - claim_a
+    speak: Now that we have seen why severity might buy a higher price per QALY, a committee needs an actual number for it — and some argue that number belongs to the disease alone, the same at any age.
+  - draw:
+      - claim_b
+    speak: Others argue severity is about the health actually at stake, so a young patient, with more years ahead, must score higher.
+  - ask:
+      intro: One thing first.
+      question: What should I call you?
+      store: name
+      default: friend
+  - clear: {}
+    speak: Norway's answer is absolutt prognosetap — absolute shortfall — so let us compute it, and see which claim survives.
+  - draw:
+      - ax
+  - draw:
+      - healthy_curve
+      - label_healthy
+    speak: 'The blue curve is the age-matched healthy expectation: the remaining QALYs a Norwegian of each age can expect, quality-adjusted and discounted at four percent.'
+  - draw:
+      - prognosis_curve
+      - label_prog
+    speak: The red line is the prognosis with today's care for our illness — about three poor years, worth roughly one and a half discounted QALYs, whenever it strikes.
+  - pause: 0.3
+  - draw:
+      - p20_h
+      - p20_d
+    parallel: true
+    speak: 'A twenty-year-old diagnosed today: twenty QALYs ahead in health, one and a half with the disease.'
+  - draw:
+      - gap20
+      - label_gap20
+    speak: Absolute shortfall is nothing but that subtraction — about eighteen and a half QALYs lost.
+  - pause: 0.5
+  - draw:
+      - p80_h
+      - p80_d
+    parallel: true
+    speak: Now the same illness at eighty, where the healthy curve has already fallen to about six QALYs.
+  - draw:
+      - gap80
+      - label_gap80
+    speak: Same disease, same prognosis, {name} — but the shortfall is four and a half.
+  - point:
+      at:
+        ref: gap20
+      gesture: underline
+    speak: Four times the loss for an identical illness, purely because of when in a life it arrives.
+  - highlight:
+      target:
+        - healthy_curve
+      effect: glow
+    speak: 'Discounting quietly softens that gradient: undiscounted, the young patient''s expectation is some seven times the old patient''s; at four percent it is barely three.'
+  - highlight:
+      target:
+        - label_gap20
+      effect: glow
+    speak: Norway sorts this number into severity classes, and the top band — a shortfall of twenty QALYs and above — accepts roughly three times the base price per QALY.
+  - clear: {}
+  - show:
+      - claim_a
+      - claim_b
+    speak: Which settles our two claims.
+  - draw:
+      - strike_a
+    speak: 'As a description of absolute shortfall, the first is simply false: the metric counts QALYs, and an eighty-year-old has fewer of them to lose.'
+    delivery: grave
+  - highlight:
+      target:
+        - claim_b
+      effect: pulse
+    speak: That is precisely the complaint waiting in part three — nusinersen's infants sit at the very top of this scale, while a fatal illness at eighty can never reach it.
+  - speak: Absolute shortfall measures the size of the loss, never the share of a life lost — which is why the same disease counts as more severe at twenty than at eighty.
+level: basic
+---
+title: Proportional shortfall and the fairness fight
+voice: male
+template: two_by_two_table
+params:
+  row_label: Severity measure
+  col_label: Patient
+  row_values:
+    - Absolute shortfall
+    - Proportional shortfall
+  col_values:
+    - 20-year-old
+    - 80-year-old
+  cells:
+    - - 48 QALYs
+      - 8 QALYs
+    - - 80%
+      - 100%
+  cell_notes:
+    - - 60 − 12
+      - 8 − 0
+    - - 48 / 60
+      - 8 / 8
+  highlight:
+    - - 0
+      - 0
+    - - 1
+      - 1
+elements:
+  - id: claim_no
+    type: text
+    text: 'Norway: years lost'
+    x: 250
+    'y': 715
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: claim_nl
+    type: text
+    text: 'Netherlands: share lost'
+    x: 750
+    'y': 715
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: myth
+    type: text
+    text: Proportional shortfall takes age out of it
+    x: 500
+    'y': 58
+    font_size: 22
+  - id: strike_myth
+    type: annotation
+    target: myth
+    kind: strike
+commands:
+  - draw:
+      - claim_no
+      - claim_nl
+    parallel: true
+    speak: Now that we have seen absolute shortfall count the years a patient loses, meet its rival — and whichever measure a system picks decides which patient's drug is allowed to cost more.
+  - draw:
+      - grid
+      - row_title
+      - col_title
+    speak: Norway counts the years lost; the Dutch system counts the share of remaining life lost.
+  - draw:
+      - col_header_0
+      - col_header_1
+    speak: 'Two patients: a twenty-year-old with spinal muscular atrophy, and an eighty-year-old with a rapidly fatal cancer.'
+  - ask:
+      intro: Before any arithmetic, a gut check.
+      question: Which of them strikes you as the more severe case?
+      store: pick
+      default: the 20-year-old
+  - draw:
+      - row_header_0
+    speak: 'The first rule is Norway''s: absolutt prognosetap, absolute shortfall — the quality-adjusted life years the disease takes away.'
+  - draw:
+      - cell_0_0
+    speak: Without the disease the twenty-year-old had about sixty QALYs ahead; with it, twelve. Forty-eight lost.
+  - draw:
+      - cell_0_1
+    speak: 'The eighty-year-old had eight ahead, and his cancer takes essentially all of them: eight lost.'
+  - draw:
+      - hl_0_0
+    speak: 'You said {pick}. On this rule there is no contest: forty-eight against eight.'
+  - pause: 0.4
+  - draw:
+      - row_header_1
+    speak: 'The second rule asks a different question: not how many years, but what fraction of what you had left.'
+  - draw:
+      - cell_1_0
+    speak: Forty-eight out of sixty — the young patient loses eighty percent of her expected health.
+  - draw:
+      - cell_1_1
+    speak: Eight out of eight — the older patient loses everything he had left.
+  - draw:
+      - hl_1_1
+    speak: 'And the ranking flips: on the proportional rule the eighty-year-old is the more severe case, sitting at the ceiling of one hundred percent.'
+    delivery: grave
+  - pause: 0.5
+  - draw:
+      - myth
+    speak: 'Which invites a tempting conclusion: that the proportional measure has taken age out of the picture.'
+  - draw:
+      - strike_myth
+    speak: It hasn't. It only reverses the tilt — nobody can lose more than everything, so the young patient's far larger loss is squeezed against that ceiling.
+  - focus:
+      target:
+        - row_header_1
+        - cell_1_1
+    speak: The Dutch system weights severity exactly this way, by proportional shortfall.
+  - focus:
+      target:
+        - row_header_0
+        - cell_0_0
+    speak: Norway examined both — the Magnussen committee in 2015 — and the 2016 white paper chose the absolute version. Each camp accuses the other of ageism.
+  - speak: 'There is no age-neutral severity measure here: one rule pays for the years ahead of you, the other for the fraction you have left, and you can only choose which way the tilt runs.'
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: What counts as a cost, and why does the future cost less?
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 10 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: What counts as a cost, and why does the future cost less?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

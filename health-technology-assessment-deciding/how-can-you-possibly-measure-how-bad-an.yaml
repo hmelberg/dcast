@@ -1,0 +1,667 @@
+playlist:
+  title: How can you possibly measure how bad an illness feels? A map of the methods
+---
+title: The Missing Number
+voice: male
+domain:
+  x:
+    - 0
+    - 12
+  'y':
+    - 0
+    - 1
+elements:
+  - id: ax
+    type: axes
+    x_label: Years of life
+    y_label: Health utility u
+  - id: full_health
+    type: curve
+    expr: '1'
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_full
+    type: label
+    text: 'u = 1: full health'
+    attach_to: full_health
+    side: below
+    style:
+      color: '#8f887c'
+  - id: untreated
+    type: curve
+    expr: 0.28 - 0.06*x
+    x_from: 0
+    x_to: 2
+    style:
+      color: '#b5482e'
+  - id: label_untreated
+    type: label
+    text: Untreated SMA type 1
+    attach_to: untreated
+    side: above-left
+    style:
+      color: '#b5482e'
+  - id: death_pt
+    type: point
+    at:
+      x: 2
+      'y': 0.16
+    style:
+      color: '#b5482e'
+  - id: label_death
+    type: label
+    text: Death before age two
+    attach_to: death_pt
+    side: right
+    style:
+      color: '#b5482e'
+  - id: treated
+    type: curve
+    expr: '0.55'
+    x_from: 0
+    x_to: 11
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: label_treated
+    type: label
+    text: Treated with nusinersen
+    attach_to: treated
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: baseline
+    type: curve
+    expr: '0'
+    x_from: 0
+    x_to: 11
+    style:
+      color: '#8f887c'
+      opacity: 0.15
+  - id: qaly_area
+    type: region
+    between:
+      - treated
+      - baseline
+    x_from: 0
+    x_to: 11
+    style:
+      fill: '#f2c14e'
+      opacity: 0.3
+  - id: label_area
+    type: label
+    text: QALYs = u × time
+    attach_to: qaly_area
+    side: below
+  - id: time_arrow
+    type: arrow
+    from:
+      x: 2
+      'y': 0.08
+    to:
+      x: 11
+      'y': 0.08
+  - id: label_time
+    type: label
+    text: ≈ 9 extra years — from the trial
+    attach_to: time_arrow
+    side: below
+  - id: u_arrow
+    type: arrow
+    from:
+      x: 6
+      'y': 0
+    to:
+      x: 6
+      'y': 0.55
+    style:
+      color: '#8a5fa8'
+  - id: label_u
+    type: label
+    text: u = ?
+    attach_to: u_arrow
+    side: right
+    style:
+      color: '#8a5fa8'
+  - id: mark_u
+    type: annotation
+    target: label_u
+    kind: box
+  - id: state_node
+    type: node
+    shape: rect
+    text: u for one health state
+  - id: n_direct
+    type: node
+    shape: rect
+    text: Direct valuation
+  - id: n_indirect
+    type: node
+    shape: rect
+    text: Indirect instruments
+  - id: n_dce
+    type: node
+    shape: rect
+    text: Discrete choice experiments
+  - id: e_direct
+    type: edge
+    from:
+      ref: state_node
+    to:
+      ref: n_direct
+  - id: e_indirect
+    type: edge
+    from:
+      ref: state_node
+    to:
+      ref: n_indirect
+  - id: e_dce
+    type: edge
+    from:
+      ref: state_node
+    to:
+      ref: n_dce
+  - id: lab_direct
+    type: label
+    text: VAS, time trade-off, standard gamble
+    attach_to: n_direct
+    side: below
+  - id: lab_indirect
+    type: label
+    text: EQ-5D, SF-6D, 15D — plus a value set
+    attach_to: n_indirect
+    side: below
+  - id: lab_dce
+    type: label
+    text: Choices between states, not ratings
+    attach_to: n_dce
+    side: below
+commands:
+  - draw:
+      - ax
+      - full_health
+      - label_full
+    speak: Across these five parts we map every method health economists use to put a number on how bad an illness feels — and this figure is why they need one.
+  - draw:
+      - untreated
+      - label_untreated
+      - death_pt
+      - label_death
+    speak: 'Our running case: spinal muscular atrophy type one, where an infant''s motor neurons fail within months, and untreated, most children die or depend on a ventilator before their second birthday.'
+  - pause: 0.3
+  - draw:
+      - treated
+      - label_treated
+    speak: Nusinersen changes that picture — treated children survive for years, many of them still ventilated.
+  - pause: 0.3
+  - draw:
+      - time_arrow
+      - label_time
+    speak: 'The trial hands us the width of that survival: call it roughly nine extra years of life.'
+  - draw:
+      - baseline
+      - qaly_area
+      - label_area
+    speak: But no health system buys years; it buys quality-adjusted years — and a QALY is an area, utility multiplied by time.
+  - pause: 0.4
+  - draw:
+      - u_arrow
+      - label_u
+    speak: 'So everything rests on the height of this box: what is u for the state ''SMA type one, ventilated, treated''?'
+  - camera:
+      center:
+        ref: label_u
+      zoom: 2.2
+    speak: And here is the awkward fact — no scanner, no blood test, no motor-function score ever outputs zero point four.
+  - camera:
+      reset: true
+    speak: u is not a property of the body at all; it is a statement about how much people would give up to escape that state.
+  - pause: 0.5
+  - clear: {}
+    speak: Which means the number has to come from human judgement — and there are three families of ways to get it.
+  - draw:
+      - state_node
+    speak: Start from the state we need valued.
+  - draw:
+      - e_direct
+      - n_direct
+      - lab_direct
+    speak: 'The first family values it directly: describe the state to people, then ask them to place it on a scale, or trade years of life away, or gamble against death.'
+  - draw:
+      - e_indirect
+      - n_indirect
+      - lab_indirect
+    speak: The second never asks the patient to value anything — they simply describe their own health in a handful of questions, and a ready-made value set converts that description into a number.
+  - highlight:
+      target:
+        - n_indirect
+      effect: glow
+    speak: That split, where one person describes the state and a quite different sample of people values it, is the spine of everything ahead.
+  - draw:
+      - e_dce
+      - n_dce
+      - lab_dce
+    speak: 'The third asks for no number at all: just repeated choices between two health states, with the values reconstructed from the pattern of choosing.'
+  - point:
+      at:
+        ref: n_indirect
+      gesture: tap
+    speak: EQ-5D-5L alone describes three thousand one hundred and twenty-five states, and each carries a value that differs by country — Norway now has a value set of its own.
+  - pause: 0.4
+  - clear: {}
+    speak: Which family you pick is not a technicality.
+  - show:
+      - ax
+      - full_health
+      - untreated
+      - label_untreated
+      - death_pt
+      - label_death
+      - treated
+      - label_treated
+      - baseline
+      - qaly_area
+      - label_area
+      - time_arrow
+      - label_time
+      - u_arrow
+      - label_u
+    speak: Move this height by five hundredths and nusinersen's ICER moves by millions of kroner — and the very same missing height sits under hip replacements and statins, where small differences multiply across hundreds of thousands of patients.
+  - draw:
+      - mark_u
+    speak: So the question for the rest of this series is exactly this one box.
+    delivery: grave
+  - speak: Every method ahead — scales, trade-offs, gambles, questionnaires, choice tasks — exists to fill in a number that no machine can read.
+level: basic
+---
+title: The Tariff Is a Separate Artefact
+voice: male
+elements:
+  - id: head
+    type: text
+    text: 'EQ-5D-5L: the descriptive system'
+    x: 500
+    'y': 700
+    font_size: 32
+  - id: d_mob
+    type: text
+    text: Mobility
+    x: 250
+    'y': 620
+    font_size: 26
+  - id: d_self
+    type: text
+    text: Self-care
+    x: 250
+    'y': 565
+    font_size: 26
+  - id: d_act
+    type: text
+    text: Usual activities
+    x: 250
+    'y': 510
+    font_size: 26
+  - id: d_pain
+    type: text
+    text: Pain / discomfort
+    x: 250
+    'y': 455
+    font_size: 26
+  - id: d_anx
+    type: text
+    text: Anxiety / depression
+    x: 250
+    'y': 400
+    font_size: 26
+  - id: l_mob
+    type: text
+    text: 5 — unable to walk about
+    x: 660
+    'y': 620
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: l_self
+    type: text
+    text: 5 — unable to wash or dress
+    x: 660
+    'y': 565
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: l_act
+    type: text
+    text: 5 — unable to do usual activities
+    x: 660
+    'y': 510
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: l_pain
+    type: text
+    text: 5 — extreme pain
+    x: 660
+    'y': 455
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: l_anx
+    type: text
+    text: 4 — severely anxious
+    x: 660
+    'y': 400
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: code
+    type: text
+    text: State  5 5 5 5 4
+    x: 500
+    'y': 290
+    font_size: 48
+    style:
+      color: '#b5482e'
+  - id: count
+    type: text
+    text: 5 levels × 5 dimensions = 3 125 possible states — and no values
+    x: 500
+    'y': 200
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: n_public
+    type: node
+    shape: rect
+    text: Public sample (n ≈ 1 000)
+  - id: n_task
+    type: node
+    shape: rect
+    text: TTO / DCE valuation tasks
+  - id: n_model
+    type: node
+    shape: rect
+    text: Regression model
+  - id: n_tariff
+    type: node
+    shape: rect
+    text: 'Value set: 3 125 states → u'
+  - id: a1
+    type: arrow
+    from:
+      ref: n_public
+    to:
+      ref: n_task
+  - id: a2
+    type: arrow
+    from:
+      ref: n_task
+    to:
+      ref: n_model
+  - id: a3
+    type: arrow
+    from:
+      ref: n_model
+    to:
+      ref: n_tariff
+  - id: t_who
+    type: label
+    text: Patients describe. The public values.
+    attach_to: n_tariff
+    side: below
+  - id: st3
+    type: text
+    text: EQ-5D-3L, worst state  3 3 3 3 3
+    x: 500
+    'y': 620
+    font_size: 30
+  - id: nl_line
+    type: path
+    points:
+      - - 140
+        - 380
+      - - 900
+        - 380
+  - id: zero_tick
+    type: path
+    points:
+      - - 453
+        - 365
+      - - 453
+        - 395
+  - id: one_tick
+    type: path
+    points:
+      - - 900
+        - 365
+      - - 900
+        - 395
+  - id: lab_zero
+    type: text
+    text: 0 = dead
+    x: 453
+    'y': 425
+    font_size: 22
+  - id: lab_one
+    type: text
+    text: 1 = full health
+    x: 850
+    'y': 425
+    font_size: 22
+  - id: lab_worse
+    type: text
+    text: worse than dead
+    x: 250
+    'y': 425
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: uk_tick
+    type: path
+    points:
+      - - 187
+        - 355
+      - - 187
+        - 405
+    style:
+      color: '#2f6b8f'
+      stroke_width: 3
+  - id: uk_label
+    type: text
+    text: 'UK:  −0.594'
+    x: 187
+    'y': 320
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: us_tick
+    type: path
+    points:
+      - - 404
+        - 355
+      - - 404
+        - 405
+    style:
+      color: '#b5482e'
+      stroke_width: 3
+  - id: us_label
+    type: text
+    text: 'US:  −0.109'
+    x: 404
+    'y': 320
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: gap_arrow
+    type: arrow
+    from:
+      x: 187
+      'y': 270
+    to:
+      x: 404
+      'y': 270
+    style:
+      color: '#8a5fa8'
+  - id: gap_label
+    type: text
+    text: 0.485 utility — from the tariff alone
+    x: 430
+    'y': 230
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: mark
+    type: annotation
+    target: gap_label
+    kind: box
+  - id: note_norway
+    type: text
+    text: Norwegian submissions long used the UK tariff
+    x: 500
+    'y': 150
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: note_icer
+    type: text
+    text: ΔE = Δu × time    →    ICER = ΔC / ΔE
+    x: 500
+    'y': 85
+    font_size: 26
+commands:
+  - draw:
+      - head
+      - d_mob
+      - d_self
+      - d_act
+      - d_pain
+      - d_anx
+    speak: Now that we have seen the two routes to u, follow the indirect one down — because a submission can lose its utility number to a decision made in another country, years before the patient was ill.
+  - draw:
+      - l_mob
+      - l_self
+      - l_act
+      - l_pain
+      - l_anx
+    parallel: true
+    speak: 'A child with spinal muscular atrophy: her proxy ticks unable to walk about, unable to wash or dress, unable to do her usual activities, extreme pain, severely anxious.'
+  - draw:
+      - code
+    speak: And that is the entire output of the descriptive system — the state five, five, five, five, four.
+  - point:
+      at:
+        ref: code
+      gesture: circle
+    speak: An address, not a price.
+  - draw:
+      - count
+    speak: One of three thousand one hundred and twenty-five addresses, and the questionnaire values none of them.
+  - clear: {}
+    speak: The value comes from somewhere else entirely — a separate study, run years earlier, on completely different people.
+  - draw:
+      - n_public
+    speak: 'A national sample of the general public: about a thousand ordinary citizens, most of them in decent health.'
+  - draw:
+      - a1
+      - n_task
+    speak: They value a handful of states by trading off time, or by choosing between them — last part's direct methods, now applied to strangers' hypothetical lives.
+  - draw:
+      - a2
+      - n_model
+      - a3
+      - n_tariff
+    speak: A regression fits a coefficient to every level of every dimension, and out drops the tariff — a lookup table pricing all 3 125 states, including the thousands nobody ever valued.
+  - draw:
+      - t_who
+    speak: 'Two separate artefacts: the patient says which state she is in, the public says what that state is worth.'
+  - clear: {}
+    speak: So when the tariff changes, the number changes — although nothing about the patient has.
+  - draw:
+      - st3
+      - nl_line
+      - zero_tick
+      - one_tick
+      - lab_zero
+      - lab_one
+      - lab_worse
+  - draw:
+      - uk_tick
+      - uk_label
+    speak: Take the older three-level EQ-5D at its worst state, three-three-three-three-three. The British value set puts it at minus 0.594 — well below being dead.
+  - draw:
+      - us_tick
+      - us_label
+    speak: The American value set, same questionnaire, same five ticks, says minus 0.109.
+    delivery: grave
+  - camera:
+      center:
+        x: 295
+        'y': 330
+      zoom: 2
+    speak: Almost half a unit of utility sits between those two marks, every year, for every patient in that state.
+  - draw:
+      - gap_arrow
+      - gap_label
+      - mark
+    speak: 'The gap is purely the tariff: different samples, different elicitation protocols, different statistical models of the very same description.'
+  - camera:
+      reset: true
+  - draw:
+      - note_norway
+    speak: Norwegian submissions long borrowed the British tariff, for want of a Norwegian one — so the utilities reaching Beslutningsforum carried English preferences about disability.
+  - draw:
+      - note_icer
+    speak: And since the QALY gain is the utility change times time, swapping value sets rescales ΔE, and with it nusinersen's ICER, without one clinical fact changing.
+  - focus:
+      target:
+        - note_icer
+        - note_norway
+    speak: The descriptive system measures her illness; the value set is a national artefact — and it is the second one that decides what her illness is worth.
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Time trade-off and standard gamble: whose values, and what lies below zero?'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 8 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Time trade-off and standard gamble: whose values, and what lies below zero?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

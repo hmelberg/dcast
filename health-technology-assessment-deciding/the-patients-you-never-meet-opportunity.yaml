@@ -1,0 +1,256 @@
+playlist:
+  title: 'The patients you never meet: opportunity cost as the hidden loser'
+---
+title: A Yes Has a Payer
+voice: female
+elements:
+  - id: title
+    type: text
+    text: One year's health budget
+    x: 500
+    'y': 620
+    font_size: 30
+  - id: bar_outline
+    type: path
+    points:
+      - - 120
+        - 420
+      - - 880
+        - 420
+      - - 880
+        - 500
+      - - 120
+        - 500
+    closed: true
+  - id: bar_label
+    type: label
+    text: Fixed before anyone fell ill
+    attach_to: bar_outline
+    side: above
+    style:
+      color: '#8f887c'
+  - id: yes_block
+    type: path
+    points:
+      - - 120
+        - 420
+      - - 260
+        - 420
+      - - 260
+        - 500
+      - - 120
+        - 500
+    closed: true
+    style:
+      color: '#b5482e'
+      fill: '#b5482e'
+      opacity: 0.55
+  - id: label_yes
+    type: label
+    text: Nusinersen — named patients
+    attach_to: yes_block
+    side: below
+    style:
+      color: '#b5482e'
+  - id: displaced_block
+    type: path
+    points:
+      - - 740
+        - 420
+      - - 880
+        - 420
+      - - 880
+        - 500
+      - - 740
+        - 500
+    closed: true
+    style:
+      color: '#c96567'
+      fill: '#c96567'
+      opacity: 0.55
+  - id: arrow_out
+    type: arrow
+    from:
+      x: 810
+      'y': 415
+    to:
+      x: 810
+      'y': 330
+  - id: label_displaced
+    type: label
+    text: Hip replacements, statins, follow-ups — not delivered
+    attach_to: arrow_out
+    side: below
+    style:
+      color: '#c96567'
+  - id: mark_displaced
+    type: annotation
+    target: label_displaced
+    kind: box
+commands:
+  - draw:
+      - title
+      - bar_outline
+      - bar_label
+    speak: 'Over three parts we ask who actually pays when a health system says yes — and it starts with this bar: one year''s health budget, fixed before anyone fell ill.'
+  - draw:
+      - yes_block
+      - label_yes
+    speak: Beslutningsforum approves nusinersen for spinal muscular atrophy at an extraordinary price per patient. The bar does not grow to accommodate good news — so who pays for this slice?
+  - pause: 1.8
+  - draw:
+      - displaced_block
+      - arrow_out
+      - label_displaced
+    speak: 'An equal slice of care at the other end drops out of the budget: hip replacements, statin prescriptions, follow-up appointments that now simply do not happen.'
+  - draw:
+      - mark_displaced
+    speak: The children who get the drug are named and photographed; the patients who paid for it never are, because nobody can say which ones they were.
+    delivery: grave
+level: basic
+---
+title: Doing the displacement arithmetic
+voice: female
+template: equation_steps
+params:
+  title: The displacement arithmetic
+  steps:
+    - tex: \text{Budget} = 100\,000\,000\ \text{kr}
+      note: Fixed. Spent either way.
+    - tex: \frac{100\,000\,000\ \text{kr}}{3\,000\,000\ \text{kr/QALY}} \approx 33\ \text{QALYs}
+      note: Nusinersen
+    - tex: \frac{100\,000\,000\ \text{kr}}{100\,000\ \text{kr/QALY}} \approx 1\,000\ \text{QALYs}
+      note: Hip replacements
+    - tex: \Delta E = 33 - 1\,000 = -967\ \text{QALYs}
+      note: Health forgone
+elements:
+  - id: mark
+    type: annotation
+    target: step_3
+    kind: box
+commands:
+  - draw:
+      - title
+  - draw:
+      - step_0
+      - note_0
+    speak: 'Now that we have seen that a yes always has a payer, let''s do the payer''s arithmetic: a hundred million kroner, which leaves the budget either way.'
+  - draw:
+      - step_1
+      - note_1
+    speak: At roughly three million kroner per QALY, nusinersen converts that budget into about thirty-three quality-adjusted life years.
+  - speak: Same hundred million, spent instead on hip replacements at around a hundred thousand kroner per QALY — how many QALYs would that buy?
+  - pause: 1.8
+  - draw:
+      - step_2
+      - note_2
+    speak: A thousand.
+  - draw:
+      - step_3
+      - note_3
+      - mark
+    speak: So the yes costs nine hundred and sixty-seven QALYs of health that the same money would have bought elsewhere.
+  - highlight:
+      target:
+        - note_3
+      effect: glow
+    speak: That loss is spread thinly over thousands of people who simply wait a little longer for a hip, and none of them will write to the newspaper, because none of them will ever learn it was them.
+level: basic
+---
+title: No budget cap, still a cost
+voice: female
+template: decision_tree
+params:
+  root:
+    id: choice
+    type: decision
+    label: 2 million kr, no budget cap
+    children:
+      - label: Buy nusinersen
+        node:
+          id: drug
+          type: terminal
+          label: One patient-year of nusinersen
+          payoff: 0.4
+      - label: Buy hip replacements
+        node:
+          id: hips
+          type: terminal
+          label: About 20 hip replacements
+          payoff: 20
+elements:
+  - id: mark
+    type: annotation
+    target: payoff_hips
+    kind: box
+commands:
+  - draw:
+      - node_choice
+      - label_choice
+      - edge_choice_drug
+      - branchlabel_choice_drug
+      - node_drug
+      - label_drug
+      - payoff_drug
+    speak: 'Now that we have done the displacement arithmetic inside a fixed budget, meet a buyer with no budget cap at all: a private foundation spending two million kroner of its own money on nusinersen, buying roughly 0.4 QALYs.'
+  - speak: No public budget is touched, and nobody's operation is cancelled — so what does this yes cost?
+  - pause: 1.8
+  - draw:
+      - edge_choice_hips
+      - branchlabel_choice_hips
+      - node_hips
+      - label_hips
+      - payoff_hips
+    speak: The same two million would have bought about twenty hip replacements, and something like twenty QALYs — from an operation that has never once made the front page.
+  - draw:
+      - mark
+    speak: 'So the loser is not a budget line but the health the money could have bought instead: opportunity cost lives in scarcity, not in the cap, and every yes — public or private — is judged against what it displaces.'
+    delivery: grave
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Where did this whole enterprise come from?
+    x: 500
+    'y': 390
+    font_size: 39
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 3 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Where did this whole enterprise come from?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

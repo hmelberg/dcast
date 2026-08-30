@@ -1,0 +1,727 @@
+playlist:
+  title: Which uncertainties can more money actually fix?
+---
+title: Four Unknowns, One Decision
+voice: male
+elements:
+  - id: title
+    type: text
+    text: Nusinersen for SMA — the appraisal sheet
+    x: 500
+    'y': 700
+    font_size: 30
+  - id: icer_line
+    type: text
+    text: ICER = ΔC / ΔE
+    x: 500
+    'y': 560
+    font_size: 30
+  - id: icer_num
+    type: text
+    text: millions of kroner per QALY gained
+    x: 500
+    'y': 495
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: lambda_line
+    type: text
+    text: λ, severity-weighted ≈ 825 000 kr per QALY
+    x: 500
+    'y': 420
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: verdict_line
+    type: text
+    text: 'Beslutningsforum: no (2017) → yes (2018), with an age limit'
+    x: 500
+    'y': 330
+    font_size: 24
+  - id: one_number
+    type: text
+    text: One number. Four different unknowns behind it.
+    x: 500
+    'y': 230
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: box1
+    type: shape
+    shape: rect
+    x: 100
+    'y': 480
+    width: 380
+    height: 130
+    style:
+      color: '#8f887c'
+  - id: b1_h
+    type: text
+    text: 1. A survival hazard
+    x: 290
+    'y': 580
+    font_size: 23
+  - id: b1_d
+    type: text
+    text: Estimated from ~120 infants
+    x: 290
+    'y': 545
+    font_size: 19
+  - id: b1_d2
+    type: text
+    text: followed for roughly a year
+    x: 290
+    'y': 515
+    font_size: 19
+  - id: box2
+    type: shape
+    shape: rect
+    x: 520
+    'y': 480
+    width: 380
+    height: 130
+    style:
+      color: '#8f887c'
+  - id: b2_h
+    type: text
+    text: 2. The model's shape
+    x: 710
+    'y': 580
+    font_size: 23
+  - id: b2_d
+    type: text
+    text: Three motor states, or five?
+    x: 710
+    'y': 545
+    font_size: 19
+  - id: b2_d2
+    type: text
+    text: Can a gained milestone be lost?
+    x: 710
+    'y': 515
+    font_size: 19
+  - id: box3
+    type: shape
+    shape: rect
+    x: 100
+    'y': 300
+    width: 380
+    height: 130
+    style:
+      color: '#8f887c'
+  - id: b3_h
+    type: text
+    text: 3. Who the patient is
+    x: 290
+    'y': 400
+    font_size: 23
+  - id: b3_d
+    type: text
+    text: A 3-month-old with type 1, or
+    x: 290
+    'y': 365
+    font_size: 19
+  - id: b3_d2
+    type: text
+    text: a 14-year-old with type 2?
+    x: 290
+    'y': 335
+    font_size: 19
+  - id: box4
+    type: shape
+    shape: rect
+    x: 520
+    'y': 300
+    width: 380
+    height: 130
+    style:
+      color: '#8f887c'
+  - id: b4_h
+    type: text
+    text: 4. The discount rate
+    x: 710
+    'y': 400
+    font_size: 23
+  - id: b4_d
+    type: text
+    text: r = 4% a year, by guideline
+    x: 710
+    'y': 365
+    font_size: 19
+  - id: b4_d2
+    type: text
+    text: compounded over 60 years
+    x: 710
+    'y': 335
+    font_size: 19
+  - id: note1
+    type: text
+    text: The age limit answered row 3,
+    x: 290
+    'y': 245
+    font_size: 18
+    style:
+      color: '#8f887c'
+  - id: note2
+    type: text
+    text: not row 1.
+    x: 290
+    'y': 220
+    font_size: 18
+    style:
+      color: '#8f887c'
+  - id: question
+    type: text
+    text: Which of these would a new trial remove?
+    x: 620
+    'y': 150
+    font_size: 27
+    style:
+      color: '#b5482e'
+  - id: q_mark
+    type: annotation
+    target: question
+    kind: box
+commands:
+  - draw:
+      - title
+      - icer_line
+    speak: When a committee says the evidence is too uncertain, more research sounds like the obvious cure — this series asks which unknowns money can actually buy down.
+  - draw:
+      - icer_num
+    speak: For nusinersen in spinal muscular atrophy, the incremental cost per QALY came out in the millions of kroner.
+  - pause: 0.3
+  - draw:
+      - lambda_line
+    speak: Against a severity-weighted threshold near eight hundred thousand kroner per QALY, that is nowhere close.
+  - draw:
+      - verdict_line
+    speak: Beslutningsforum said no in 2017, then yes in 2018 — but only for patients below a certain age.
+  - draw:
+      - one_number
+    speak: Behind that single ratio sit four unknowns, with one word stretched across all of them.
+    delivery: grave
+  - pause: 0.5
+  - clear:
+      keep:
+        - title
+    speak: Open the sheet, and they come apart.
+  - draw:
+      - box1
+      - b1_h
+      - b1_d
+      - b1_d2
+    speak: First, a survival hazard — how long treated infants live, estimated from roughly a hundred and twenty babies followed about a year.
+  - pause: 0.3
+  - draw:
+      - box2
+      - b2_h
+      - b2_d
+      - b2_d2
+    speak: 'Second, the shape of the model itself: three motor states or five, and whether a milestone once gained can be lost again.'
+  - pause: 0.3
+  - draw:
+      - box3
+      - b3_h
+      - b3_d
+      - b3_d2
+    speak: Third, who the patient is — a three-month-old with type one is simply not the same person as a fourteen-year-old with type two.
+  - pause: 0.3
+  - draw:
+      - box4
+      - b4_h
+      - b4_d
+      - b4_d2
+    speak: 'Fourth, the discount rate: four percent a year by Norwegian guideline, compounded across sixty years of a life.'
+  - pause: 0.5
+  - draw:
+      - note1
+      - note2
+    speak: And the age limit that unlocked the yes was the committee's answer to the third row — never to the first.
+  - draw:
+      - question
+      - q_mark
+    speak: 'So the question the series turns on: which of these four would a new trial remove?'
+  - highlight:
+      target:
+        - box1
+        - b1_h
+        - b1_d
+        - b1_d2
+      effect: glow
+    speak: Only one of them has a sample size attached.
+  - focus:
+      target:
+        - box2
+        - b2_h
+        - b2_d
+        - b2_d2
+        - box3
+        - b3_h
+        - b3_d
+        - b3_d2
+        - box4
+        - b4_h
+        - b4_d
+        - b4_d2
+    speak: The other three would read exactly the same the morning after that trial reports.
+  - speak: One word — uncertainty — doing four different jobs, and only one of them is for sale.
+    delivery: grave
+level: advanced
+---
+title: 'Sorting the Unknowns: A Four-Box Taxonomy'
+level: advanced
+voice: male
+template: two_by_two_table
+params:
+  title: Four unknowns, sorted by what would fix them
+  row_label: What is unknown
+  col_label: Can more data fix it?
+  row_values:
+    - The numbers in the model
+    - The frame around them
+  col_values:
+    - Yes — evidence can shrink it
+    - No — evidence cannot
+  cells:
+    - - Parameter uncertainty
+      - Heterogeneity
+    - - Structural uncertainty
+      - Methodological uncertainty
+  cell_notes:
+    - - the value of an input
+      - patients genuinely differ
+    - - the shape of the model
+      - the rules of the analysis
+  highlight:
+    - - 0
+      - 0
+    - - 1
+      - 0
+elements:
+  - id: mark_col
+    type: annotation
+    target: col_header_0
+    kind: box
+commands:
+  - draw:
+      - title
+      - grid
+    speak: Now that we have seen four unknowns pull at the same nusinersen decision, the practical question is which of them another study could actually buy away — because committees are routinely asked to wait for evidence that would never have helped.
+  - draw:
+      - row_title
+      - row_header_0
+      - row_header_1
+    speak: 'Sort them first by what is unknown: the numbers we feed the model, or the frame we built around those numbers.'
+  - draw:
+      - col_title
+      - col_header_0
+      - col_header_1
+    speak: And second by whether evidence — another trial, longer follow-up — could ever shrink it.
+  - pause: 0.3
+  - draw:
+      - cell_0_0
+    speak: 'Top left: our model needs a yearly probability of losing ventilator-free survival, and the data put it near 0.12, consistent with anything from 0.08 to 0.17.'
+  - focus:
+      target:
+        - cell_0_0
+    speak: A true value exists and our estimate is merely noisy — quadruple the sample and the interval halves.
+  - pause: 0.4
+  - draw:
+      - cell_0_1
+    speak: 'Top right is still numbers, but a different animal: a six-month-old with type 1 disease and a thirty-year-old with type 3 do not share one transition probability.'
+  - point:
+      at:
+        ref: cell_0_1
+      gesture: circle
+    speak: A thousand more patients would not shrink that spread by a hair — which is why Beslutningsforum, the decision forum, answered nusinersen with an age limit rather than a bigger study.
+  - pause: 0.4
+  - draw:
+      - cell_1_0
+    speak: 'Bottom left leaves the inputs alone and asks about the frame: does the benefit hold for life or fade after ten years, and does the model even contain a state where it fades?'
+  - focus:
+      target:
+        - cell_1_0
+    speak: Two models with identical parameters can hand you ICERs that differ by a factor — settleable in principle, but only by twenty years of follow-up nobody has.
+  - highlight:
+      target:
+        - cell_1_0
+      effect: glow
+    speak: Which is why this box is the one most often left unquantified — named in the discussion section, given a number far less often than the parameters above it.
+  - pause: 0.3
+  - draw:
+      - cell_1_1
+    speak: 'Bottom right: the four percent discount rate, the perspective, whose costs count, lambda itself — rules chosen by guideline, never measured by anyone.'
+  - focus:
+      target:
+        - cell_1_1
+    speak: 'And in the boring contrast case, statins, this box dominates: costs land now and health lands decades later, so moving the discount rate shifts the ICER further than any confidence interval on the effect ever could.'
+  - pause: 0.4
+  - draw:
+      - hl_0_0
+      - hl_1_0
+    parallel: true
+    speak: So a new trial writes only in this left column — quickly at the top, slowly and only with time at the bottom.
+  - draw:
+      - mark_col
+    speak: Money buys evidence, and evidence reaches exactly this far — the right-hand column survives every trial ever funded.
+    delivery: grave
+  - highlight:
+      target:
+        - cell_0_1
+      effect: glow
+    speak: And heterogeneity was never waiting for evidence — it is waiting for us to stop averaging over it, which is where we go next.
+---
+title: Heterogeneity is not uncertainty
+level: advanced
+voice: male
+template: cost_effectiveness_plane
+params:
+  title: 'Nusinersen: one average, two realities'
+  x_label: ΔE (QALYs gained)
+  y_label: ΔC (kr)
+  wtp_threshold: 1000000
+  points:
+    - label: Child, treated early
+      effect: 8
+      cost: 4800000
+    - label: Adult, established disease
+      effect: 2
+      cost: 4800000
+    - label: The average patient
+      effect: 5
+      cost: 4800000
+      emphasize: true
+elements:
+  - id: cross_avg
+    type: annotation
+    target: pt_label_2
+    kind: cross
+  - id: box_kids
+    type: annotation
+    target: pt_label_0
+    kind: box
+commands:
+  - draw:
+      - x_axis
+      - y_axis
+    speak: 'Now that we have sorted the unknowns into four boxes, take the one that was never uncertainty at all — and ask: which patient does an average ICER actually describe?'
+  - draw:
+      - q_nw
+      - q_ne
+      - q_sw
+      - q_se
+    parallel: true
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: 'Here is the threshold line: at Norway''s severity-weighted ceiling, roughly a million kroner per QALY, anything below it is worth buying.'
+  - pause: 0.3
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: Nusinersen in a child treated early gains about eight QALYs for 4.8 million kroner — an ICER near 600,000 per QALY, comfortably under the line.
+  - pause: 0.3
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'Same drug, same price, an adult with established motor neurone loss: about two QALYs — 2.4 million kroner per QALY, well above it.'
+  - highlight:
+      target:
+        - pt_0
+        - pt_1
+      effect: glow
+    speak: These are not two guesses at one number — both are true, and we know in advance which patient is which.
+  - pause: 0.4
+  - draw:
+      - pt_2
+      - pt_label_2
+    speak: 'Now pool them, half and half: five QALYs on average, still 4.8 million kroner, so 960,000 per QALY.'
+  - point:
+      at:
+        ref: pt_2
+      gesture: circle
+    speak: That slips in just under the threshold, so the average says yes — to everybody.
+    delivery: grave
+  - draw:
+      - cross_avg
+    speak: But nobody gains five QALYs. The average patient is the one patient the trial never enrolled.
+  - clear:
+      keep:
+        - x_axis
+        - y_axis
+        - wtp_line
+        - wtp_label
+        - pt_0
+        - pt_label_0
+        - pt_1
+        - pt_label_1
+    speak: Strip the average away, and the two real groups are still standing exactly where they were.
+  - highlight:
+      target:
+        - pt_0
+        - pt_1
+      effect: pulse
+    speak: Run a trial ten times larger and each dot tightens into a smaller cloud — that is parameter uncertainty shrinking, and money buys it.
+  - focus:
+      target:
+        - pt_0
+        - pt_1
+    speak: 'The distance between the dots does not shrink at all: it is a fact about the patients, not about our sample size.'
+  - draw:
+      - box_kids
+    speak: In 2018 Beslutningsforum did precisely this — yes to nusinersen, but only for patients under eighteen.
+  - highlight:
+      target:
+        - pt_1
+      effect: glow
+    speak: And, painfully, no to adults with the same diagnosis; that age limit is a refusal to average.
+  - draw:
+      - title
+    speak: 'So the answer to our question: the average ICER describes nobody — and no trial, however large, will ever make it describe someone.'
+---
+title: What survives every trial
+level: advanced
+voice: male
+elements:
+  - id: n_param
+    type: node
+    shape: rect
+    text: Parameter uncertainty
+    style:
+      color: '#2f6b8f'
+  - id: n_struct
+    type: node
+    shape: rect
+    text: Structural uncertainty
+  - id: n_hetero
+    type: node
+    shape: rect
+    text: Heterogeneity
+    style:
+      color: '#8a5fa8'
+  - id: n_method
+    type: node
+    shape: rect
+    text: Methodological uncertainty
+    style:
+      color: '#b5482e'
+  - id: f_shrink
+    type: node
+    shape: rect
+    text: Evidence can shrink it
+    style:
+      color: '#2f6b8f'
+  - id: f_split
+    type: node
+    shape: rect
+    text: Only stratification handles it
+    style:
+      color: '#8a5fa8'
+  - id: f_survive
+    type: node
+    shape: rect
+    text: Survives every trial
+    style:
+      color: '#b5482e'
+  - id: e_param
+    type: edge
+    from:
+      ref: n_param
+    to:
+      ref: f_shrink
+    style:
+      color: '#2f6b8f'
+  - id: e_struct_shrink
+    type: edge
+    from:
+      ref: n_struct
+    to:
+      ref: f_shrink
+    curved: true
+    style:
+      color: '#2f6b8f'
+  - id: e_struct_survive
+    type: edge
+    from:
+      ref: n_struct
+    to:
+      ref: f_survive
+    curved: true
+    style:
+      color: '#b5482e'
+  - id: e_hetero
+    type: edge
+    from:
+      ref: n_hetero
+    to:
+      ref: f_split
+    style:
+      color: '#8a5fa8'
+  - id: e_method
+    type: edge
+    from:
+      ref: n_method
+    to:
+      ref: f_survive
+    style:
+      color: '#b5482e'
+  - id: lbl_struct_shrink
+    type: label
+    text: Does the effect persist?
+    attach_to: e_struct_shrink
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: lbl_struct_survive
+    type: label
+    text: 80-year extrapolation
+    attach_to: e_struct_survive
+    side: below
+    style:
+      color: '#b5482e'
+  - id: mark_residue
+    type: annotation
+    target: f_survive
+    kind: box
+  - id: res_lambda
+    type: label
+    text: Threshold λ
+    attach_to: f_survive
+    side: below
+    style:
+      color: '#b5482e'
+  - id: res_r
+    type: label
+    text: Discount rate r = 4%
+    attach_to: f_survive
+    side: left
+    style:
+      color: '#b5482e'
+  - id: res_persp
+    type: label
+    text: 'Perspective: whose costs count'
+    attach_to: f_survive
+    side: below-left
+    style:
+      color: '#b5482e'
+commands:
+  - draw:
+      - n_param
+      - n_struct
+      - n_hetero
+      - n_method
+    parallel: true
+    speak: 'Now that we have seen how averaging hides heterogeneity, here are our four unknowns together — and one question: which of them can more money actually fix?'
+  - pause: 0.4
+  - draw:
+      - f_shrink
+    speak: 'The first fate: unknowns that genuinely shrink when someone goes out and collects more data.'
+  - draw:
+      - e_param
+    speak: Parameter uncertainty goes straight here — in our nusinersen model the utility of a treated child was 0.40, with a confidence interval from 0.25 to 0.55.
+  - highlight:
+      target:
+        - e_param
+      effect: glow
+    speak: Quadruple the sample and that interval halves; this is the one box a cheque can honestly buy down.
+  - pause: 0.3
+  - draw:
+      - e_struct_shrink
+      - lbl_struct_shrink
+    speak: Part of structural uncertainty is testable too — whether the treatment effect persists after year five is something long follow-up can settle.
+  - draw:
+      - f_survive
+    speak: 'But the rest of the structure walks into a second fate: the things no trial ever reaches.'
+  - draw:
+      - e_struct_survive
+      - lbl_struct_survive
+    speak: Our Markov model runs a child treated at six months out over eighty years, from five years of evidence — nobody will ever run the study that checks that tail.
+  - pause: 0.3
+  - draw:
+      - e_method
+    speak: 'Methodological uncertainty settles there permanently: the four percent discount rate, the perspective, the threshold, whether health should be counted in QALYs at all.'
+  - draw:
+      - f_split
+      - e_hetero
+    speak: Heterogeneity gets a fate of its own — it is real variation, not ignorance, so it cannot shrink; you can only stop averaging and split the decision.
+  - highlight:
+      target:
+        - f_split
+      effect: glow
+    speak: 'Beslutningsforum, the national decision forum, did exactly that: nusinersen was rejected, then accepted with an age limit at eighteen — one technology, two answers, by subgroup.'
+  - pause: 0.4
+  - draw:
+      - mark_residue
+    speak: 'So box the bottom of that column: this is the residue, everything still standing after the perfect trial.'
+  - clear:
+      keep:
+        - n_method
+        - f_survive
+        - mark_residue
+    speak: Imagine that perfect trial has been run — ten thousand infants, thirty years of follow-up, every parameter nailed down.
+  - draw:
+      - res_lambda
+      - res_r
+      - res_persp
+    parallel: true
+    speak: You would know the QALY gain to three decimals, and still not know these three.
+  - highlight:
+      target:
+        - res_lambda
+      effect: glow
+    speak: At a threshold of 275,000 kroner per QALY nusinersen is far out of reach; at 1.4 million it is arguable — and no experiment decides that, because lambda describes the health we displace, not the drug.
+    delivery: grave
+  - highlight:
+      target:
+        - f_survive
+      effect: pulse
+    speak: 'Across the four parts: parameters shrink with evidence, structure only in part, heterogeneity splits rather than shrinks, and the methodological core survives every trial ever run.'
+  - speak: More money buys precision about the world; it never buys agreement about what the world is worth — and next time we look at how to show that residue honestly.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Showing what you don''t know: from tornado diagrams to acceptability curves'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 18 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Showing what you don''t know: from tornado diagrams to acceptability curves'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

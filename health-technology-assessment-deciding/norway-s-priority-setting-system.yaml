@@ -1,0 +1,649 @@
+playlist:
+  title: Norway's priority-setting system, criterion by criterion
+---
+title: Two Answers, One Drug
+voice: female
+template: timeline
+params:
+  title: Nusinersen (Spinraza) in Norway
+  start_label: '2017'
+  end_label: '2018'
+  milestones:
+    - label: Approved in Europe
+      sublabel: '2017'
+    - label: Method assessment
+      sublabel: Legemiddelverket
+    - label: 'No'
+      sublabel: Beslutningsforum, 2017
+      emphasize: true
+    - label: Price negotiation
+      sublabel: confidential
+    - label: Yes, under 18
+      sublabel: February 2018
+      emphasize: true
+elements:
+  - id: n_nytte
+    type: node
+    shape: rect
+    text: Nytte (benefit)
+    style:
+      color: '#2f6b8f'
+  - id: n_ressurs
+    type: node
+    shape: rect
+    text: Ressursbruk (resource use)
+    style:
+      color: '#b5482e'
+  - id: n_alvor
+    type: node
+    shape: rect
+    text: Alvorlighet (severity)
+    style:
+      color: '#8a5fa8'
+  - id: n_dec
+    type: node
+    shape: rect
+    text: Yes / No
+  - id: a_n
+    type: arrow
+    from:
+      ref: n_nytte
+    to:
+      ref: n_dec
+    style:
+      color: '#2f6b8f'
+  - id: a_r
+    type: arrow
+    from:
+      ref: n_ressurs
+    to:
+      ref: n_dec
+    style:
+      color: '#b5482e'
+  - id: a_a
+    type: arrow
+    from:
+      ref: n_alvor
+    to:
+      ref: n_dec
+    style:
+      color: '#8a5fa8'
+  - id: lbl_shortfall
+    type: label
+    text: 'Absolutt prognosetap: QALYs lost vs. a healthy peer'
+    attach_to: n_alvor
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: lbl_lambda
+    type: label
+    text: ≈ 275 000 kr → ≈ 825 000 kr per QALY
+    attach_to: n_alvor
+    side: right
+    style:
+      color: '#8a5fa8'
+  - id: mark_dec
+    type: annotation
+    target: n_dec
+    kind: box
+commands:
+  - draw:
+      - line
+      - title
+    speak: Across this series we take Norway's priority-setting system apart criterion by criterion — starting with one drug file that got two opposite answers.
+  - draw:
+      - dot_0
+      - label_0
+    speak: 'Nusinersen, sold as Spinraza, was licensed in Europe in 2017: the first drug ever approved for spinal muscular atrophy, whose severest form kills most infants, or leaves them permanently ventilated, before their second birthday.'
+  - pause: 0.3
+  - draw:
+      - dot_1
+      - label_1
+    speak: Legemiddelverket ran the method assessment — how much health the drug buys, and what it costs to buy it.
+  - point:
+      at:
+        ref: dot_1
+      gesture: tap
+    speak: At its US list price — around 750 000 dollars in the first year and about 375 000 every year after — the cost per QALY came out many times above the values Norway works with.
+  - draw:
+      - dot_2
+      - label_2
+    speak: So in 2017 Beslutningsforum said no — not because the drug fails, the trial effect was real, but because of the health that price would take from patients we never see.
+  - pause: 0.4
+  - draw:
+      - dot_3
+      - label_3
+    speak: Then the manufacturer and the health trusts negotiated; the Norwegian price is confidential, but it is lower.
+  - draw:
+      - dot_4
+      - label_4
+    speak: 'February 2018: yes — for patients who begin treatment before they turn eighteen.'
+  - camera:
+      center:
+        ref: dot_3
+      zoom: 1.7
+    speak: 'Same drug, same trials, fourteen months apart: no, then yes with an age limit.'
+    delivery: grave
+  - camera:
+      reset: true
+  - highlight:
+      target:
+        - dot_2
+        - dot_4
+      effect: glow
+    speak: Any rule Norway claims to follow has to be able to produce both of these.
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - n_nytte
+    speak: 'The rule is written down, in the 2015–16 white paper Meld. St. 34: three criteria. First, nytte — benefit, the QALYs a technology is expected to add.'
+  - draw:
+      - n_ressurs
+    speak: 'Second, ressursbruk — resource use: everything the health service must spend to get those QALYs.'
+  - draw:
+      - n_alvor
+    speak: 'Third, alvorlighet — severity: how much is at stake for these patients if we do nothing.'
+  - draw:
+      - lbl_shortfall
+    speak: 'And severity is turned into a number — absolutt prognosetap, the absolute shortfall: the QALYs a patient loses compared with a healthy person of the same age.'
+  - draw:
+      - lbl_lambda
+    speak: The larger that shortfall, the more we accept paying per QALY — from a reference around 275 000 kroner up to roughly three times that at the highest severity.
+  - draw:
+      - n_dec
+      - a_n
+      - a_r
+      - a_a
+    speak: All three enter a single yes or no — and for an infant with SMA type one, the shortfall is close to an entire lifetime.
+  - point:
+      at:
+        ref: n_dec
+      gesture: circle
+    speak: 'That judgement also has an address: Bestillerforum orders the assessment, Legemiddelverket writes it, Beslutningsforum — the four regional directors — decides; outpatient drugs travel the separate blåresept route.'
+  - draw:
+      - mark_dec
+    speak: 'So nusinersen''s two answers were not a contradiction: benefit and severity never moved, the price did — and the same rule turned over.'
+  - speak: 'Next: the three criteria one at a time, then severity as a number, then who actually decides, and finally the four commissions — Lønning I, Lønning II, Norheim and Magnussen — that built this machinery.'
+level: basic
+---
+title: Nytte, Ressursbruk, Alvorlighet
+voice: female
+template: cost_effectiveness_plane
+params:
+  title: 'Meld. St. 34 (2015–2016): three criteria, one judgement'
+  x_label: 'nytte (benefit): ΔE, QALYs gained'
+  y_label: 'ressursbruk (resource use): ΔC, kroner'
+  wtp_threshold: 275000
+  quadrant_labels: true
+  points:
+    - label: Hip replacement
+      effect: 2
+      cost: 120000
+    - label: New drug, severe disease
+      effect: 0.4
+      cost: 180000
+      emphasize: true
+elements:
+  - id: sev_label
+    type: label
+    text: alvorlighet (severity) sets the slope λ
+    attach_to: wtp_line
+    side: above-left
+    style:
+      color: '#8a5fa8'
+  - id: mark_accept
+    type: annotation
+    target: pt_1
+    kind: circle
+commands:
+  - draw:
+      - x_axis
+    speak: 'Now that we have seen one drug get two different answers, here is the rulebook behind both: the three criteria of Meld. St. 34, Norway''s priority white paper of 2015 to 2016.'
+  - point:
+      at:
+        ref: x_axis
+      gesture: underline
+    speak: 'The first criterion is nytte — benefit — how much health a technology adds: our ΔE, measured in QALYs.'
+  - draw:
+      - y_axis
+    speak: 'The second is ressursbruk — resource use — what it consumes: ΔC, in kroner.'
+  - draw:
+      - q_ne
+      - q_nw
+      - q_se
+      - q_sw
+    parallel: true
+  - pause: 0.3
+  - draw:
+      - pt_0
+      - pt_label_0
+    speak: 'A hip replacement lands far out here: roughly a couple of good years for around a hundred thousand kroner. Placements on this plane are illustrative, but the order of magnitude is real.'
+  - pause: 0.3
+  - draw:
+      - pt_1
+      - pt_label_1
+    speak: 'And here a drug for a severe, rare disease: 0.4 QALYs per patient for 180,000 kroner more — about 450,000 kroner per QALY.'
+  - draw:
+      - wtp_line
+      - wtp_label
+    speak: Neither number decides alone. The pair is read against a line through the origin whose slope is lambda, our willingness to pay per QALY — the white paper's illustrative figure was 275,000 kroner for a good life year.
+  - highlight:
+      target:
+        - pt_1
+      effect: glow
+    speak: The drug sits above that line. On nytte and ressursbruk alone, the answer is no.
+  - pause: 0.4
+  - draw:
+      - sev_label
+    speak: The third criterion, alvorlighet — severity — is not a third coordinate on this plane. It moves the line.
+  - animate:
+      wtp_threshold: 825000
+    duration: 3
+    speak: The greater the absolute shortfall — the health these patients lose compared with their peers — the more we accept paying, in practice up to about three times as much, roughly 825,000 kroner per QALY.
+    delivery: grave
+  - camera:
+      center:
+        ref: pt_1
+      zoom: 2
+    speak: Same benefit, same cost, same point — and now it lies under the line.
+  - draw:
+      - mark_accept
+    speak: 'That is what the white paper means by assessing the criteria jointly: what decides is the point against the line, never one number on its own.'
+  - camera:
+      reset: true
+  - erase:
+      - q_ne
+      - q_nw
+      - q_se
+      - q_sw
+    parallel: true
+    speak: Severity, though, buys a steeper line — not an unlimited one.
+  - highlight:
+      target:
+        - y_axis
+      effect: glow
+    speak: 'Nusinersen, our running example, sits so far up this cost axis that the page cannot hold it: at list price its cost per QALY ran into the millions, even against the highest severity Norway recognises.'
+  - speak: Beslutningsforum said no in 2017, and yes in February 2018 for patients under eighteen — once the price had moved.
+  - pause: 0.4
+  - draw:
+      - title
+    speak: 'Three criteria, one judgement: nytte and ressursbruk place the point, alvorlighet sets the line, and only the two together give an answer.'
+level: basic
+---
+title: Who actually decides
+voice: female
+template: pathway
+params:
+  title: 'Who actually decides: one assessment, two decision routes'
+  edges: Proposal -> Bestillerforum; Bestillerforum -> Legemiddelverket; Legemiddelverket -> LIS price talks; LIS price talks -> Beslutningsforum; Beslutningsforum -> Hospital use; Outpatient drug -> Legemiddelverket; Legemiddelverket -> Blaresept
+  node_types:
+    Proposal: protein
+    Bestillerforum: gene
+    Legemiddelverket: gene
+    LIS price talks: gene
+    Beslutningsforum: gene
+    Hospital use: protein
+    Outpatient drug: protein
+    Blaresept: protein
+elements:
+  - id: conf_label
+    type: label
+    text: 'Negotiated price: confidential'
+    attach_to: node_lis_price_talks
+    side: below
+    style:
+      color: '#b5482e'
+  - id: conf_mark
+    type: annotation
+    target: conf_label
+    kind: box
+  - id: blar_note
+    type: label
+    text: Above ~100 mill. kr per year → Storting
+    attach_to: node_blaresept
+    side: below
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - title
+    speak: Now that severity has become a number, follow it through the rooms that turn it into a yes or a no — because in Norway the body that calculates is never the body that decides.
+  - draw:
+      - node_proposal
+      - node_label_proposal
+    speak: Any clinician, company or health trust can propose a method — nusinersen for spinal muscular atrophy entered here in 2017.
+  - pause: 0.3
+  - draw:
+      - edge_0
+      - node_bestillerforum
+      - node_label_bestillerforum
+    speak: Bestillerforum commissions the work, deciding whether a method is assessed at all.
+  - point:
+      at:
+        ref: node_bestillerforum
+      gesture: circle
+    speak: A method never commissioned here simply never reaches a decision.
+  - draw:
+      - edge_1
+      - node_legemiddelverket
+      - node_label_legemiddelverket
+    speak: For drugs, Legemiddelverket writes the method assessment — since 2024 inside the new Directorate for Medical Products.
+  - highlight:
+      target:
+        - node_legemiddelverket
+      effect: glow
+    speak: 'Here the three criteria become arithmetic: nytte and ressursbruk collapse into an ICER, alvorlighet into absolutt prognosetap.'
+  - pause: 0.3
+  - draw:
+      - edge_2
+      - node_lis_price_talks
+      - node_label_lis_price_talks
+    speak: Then Sykehusinnkjøp negotiates a price — and the ICER that counts is computed at that negotiated price, never the list price.
+  - draw:
+      - edge_3
+      - node_beslutningsforum
+      - node_label_beslutningsforum
+    speak: Only now does Beslutningsforum decide, for the whole country at once.
+  - camera:
+      center:
+        ref: node_beslutningsforum
+      zoom: 1.9
+    speak: 'Four people sit in that room: the chief executives of the four regional health authorities, meeting roughly once a month.'
+    delivery: grave
+  - camera:
+      reset: true
+    speak: They said no to nusinersen in 2017, then yes in February 2018 at a new price, with an age limit of eighteen years.
+  - draw:
+      - edge_4
+      - node_hospital_use
+      - node_label_hospital_use
+    speak: A yes means every hospital in Norway may use it; a no means none may.
+  - pause: 0.5
+  - draw:
+      - node_outpatient_drug
+      - node_label_outpatient_drug
+      - edge_5
+    speak: Yet most drugs never meet those four executives — the ones you collect at a pharmacy take another road into the very same agency.
+  - draw:
+      - edge_6
+      - node_blaresept
+      - node_label_blaresept
+    speak: Blaresept, the blue prescription, is reimbursement from the national insurance scheme — and Legemiddelverket grants it itself, with no forum at all.
+  - draw:
+      - blar_note
+    speak: Unless the bill would exceed roughly a hundred million kroner a year, when it must go to the Storting with the budget.
+  - focus:
+      target:
+        - node_legemiddelverket
+        - node_blaresept
+        - node_beslutningsforum
+    speak: Same criteria, same agency doing the sums — but who says yes depends on whether the drug is given in a ward or handed across a counter.
+  - pause: 0.4
+  - draw:
+      - conf_label
+    speak: 'And this box is where Norwegian priority setting currently quarrels with itself: the negotiated price is confidential.'
+  - draw:
+      - conf_mark
+    speak: The published assessment shows list prices, so no outsider can recompute the number the decision actually rested on.
+  - highlight:
+      target:
+        - conf_label
+      effect: pulse
+    speak: Secrecy is defended as what buys Norway the discount; it also means a public decision leans on a figure the public may not see.
+  - speak: 'Four rooms, one route: whoever calculates does not decide, and whoever decides cannot show you the number.'
+    delivery: grave
+level: basic
+---
+title: Four Commissions, One System
+voice: female
+domain:
+  x:
+    - 0
+    - 20
+  'y':
+    - 0
+    - 900
+template: timeline
+params:
+  title: Four commissions, one system
+  start_label: '1987'
+  end_label: '2016'
+  milestones:
+    - label: Lønning I
+      sublabel: NOU 1987:23
+    - label: Lønning II
+      sublabel: NOU 1997:18
+    - label: Norheim
+      sublabel: NOU 2014:12
+    - label: Magnussen
+      sublabel: '2015'
+    - label: Meld. St. 34
+      sublabel: 2015–2016
+      emphasize: true
+elements:
+  - id: sev_axes
+    type: axes
+    x_label: Absolutt prognosetap (QALYs lost)
+    y_label: Accepted price (1000 kr per QALY)
+  - id: wtp_line
+    type: curve
+    expr: 275 + 27.5*x
+    style:
+      color: '#2f6b8f'
+  - id: label_wtp
+    type: label
+    text: Severity buys tolerance for cost
+    attach_to: wtp_line
+    side: above-left
+    style:
+      color: '#2f6b8f'
+  - id: pt_base
+    type: point
+    at:
+      x: 0
+      'y': 275
+  - id: label_base
+    type: label
+    text: ≈ 275 000 kr/QALY
+    attach_to: pt_base
+    side: right
+  - id: pt_top
+    type: point
+    at:
+      x: 20
+      'y': 825
+    guides: true
+  - id: label_top
+    type: label
+    text: ≈ 825 000 kr/QALY
+    attach_to: pt_top
+    side: above-left
+  - id: n_nytte
+    type: node
+    shape: rect
+    text: Nytte
+    style:
+      color: '#2f6b8f'
+  - id: n_alv
+    type: node
+    shape: rect
+    text: Alvorlighet
+    style:
+      color: '#8a5fa8'
+  - id: n_ress
+    type: node
+    shape: rect
+    text: Ressursbruk
+    style:
+      color: '#b5482e'
+  - id: n_dec
+    type: node
+    shape: decision
+    text: Yes — under 18
+  - id: label_nytte
+    type: label
+    text: motor function gained
+    attach_to: n_nytte
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: label_alv
+    type: label
+    text: shortfall near the maximum
+    attach_to: n_alv
+    side: above
+    style:
+      color: '#8a5fa8'
+  - id: label_ress
+    type: label
+    text: price above even the raised λ
+    attach_to: n_ress
+    side: above
+    style:
+      color: '#b5482e'
+  - id: e1
+    type: edge
+    from:
+      ref: n_nytte
+    to:
+      ref: n_dec
+  - id: e2
+    type: edge
+    from:
+      ref: n_alv
+    to:
+      ref: n_dec
+  - id: e3
+    type: edge
+    from:
+      ref: n_ress
+    to:
+      ref: n_dec
+  - id: mark_dec
+    type: annotation
+    target: n_dec
+    kind: box
+commands:
+  - draw:
+      - title
+      - line
+    speak: Now that we have seen who decides, the last question is where their three criteria came from — four public commissions across thirty years.
+  - draw:
+      - dot_0
+      - label_0
+    speak: 'Lønning I, reporting in 1987, was among the first national priority commissions anywhere: it sorted all of Norwegian health care into five levels, ranked by severity alone.'
+  - draw:
+      - dot_1
+      - label_1
+    speak: Ten years later Lønning II added expected benefit and a reasonable relation between cost and effect, and its priority groups fed straight into the 1999 Patients' Rights Act.
+  - draw:
+      - dot_2
+      - label_2
+    speak: 'Norheim''s committee in 2014 named three criteria outright: health benefit, resource use, and health loss measured across a whole lifetime.'
+  - highlight:
+      target:
+        - dot_2
+        - label_2
+      effect: glow
+    speak: That last one counted health a patient had already lost, so an eighty-year-old could barely score on it — the hearing responses were fierce, and the criterion did not survive.
+  - draw:
+      - dot_3
+      - label_3
+    speak: So a second group under Jon Magnussen replaced it in 2015 with absolutt prognosetap — the QALYs lost from today forward, not the ones already behind you.
+  - draw:
+      - dot_4
+      - label_4
+    speak: Meld. St. 34 took that to the Storting in 2016, and the three criteria we now work with — nytte, ressursbruk, alvorlighet — became national policy.
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - sev_axes
+    speak: Between 1987 and 2015, severity travelled from a rank order to a number — and a number can do something a rank order cannot.
+  - draw:
+      - wtp_line
+      - label_wtp
+    speak: 'Put absolute shortfall on the horizontal axis and the price we accept per QALY on the vertical: the more future health a condition destroys, the more we are willing to pay to save some of it.'
+  - draw:
+      - pt_base
+      - label_base
+      - pt_top
+      - label_top
+    speak: The reference figure at ordinary severity has been about 275 000 kroner per QALY; at the extreme end Magnussen's proposal reached roughly 825 000.
+  - camera:
+      center:
+        ref: pt_top
+      zoom: 2
+    speak: Magnussen proposed six discrete severity classes between those ends — the white paper kept the graded logic but left the boundaries to judgement, so this straight line is illustrative, not statutory.
+  - camera:
+      reset: true
+  - pause: 0.4
+  - clear: {}
+  - draw:
+      - n_nytte
+      - label_nytte
+    speak: 'Now run nusinersen through the machinery. Nytte: infants with SMA type 1 who would never have sat unsupported gained motor function — the benefit is real and visible.'
+  - draw:
+      - n_alv
+      - label_alv
+    speak: 'Alvorlighet: untreated, the condition takes almost an entire expected lifetime, so the absolute prognosis loss sits at the very top of the scale, and lifts the acceptable price with it.'
+  - draw:
+      - n_ress
+      - label_ress
+    speak: 'Ressursbruk: at a launch price of several million kroner per patient in the first year, the cost per QALY overshot even that raised ceiling — which is why Beslutningsforum said no in 2017.'
+  - draw:
+      - e1
+      - e2
+      - e3
+      - n_dec
+      - mark_dec
+    speak: In February 2018, after a price agreement and further documentation, the same body said yes — but only for patients under eighteen, where the evidence of benefit was strongest.
+  - speak: 'Across these five parts, that is the whole system in one sentence: Norway never decided whether nusinersen was worth it — it decided how to decide, and the age limit is what four commissions, three criteria and one number produced.'
+    delivery: grave
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Whose costs count? The perspective question decides the answer
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 5 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Whose costs count? The perspective question decides the answer'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}
