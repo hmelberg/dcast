@@ -1,0 +1,1048 @@
+playlist:
+  title: What makes a question causal?
+---
+title: Her Two Futures
+level: basic
+voice: female
+template: decision_tree
+params:
+  root:
+    id: maria
+    type: decision
+    label: Maria, age 40
+    children:
+      - label: Insured (D_i = 1)
+        node:
+          id: y1
+          type: terminal
+          label: Y_i(1)
+          payoff: 72
+      - label: Uninsured (D_i = 0)
+        node:
+          id: y0
+          type: terminal
+          label: Y_i(0)
+          payoff: 64
+elements:
+  - id: gap_arrow
+    type: arrow
+    from:
+      ref: payoff_y0
+    to:
+      ref: payoff_y1
+    curved: true
+    style:
+      color: '#8a5fa8'
+  - id: gap_label
+    type: label
+    text: Effect for Maria = 72 − 64 = 8
+    attach_to: gap_arrow
+    side: right
+    style:
+      color: '#8a5fa8'
+  - id: cross_y0
+    type: annotation
+    target: payoff_y0
+    kind: cross
+  - id: eq_text
+    type: text
+    x: 500
+    'y': 100
+    text: Y_i = Y_i(1) if D_i = 1,   Y_i(0) if D_i = 0
+    font_size: 26
+  - id: punch_text
+    type: text
+    x: 500
+    'y': 52
+    text: 'Y_i(1) − Y_i(0): defined for her, never observed'
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: punch_box
+    type: annotation
+    target: punch_text
+    kind: box
+commands:
+  - draw:
+      - node_maria
+      - label_maria
+    speak: Governments spend billions on health coverage, and across these four short parts we'll see why proving it helped anyone required a lottery.
+  - highlight:
+      target:
+        - node_maria
+      effect: glow
+    speak: 'Meet Maria: forty, uninsured, one of about ninety thousand Oregonians who signed up in 2008 when the state had money for only ten thousand more adults.'
+  - pause: 1
+  - draw:
+      - edge_maria_y1
+      - branchlabel_maria_y1
+      - node_y1
+      - label_y1
+    speak: 'One road: she gets coverage. D equals one is just a switch — one means insured, zero means not.'
+  - draw:
+      - payoff_y1
+    speak: 'A year later her health scores 72 out of 100. That''s Y of one: her health in the world where she''s covered.'
+  - pause: 1
+  - draw:
+      - edge_maria_y0
+      - branchlabel_maria_y0
+      - node_y0
+      - label_y0
+      - payoff_y0
+    speak: 'The other road: same woman, same year, no coverage — she''d have scored 64. That''s Y of zero.'
+  - pause: 1
+  - draw:
+      - gap_arrow
+      - gap_label
+    speak: 'Insurance''s effect on Maria is the gap between those two numbers: eight points.'
+  - focus:
+      target:
+        - payoff_y1
+        - payoff_y0
+    speak: So "insurance improved her health" compares Maria with Maria — not with her insured neighbour, and not with any average.
+  - pause: 1
+  - draw:
+      - cross_y0
+    speak: But the world runs only one road. She enrolled, so 72 sits on the record — and 64 was never measured, by anyone, ever.
+  - erase:
+      - gap_arrow
+      - gap_label
+      - edge_maria_y0
+      - branchlabel_maria_y0
+      - node_y0
+      - label_y0
+      - payoff_y0
+      - cross_y0
+    speak: The unlived branch isn't merely unrecorded — it never happens, and the gap we wanted vanishes with it.
+    delivery: grave
+  - pause: 1
+  - draw:
+      - eq_text
+    speak: 'All the data ever holds is one number per person: whichever future she actually lived.'
+  - draw:
+      - punch_text
+    speak: Her effect stays perfectly well defined — and permanently unobservable.
+  - point:
+      at:
+        ref: punch_text
+      gesture: underline
+    speak: 'Which is the strange part: the quantity every health policy argument is about has never once been seen for a single patient.'
+  - draw:
+      - punch_box
+    speak: A causal question asks about two futures for one person — and for that person, the answer is never in the data.
+  - speak: 'Next: line up thousands of Marias in a table, and watch one column come up always blank.'
+    delivery: soft
+---
+title: The Column That Is Always Blank
+level: basic
+voice: female
+elements:
+  - id: title
+    type: text
+    text: Two columns — one is always blank
+    x: 500
+    'y': 690
+    font_size: 30
+  - id: t_box
+    type: path
+    points:
+      - - 110
+        - 320
+      - - 890
+        - 320
+      - - 890
+        - 620
+      - - 110
+        - 620
+    closed: true
+    style:
+      color: '#8f887c'
+  - id: t_hsep
+    type: path
+    points:
+      - - 110
+        - 555
+      - - 890
+        - 555
+    style:
+      color: '#8f887c'
+  - id: t_r1
+    type: path
+    points:
+      - - 110
+        - 496
+      - - 890
+        - 496
+    style:
+      color: '#8f887c'
+  - id: t_r2
+    type: path
+    points:
+      - - 110
+        - 437
+      - - 890
+        - 437
+    style:
+      color: '#8f887c'
+  - id: t_r3
+    type: path
+    points:
+      - - 110
+        - 378
+      - - 890
+        - 378
+    style:
+      color: '#8f887c'
+  - id: t_v1
+    type: path
+    points:
+      - - 260
+        - 320
+      - - 260
+        - 620
+    style:
+      color: '#8f887c'
+  - id: t_v2
+    type: path
+    points:
+      - - 380
+        - 320
+      - - 380
+        - 620
+    style:
+      color: '#8f887c'
+  - id: t_v3
+    type: path
+    points:
+      - - 530
+        - 320
+      - - 530
+        - 620
+    style:
+      color: '#8f887c'
+  - id: t_v4
+    type: path
+    points:
+      - - 680
+        - 320
+      - - 680
+        - 620
+    style:
+      color: '#8f887c'
+  - id: h_person
+    type: text
+    text: Person
+    x: 185
+    'y': 588
+    font_size: 22
+  - id: h_d
+    type: text
+    text: Dᵢ
+    x: 320
+    'y': 598
+    font_size: 22
+  - id: h_d_sub
+    type: text
+    text: insured?
+    x: 320
+    'y': 570
+    font_size: 18
+  - id: h_y1
+    type: text
+    text: Yᵢ(1)
+    x: 455
+    'y': 598
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: h_y1_sub
+    type: text
+    text: if insured
+    x: 455
+    'y': 570
+    font_size: 18
+    style:
+      color: '#2f6b8f'
+  - id: h_y0
+    type: text
+    text: Yᵢ(0)
+    x: 605
+    'y': 598
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: h_y0_sub
+    type: text
+    text: if not insured
+    x: 605
+    'y': 570
+    font_size: 18
+    style:
+      color: '#b5482e'
+  - id: h_eff
+    type: text
+    text: Yᵢ(1) − Yᵢ(0)
+    x: 785
+    'y': 598
+    font_size: 22
+    style:
+      color: '#8a5fa8'
+  - id: h_eff_sub
+    type: text
+    text: causal effect
+    x: 785
+    'y': 570
+    font_size: 18
+    style:
+      color: '#8a5fa8'
+  - id: r1_name
+    type: text
+    text: Maria
+    x: 185
+    'y': 525
+    font_size: 22
+  - id: r1_d
+    type: text
+    text: '1'
+    x: 320
+    'y': 525
+    font_size: 22
+  - id: r1_y1
+    type: text
+    text: '24'
+    x: 455
+    'y': 525
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: r1_y0
+    type: text
+    text: '?'
+    x: 605
+    'y': 525
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r1_eff
+    type: text
+    text: '?'
+    x: 785
+    'y': 525
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r2_name
+    type: text
+    text: James
+    x: 185
+    'y': 466
+    font_size: 22
+  - id: r2_d
+    type: text
+    text: '0'
+    x: 320
+    'y': 466
+    font_size: 22
+  - id: r2_y1
+    type: text
+    text: '?'
+    x: 455
+    'y': 466
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r2_y0
+    type: text
+    text: '19'
+    x: 605
+    'y': 466
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: r2_eff
+    type: text
+    text: '?'
+    x: 785
+    'y': 466
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r3_name
+    type: text
+    text: Rosa
+    x: 185
+    'y': 407
+    font_size: 22
+  - id: r3_d
+    type: text
+    text: '1'
+    x: 320
+    'y': 407
+    font_size: 22
+  - id: r3_y1
+    type: text
+    text: '27'
+    x: 455
+    'y': 407
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: r3_y0
+    type: text
+    text: '?'
+    x: 605
+    'y': 407
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r3_eff
+    type: text
+    text: '?'
+    x: 785
+    'y': 407
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r4_name
+    type: text
+    text: Daniel
+    x: 185
+    'y': 349
+    font_size: 22
+  - id: r4_d
+    type: text
+    text: '0'
+    x: 320
+    'y': 349
+    font_size: 22
+  - id: r4_y1
+    type: text
+    text: '?'
+    x: 455
+    'y': 349
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: r4_y0
+    type: text
+    text: '22'
+    x: 605
+    'y': 349
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: r4_eff
+    type: text
+    text: '?'
+    x: 785
+    'y': 349
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: neyman
+    type: portrait
+    of: Jerzy Neyman
+    cameo: true
+  - id: note_holland
+    type: text
+    text: The fundamental problem of causal inference
+    x: 500
+    'y': 268
+    font_size: 24
+  - id: note_box
+    type: annotation
+    target: note_holland
+    kind: box
+  - id: want_node
+    type: node
+    shape: rect
+    text: Maria's own effect
+  - id: want_cross
+    type: annotation
+    target: want_node
+    kind: cross
+  - id: got_node
+    type: node
+    shape: rect
+    text: Average effect in a group
+  - id: link
+    type: arrow
+    from:
+      ref: want_node
+    to:
+      ref: got_node
+    curved: true
+  - id: label_link
+    type: label
+    text: borrow the missing half from others
+    attach_to: link
+    side: above
+commands:
+  - draw:
+      - title
+    speak: 'Now that we have seen Maria''s two futures, one question remains: why can no study, however large, ever measure what insurance did to her?'
+  - draw:
+      - t_box
+      - t_hsep
+      - t_r1
+      - t_r2
+      - t_r3
+      - t_v1
+      - t_v2
+      - t_v3
+      - t_v4
+    parallel: true
+  - draw:
+      - h_person
+      - h_d
+      - h_d_sub
+    speak: 'One row per person, and a column recording whether she had coverage: D equals one for insured, zero for not.'
+  - draw:
+      - h_y1
+      - h_y1_sub
+      - h_y0
+      - h_y0_sub
+    speak: This column holds her health with insurance — days she felt well, out of thirty — and this one, the very same month lived without coverage.
+  - pause: 1
+  - draw:
+      - r1_name
+      - r1_d
+      - r1_y1
+    speak: Maria won a Medicaid slot in Oregon's lottery, and felt well twenty-four days out of thirty. That number is real; a clerk could look it up.
+  - draw:
+      - r1_y0
+    speak: Her other cell stays a question mark, because nobody can rewind the month and take the insurance back off her.
+  - pause: 1
+  - draw:
+      - h_eff
+      - h_eff_sub
+    speak: 'And the quantity we actually came for sits in this last column: her health with coverage, minus her health without it.'
+  - draw:
+      - r1_eff
+    speak: Twenty-four minus a question mark is a question mark — Maria's causal effect is not a hard number, it is an unfillable cell.
+  - pause: 1
+  - draw:
+      - r2_name
+      - r2_d
+      - r2_y1
+      - r2_y0
+      - r2_eff
+    speak: 'James was never drawn: we see nineteen good days uninsured, and the blank has simply jumped to the other column.'
+  - draw:
+      - r3_name
+      - r3_d
+      - r3_y1
+      - r3_y0
+      - r3_eff
+      - r4_name
+      - r4_d
+      - r4_y1
+      - r4_y0
+      - r4_eff
+    speak: 'Rosa, Daniel, and the ninety thousand Oregonians behind them: every new row arrives carrying its own fresh blank, and the last column stays empty all the way down.'
+  - pause: 1
+  - focus:
+      target:
+        - r1_y0
+        - r2_y1
+        - r3_y0
+        - r4_y1
+    speak: These gaps are not noise — noise shrinks as you collect more data, but a number that was never created stays missing forever.
+  - draw:
+      - neyman
+    speak: Jerzy Neyman first wrote these two columns side by side in nineteen twenty-three, in a paper about yields on agricultural plots.
+  - erase:
+      - neyman
+    speak: Sixty years later Paul Holland gave the gap the name it still carries.
+  - draw:
+      - note_holland
+      - note_box
+    speak: 'The fundamental problem of causal inference: for every person, at least one of the two numbers we need is missing — and no sample size, no clever estimator, can conjure it.'
+    delivery: grave
+  - pause: 1
+  - clear:
+      keep:
+        - title
+  - draw:
+      - want_node
+      - want_cross
+    speak: So Oregon, deciding whether to buy ten thousand Medicaid slots, could never ask what coverage did for Maria herself — that question has no answer in any data set on earth.
+  - draw:
+      - got_node
+      - link
+      - label_link
+    speak: 'What can be answered is a group question: the average health of people who got coverage, against people who did not.'
+  - highlight:
+      target:
+        - got_node
+      effect: glow
+    speak: Missing data, not statistics — causal inference is the craft of filling one person's blank cell with somebody else's.
+---
+title: From One Person to an Average
+level: basic
+voice: female
+elements:
+  - id: cap_units
+    type: text
+    x: 500
+    'y': 700
+    text: 'Health score: 0 = worst, 1 = perfect health'
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: hdr_person
+    type: text
+    x: 150
+    'y': 630
+    text: Person
+    font_size: 22
+  - id: hdr_y1
+    type: text
+    x: 400
+    'y': 630
+    text: 'Y(1): with insurance'
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: hdr_y0
+    type: text
+    x: 670
+    'y': 630
+    text: 'Y(0): without'
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: hdr_eff
+    type: text
+    x: 880
+    'y': 630
+    text: Y(1) − Y(0)
+    font_size: 22
+    style:
+      color: '#8a5fa8'
+  - id: rule_top
+    type: path
+    points:
+      - - 80
+        - 600
+      - - 950
+        - 600
+    style:
+      color: '#8f887c'
+  - id: r_ana
+    type: text
+    x: 150
+    'y': 540
+    text: Ana
+    font_size: 26
+  - id: ana_y1
+    type: text
+    x: 400
+    'y': 540
+    text: '0.80'
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: ana_y0
+    type: text
+    x: 670
+    'y': 540
+    text: '?'
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: r_ben
+    type: text
+    x: 150
+    'y': 480
+    text: Ben
+    font_size: 26
+  - id: ben_y1
+    type: text
+    x: 400
+    'y': 480
+    text: '?'
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: ben_y0
+    type: text
+    x: 670
+    'y': 480
+    text: '0.55'
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: r_carla
+    type: text
+    x: 150
+    'y': 420
+    text: Carla
+    font_size: 26
+  - id: carla_y1
+    type: text
+    x: 400
+    'y': 420
+    text: '0.72'
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: carla_y0
+    type: text
+    x: 670
+    'y': 420
+    text: '?'
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: r_dan
+    type: text
+    x: 150
+    'y': 360
+    text: Dan
+    font_size: 26
+  - id: dan_y1
+    type: text
+    x: 400
+    'y': 360
+    text: '?'
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: dan_y0
+    type: text
+    x: 670
+    'y': 360
+    text: '0.61'
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: eff_ana
+    type: text
+    x: 880
+    'y': 540
+    text: '?'
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: eff_ben
+    type: text
+    x: 880
+    'y': 480
+    text: '?'
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: eff_carla
+    type: text
+    x: 880
+    'y': 420
+    text: '?'
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: eff_dan
+    type: text
+    x: 880
+    'y': 360
+    text: '?'
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: rule_bot
+    type: path
+    points:
+      - - 80
+        - 320
+      - - 950
+        - 320
+    style:
+      color: '#8f887c'
+  - id: avg_lab
+    type: text
+    x: 150
+    'y': 270
+    text: Average
+    font_size: 24
+  - id: avg_y1
+    type: text
+    x: 400
+    'y': 270
+    text: '0.76'
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: avg_y0
+    type: text
+    x: 670
+    'y': 270
+    text: '0.58'
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: gap_arrow
+    type: arrow
+    from:
+      x: 640
+      'y': 200
+    to:
+      x: 430
+      'y': 200
+    style:
+      color: '#8a5fa8'
+  - id: gap_label
+    type: label
+    text: 0.76 − 0.58 = 0.18
+    attach_to: gap_arrow
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: n_pool
+    type: node
+    shape: rect
+    text: About 90,000 sign up
+  - id: n_drawn
+    type: node
+    shape: rect
+    text: About 30,000 drawn
+  - id: n_not
+    type: node
+    shape: rect
+    text: About 60,000 not drawn
+  - id: e_drawn
+    type: arrow
+    from:
+      ref: n_pool
+    to:
+      ref: n_drawn
+    curved: true
+  - id: e_not
+    type: arrow
+    from:
+      ref: n_pool
+    to:
+      ref: n_not
+    curved: true
+  - id: lab_drawn
+    type: label
+    text: Their average = Y(1)
+    attach_to: n_drawn
+    side: below
+    style:
+      color: '#b5482e'
+  - id: lab_not
+    type: label
+    text: Their average stands in for Y(0)
+    attach_to: n_not
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: ann_key
+    type: annotation
+    target: lab_not
+    kind: box
+  - id: finding
+    type: text
+    x: 500
+    'y': 90
+    text: More care used. Clearly less depression. Blood sugar barely moved.
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: c_missing
+    type: node
+    shape: rect
+    text: The future that never happened
+  - id: ann_final
+    type: annotation
+    target: c_missing
+    kind: circle
+  - id: d_lottery
+    type: node
+    shape: rect
+    text: 'Lottery: Oregon'
+  - id: d_did
+    type: node
+    shape: rect
+    text: 'Other states: ACA expansions'
+  - id: d_rd
+    type: node
+    shape: rect
+    text: 'Just before 65: Medicare'
+  - id: d_sc
+    type: node
+    shape: rect
+    text: 'A blend of states: Proposition 99'
+  - id: a_lottery
+    type: arrow
+    from:
+      ref: d_lottery
+    to:
+      ref: c_missing
+  - id: a_did
+    type: arrow
+    from:
+      ref: d_did
+    to:
+      ref: c_missing
+  - id: a_rd
+    type: arrow
+    from:
+      ref: d_rd
+    to:
+      ref: c_missing
+  - id: a_sc
+    type: arrow
+    from:
+      ref: d_sc
+    to:
+      ref: c_missing
+commands:
+  - draw:
+      - cap_units
+      - hdr_person
+      - hdr_y1
+      - hdr_y0
+      - rule_top
+    speak: 'Now that we have seen what the lottery draws, one question is still open: how do you put a number on a difference that nobody can ever see?'
+  - draw:
+      - r_ana
+      - ana_y1
+      - ana_y0
+    speak: Ana has coverage, and her health score with it is 0.80 — her score without coverage is a blank we will never fill in.
+  - pause: 1
+  - draw:
+      - r_ben
+      - ben_y1
+      - ben_y0
+      - r_carla
+      - carla_y1
+      - carla_y0
+      - r_dan
+      - dan_y1
+      - dan_y0
+    speak: 'Everyone else is the same story from one side or the other: one number we can see, one future we cannot.'
+  - pause: 1
+  - draw:
+      - hdr_eff
+      - eff_ana
+      - eff_ben
+      - eff_carla
+      - eff_dan
+    speak: So the column we actually care about — what coverage did for each of them — is question marks all the way down.
+  - pause: 1
+  - draw:
+      - rule_bot
+      - avg_lab
+      - avg_y1
+      - avg_y0
+    speak: 'Now stop reading across the rows and read down the columns instead: the scores we can see average 0.76 with insurance and 0.58 without.'
+  - draw:
+      - gap_arrow
+      - gap_label
+    speak: Eighteen points — a number we can actually compute, even though not one person's own effect is known.
+  - pause: 1
+  - highlight:
+      target:
+        - avg_y1
+        - avg_y0
+      effect: glow
+    speak: An average needs nobody to appear twice; it only needs one group of people to stand in for another group's missing column.
+  - pause: 1
+  - clear: {}
+  - draw:
+      - n_pool
+    speak: 'Oregon, 2008: the state could afford Medicaid for about ten thousand more adults, and roughly ninety thousand people put their names down.'
+  - draw:
+      - n_drawn
+      - n_not
+      - e_drawn
+      - e_not
+    speak: A lottery split that list — about thirty thousand names drawn, the rest not — decided by chance and nothing else.
+  - pause: 1
+  - highlight:
+      target:
+        - n_drawn
+        - n_not
+      effect: glow
+    speak: 'Chance makes the two groups mirror images: same ages, same illnesses, same worries, on average.'
+  - draw:
+      - lab_drawn
+      - lab_not
+      - ann_key
+    speak: So the people who lost the draw can stand in for the missing column of the people who won it.
+  - pause: 1
+  - draw:
+      - finding
+    speak: 'That is why health ministries and insurers pay for lotteries and trials: the drawn group used more care and had clearly less depression, while blood-sugar control barely moved — differences no survey could ever have pinned on insurance alone.'
+  - pause: 1
+  - clear: {}
+  - draw:
+      - c_missing
+    speak: 'Every design in the rest of this course is an argument about one blank: the future that never happened.'
+  - draw:
+      - d_lottery
+      - a_lottery
+    speak: A lottery fills it with the people who were not drawn.
+  - draw:
+      - d_did
+      - a_did
+      - d_rd
+      - a_rd
+    speak: Difference-in-differences fills it with states that did not expand Medicaid; a birthday cut-off fills it with people a few months short of sixty-five.
+  - draw:
+      - d_sc
+      - a_sc
+    speak: Synthetic control builds it out of a weighted blend of other states, mixed to match the one we care about.
+  - pause: 1
+  - draw:
+      - ann_final
+    speak: One person's effect can never be observed — but an average can, whenever we find an honest stand-in for the future that never happened.
+    delivery: grave
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Why insured people can look sicker: selection bias, decomposed'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 2 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Why insured people can look sicker: selection bias, decomposed'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}
