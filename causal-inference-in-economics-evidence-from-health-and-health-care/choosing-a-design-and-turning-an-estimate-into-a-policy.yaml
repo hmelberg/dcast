@@ -1,0 +1,961 @@
+playlist:
+  title: Choosing a design, and turning an estimate into a policy
+---
+title: One Estimate, Three Decisions
+level: advanced
+voice: male
+elements:
+  - id: t_year
+    type: text
+    x: 500
+    'y': 700
+    text: Oregon, 2008
+    font_size: 30
+  - id: t_apply
+    type: text
+    x: 500
+    'y': 650
+    text: ≈10,000 Medicaid slots — ≈90,000 adults sign up
+    font_size: 26
+  - id: t_lottery
+    type: text
+    x: 500
+    'y': 605
+    text: ≈30,000 names drawn by lottery  →  Z_i = 1
+    font_size: 26
+  - id: t_takeup
+    type: text
+    x: 500
+    'y': 560
+    text: only ≈1 in 4 of them actually enrolls  →  D_i = 1
+    font_size: 26
+  - id: t_est
+    type: text
+    x: 500
+    'y': 480
+    text: 'LATE:  −9.2 points on the rate of depression'
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: t_est_sub
+    type: text
+    x: 500
+    'y': 440
+    text: for compliers · in Oregon · in 2008
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: stage_design
+    type: node
+    shape: rect
+    text: 1. Design
+  - id: stage_transport
+    type: node
+    shape: rect
+    text: 2. Transport
+  - id: stage_price
+    type: node
+    shape: rect
+    text: 3. Price
+  - id: e1
+    type: edge
+    from:
+      ref: stage_design
+    to:
+      ref: stage_transport
+  - id: e2
+    type: edge
+    from:
+      ref: stage_transport
+    to:
+      ref: stage_price
+  - id: label_design
+    type: label
+    text: Which assumption do you sign?
+    attach_to: stage_design
+    side: below
+  - id: label_transport
+    type: label
+    text: Do the compliers travel?
+    attach_to: stage_transport
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: label_price
+    type: label
+    text: $ per QALY
+    attach_to: stage_price
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: label_e1
+    type: label
+    text: …but for whom?
+    attach_to: e1
+    side: above
+  - id: label_e2
+    type: label
+    text: …and worth what?
+    attach_to: e2
+    side: above
+  - id: mark_transport
+    type: annotation
+    target: stage_transport
+    kind: circle
+  - id: sign_1
+    type: text
+    x: 500
+    'y': 225
+    text: 'Design: the assumption that makes D_i as good as random'
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: sign_2
+    type: text
+    x: 500
+    'y': 180
+    text: 'Transport: Oregon''s compliers stand in for your population'
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: sign_3
+    type: text
+    x: 500
+    'y': 135
+    text: 'Price: a weight per year of health, and a threshold in dollars'
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+commands:
+  - draw:
+      - t_year
+    speak: This series follows one causal estimate from a lottery in Oregon to a line in a health budget — because the step that usually decides policy is not the regression, but what comes after it.
+  - draw:
+      - t_apply
+    speak: In 2008 Oregon had money to cover about ten thousand adults, and about ninety thousand signed up.
+  - draw:
+      - t_lottery
+    speak: So the state drew names — roughly thirty thousand of them — and that draw is our instrument, Z_i.
+  - draw:
+      - t_takeup
+    speak: Only about a quarter of those drawn ended up enrolled, so winning the lottery is very far from being covered, D_i.
+  - pause: 0.4
+  - draw:
+      - t_est
+      - t_est_sub
+    speak: 'Scale the intention-to-treat up by that take-up and you get the headline: coverage cut the rate of depression by about nine percentage points.'
+  - highlight:
+      target:
+        - t_est_sub
+      effect: glow
+    speak: The small print carries the whole lecture — compliers, Oregon, 2008.
+  - wait: click
+  - clear:
+      keep:
+        - t_est
+        - t_est_sub
+    speak: An econometrics course stops at that number; a budget office is still three arguments away from spending on it.
+  - move:
+      target:
+        - t_est
+        - t_est_sub
+      by:
+        - 0
+        - 190
+      duration: 1
+    speak: Park it at the top of the board and watch what must happen to it on the way down.
+  - draw:
+      - stage_design
+      - label_design
+    speak: First, the design — a lottery, an instrument, a difference-in-differences, a discontinuity, a synthetic control — each one asking you to sign a different assumption.
+  - pause: 0.3
+  - draw:
+      - e1
+      - label_e1
+      - stage_transport
+      - label_transport
+    speak: 'Second, transport: whether an effect measured on Oregon''s compliers says anything about the people another state would actually cover.'
+  - pause: 0.3
+  - draw:
+      - e2
+      - label_e2
+      - stage_price
+      - label_price
+    speak: 'Third, price: turning an effect on depression into a cost per quality-adjusted life year.'
+  - wait: click
+  - draw:
+      - sign_1
+    speak: Design asks for the assumption that makes coverage as good as randomly assigned — exclusion and monotonicity, or parallel trends, or continuity at the cutoff.
+  - highlight:
+      target:
+        - stage_design
+      effect: glow
+    speak: Oregon buys that almost for free, which is why every observational design in this course was judged against it.
+  - draw:
+      - sign_2
+    speak: 'Transport asks for something no Oregon data can settle: that Oregon''s compliers resemble the people your policy would enrol.'
+  - draw:
+      - sign_3
+    speak: And price asks for two more things no regression supplies — what a year lived with depression is worth against full health, and the threshold above which the money is judged not worth spending.
+  - point:
+      at:
+        ref: sign_3
+      gesture: underline
+    speak: England's NICE works to roughly twenty to thirty thousand pounds per QALY — a number set by judgement, and openly defended as judgement.
+    delivery: soft
+  - highlight:
+      target:
+        - t_est
+      effect: pulse
+    speak: When Oregon's two-year results landed, both sides of the Medicaid expansion fight quoted the same estimates and disagreed entirely about the two steps below.
+  - wait: click
+  - ask:
+      intro: Your turn.
+      question: Click the step where a flawless Oregon estimate can still be the wrong number for another state.
+      answer: stage_transport
+      widget: click
+      right: Transport — the estimate belongs to Oregon's compliers, and another state covers different people.
+  - draw:
+      - mark_transport
+    speak: The weakest link is rarely the econometrics; it is the argument no dataset can adjudicate.
+    delivery: grave
+  - quiz:
+      intro: One check before we go.
+      question: In a cost per QALY figure, which input is a value judgement wearing a parameter's clothes?
+      choices:
+        - The effect of coverage on depression
+        - The weight on a year lived with depression
+        - The cost of enrolling one adult
+      correct: 2
+      right: The weight — what a year with depression is worth against full health comes from a valuation survey, not from any causal design.
+      wrong: Both the effect and the cost can be estimated; what a year of health is worth cannot be.
+      required: true
+  - speak: 'Nine percentage points, for compliers, in Oregon, in 2008: identification was the easy part, and the next four parts are the three arguments that follow it.'
+---
+title: Picking the Design You Can Defend
+level: advanced
+voice: male
+elements:
+  - id: title
+    type: text
+    text: Design follows data — and the assumption you must defend
+    x: 500
+    'y': 706
+    font_size: 29
+  - id: hline
+    type: path
+    points:
+      - - 40
+        - 634
+      - - 960
+        - 634
+    style:
+      color: '#8f887c'
+  - id: h_data
+    type: text
+    text: Data you actually have
+    x: 165
+    'y': 660
+    font_size: 23
+  - id: h_design
+    type: text
+    text: Design
+    x: 470
+    'y': 660
+    font_size: 23
+  - id: h_assume
+    type: text
+    text: What you agree to defend
+    x: 790
+    'y': 660
+    font_size: 23
+    style:
+      color: '#8a5fa8'
+  - id: data_rct
+    type: text
+    text: A randomized slot
+    x: 165
+    'y': 572
+    font_size: 21
+  - id: design_rct
+    type: text
+    text: RCT / ITT
+    x: 470
+    'y': 572
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: assume_rct
+    type: text
+    text: The draw is truly random
+    x: 790
+    'y': 572
+    font_size: 21
+    style:
+      color: '#8a5fa8'
+  - id: data_iv
+    type: text
+    text: Random slot, 25% take-up
+    x: 165
+    'y': 487
+    font_size: 21
+  - id: design_iv
+    type: text
+    text: IV → LATE
+    x: 470
+    'y': 487
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: assume_iv
+    type: text
+    text: Exclusion + monotonicity
+    x: 790
+    'y': 487
+    font_size: 21
+    style:
+      color: '#8a5fa8'
+  - id: data_did
+    type: text
+    text: A policy date + controls
+    x: 165
+    'y': 402
+    font_size: 21
+  - id: design_did
+    type: text
+    text: DiD
+    x: 470
+    'y': 402
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: assume_did
+    type: text
+    text: Parallel trends
+    x: 790
+    'y': 402
+    font_size: 21
+    style:
+      color: '#8a5fa8'
+  - id: data_rd
+    type: text
+    text: A sharp cutoff (age 65)
+    x: 165
+    'y': 317
+    font_size: 21
+  - id: design_rd
+    type: text
+    text: RD
+    x: 470
+    'y': 317
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: assume_rd
+    type: text
+    text: Nothing else jumps at 65
+    x: 790
+    'y': 317
+    font_size: 21
+    style:
+      color: '#8a5fa8'
+  - id: data_sc
+    type: text
+    text: One treated unit + donors
+    x: 165
+    'y': 232
+    font_size: 21
+  - id: design_sc
+    type: text
+    text: Synthetic control
+    x: 470
+    'y': 232
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: assume_sc
+    type: text
+    text: Pre-period fit keeps holding
+    x: 790
+    'y': 232
+    font_size: 21
+    style:
+      color: '#8a5fa8'
+  - id: ann_col
+    type: annotation
+    target: h_assume
+    kind: box
+  - id: note
+    type: text
+    text: You don't pick the strongest design — you pick the assumption you can defend.
+    x: 500
+    'y': 124
+    font_size: 22
+  - id: ann_note
+    type: annotation
+    target: note
+    kind: box
+commands:
+  - draw:
+      - title
+    speak: Now that we have seen one estimate pull three different decisions, the harder question is which design earns the right to produce that number a budget office will actually spend money on.
+  - draw:
+      - hline
+      - h_data
+      - h_design
+      - h_assume
+    parallel: true
+    speak: 'Three columns: the data you actually have, the design that data permits, and the one assumption you agree to defend in public.'
+  - pause: 0.4
+  - draw:
+      - data_rct
+    speak: 'Oregon, 2008: money for about ten thousand Medicaid slots, ninety thousand adults signed up, and the state drew roughly thirty thousand names by lottery.'
+  - draw:
+      - design_rct
+    speak: A randomly assigned slot buys you a randomized trial, whose honest headline is the intention-to-treat — drawn versus not drawn, whatever people did afterwards.
+  - draw:
+      - assume_rct
+    speak: 'The bill here is small: the draw really was random, and both groups were followed up the same way — which is why this row is the benchmark every other row is judged against.'
+  - pause: 0.5
+  - wait: click
+  - draw:
+      - data_iv
+    speak: 'But randomizing the offer is not randomizing coverage: only about a quarter of the people drawn ended up enrolled.'
+  - draw:
+      - design_iv
+    speak: So winning the lottery becomes an instrument for coverage D i, and dividing the intention-to-treat by that first stage of one quarter scales the number up roughly fourfold.
+  - draw:
+      - assume_iv
+    speak: 'Which means you now defend two further claims: the lottery moved health only by changing coverage, and losing it never pushed anyone into Medicaid.'
+  - quiz:
+      intro: A quick check.
+      question: Losing the lottery makes people seek free clinic care they'd otherwise skip. Which assumption breaks?
+      choices:
+        - Exclusion restriction
+        - Monotonicity
+        - Random assignment
+      correct: 1
+      right: Exclusion breaks — the lottery is now moving health through a second channel, not only through coverage.
+      wrong: Monotonicity is about who enrols, and randomization is untouched — the problem is a second channel.
+  - wait: click
+  - draw:
+      - data_did
+      - design_did
+    speak: Most questions arrive with no lottery at all; what you have is a date — in 2014 some states expanded Medicaid under the ACA, and others refused.
+  - draw:
+      - assume_did
+    speak: 'Difference-in-differences buys its counterfactual from the non-expanding states, and the price is parallel trends: a claim about a path that never happened, which pre-trends can only rhyme with.'
+  - highlight:
+      target:
+        - assume_did
+      effect: glow
+    speak: And when states expand in different years, the naive two-way fixed effects estimate quietly starts comparing late adopters with already-treated early ones — the staggered trouble from lecture twelve.
+  - pause: 0.4
+  - draw:
+      - data_rd
+      - design_rd
+    speak: 'Sometimes the assignment rule is simply a number: in the United States, coverage changes sharply on the sixty-fifth birthday.'
+  - draw:
+      - assume_rd
+    speak: Regression discontinuity compares people just under and just over that line, and you defend that nothing else jumps exactly there — which is why the covariate and density checks are the argument, not a formality.
+  - pause: 0.4
+  - draw:
+      - data_sc
+      - design_sc
+    speak: And sometimes there is exactly one treated unit — one state, one reform — and no comparison group anywhere.
+  - draw:
+      - assume_sc
+    speak: Synthetic control weights donor states into a blend that tracks the treated one before the policy — as Abadie's California tobacco study did — and you defend that the blend would have kept tracking it after.
+  - wait: click
+  - ask:
+      intro: One for you.
+      question: Only one state changed its policy, and dozens did not. Click the design you would have to defend.
+      answer: design_sc
+      widget: click
+      right: Synthetic control — one treated unit, a donor pool, and a pre-period fit that you promise would have held.
+  - focus:
+      target:
+        - assume_rct
+        - assume_iv
+        - assume_did
+        - assume_rd
+        - assume_sc
+    speak: Read straight down this column and the choice stops looking technical.
+  - draw:
+      - ann_col
+    speak: Every row sells the same product — a causal number — and differs only in what you have promised to defend.
+  - highlight:
+      target:
+        - design_did
+        - design_rd
+        - design_sc
+      effect: glow
+    speak: And if the assumption in the row you chose fails, nothing warns you — the failure travels straight into the price of the expansion.
+  - quiz:
+      question: Which of these can you actually test in the data?
+      choices:
+        - Parallel trends after treatment
+        - The lottery's first stage
+        - Continuity of potential outcomes at 65
+      correct: 2
+      right: The first stage is a fact you can measure — about a quarter of those drawn enrolled; the other two are claims about a world you never observe.
+      wrong: Parallel trends and continuity at 65 concern counterfactuals — you can stress-test them, but never observe them.
+      required: true
+  - draw:
+      - note
+      - ann_note
+    speak: 'So the rule is this: not the design that sounds strongest, but the assumption you can defend to the people who will spend money on your estimate.'
+    delivery: grave
+  - speak: Oregon handed us a defensible assumption for free; every design below it is an argument for why our data almost did.
+---
+title: Whose effect is it? Compliers in Oregon
+level: advanced
+voice: male
+template: icon_array
+params:
+  total: 100
+  groups:
+    - label: Compliers (enrolled)
+      count: 25
+      color: supply
+  rest_label: Never-takers
+  title: 100 names drawn in the Oregon lottery
+elements:
+  - id: t_head
+    type: text
+    text: Rescaling the lottery estimate
+    x: 500
+    'y': 660
+    font_size: 34
+  - id: t_itt
+    type: text
+    text: ITT (drawn vs not drawn) ≈ $195 per year
+    x: 500
+    'y': 545
+    font_size: 30
+  - id: t_fs
+    type: text
+    text: First stage (coverage gain) = 0.25
+    x: 500
+    'y': 450
+    font_size: 30
+  - id: t_late
+    type: text
+    text: LATE = ITT ÷ 0.25 ≈ $780 per year, for compliers
+    x: 500
+    'y': 345
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: box_late
+    type: annotation
+    target: t_late
+    kind: box
+  - id: t_se
+    type: text
+    text: Dividing by 0.25 multiplies the standard error by 4 too
+    x: 500
+    'y': 230
+    font_size: 24
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - title
+    speak: 'Now that we''ve seen how to pick a design you can defend, take the one we trust most — Oregon''s 2008 lottery — and ask the question a budget office will ask: whose effect is this number, before you price an expansion with it?'
+  - draw:
+      - group_0
+      - legend_0
+    speak: Of every hundred names drawn from that list, only about twenty-five ended up enrolled in Medicaid.
+  - pause: 0.4
+  - draw:
+      - rest
+      - legend_rest
+    speak: The other seventy-five won a lottery that changed nothing at all about their coverage.
+  - focus:
+      target:
+        - rest
+    speak: Winning only bought the right to apply — return the form, document your income, enrol — and roughly half never sent the paperwork back.
+  - wait: click
+  - highlight:
+      target:
+        - group_0
+      effect: glow
+    speak: 'Under monotonicity these twenty-five are the compliers: the people whose coverage the draw actually moved, plus a handful of always-takers who would have found coverage anyway.'
+  - focus:
+      target:
+        - rest
+    speak: The seventy-five are never-takers — uninsured whether their name came out or not, so they carry no information about what insurance does.
+  - ask:
+      question: Click the people whose effect the LATE describes.
+      intro: Quick check —
+      answer: group_0
+      widget: click
+      right: The LATE belongs to the compliers, the quarter whose enrollment the draw changed.
+      wrong: The never-takers never changed coverage, so they contribute nothing to the estimate.
+  - point:
+      at:
+        ref: group_0
+      gesture: circle
+    speak: We can count the compliers exactly — a quarter of the draw — but we can never point at any single one, because nobody shows us what they would have done had the draw gone the other way.
+  - wait: click
+  - clear: {}
+    speak: So the winners-versus-losers comparison is diluted by three quarters of people it never touched.
+  - draw:
+      - t_head
+  - draw:
+      - t_itt
+    speak: The raw comparison, the intention-to-treat, is roughly a hundred and ninety-five dollars more annual medical spending for a name drawn than a name not drawn.
+  - draw:
+      - t_fs
+    speak: 'The first stage is that quarter: winning raised the chance of coverage by about twenty-five percentage points, once you subtract the few who were covered without winning.'
+  - draw:
+      - t_late
+    speak: Divide one by the other, and the effect on compliers is four times as large — about seven hundred and eighty dollars a year.
+  - draw:
+      - box_late
+    speak: That is the published Oregon spending effect, and it was never an effect on everybody.
+    delivery: grave
+  - quiz:
+      question: The ITT is about $195 a year and a quarter of those drawn enrolled. What is the LATE?
+      intro: Let's check the arithmetic.
+      choices:
+        - About $49
+        - About $195
+        - About $780
+      correct: 3
+      right: You divide by the first stage of 0.25, which multiplies the ITT by four — about $780 a year.
+      wrong: Dividing by a first stage below one always makes the estimate bigger, never smaller.
+  - draw:
+      - t_se
+    speak: 'The same division multiplies the noise: rescaling by a quarter makes the confidence interval four times wider, which is exactly why Oregon''s health results were so hard to call.'
+  - wait: click
+  - clear: {}
+    speak: Keep that ratio in mind, and go back to the people.
+  - show:
+      - title
+      - group_0
+      - rest
+      - legend_0
+      - legend_rest
+    speak: Here they are again — and now the number has an owner.
+  - focus:
+      target:
+        - group_0
+    speak: Seven hundred and eighty dollars is the effect for these twenty-five, who are a quarter of the ninety thousand who signed up, who were themselves the Oregonians who heard about the list and put their names down.
+  - speak: Lift that number off the shelf to price an expansion elsewhere, and you have quietly assumed your newly covered population behaves like the sliver of Oregonians a lottery could move.
+    delivery: grave
+  - quiz:
+      question: Whose effect is the Oregon LATE?
+      intro: One more.
+      choices:
+        - Every uninsured adult in Oregon
+        - Everyone who entered the lottery
+        - Those whose enrollment the lottery changed
+      correct: 3
+      right: It is the effect on compliers — the quarter whose coverage the draw actually moved.
+      wrong: The seventy-five never-takers never changed coverage, so they contribute nothing to the estimate.
+  - highlight:
+      target:
+        - group_0
+      effect: glow
+    speak: So the Oregon estimate is not the effect of insurance; it's the effect of insurance on the one in four whose enrollment a lottery could change — countable, unnameable, and the population we have to argue about next time.
+---
+title: 'Cost per QALY: Causal or Value Judgement?'
+level: advanced
+voice: male
+elements:
+  - id: title
+    type: text
+    text: Cost per QALY
+    x: 500
+    'y': 712
+    font_size: 30
+  - id: eq_lhs
+    type: text
+    text: ICER =
+    x: 215
+    'y': 630
+    font_size: 30
+  - id: eq_num
+    type: text
+    text: Δ Cost
+    x: 420
+    'y': 662
+    font_size: 28
+  - id: eq_bar
+    type: path
+    points:
+      - - 320
+        - 634
+      - - 520
+        - 634
+  - id: eq_den
+    type: text
+    text: Δ QALYs
+    x: 420
+    'y': 602
+    font_size: 28
+  - id: eq_rhs
+    type: text
+    text: '= dollars per QALY gained'
+    x: 700
+    'y': 630
+    font_size: 24
+  - id: rule_top
+    type: path
+    points:
+      - - 60
+        - 560
+      - - 940
+        - 560
+    style:
+      color: '#8f887c'
+  - id: divider
+    type: path
+    points:
+      - - 500
+        - 548
+      - - 500
+        - 232
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: head_left
+    type: text
+    text: Estimated (causal)
+    x: 270
+    'y': 522
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: head_right
+    type: text
+    text: Chosen (value judgement)
+    x: 740
+    'y': 522
+    font_size: 25
+    style:
+      color: '#b5482e'
+  - id: c1
+    type: text
+    text: 'Δ spending: +$778 / year'
+    x: 270
+    'y': 468
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: c2
+    type: text
+    text: 'Δ depression: −30%'
+    x: 270
+    'y': 404
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: c3
+    type: text
+    text: 'Δ blood sugar: ≈ 0'
+    x: 270
+    'y': 340
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: c4
+    type: text
+    text: 'Compliance: 25% take-up'
+    x: 270
+    'y': 276
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: v1
+    type: text
+    text: Utility weight for depression
+    x: 740
+    'y': 468
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: v2
+    type: text
+    text: 'Discount rate: 3% or 1.5%?'
+    x: 740
+    'y': 404
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: v3
+    type: text
+    text: 'Perspective: payer or society?'
+    x: 740
+    'y': 340
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: v4
+    type: text
+    text: 'Threshold: $50,000 per QALY?'
+    x: 740
+    'y': 276
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: arrow_weight
+    type: arrow
+    from:
+      ref: c2
+    to:
+      ref: v1
+    curved: true
+    style:
+      color: '#8a5fa8'
+  - id: arrow_label
+    type: label
+    text: worth how much?
+    attach_to: arrow_weight
+    side: above
+    style:
+      color: '#8a5fa8'
+  - id: res1
+    type: text
+    text: $778 ÷ 0.03 = $26,000 per QALY
+    x: 500
+    'y': 175
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: res2
+    type: text
+    text: 0.02 → $39,000      0.05 → $16,000
+    x: 500
+    'y': 122
+    font_size: 22
+    style:
+      color: '#8a5fa8'
+  - id: mark_range
+    type: annotation
+    target: res2
+    kind: box
+  - id: closer
+    type: text
+    text: Half estimated, half chosen — report both.
+    x: 500
+    'y': 58
+    font_size: 24
+commands:
+  - draw:
+      - title
+    speak: Now that we have seen what it takes to carry Oregon's complier effect to another state, one step remains — the one where a committee decides whether to cover the thing at all.
+  - draw:
+      - eq_lhs
+      - eq_num
+      - eq_bar
+      - eq_den
+    speak: 'The incremental cost-effectiveness ratio: the extra cost of covering someone, divided by the extra quality-adjusted life years it buys.'
+  - draw:
+      - eq_rhs
+    speak: Out comes one number in dollars per QALY, and NICE in England, the Nordic agencies and American payers all price coverage from it.
+  - highlight:
+      target:
+        - eq_rhs
+      effect: glow
+    speak: Only half of that number was ever estimated — and the chosen half moves it further than any confidence interval does.
+    delivery: grave
+  - wait: click
+  - draw:
+      - rule_top
+      - divider
+      - head_left
+    speak: So split the formula down the middle — on the left, everything a research design can actually deliver.
+  - draw:
+      - c1
+    speak: 'From the Oregon lottery: enrolling in Medicaid raised annual medical spending by about seven hundred and seventy-eight dollars.'
+  - draw:
+      - c2
+    speak: On the benefit side, the sharpest finding — coverage cut the rate of depression by roughly thirty percent.
+  - draw:
+      - c3
+    speak: 'And the celebrated null: blood pressure, cholesterol and blood sugar barely moved, estimated tightly enough to rule out large effects, not small ones.'
+  - draw:
+      - c4
+    speak: All of it scaled by the quarter of those drawn who actually enrolled, so these are complier effects, not effects on everyone.
+  - focus:
+      target:
+        - head_left
+        - c1
+        - c2
+        - c3
+        - c4
+    speak: Every line here costs an assumption you agreed to defend — random assignment, exclusion, and the leap from compliers to the population you care about.
+  - wait: click
+  - draw:
+      - head_right
+      - v1
+    speak: 'Now the other side: to turn less depression into QALYs, somebody has to say what a year without depression is worth.'
+  - draw:
+      - arrow_weight
+      - arrow_label
+    speak: That weight comes from a survey — typically EQ-5D valuations, where members of the public trade years of life against health states. No design identifies it.
+  - draw:
+      - res1
+    speak: 'Say that weight is three hundredths of a QALY per year: seven seventy-eight divided by 0.03 is about twenty-six thousand dollars per QALY.'
+  - wait: click
+  - draw:
+      - res2
+      - mark_range
+    speak: Set the weight to 0.02 and the same causal estimate costs thirty-nine thousand; set it to 0.05 and it costs sixteen thousand.
+    delivery: grave
+  - highlight:
+      target:
+        - c2
+      effect: glow
+    speak: Nothing about Oregon changed — the estimate never moved, only the price we put on feeling well.
+  - draw:
+      - v2
+    speak: 'Then the discount rate: benefits arriving in 2040 count for less than benefits today, and three percent versus one and a half is a stance on the future, not a measurement of it.'
+  - draw:
+      - v3
+    speak: Perspective decides whose dollars count — Medicaid's budget alone, or also the catastrophic out-of-pocket bills Oregon nearly eliminated, and the work that illness costs.
+  - draw:
+      - v4
+    speak: And the threshold that turns a ratio into a yes or no; the American fifty-thousand figure is usually traced back to what dialysis cost Medicare in the seventies, not to any estimate of what health is worth.
+  - highlight:
+      target:
+        - v4
+      effect: pulse
+    speak: NICE has used twenty to thirty thousand pounds since 1999, while Claxton's team estimated that the health displaced elsewhere in the NHS costs about thirteen thousand — if that is right, approvals at the official threshold destroy more health than they create.
+  - wait: click
+  - ask:
+      intro: One quick check on the figure.
+      question: Click the parameter that decides whether $26,000 per QALY counts as good value.
+      answer: v4
+      widget: click
+      right: The threshold does that work — the ratio itself never says yes or no.
+      wrong: 'The ratio is only ever compared with something: the threshold converts it into a decision.'
+  - quiz:
+      intro: And two on the logic.
+      question: Which change moves the cost per QALY with no new data at all?
+      choices:
+        - A larger Oregon sample
+        - A lower discount rate
+        - A stronger first stage
+      correct: 2
+      right: The discount rate is chosen, so changing it moves the number without a single new observation.
+      wrong: Sample size and first-stage strength change the estimate's precision; they need data.
+  - quiz:
+      question: The $778 spending effect and the EQ-5D utility weight differ in kind. How?
+      choices:
+        - Both are causal estimates
+        - One is estimated, one is elicited preference
+        - Both are value judgements
+      correct: 2
+      right: The spending effect is identified by the lottery; the weight is elicited from people's stated preferences.
+      wrong: Only one of them has a research design behind it — the weight comes from a valuation survey.
+  - speak: That's {score} out of {score_total}.
+    delivery: brisk
+  - draw:
+      - closer
+    speak: 'So report the ratio as what it is: an estimate defended by one assumption, carried to a new population by another, and then multiplied by four numbers nobody estimated.'
+  - speak: 'Across this series the road from design to decision was one chain of things you agree to defend — and you can now see where the chain changes character: at the end, honesty means naming a choice, not an identification strategy.'
+    delivery: grave

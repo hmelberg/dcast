@@ -1,0 +1,621 @@
+playlist:
+  title: Difference-in-differences and the parallel trends assumption
+---
+title: What the Double Difference Subtracts
+level: advanced
+voice: female
+template: two_by_two_table
+params:
+  title: Uninsured rate, nonelderly adults
+  row_label: Group
+  col_label: Year
+  row_values:
+    - Expansion (D=1)
+    - Non-expansion (D=0)
+  col_values:
+    - '2013'
+    - '2014'
+  cells:
+    - - 18.4%
+      - 12.4%
+    - - 22.7%
+      - 19.0%
+elements:
+  - id: diff_treated
+    type: text
+    text: 'Expansion: 12.4 − 18.4 = −6.0'
+    x: 275
+    'y': 140
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: diff_control
+    type: text
+    text: 'Non-expansion: 19.0 − 22.7 = −3.7'
+    x: 720
+    'y': 140
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: did_text
+    type: text
+    text: DiD = (−6.0) − (−3.7) = −2.3 points
+    x: 500
+    'y': 62
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: mark_did
+    type: annotation
+    target: did_text
+    kind: box
+  - id: assume_head
+    type: text
+    text: Parallel trends
+    x: 500
+    'y': 580
+    font_size: 34
+  - id: eq_line1
+    type: text
+    text: E[ Y_i(0)_2014 − Y_i(0)_2013 | D_i = 1 ]
+    x: 500
+    'y': 470
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: eq_line2
+    type: text
+    text: '=   E[ Y_i(0)_2014 − Y_i(0)_2013 | D_i = 0 ]'
+    x: 500
+    'y': 400
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: mark_unobs
+    type: annotation
+    target: eq_line1
+    kind: box
+  - id: unobs_note
+    type: text
+    text: the 2014 term here never happened
+    x: 500
+    'y': 338
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: note_levels
+    type: text
+    text: 'Levels may differ freely: 22.7% vs 18.4% in 2013'
+    x: 500
+    'y': 250
+    font_size: 24
+  - id: final_line
+    type: text
+    text: Not alike — only moving alike
+    x: 500
+    'y': 150
+    font_size: 28
+    style:
+      color: '#8a5fa8'
+commands:
+  - draw:
+      - title
+      - grid
+      - row_title
+      - col_title
+    speak: Now that we have two groups and two periods on the board, let's work the arithmetic and ask exactly what the double difference subtracts.
+  - draw:
+      - row_header_0
+      - row_header_1
+      - col_header_0
+      - col_header_1
+    parallel: true
+    speak: Rows are the groups — states that took the ACA Medicaid expansion in 2014 and states that refused it; columns are the year before and the year after.
+  - draw:
+      - cell_0_0
+      - cell_0_1
+    speak: In round American Community Survey numbers, about eighteen percent of nonelderly adults in expansion states were uninsured in 2013, and about twelve a year later.
+  - pause: 0.3
+  - draw:
+      - cell_1_0
+      - cell_1_1
+    speak: The non-expansion states started higher, near twenty-three percent, and by 2014 sat near nineteen.
+  - highlight:
+      target:
+        - cell_0_0
+        - cell_0_1
+      effect: glow
+    speak: Read the treated row alone and you get a six-point fall — but 2014 also brought the exchanges, the individual mandate and a recovering labour market to every state in the country.
+  - draw:
+      - diff_treated
+    speak: 'So write the treated change down honestly: minus six points, cause and coincidence still mixed together.'
+  - draw:
+      - diff_control
+    speak: The control states got all of that same national weather, and fell three point seven points without expanding Medicaid at all.
+  - pause: 0.4
+  - draw:
+      - did_text
+      - mark_did
+    speak: Subtract the second change from the first, and about two and a half points survive — the double difference, and close to where published first-year estimates of the expansion's coverage effect land.
+    delivery: grave
+  - quiz:
+      intro: A quick check.
+      question: What is the 2×2 DiD estimator subtracting?
+      choices:
+        - The two groups' 2014 levels
+        - The treated group's change minus the control group's change
+        - The treated group's before-after change
+      correct: 2
+      right: It is a difference of changes — minus six against minus three point seven — which nets out anything that hit both groups in 2014.
+      wrong: Levels are not the object here; DiD works on changes over time.
+  - clear:
+      keep:
+        - title
+    speak: Four numbers gave us one estimate. Nothing so far makes it causal.
+  - draw:
+      - assume_head
+      - eq_line1
+      - eq_line2
+    speak: 'It becomes causal only under this: without treatment, the expected change in Y-of-zero, the untreated potential outcome, would have been the same in both groups.'
+  - draw:
+      - mark_unobs
+      - unobs_note
+    speak: And the boxed line is a fiction — what uninsurance in expansion states would have done in 2014 had they never expanded. That state of the world did not occur, so no dataset contains it.
+  - pause: 0.4
+  - draw:
+      - note_levels
+    speak: 'Notice what the assumption never mentions: levels. The control states were four points worse insured at baseline, and a constant gap like that is differenced straight out.'
+  - highlight:
+      target:
+        - eq_line1
+        - eq_line2
+      effect: glow
+    speak: Parallel trends is a claim about slopes, not heights — which is why selection on the level of a state's uninsurance is harmless here, while selection on its trajectory is fatal.
+  - quiz:
+      question: Which quantity in the parallel-trends equation can never be observed?
+      choices:
+        - Expansion states' 2013 uninsured rate
+        - Expansion states' 2014 rate had they not expanded
+        - Non-expansion states' 2014 rate
+      correct: 2
+      right: The treated group's untreated 2014 outcome never happened — which is why parallel trends is an assumption and not a finding.
+      wrong: That number is sitting in the data; the missing one is the counterfactual.
+  - speak: 'The move is old, by the way: in the 1850s John Snow compared London households whose water company had moved its intake upstream of the sewage with neighbours whose company had not, before and after — a difference of differences, written long before anyone wrote E of Y-of-zero.'
+  - draw:
+      - final_line
+    speak: Difference-in-differences never claims the two groups are alike; it claims that, untreated, they would have moved alike.
+---
+title: Reading Pre-Trends Honestly
+level: advanced
+voice: female
+template: event_study
+params:
+  periods_pre: 5
+  periods_post: 5
+  effect: 1
+  ci: 0.55
+  pre_trend: 0
+  ramp: false
+  y_label: Expansion − non-expansion gap
+  title: Reading pre-trends honestly
+commands:
+  - draw:
+      - title
+      - axes
+      - zero_line
+    speak: Now that we have seen what the double difference subtracts, everything rests on one line we can never observe — so let's look hard at the picture researchers show instead.
+  - draw:
+      - treat_line
+    speak: 'January 2014: about half the states expanded Medicaid under the ACA, and the rest did not.'
+  - pause: 0.3
+  - draw:
+      - coef_0
+      - coef_1
+      - coef_2
+      - coef_3
+      - coef_4
+    parallel: true
+    speak: Each dot is the gap between expansion and non-expansion states in one year, measured relative to the year before the expansion.
+  - point:
+      at:
+        ref: coef_4
+      gesture: circle
+    speak: That last pre-year sits exactly on zero because we put it there — it is normalization, not evidence.
+  - pause: 0.3
+  - draw:
+      - coef_5
+      - coef_6
+      - coef_7
+      - coef_8
+      - coef_9
+    speak: 'After 2014 the gap opens: coverage among low-income adults improves far more where Medicaid expanded, with published estimates clustering around five to six percentage points fewer uninsured.'
+  - focus:
+      target:
+        - coef_0
+        - coef_1
+        - coef_2
+        - coef_3
+        - coef_4
+    speak: Flat before, jumping after — this is the figure that is supposed to make you believe the design.
+  - pause: 0.4
+  - focus:
+      target:
+        - coef_5
+        - coef_6
+        - coef_7
+        - coef_8
+        - coef_9
+    speak: 'But parallel trends claims something about this half of the plot: that after 2014, the expansion states'' untreated potential outcome, Y of zero, would have moved exactly like the non-expansion states''.'
+  - highlight:
+      target:
+        - treat_line
+      effect: glow
+    speak: Those states with D set to zero after 2014 never existed, so not one dot on this plot observes the quantity the assumption is about.
+  - quiz:
+      intro: A quick check.
+      question: Flat pre-treatment coefficients establish that…
+      choices:
+        - Parallel trends holds after treatment
+        - The groups moved together before treatment
+        - The treatment had no effect
+      correct: 2
+      right: They show only that the groups moved together beforehand — the assumption concerns the untreated path afterwards, which is never observed.
+      wrong: Nothing measured before 2014 can observe the post-2014 counterfactual.
+  - camera:
+      center:
+        ref: coef_2
+      zoom: 1.7
+    speak: And even as a test of the past, a failure to reject has two very different causes.
+  - animate:
+      pre_trend: 0.12
+    duration: 3
+    speak: Suppose the gap was already drifting apart before anyone expanded anything — about an eighth of the eventual jump each year.
+  - highlight:
+      target:
+        - coef_0
+        - coef_1
+        - coef_2
+        - coef_3
+      effect: glow
+    speak: Every pre-estimate still touches zero; the confidence bands swallow the drift, and the test passes cleanly.
+  - camera:
+      reset: true
+    speak: Yet carried five years past 2014, that same invisible drift would manufacture more than half of the estimated effect.
+  - quiz:
+      question: Why is passing a pre-trend test weak reassurance in a noisy sample?
+      choices:
+        - Pre-trends are mechanically zero
+        - The test has low power against violations that still matter
+        - Confidence intervals shrink after treatment
+      correct: 2
+      right: With wide intervals, a drift large enough to bias the estimate is easily missed, so passing tells you little.
+      wrong: The intervals are wide, so a violation big enough to matter can slip through undetected.
+  - highlight:
+      target:
+        - coef_0
+        - coef_1
+        - coef_2
+        - coef_3
+        - coef_4
+      effect: pulse
+    speak: 'Jonathan Roth''s 2022 paper made this concrete: published event studies often have little power against trends big enough to overturn their results, and screening on flat pre-trends is itself a selection rule — you keep exactly the samples where noise happened to hide the slope.'
+  - speak: 'So the modern advice, from Rambachan and Roth, is to stop treating the pre-period as a hurdle to clear and start using it as a bound: ask how large a post-treatment violation the result could survive.'
+  - speak: You got {score} of {score_total}. Flat pre-trends are a failed refutation, not a proof — they cannot see the counterfactual, and when the data are noisy they cannot even see the trend.
+    delivery: grave
+---
+title: What DiD Buys You, and What It Borrows
+level: advanced
+voice: female
+template: did_trends
+params:
+  effect: -1.5
+  treat_at: 5
+  group_labels:
+    - Expansion states
+    - Non-expansion states
+  y_label: Mortality, low-income adults
+  show_counterfactual: true
+  title: Expansion vs non-expansion states, 2014
+elements:
+  - id: t2_claim
+    type: text
+    text: '"The pre-trends were flat, so the assumption holds"'
+    x: 500
+    'y': 680
+    font_size: 26
+  - id: mark_claim
+    type: annotation
+    target: t2_claim
+    kind: strike
+  - id: n_a
+    type: text
+    text: Faster rebound after 2013
+    x: 300
+    'y': 570
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: arr_ab
+    type: arrow
+    from:
+      ref: n_a
+    to:
+      ref: n_b
+    style:
+      color: '#8a5fa8'
+  - id: n_b
+    type: text
+    text: Employment and income rise
+    x: 300
+    'y': 450
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: arr_bc
+    type: arrow
+    from:
+      ref: n_b
+    to:
+      ref: n_c
+    style:
+      color: '#8a5fa8'
+  - id: n_c
+    type: text
+    text: Mortality falls anyway
+    x: 300
+    'y': 330
+    font_size: 24
+    style:
+      color: '#8a5fa8'
+  - id: arr_cd
+    type: arrow
+    from:
+      ref: n_c
+    to:
+      ref: n_did
+    style:
+      color: '#b5482e'
+  - id: n_did
+    type: text
+    text: DiD books it as Medicaid
+    x: 730
+    'y': 330
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: mark_did
+    type: annotation
+    target: n_did
+    kind: box
+  - id: t2_note
+    type: text
+    text: The divergence starts in 2014 — the pre-trend test passes
+    x: 500
+    'y': 180
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: c_title
+    type: text
+    text: Two designs, one question
+    x: 500
+    'y': 690
+    font_size: 28
+  - id: n_lot
+    type: text
+    text: Oregon lottery, 2008
+    x: 260
+    'y': 590
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: lot_l1
+    type: text
+    text: Randomized by design
+    x: 260
+    'y': 535
+    font_size: 21
+  - id: lot_l2
+    type: text
+    text: ≈30,000 drawn, 2 years
+    x: 260
+    'y': 495
+    font_size: 21
+  - id: lot_l3
+    type: text
+    text: 'Mortality: too imprecise'
+    x: 260
+    'y': 455
+    font_size: 21
+  - id: n_did2
+    type: text
+    text: ACA expansion DiD, 2014
+    x: 730
+    'y': 590
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: did_l1
+    type: text
+    text: Parallel trends assumed
+    x: 730
+    'y': 535
+    font_size: 21
+  - id: did_l2
+    type: text
+    text: Millions of adults, many years
+    x: 730
+    'y': 495
+    font_size: 21
+  - id: did_l3
+    type: text
+    text: Mortality −0.13 pp/year (≈9%)
+    x: 730
+    'y': 455
+    font_size: 21
+  - id: trade_text
+    type: text
+    text: Credibility  ⇄  statistical power
+    x: 500
+    'y': 350
+    font_size: 26
+    style:
+      color: '#8f887c'
+  - id: fin_text
+    type: text
+    text: The counterfactual is assumed, never observed
+    x: 500
+    'y': 230
+    font_size: 26
+  - id: mark_fin
+    type: annotation
+    target: fin_text
+    kind: box
+commands:
+  - draw:
+      - axes
+      - title
+    speak: 'Now that we have seen how a faster state recovery could masquerade as a Medicaid effect, let''s put the whole design on one figure: what difference-in-differences buys, and what it borrows.'
+  - draw:
+      - control_line
+    speak: Non-expansion states — the group the policy never reached, measured before and after.
+  - pause: 0.3
+  - draw:
+      - treated_line
+      - treat_line
+    speak: Expansion states run alongside them until January 2014, and then their path bends downward.
+  - pause: 0.3
+  - draw:
+      - counterfactual
+    speak: 'Here is the borrowed piece: we take the control states'' change and glue it onto the expansion states'' own starting level.'
+  - draw:
+      - effect_arrow
+    speak: So the estimator subtracts two changes — the change among expansion states minus the change among non-expansion states — and calls the leftover the effect.
+  - highlight:
+      target:
+        - counterfactual
+      effect: glow
+    speak: 'Parallel trends is a claim about that dashed line nobody observes: the average change in Y_i(0), the outcome with no expansion, would have been the same in both groups — levels may differ all they like, only the trend must match.'
+    delivery: grave
+  - quiz:
+      intro: A quick check.
+      question: Parallel trends restricts which quantity?
+      choices:
+        - The pre-period levels of Y
+        - The trend in Y_i(0) in both groups
+        - The size of the treatment effect
+      correct: 2
+      right: 'It restricts the untreated potential outcome: both groups'' Y(0) would have moved by the same amount.'
+      wrong: Levels are allowed to differ entirely — DiD differences them away; it is the untreated trend that must match.
+  - clear: {}
+  - draw:
+      - t2_claim
+    speak: 'Question two: do flat lines before 2014 prove that assumption?'
+  - draw:
+      - mark_claim
+    speak: They only fail to refute it — the claim is about the years after the expansion, and no pre-period data can reach them.
+  - quiz:
+      question: Flat pre-2014 lines tell you that…
+      choices:
+        - Parallel trends is verified
+        - Some violations are ruled out, not all
+        - The estimate is causal
+      correct: 2
+      right: A passing pre-trend test refutes some bad stories; the assumption itself lives in the post period and stays untestable.
+      wrong: The assumption concerns years the pre-period data never observe.
+  - draw:
+      - n_a
+      - arr_ab
+      - n_b
+    speak: 'Here is a story the test cannot touch: expansion states were disproportionately the ones whose economies rebounded faster, taking employment and income with them.'
+  - pause: 0.3
+  - draw:
+      - arr_bc
+      - n_c
+    speak: Mortality among low-income adults then falls in those states — and would have fallen with no expansion at all.
+  - draw:
+      - arr_cd
+      - n_did
+      - mark_did
+    speak: The double difference cannot separate the two, so it books the whole gap as the Medicaid effect.
+  - draw:
+      - t2_note
+    speak: And because that divergence begins in 2014, exactly with the policy, the pre-trend test sails straight through.
+  - quiz:
+      question: Which story would break parallel trends here?
+      choices:
+        - Expansion states started with higher mortality
+        - Their economies rebounded faster from 2014
+        - Enrollment took a few months to complete
+      correct: 2
+      right: A recovery that starts with the policy moves the untreated path itself, and DiD credits that movement to Medicaid.
+      wrong: Different starting levels are harmless — DiD differences them away; a different trend is what breaks it.
+  - clear: {}
+  - draw:
+      - c_title
+      - n_lot
+      - lot_l1
+      - lot_l2
+      - lot_l3
+    speak: 'So why use this design at all? Set it beside the study this course began with: Oregon drew about thirty thousand names from ninety thousand applicants, and bought identification outright — no assumption to defend, but only two years and a few thousand enrollees, far too little to see mortality.'
+  - draw:
+      - n_did2
+      - did_l1
+      - did_l2
+      - did_l3
+    speak: 'The expansion comparison buys the opposite: every low-income adult in the country, followed for years — Miller, Johnson and Wherry find annual mortality down about a tenth of a percentage point, roughly nine percent — paid for with an assumption no data will ever verify.'
+  - draw:
+      - trade_text
+    speak: 'That is the trade this design makes: a lottery gives a credible answer to a small question, parallel trends lets you ask the national one, on borrowed credibility.'
+  - draw:
+      - fin_text
+      - mark_fin
+    speak: Two groups, two periods, one subtraction — and the entire causal claim resting on a line that was never observed, which is why the defence of a DiD is never the regression, but the story about that line.
+    delivery: grave
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'When treatment arrives at different times: staggered DiD in trouble'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 12 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: When treatment arrives at different times: staggered DiD in trouble'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

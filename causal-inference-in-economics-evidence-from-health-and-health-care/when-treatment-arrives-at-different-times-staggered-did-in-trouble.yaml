@@ -1,0 +1,291 @@
+playlist:
+  title: 'When treatment arrives at different times: staggered DiD in trouble'
+---
+title: Clean Controls and the Event-Time Plot
+level: advanced
+voice: male
+template: event_study
+params:
+  periods_pre: 4
+  periods_post: 4
+  effect: -2.4
+  ramp: true
+  pre_trend: 0
+  ci: 0.5
+  y_label: Change in uninsured rate (pp)
+  title: 'ATT(g,t): clean controls only'
+elements:
+  - id: c14
+    type: node
+    shape: rect
+    text: g = 2014
+    x: 180
+    'y': 600
+  - id: l14
+    type: label
+    text: 24 states + D.C.
+    attach_to: c14
+    side: below
+  - id: c15
+    type: node
+    shape: rect
+    text: g = 2015
+    x: 345
+    'y': 470
+  - id: l15
+    type: label
+    text: PA, IN, AK
+    attach_to: c15
+    side: below
+  - id: c16
+    type: node
+    shape: rect
+    text: g = 2016
+    x: 505
+    'y': 340
+  - id: l16
+    type: label
+    text: MT, LA
+    attach_to: c16
+    side: below
+  - id: never
+    type: node
+    shape: rect
+    text: Never treated
+    x: 815
+    'y': 480
+  - id: lnev
+    type: label
+    text: TX, FL, GA
+    attach_to: never
+    side: below
+  - id: a14
+    type: arrow
+    from:
+      ref: c14
+    to:
+      ref: never
+    style:
+      color: '#2f6b8f'
+  - id: a15
+    type: arrow
+    from:
+      ref: c15
+    to:
+      ref: never
+    style:
+      color: '#2f6b8f'
+  - id: a16
+    type: arrow
+    from:
+      ref: c16
+    to:
+      ref: never
+    style:
+      color: '#2f6b8f'
+  - id: label_clean
+    type: label
+    text: Clean control
+    attach_to: a15
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: a_nyt
+    type: arrow
+    from:
+      ref: c14
+    to:
+      ref: c16
+    curved: true
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: label_nyt
+    type: label
+    text: Not yet treated
+    attach_to: a_nyt
+    side: left
+    style:
+      color: '#2f6b8f'
+  - id: a_bad
+    type: arrow
+    from:
+      ref: c16
+    to:
+      ref: c15
+    curved: true
+    style:
+      color: '#b5482e'
+  - id: label_bad
+    type: label
+    text: Already treated
+    attach_to: a_bad
+    side: below
+    style:
+      color: '#b5482e'
+  - id: ann_bad
+    type: annotation
+    target: a_bad
+    kind: cross
+  - id: att
+    type: text
+    text: ATT(g,t) = E[ Y_t(g) − Y_t(∞) | G = g ]
+    x: 500
+    'y': 140
+    font_size: 30
+commands:
+  - draw:
+      - c14
+      - l14
+    speak: 'Now that we have seen how Bacon''s weights let already-treated states slip in as controls, let''s rebuild the estimator from clean comparisons only — starting with one cohort: the twenty-four states plus D.C. that expanded Medicaid in January 2014.'
+  - draw:
+      - c15
+      - l15
+      - c16
+      - l16
+    speak: Pennsylvania and Indiana followed in 2015, Alaska that September, Montana and Louisiana in 2016 — each adoption date defines its own group, G equal to the year the state switched on.
+  - draw:
+      - never
+      - lnev
+    speak: And Texas, Florida and Georgia never expanded at all — the group these estimators care about most.
+  - pause: 0.3
+  - draw:
+      - att
+    speak: 'The building block is ATT of g and t: for cohort g, at calendar time t, the average gap between the outcome observed and the outcome that cohort would have had under never being treated.'
+  - draw:
+      - a14
+      - a15
+      - a16
+      - label_clean
+    parallel: true
+    speak: Every one of those gaps is estimated against units whose treatment status never changes across the window.
+  - draw:
+      - a_nyt
+      - label_nyt
+    speak: 'Or against states not yet treated: before 2016, Montana and Louisiana are as untreated as Texas, so they are legitimate controls for the 2014 cohort.'
+  - draw:
+      - a_bad
+      - label_bad
+    speak: What is never allowed is this — the 2016 cohort compared against 2015 adopters whose own treatment effect is already running.
+  - draw:
+      - ann_bad
+    speak: That comparison, the one that manufactured the negative weights, is simply not in the estimand.
+    delivery: grave
+  - wait: click
+  - clear: {}
+  - draw:
+      - axes
+      - zero_line
+      - treat_line
+  - draw:
+      - coef_0
+      - coef_1
+      - coef_2
+      - coef_3
+    speak: Now line the cohorts up by time since their own expansion rather than by calendar year, and average the ATT of g and t at each event time. Before expansion the estimates sit on zero.
+  - draw:
+      - coef_4
+      - coef_5
+      - coef_6
+      - coef_7
+    speak: 'After expansion the uninsured rate falls: in this illustration about half a percentage point in the first year, reaching roughly two and a half by the fourth as enrollment builds.'
+  - highlight:
+      target:
+        - coef_0
+        - coef_1
+        - coef_2
+        - coef_3
+      effect: glow
+    speak: The pre-period points are not decoration — one is normalized to zero by construction, and the rest are your only visible check on parallel trends and anticipation.
+  - highlight:
+      target:
+        - coef_4
+        - coef_5
+        - coef_6
+        - coef_7
+      effect: pulse
+    speak: 'Sun and Abraham reach the same picture from the regression side: interact cohort dummies with relative-time dummies, then average those interactions with cohort shares, so no coefficient borrows another cohort''s post-period.'
+  - wait: click
+  - point:
+      at:
+        ref: treat_line
+      gesture: underline
+    speak: Now the price. Because ATT is defined against never-treated potential outcomes, no state may respond before its start date — and expansions were legislated and announced months ahead, so hospitals and insurers had time to move.
+  - point:
+      at:
+        ref: zero_line
+      gesture: underline
+    speak: Second, parallel trends must hold cohort by cohort, and in the not-yet-treated version it must hold at every horizon, not only around each switch.
+  - point:
+      at:
+        ref: coef_7
+      gesture: circle
+    speak: 'Third, precision: each ATT is estimated off a slice of the panel, and Callaway and Sant''Anna''s simultaneous bands, bootstrapped and clustered by state, are visibly wider than the pointwise standard error two-way fixed effects handed you.'
+  - wait: click
+  - highlight:
+      target:
+        - coef_4
+        - coef_5
+        - coef_6
+        - coef_7
+      effect: glow
+    speak: 'Here the field genuinely argues: Baker, Larcker and Wang re-ran published staggered designs and found conclusions that shift once the contaminated comparisons come out, while others reply that in many applications the reweighting barely moves the point estimate at all.'
+  - focus:
+      target:
+        - coef_0
+        - coef_1
+        - coef_2
+        - coef_3
+    speak: And the choice of clean control is itself contested — never-expanders are disproportionately Southern and poorer, so the cleanest group may be the least comparable, while not-yet-treated controls buy back power at the cost of one more assumption.
+  - pause: 0.4
+  - speak: 'The Oregon lottery needed none of this: one date, one randomization, the counterfactual handed to you. Here the counterfactual is assembled cohort by cohort, and every seam is an assumption you must defend.'
+  - draw:
+      - title
+    speak: 'So these estimators do not repair the regression — they change the estimand: ATT for each cohort and period, built only against never-treated or not-yet-treated states, aggregated on purpose rather than by accident, and paid for in wider bands.'
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Regression discontinuity: what happens at your 65th birthday'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 13 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Regression discontinuity: what happens at your 65th birthday'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

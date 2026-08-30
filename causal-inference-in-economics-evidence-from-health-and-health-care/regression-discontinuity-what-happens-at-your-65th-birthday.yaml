@@ -1,0 +1,832 @@
+playlist:
+  title: 'Regression discontinuity: what happens at your 65th birthday'
+---
+title: A Birthday as an Experiment
+level: advanced
+voice: female
+domain:
+  x:
+    - 55
+    - 75
+  'y':
+    - 0
+    - 100
+elements:
+  - id: ax
+    type: axes
+    x_label: Age (years)
+    y_label: Percent of people
+  - id: cov_left
+    type: curve
+    expr: 83 + 0.5*(x-55)
+    x_from: 55
+    x_to: 65
+    style:
+      color: '#2f6b8f'
+  - id: cov_right
+    type: curve
+    expr: 98.5 + 0.03*(x-65)
+    x_from: 65
+    x_to: 75
+    style:
+      color: '#2f6b8f'
+  - id: label_cov
+    type: label
+    text: 'E[D_i | age]: any coverage'
+    attach_to: cov_right
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: cutoff
+    type: edge
+    from:
+      x: 65
+      'y': 0
+    to:
+      x: 65
+      'y': 100
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_cutoff
+    type: label
+    text: 65th birthday
+    attach_to: cutoff
+    side: above
+    style:
+      color: '#8f887c'
+  - id: jump_arrow
+    type: arrow
+    from:
+      x: 65.6
+      'y': 88.1
+    to:
+      x: 65.6
+      'y': 98.4
+    style:
+      color: '#b5482e'
+  - id: label_jump
+    type: label
+    text: ≈ +10 points overnight
+    attach_to: jump_arrow
+    side: right
+    style:
+      color: '#b5482e'
+  - id: smoke
+    type: curve
+    expr: 20 - 0.45*(x-55)
+    style:
+      color: '#8a5fa8'
+  - id: label_smoke
+    type: label
+    text: Currently smokes
+    attach_to: smoke
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: chronic
+    type: curve
+    expr: 44 + 1.1*(x-55)
+    style:
+      color: '#8a5fa8'
+  - id: label_chronic
+    type: label
+    text: Has a chronic condition
+    attach_to: chronic
+    side: above-left
+    style:
+      color: '#8a5fa8'
+  - id: truman
+    type: portrait
+    of: Harry S. Truman
+    cameo: true
+  - id: p_before
+    type: point
+    at:
+      x: 64.7
+      'y': 87.9
+    style:
+      color: '#b5482e'
+  - id: p_after
+    type: point
+    at:
+      x: 65.3
+      'y': 98.5
+    style:
+      color: '#b5482e'
+  - id: label_pair
+    type: label
+    text: 64y 11m vs. 65y 1m
+    attach_to: p_before
+    side: below-left
+    style:
+      color: '#b5482e'
+  - id: mark
+    type: annotation
+    target: label_jump
+    kind: box
+commands:
+  - draw:
+      - ax
+    speak: Over these five parts we'll ask whether one rule — turn sixty-five, and Medicare switches on — can do the work of an experiment, and what it revealed about whether coverage keeps very sick people alive.
+  - draw:
+      - cov_left
+      - label_cov
+    speak: Here is the share of Americans holding any health insurance, drifting gently upward through the late fifties and early sixties — the probability of coverage at each age, E of D_i given age.
+  - highlight:
+      target:
+        - cov_left
+      effect: glow
+    speak: 'Just short of sixty-five it sits near eighty-eight percent: roughly one in eight of these adults has no coverage at all.'
+  - pause: 0.3
+  - draw:
+      - cutoff
+      - label_cutoff
+    speak: Now mark the sixty-fifth birthday, the day Medicare eligibility begins for nearly every American who paid into Social Security.
+  - draw:
+      - cov_right
+    speak: One birthday later, the same measure is pressed up against one hundred percent.
+    delivery: grave
+  - pause: 0.5
+  - draw:
+      - jump_arrow
+      - label_jump
+    speak: About ten points of coverage appear overnight — a genuine step in a variable that otherwise only drifts.
+  - pause: 0.4
+  - draw:
+      - smoke
+      - label_smoke
+    speak: 'The obvious objection is that sixty-six-year-olds differ from sixty-four-year-olds in a hundred ways, so watch what else moves: smoking falls steadily with age.'
+  - draw:
+      - chronic
+      - label_chronic
+    speak: Chronic illness climbs steadily — and both cross the birthday without so much as a kink.
+  - focus:
+      target:
+        - smoke
+        - chronic
+        - cutoff
+    speak: Income, schooling and marital status behave the same way, because nothing inside a person changes on a birthday; only a legal rule does.
+  - draw:
+      - truman
+    speak: And that rule is an accident of politics — Lyndon Johnson signed Medicare in July 1965 and handed card number one to Harry Truman, who had pushed for national health insurance twenty years earlier.
+  - erase:
+      - truman
+    speak: The compromise settled on the number sixty-five, and an arbitrary number is exactly what a research design can exploit.
+  - clear:
+      keep:
+        - ax
+        - cov_left
+        - cov_right
+        - label_cov
+        - cutoff
+        - label_cutoff
+        - jump_arrow
+        - label_jump
+    speak: So strip the picture back to the step itself.
+  - camera:
+      center:
+        ref: jump_arrow
+      zoom: 1.8
+    speak: And come in close on the weeks either side of the line.
+  - draw:
+      - p_before
+      - p_after
+      - label_pair
+    speak: 'Compare someone a month short of sixty-five with someone a month past: same smoking, same income, same diseases — different insurance.'
+  - draw:
+      - mark
+    speak: That step is the design — assignment to coverage decided by the calendar rather than by anything about the patient.
+  - camera:
+      reset: true
+    speak: In Oregon a lottery drew about thirty thousand names from ninety thousand applicants; here a birthday does the drawing, for everyone, every day.
+  - speak: A rule, not a lottery, can manufacture quasi-random variation — and whether the comparison across it is legitimate rests on a single assumption, which is where we go next.
+---
+title: Continuity, Not Parallel Trends
+level: advanced
+voice: female
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 100
+elements:
+  - id: ax
+    type: axes
+    x_label: Age (running variable)
+    y_label: E[Y_i | age]
+  - id: cut_line
+    type: arrow
+    from:
+      x: 50
+      'y': 0
+    to:
+      x: 50
+      'y': 88
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_cut
+    type: label
+    text: Age 65
+    attach_to: cut_line
+    side: above
+    style:
+      color: '#8f887c'
+  - id: y0_left
+    type: curve
+    expr: 30+0.35*x
+    x_from: 0
+    x_to: 50
+    style:
+      color: '#2f6b8f'
+  - id: y0_right
+    type: curve
+    expr: 30+0.35*x
+    x_from: 50
+    x_to: 100
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: y1_right
+    type: curve
+    expr: 46+0.35*x
+    x_from: 50
+    x_to: 100
+    style:
+      color: '#b5482e'
+  - id: y1_left
+    type: curve
+    expr: 46+0.35*x
+    x_from: 0
+    x_to: 50
+    style:
+      color: '#b5482e'
+      dash: true
+  - id: label_y0
+    type: label
+    text: E[Y_i(0) | age]
+    attach_to: y0_left
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: label_y1
+    type: label
+    text: E[Y_i(1) | age]
+    attach_to: y1_right
+    side: above
+    style:
+      color: '#b5482e'
+  - id: jump_arrow
+    type: arrow
+    from:
+      x: 50
+      'y': 47.5
+    to:
+      x: 50
+      'y': 63.5
+    style:
+      color: '#8a5fa8'
+  - id: label_tau
+    type: label
+    text: 'τ: the jump at the cutoff'
+    attach_to: jump_arrow
+    side: right
+    style:
+      color: '#8a5fa8'
+  - id: y0_local
+    type: curve
+    expr: 30+0.35*x
+    x_from: 41
+    x_to: 50
+    style:
+      color: '#8a5fa8'
+      stroke_width: 4
+  - id: y1_local
+    type: curve
+    expr: 46+0.35*x
+    x_from: 50
+    x_to: 59
+    style:
+      color: '#8a5fa8'
+      stroke_width: 4
+  - id: label_local
+    type: label
+    text: Identified here, and only here
+    attach_to: y0_local
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: mark_local
+    type: annotation
+    target: label_local
+    kind: box
+  - id: ax2
+    type: axes
+    x_label: Year
+    y_label: Outcome Y_i
+  - id: policy_line
+    type: arrow
+    from:
+      x: 50
+      'y': 0
+    to:
+      x: 50
+      'y': 88
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_policy
+    type: label
+    text: Policy
+    attach_to: policy_line
+    side: above
+    style:
+      color: '#8f887c'
+  - id: control_line
+    type: curve
+    expr: 35+0.3*x
+    x_from: 0
+    x_to: 100
+    style:
+      color: '#2f6b8f'
+  - id: label_control
+    type: label
+    text: Control
+    attach_to: control_line
+    side: below-right
+    style:
+      color: '#2f6b8f'
+  - id: treated_pre
+    type: curve
+    expr: 50+0.3*x
+    x_from: 0
+    x_to: 50
+    style:
+      color: '#b5482e'
+  - id: treated_post
+    type: curve
+    expr: 65+0.55*(x-50)
+    x_from: 50
+    x_to: 100
+    style:
+      color: '#b5482e'
+  - id: label_treated
+    type: label
+    text: Treated
+    attach_to: treated_post
+    side: above
+    style:
+      color: '#b5482e'
+  - id: counterfactual
+    type: curve
+    expr: 50+0.3*x
+    x_from: 50
+    x_to: 100
+    style:
+      color: '#d0865f'
+      dash: true
+  - id: label_cf
+    type: label
+    text: Assumed counterfactual
+    attach_to: counterfactual
+    side: below-right
+    style:
+      color: '#d0865f'
+commands:
+  - draw:
+      - ax
+      - cut_line
+      - label_cut
+    speak: Now that we've seen coverage jump at the 65th birthday, let's state exactly what has to be true for that jump to be causal.
+  - draw:
+      - y0_left
+      - label_y0
+    speak: Left of the line we observe the untreated conditional mean — hospital use for people without Medicare, drifting up as they age.
+  - draw:
+      - y1_right
+      - label_y1
+    speak: Right of the line almost everyone has D_i equal to one, so what we see there is the treated conditional mean.
+  - pause: 0.4
+  - draw:
+      - y0_right
+      - y1_left
+    parallel: true
+    speak: 'The dashed halves are what we never observe: each side''s missing counterfactual.'
+  - draw:
+      - jump_arrow
+      - label_tau
+    speak: The RD estimate is this vertical gap — the distance between the two curves at exactly age 65.
+  - highlight:
+      target:
+        - y0_right
+        - y1_left
+      effect: glow
+    speak: 'And it is causal only under continuity: both conditional expectations cross the birthday without a break.'
+  - point:
+      at:
+        ref: cut_line
+      gesture: tap
+    speak: In plain words — everything else that shapes health care use runs smoothly through the day you turn sixty-five; only D_i breaks.
+  - speak: 'Card, Dobkin and Maestas found exactly that pattern: coverage jumps by roughly ten percentage points at 65, while income, education, race and marital status trend straight through the birthday.'
+  - speak: The design is older than it looks — Thistlethwaite and Campbell invented it in 1960, comparing students just above and just below a National Merit test-score cutoff.
+    delivery: soft
+  - clear: {}
+    speak: Now hold that against the assumption we made back in lecture eleven.
+  - draw:
+      - ax2
+      - policy_line
+      - label_policy
+      - control_line
+      - label_control
+      - treated_pre
+      - treated_post
+      - label_treated
+    speak: 'Difference-in-differences: two groups moving together, until a policy lands on one of them.'
+  - draw:
+      - counterfactual
+      - label_cf
+    speak: Parallel trends asks this dashed path to stay right for every year afterwards — a claim about a whole horizon nobody ever observes.
+  - highlight:
+      target:
+        - counterfactual
+      effect: glow
+    speak: 'Continuity asks much less: not that two groups track each other for a decade, but that nothing else breaks in a small neighbourhood of one point.'
+  - clear: {}
+    speak: That weaker assumption, though, is bought at a real price.
+  - show:
+      - ax
+      - cut_line
+      - label_cut
+      - y0_left
+      - y0_right
+      - y1_left
+      - y1_right
+      - label_y0
+      - label_y1
+      - jump_arrow
+      - label_tau
+  - camera:
+      center:
+        ref: jump_arrow
+      zoom: 1.9
+    speak: 'Zoom in, and the estimand is a treatment effect at a single point: E[Y_i(1) − Y_i(0) given age equals 65].'
+  - draw:
+      - y0_local
+      - y1_local
+      - label_local
+      - mark_local
+    speak: Only the people crowded against the line do the identifying work — nothing here speaks about a 55-year-old, or an 80-year-old.
+  - camera:
+      reset: true
+    speak: 'The Oregon lottery, by contrast, randomised among low-income adults from 19 to 64: its effect belongs to a whole population of compliers, not to one birthday.'
+  - speak: So parallel trends buys breadth with a strong assumption stretched across time; continuity buys credibility with a weak assumption at a point — and you can only ever spend it at that point.
+    delivery: grave
+---
+title: Estimating the Jump
+level: advanced
+voice: female
+template: rd_plot
+params:
+  jump: 2.2
+  slope: 0.15
+  curvature: 0.008
+  noise: 0.3
+  x_label: Age minus 65 (years)
+  cutoff_label: 65th birthday
+  title: Share with any health insurance
+elements:
+  - id: mark_jump
+    type: annotation
+    target: jump_bracket
+    kind: circle
+commands:
+  - draw:
+      - axes
+      - title
+    speak: Now that we have seen that RD rests on continuity rather than parallel trends, let's turn a birthday into an actual number.
+  - draw:
+      - cutoff_line
+    speak: 'First, recenter the running variable: age minus 65, so the cutoff sits at zero and D_i switches on the instant it is crossed.'
+  - draw:
+      - dots_left
+    speak: Each dot is a bin of ages — say one month of age — and its average coverage; just before the birthday, roughly 87 percent of Americans hold any health insurance.
+  - draw:
+      - dots_right
+    speak: Just after, it is close to 98 percent, because Medicare eligibility is essentially universal at 65.
+  - pause: 0.4
+  - draw:
+      - fit_left
+    speak: Now fit a line to the left-hand bins — but only to those inside a bandwidth h, say two years, since 50-year-olds tell us almost nothing about people at the cutoff.
+  - draw:
+      - fit_right
+    speak: 'Then a separate line on the right: the regression is Y_i equals alpha, plus tau times D_i, plus beta times age-minus-65, plus gamma times the interaction.'
+  - highlight:
+      target:
+        - fit_left
+        - fit_right
+      effect: glow
+    speak: That interaction term is what lets each side keep its own slope — force a single common slope and any curvature in the age profile leaks straight into your estimate.
+  - draw:
+      - jump_bracket
+    speak: 'Extrapolate both lines to the boundary and read the vertical gap between them: tau, about ten percentage points of coverage.'
+  - draw:
+      - mark_jump
+    speak: That circled gap is the whole estimate — not a comparison of 60-year-olds with 70-year-olds, but two extrapolations meeting at one point.
+    delivery: grave
+  - point:
+      at:
+        ref: cutoff_line
+      gesture: tap
+    speak: And since D here is coverage itself, this jump is the first stage — the health outcomes will later be divided by it.
+  - camera:
+      center:
+        ref: cutoff_line
+      zoom: 2
+    speak: 'Now the choice that does most of the work: shrink h, and only near-65s count — little bias, but few observations, so the estimate wobbles.'
+  - camera:
+      reset: true
+    speak: Widen h and you borrow strength from 62- and 68-year-olds — more precision, but now a straight line must summarize a curved age profile, and that curvature becomes bias.
+  - highlight:
+      target:
+        - dots_left
+        - dots_right
+      effect: pulse
+    speak: Because that trade-off is unavoidable, applied work reports a data-driven bandwidth — the Imbens–Kalyanaraman rule, or Calonico, Cattaneo and Titiunik's.
+  - highlight:
+      target:
+        - cutoff_line
+      effect: glow
+    speak: 'The design is older than the health economics: Thistlethwaite and Campbell invented it in 1960, comparing students just above and just below a National Merit award cutoff.'
+  - speak: So an RD estimate is a difference between two fitted lines at a single point on the age axis — and its credibility lives entirely inside the window you chose.
+---
+title: What the Cutoff Can and Cannot Tell You
+level: advanced
+voice: female
+template: rd_plot
+params:
+  jump: -1
+  slope: 0.18
+  curvature: 0.006
+  noise: 0.3
+  x_label: Age at admission
+  cutoff_label: 65th birthday
+  title: 7-day mortality, non-deferrable ED admissions
+elements:
+  - id: age_axis
+    type: path
+    points:
+      - - 120
+        - 430
+      - - 900
+        - 430
+    style:
+      color: '#8f887c'
+  - id: tick19
+    type: text
+    text: '19'
+    x: 160
+    'y': 398
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: tick64
+    type: text
+    text: '64'
+    x: 610
+    'y': 398
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: tick85
+    type: text
+    text: '85'
+    x: 830
+    'y': 398
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: oregon_band
+    type: path
+    points:
+      - - 160
+        - 430
+      - - 616
+        - 430
+    style:
+      color: '#2f6b8f'
+      stroke_width: 16
+      opacity: 0.5
+  - id: oregon_label
+    type: text
+    text: 'Oregon lottery: uninsured adults 19–64'
+    x: 370
+    'y': 478
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: rd_dot
+    type: shape
+    shape: circle
+    x: 626
+    'y': 430
+    radius: 9
+    style:
+      color: '#b5482e'
+      fill: '#b5482e'
+  - id: rd_label
+    type: text
+    text: 'Medicare RD: age 65'
+    x: 775
+    'y': 478
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: rd_arrow
+    type: arrow
+    from:
+      ref: rd_label
+    to:
+      ref: rd_dot
+    style:
+      color: '#b5482e'
+  - id: b1
+    type: text
+    text: Lottery → LATE for compliers
+    x: 290
+    'y': 330
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: b2
+    type: text
+    text: A population, not a moment
+    x: 290
+    'y': 292
+    font_size: 21
+  - id: b3
+    type: text
+    text: 30,000 drawn, ~1 in 4 enrolled
+    x: 290
+    'y': 256
+    font_size: 19
+    style:
+      color: '#8f887c'
+  - id: r1
+    type: text
+    text: Continuity → the effect at 65
+    x: 730
+    'y': 330
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: r2
+    type: text
+    text: A moment, not a population
+    x: 730
+    'y': 292
+    font_size: 21
+  - id: r3
+    type: text
+    text: Admissions +10%, 7-day mortality −1 pt
+    x: 730
+    'y': 256
+    font_size: 19
+    style:
+      color: '#8f887c'
+  - id: closing
+    type: text
+    text: Both are local — neither is the average effect of insurance.
+    x: 500
+    'y': 175
+    font_size: 26
+  - id: closing_box
+    type: annotation
+    target: closing
+    kind: box
+commands:
+  - draw:
+      - axes
+    speak: 'Now that we have seen how the fuzzy jump in coverage at 65 gets scaled into a treatment effect, the question that decides whether you may cite it in a policy memo is left: whose effect is it?'
+  - draw:
+      - title
+      - dots_left
+      - dots_right
+    speak: Each dot is the seven-day death rate for patients wheeled into an emergency department with something that could not wait — a heart attack, a hip fracture — grouped by their age at admission.
+  - draw:
+      - fit_left
+      - fit_right
+      - cutoff_line
+    speak: Fit the age trend separately on each side of the sixty-fifth birthday; nothing about these patients bends as they age through their early sixties.
+  - pause: 0.4
+  - draw:
+      - jump_bracket
+    speak: Card, Dobkin and Maestas found the death rate falls by about one percentage point exactly at the line — roughly a fifth of a baseline near five percent.
+  - point:
+      at:
+        ref: dots_right
+      gesture: tap
+    speak: 'The same birthday raises hospital admissions by roughly ten percent: more care bought, and for the sickest patients, fewer deaths.'
+  - point:
+      at:
+        ref: cutoff_line
+      gesture: underline
+    speak: What actually jumps at 65 is Medicare eligibility — the uninsured share among the near-elderly, around a tenth at 64, nearly vanishes overnight — while income, education, and a lifetime of smoking drift smoothly straight through the birthday.
+  - highlight:
+      target:
+        - fit_left
+        - fit_right
+      effect: glow
+    speak: 'So the identifying assumption is just this: potential outcomes are continuous at the cutoff — what mortality would have been without Medicare does not jump on a birthday.'
+  - focus:
+      target:
+        - cutoff_line
+        - jump_bracket
+    speak: 'That is a gentler demand than parallel trends: we never claim two groups would have moved together for years, only that one curve would have stayed smooth for an instant — and in exchange we learn about an instant.'
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - age_axis
+      - tick19
+      - tick64
+      - tick85
+    speak: Put both designs of this course on one age axis.
+  - draw:
+      - oregon_band
+      - oregon_label
+      - b3
+    speak: The Oregon lottery covered low-income uninsured adults from nineteen to sixty-four — about thirty thousand names drawn out of ninety thousand who signed up, and only about one in four of those drawn ended up enrolled.
+  - draw:
+      - rd_dot
+      - rd_label
+      - rd_arrow
+      - r3
+    speak: 'The Medicare discontinuity lives at a single point on that axis: sixty-five.'
+  - draw:
+      - b1
+      - b2
+    speak: Randomization bought a local average effect for the lottery's compliers — a whole population of poor adults, though only in one state, and only those the lottery actually moved.
+  - draw:
+      - r1
+      - r2
+    speak: 'Continuity bought something sharper and thinner: the effect at the cutoff, for people within months of that birthday, many already sick enough to be at an emergency-room door.'
+  - focus:
+      target:
+        - b2
+        - r2
+    speak: Drag the RD estimate away from 65 and it stops being identified; drag Oregon's estimate up to the elderly and it stops being relevant.
+  - draw:
+      - closing
+      - closing_box
+    speak: 'Both are local: Oregon''s compliers are a kind of person, Medicare''s are a person at a moment — and neither hands you the average effect of insurance on Americans.'
+    delivery: grave
+  - speak: Across this series a birthday gave us an experiment nobody ran; what it can never give us is the world on either side of the cutoff.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Stress-testing a discontinuity
+    x: 500
+    'y': 390
+    font_size: 55
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 14 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Stress-testing a discontinuity'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

@@ -1,0 +1,727 @@
+playlist:
+  title: 'Genes as instruments: Mendelian randomization'
+---
+title: Nature's Lottery Draw
+level: advanced
+voice: female
+template: punnett_square
+params:
+  parent1: Aa
+  parent2: Aa
+  trait:
+    dominant: carries *2 — flushes
+    recessive: '*1/*1 — no flush'
+  highlight: dominant
+  show_ratio: true
+elements:
+  - id: ore_title
+    type: text
+    text: Oregon, 2008
+    x: 265
+    'y': 560
+    font_size: 32
+    style:
+      color: '#2f6b8f'
+  - id: ore_text
+    type: text
+    text: ≈90,000 apply — 30,000 names drawn
+    x: 265
+    'y': 500
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: nat_title
+    type: text
+    text: Every conception
+    x: 735
+    'y': 560
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: nat_text
+    type: text
+    text: 2 alleles carried — 1 transmitted
+    x: 735
+    'y': 500
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: divider
+    type: path
+    points:
+      - - 500
+        - 610
+      - - 500
+        - 470
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: cmp_text
+    type: text
+    text: Allocation by chance — once in Oregon, twice at every conception
+    x: 500
+    'y': 400
+    font_size: 24
+  - id: head3
+    type: text
+    text: What nature's lottery buys you
+    x: 500
+    'y': 640
+    font_size: 34
+  - id: p1
+    type: text
+    text: 1. Random within parental genotype
+    x: 500
+    'y': 545
+    font_size: 26
+  - id: p2
+    type: text
+    text: 2. Fixed at conception — nothing downstream can reverse-cause it
+    x: 500
+    'y': 460
+    font_size: 26
+  - id: p3
+    type: text
+    text: '3. Relevance is not free: the allele must move the exposure'
+    x: 500
+    'y': 375
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: mark3
+    type: annotation
+    target: p3
+    kind: box
+  - id: zline
+    type: text
+    text: Z_i = copies of *2   →   D_i = alcohol intake   →   Y_i = health
+    x: 500
+    'y': 250
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+commands:
+  - draw:
+      - ore_title
+      - ore_text
+    speak: Nobody will ever randomize you into thirty years of heavy drinking — so over four parts we ask whether a gene can stand in for the lottery we cannot run.
+  - draw:
+      - nat_title
+      - nat_text
+      - divider
+    speak: Oregon drew thirty thousand names from ninety thousand applicants, once, in 2008; meiosis runs its own draw at every conception, twice over.
+  - draw:
+      - cmp_text
+    speak: Both allocate by chance, but only one of them has been running since long before there were economists to exploit it.
+  - pause: 0.4
+  - clear: {}
+  - draw:
+      - parent1_label
+      - parent2_label
+      - grid
+    speak: 'Take the gene this series lives on: ALDH2 on chromosome 12, and two parents who each carry one low-activity *2 copy and one normal *1.'
+  - draw:
+      - grid__ch0
+      - grid__ch1
+      - grid__rh0
+      - grid__rh1
+    speak: 'Write A for the *2 allele and a for *1: each parent transmits one of their two copies with probability one half, and which one is pure chance.'
+  - pause: 0.3
+  - draw:
+      - grid__c0_0
+      - grid__c0_1
+      - grid__c1_0
+      - grid__c1_1
+    parallel: true
+    speak: The two transmissions are independent, so all four cells are equally likely — a two-ticket draw with no selection anywhere in it.
+  - pause: 0.4
+  - draw:
+      - hl_0_0
+      - hl_0_1
+      - hl_1_0
+    parallel: true
+    speak: Three of the four inherit at least one *2 copy, letting acetaldehyde pile up after a drink — so in this lottery the losing hand is a flush.
+  - draw:
+      - ratio
+    speak: 'Three to one: Mendel''s segregation ratio is the oldest randomized allocation rule in science, and it re-runs every generation.'
+  - pause: 0.5
+  - focus:
+      target:
+        - parent1_label
+        - parent2_label
+    speak: Read the conditioning carefully, though — the draw is random within these parents' genotypes, not across a population.
+  - speak: Across populations, allele frequencies track ancestry, and so do diet, income and disease; population stratification is confounding under another name, which is why credible studies condition on ancestry components or compare siblings within a family.
+  - clear: {}
+  - draw:
+      - head3
+      - p1
+    speak: 'So what has the lottery bought us? First, independence: conditional on the parents, the allele is dealt before any covariate exists to be unbalanced.'
+  - draw:
+      - p2
+    speak: Second, temporal order — the genotype is fixed at conception, decades before smoking, income or illness, so no outcome can reach back and cause it.
+  - draw:
+      - p3
+      - mark3
+    speak: 'Third, the part nature does not hand you: relevance, the requirement that the allele actually shifts the exposure.'
+  - draw:
+      - zline
+    speak: In our notation Z_i is the number of *2 copies, D_i is alcohol intake, Y_i the health outcome — and the next part measures that first stage in a real population.
+  - pause: 0.4
+  - speak: Nature randomizes the allele; it never promised to randomize what the allele does — and that gap is the rest of this series.
+    delivery: grave
+---
+title: Pleiotropy in a Lab Coat
+level: advanced
+voice: female
+template: causal_dag
+params:
+  title: Two arrows out of one gene
+  nodes:
+    - name: ALDH2 variant
+      role: exposure
+    - name: Alcohol intake
+      role: mediator
+    - name: Heart disease
+      role: outcome
+    - name: Aldehyde toxicity
+      role: collider
+    - name: Ancestry
+      role: confounder
+    - name: Family environment
+      role: confounder
+  edges: ALDH2 variant -> Alcohol intake; Alcohol intake -> Heart disease; ALDH2 variant -> Aldehyde toxicity; Aldehyde toxicity -> Heart disease; Ancestry -> ALDH2 variant; Ancestry -> Heart disease; Family environment -> ALDH2 variant; Family environment -> Heart disease
+  highlight_backdoor: true
+elements:
+  - id: mark_horizontal
+    type: annotation
+    target: node_aldehyde_toxicity
+    kind: circle
+  - id: wald
+    type: text
+    text: plim β̂_IV = β + γ / π
+    x: 500
+    'y': 58
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: t_head
+    type: text
+    text: 'Polygenic score: hundreds of SNPs, one instrument'
+    x: 500
+    'y': 600
+    font_size: 30
+  - id: t_f
+    type: text
+    text: 'First stage: F in the hundreds'
+    x: 500
+    'y': 520
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: t_cost
+    type: text
+    text: 'Exclusion: hundreds of ways to fail'
+    x: 500
+    'y': 462
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: t_m1
+    type: text
+    text: MR-Egger — nonzero intercept ⇒ directional pleiotropy
+    x: 500
+    'y': 372
+    font_size: 24
+  - id: t_m2
+    type: text
+    text: Weighted median — consistent if >50% of weight is valid
+    x: 500
+    'y': 316
+    font_size: 24
+  - id: t_m3
+    type: text
+    text: Within-sibship MR — differences out ancestry and home
+    x: 500
+    'y': 260
+    font_size: 24
+  - id: t_bottom
+    type: text
+    text: Falsification tests, not proof.
+    x: 500
+    'y': 160
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: mark_bottom
+    type: annotation
+    target: t_bottom
+    kind: box
+commands:
+  - draw:
+      - title
+      - node_aldh2_variant
+    speak: Now that the ALDH2 flush has given us a genuinely strong first stage, the question that decides whether we may publish a number at all is whether this gene touches the heart by any route other than the glass.
+  - draw:
+      - node_alcohol_intake
+      - edge_0
+    speak: One copy of the star-two allele lets acetaldehyde accumulate, drinking turns unpleasant, and intake falls — to near zero among homozygotes.
+  - pause: 0.3
+  - draw:
+      - node_heart_disease
+      - edge_1
+    speak: 'Alcohol then acts on blood pressure and the heart: this arrow is the effect we actually want.'
+  - focus:
+      target:
+        - node_aldh2_variant
+        - node_alcohol_intake
+        - node_heart_disease
+        - edge_0
+        - edge_1
+    speak: Strictly in series — that is vertical pleiotropy, and far from a violation it is the instrument doing its job.
+  - pause: 0.4
+  - draw:
+      - node_aldehyde_toxicity
+      - edge_2
+    speak: But the same variant leaves acetaldehyde itself circulating, and acetaldehyde is a group-one carcinogen and a vasodilator in its own right.
+  - draw:
+      - edge_3
+      - mark_horizontal
+    speak: A second arrow reaches the outcome without ever passing through drinking — horizontal pleiotropy, which is our exclusion restriction from lecture seven wearing a lab coat.
+    delivery: grave
+  - draw:
+      - wald
+    speak: 'And the damage is arithmetic: the Wald ratio converges not to beta but to beta plus gamma over pi — direct effect over first stage. Bias you inherit.'
+  - pause: 0.5
+  - draw:
+      - node_ancestry
+      - edge_4
+      - edge_5
+    speak: 'Randomization at conception holds within a mating pool, not across them: ancestry moves allele frequencies and disease risk together — pool populations carelessly and you can discover a gene for chopstick use.'
+  - draw:
+      - node_family_environment
+      - edge_6
+      - edge_7
+    speak: 'Dynastic effects next: your genotype is correlated with your parents'', and their genotype built the household that acted on you directly.'
+  - focus:
+      target:
+        - node_ancestry
+        - node_family_environment
+        - edge_4
+        - edge_5
+        - edge_6
+        - edge_7
+    speak: Both are omitted-variable bias in genetic dress — they break independence before exclusion is even reached, which is why credible work adjusts for ancestry components or moves inside families.
+  - pause: 0.5
+  - clear:
+      keep:
+        - title
+  - draw:
+      - t_head
+      - t_f
+    speak: 'Modern Mendelian randomization rarely rests on one variant: a polygenic score aggregates hundreds of SNPs, and the first stage becomes so strong that lecture eight''s weak-instrument worry simply evaporates.'
+  - draw:
+      - t_cost
+    speak: Which is the trap — a score selected for prediction is selected precisely for touching everything it can, so strength is bought with hundreds of new direct paths.
+  - draw:
+      - t_m1
+      - t_m2
+    speak: 'So exclusion gets tested rather than assumed: MR-Egger reads a nonzero intercept as directional pleiotropy, and the weighted median survives if over half the instrument weight is valid.'
+  - draw:
+      - t_m3
+    speak: Within-sibship designs difference out ancestry and the family home — the one setting where comparing yourself with your sibling is scientifically productive.
+  - draw:
+      - t_bottom
+      - mark_bottom
+    speak: Each carries assumptions of its own, and whether a polygenic score can ever satisfy exclusion remains openly disputed in the field.
+  - show:
+      - node_aldh2_variant
+      - node_alcohol_intake
+      - node_heart_disease
+      - node_aldehyde_toxicity
+      - edge_0
+      - edge_1
+      - edge_2
+      - edge_3
+      - mark_horizontal
+    speak: 'Everything hangs on one arrow leaving the gene rather than two: Mendelian randomization does not escape the exclusion restriction, it relocates it into biology, where it is harder to see and no easier to test.'
+    delivery: grave
+---
+title: What the gene can and cannot tell you
+level: advanced
+voice: female
+domain:
+  x:
+    - 0
+    - 70
+  'y':
+    - 0
+    - 25
+elements:
+  - id: grid_h
+    type: path
+    points:
+      - - 60
+        - 612
+      - - 960
+        - 612
+    style:
+      color: '#8f887c'
+  - id: grid_v1
+    type: path
+    points:
+      - - 335
+        - 225
+      - - 335
+        - 618
+    style:
+      color: '#8f887c'
+  - id: grid_v2
+    type: path
+    points:
+      - - 672
+        - 225
+      - - 672
+        - 618
+    style:
+      color: '#8f887c'
+  - id: t1
+    type: text
+    x: 500
+    'y': 700
+    text: One checklist, two lotteries
+    font_size: 30
+  - id: head_1
+    type: text
+    x: 500
+    'y': 648
+    text: Oregon lottery
+    font_size: 23
+    style:
+      color: '#2f6b8f'
+  - id: head_2
+    type: text
+    x: 816
+    'y': 648
+    text: ALDH2 rs671
+    font_size: 23
+    style:
+      color: '#b5482e'
+  - id: r1
+    type: text
+    x: 195
+    'y': 555
+    text: Relevance
+    font_size: 22
+  - id: c11
+    type: text
+    x: 500
+    'y': 555
+    text: +25 pp coverage
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c12
+    type: text
+    x: 816
+    'y': 555
+    text: ≈ half the drinks/week
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: r2
+    type: text
+    x: 195
+    'y': 460
+    text: Independence
+    font_size: 22
+  - id: c21
+    type: text
+    x: 500
+    'y': 460
+    text: A state computer, 2008
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c22
+    type: text
+    x: 816
+    'y': 460
+    text: Meiosis, at conception
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: r3
+    type: text
+    x: 195
+    'y': 365
+    text: Exclusion
+    font_size: 22
+  - id: c31
+    type: text
+    x: 500
+    'y': 365
+    text: Letter changes nothing else
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c32
+    type: text
+    x: 816
+    'y': 365
+    text: No horizontal pleiotropy
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: mark_excl
+    type: annotation
+    target: c32
+    kind: box
+  - id: r4
+    type: text
+    x: 195
+    'y': 270
+    text: Monotonicity
+    font_size: 22
+  - id: c41
+    type: text
+    x: 500
+    'y': 270
+    text: No one enrolls on losing
+    font_size: 19
+    style:
+      color: '#2f6b8f'
+  - id: c42
+    type: text
+    x: 816
+    'y': 270
+    text: Flush never raises drinking
+    font_size: 19
+    style:
+      color: '#b5482e'
+  - id: ax
+    type: axes
+    x_label: Age (years)
+    y_label: Drinks per week
+  - id: curve_wt
+    type: curve
+    expr: 20/(1+exp(-(x-22)/2.5))
+    style:
+      color: '#2f6b8f'
+  - id: label_wt
+    type: label
+    text: Two functional alleles
+    attach_to: curve_wt
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: curve_het
+    type: curve
+    expr: 10/(1+exp(-(x-22)/2.5))
+    style:
+      color: '#b5482e'
+  - id: label_het
+    type: label
+    text: 'Carries rs671: flushes'
+    attach_to: curve_het
+    side: below
+    style:
+      color: '#b5482e'
+  - id: region_gap
+    type: region
+    between:
+      - curve_wt
+      - curve_het
+    x_from: 0
+    x_to: 70
+    style:
+      fill: '#f2c14e'
+  - id: label_gap
+    type: label
+    text: Lifetime exposure contrast
+    attach_to: region_gap
+    side: above-left
+  - id: curve_policy
+    type: curve
+    expr: 20/(1+exp(-(x-22)/2.5)) - 5*exp(-((x-45)*(x-45))/12)
+    style:
+      color: '#d0865f'
+      dash: true
+  - id: region_policy
+    type: region
+    between:
+      - curve_wt
+      - curve_policy
+    x_from: 38
+    x_to: 52
+    style:
+      fill: '#87a878'
+  - id: label_policy
+    type: label
+    text: Five-year alcohol tax
+    attach_to: region_policy
+    side: below-right
+    style:
+      color: '#d0865f'
+  - id: syn_title
+    type: text
+    x: 500
+    'y': 590
+    text: What the gene can and cannot tell you
+    font_size: 30
+  - id: s1
+    type: text
+    x: 500
+    'y': 480
+    text: 'Can: the sign and scale of lifetime exposure'
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: s2
+    type: text
+    x: 500
+    'y': 400
+    text: 'Cannot: the effect of any policy you could pass'
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: s3
+    type: text
+    x: 500
+    'y': 320
+    text: 'Always: a LATE, on compliers you did not choose'
+    font_size: 24
+  - id: mark_s3
+    type: annotation
+    target: s3
+    kind: box
+commands:
+  - draw:
+      - grid_h
+      - grid_v1
+      - grid_v2
+      - t1
+      - head_1
+      - head_2
+    speak: Now that we have seen pleiotropy break the exclusion restriction, the question a ministry will actually ask you is whether an MR estimate can be taken to a policy — so let's hold the gene and the Oregon lottery to the same four-item checklist.
+  - draw:
+      - r1
+      - c11
+      - c12
+    speak: 'Relevance: the Oregon draw raised Medicaid coverage by about twenty-five percentage points, and one copy of the rs671 variant roughly halves weekly drinking — both first stages are strong.'
+  - pause: 0.3
+  - draw:
+      - r2
+      - c21
+      - c22
+    speak: 'Independence: Oregon''s assignment came from a state computer in 2008, the gene''s from meiosis at conception — and nobody chose whether to enter that second draw.'
+  - pause: 0.3
+  - draw:
+      - r3
+      - c31
+      - c32
+    speak: 'Exclusion: the letter must move health only through coverage, the variant only through alcohol — and this is the door pleiotropy walks through.'
+  - pause: 0.3
+  - draw:
+      - r4
+      - c41
+      - c42
+    speak: 'Monotonicity: nobody enrolled in Medicaid because they lost the lottery, and nobody drinks more because their face turns red — no defiers on either side.'
+  - pause: 0.5
+  - draw:
+      - mark_excl
+    speak: Three of these four rungs the gene climbs more easily than the lottery does; this one it can never climb, only argue.
+    delivery: grave
+  - clear: {}
+  - draw:
+      - ax
+  - draw:
+      - curve_wt
+      - label_wt
+    speak: 'Take two men of the same cohort: the one with two functional alleles drinks more through his twenties and settles near twenty units a week.'
+  - pause: 0.3
+  - draw:
+      - curve_het
+      - label_het
+    speak: His neighbour carries the variant, flushes on the second drink, and settles at about half that — from his first drink to his last.
+  - pause: 0.3
+  - draw:
+      - region_gap
+      - label_gap
+    speak: 'So the instrument''s contrast is this entire slab: four decades at half the dose, not one year of it.'
+  - highlight:
+      target:
+        - region_gap
+      effect: glow
+    speak: Run exactly this contrast in the China Kadoorie Biobank — half a million adults — and stroke risk climbs steadily with genotype-predicted alcohol, with no protective sweet spot for moderate drinking.
+  - pause: 0.4
+  - draw:
+      - curve_policy
+      - region_policy
+      - label_policy
+    speak: 'Now the object a finance ministry actually controls: a tax that shaves five units a week off midlife drinking for five years — this thin green sliver.'
+  - point:
+      at:
+        ref: region_gap
+      gesture: circle
+    speak: 'The gene''s local average treatment effect is anything but late: it switches on before the first drink and never switches off.'
+  - clear: {}
+  - draw:
+      - syn_title
+      - s1
+    speak: What the gene can give you is the sign and the scale of lifetime exposure, uncontaminated by reverse causation or by the habits that travel with drinking.
+  - draw:
+      - s2
+    speak: What it cannot give you is a policy effect — rescaling that lifetime slab down to a five-year sliver is extrapolation, not estimation.
+  - draw:
+      - s3
+      - mark_s3
+    speak: And what it always gives you is a LATE, defined by compliers you never chose — the heterozygotes the flush actually moves, just as Oregon's estimate belonged to the quarter who enrolled.
+  - pause: 0.4
+  - speak: Nature randomizes the allele for free, and that buys independence outright; exclusion and the complier definition you still pay for — in biology, and in how far you dare carry the number.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Choosing a design, and turning an estimate into a policy
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 18 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Choosing a design, and turning an estimate into a policy'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

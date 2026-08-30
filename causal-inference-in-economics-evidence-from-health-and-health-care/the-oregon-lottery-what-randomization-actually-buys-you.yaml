@@ -1,0 +1,918 @@
+playlist:
+  title: 'The Oregon lottery: what randomization actually buys you'
+---
+title: 'Independence: (Y(1),Y(0)) ⊥ D'
+level: advanced
+voice: female
+template: equation_steps
+params:
+  title: What the lottery buys
+  steps:
+    - tex: Y_i = D_i\,Y_i(1) + (1-D_i)\,Y_i(0)
+      note: We see one outcome per person.
+    - tex: E[Y_i\mid D_i=1]-E[Y_i\mid D_i=0]=\underbrace{E[Y_i(1)-Y_i(0)\mid D_i=1]}_{\text{ATT}}+\underbrace{E[Y_i(0)\mid D_i=1]-E[Y_i(0)\mid D_i=0]}_{\text{selection bias}}
+      note: Lecture 2's decomposition.
+    - tex: \bigl(Y_i(1),\,Y_i(0)\bigr)\ \perp\ D_i
+      note: What the draw delivers.
+    - tex: E[Y_i\mid D_i=1]-E[Y_i\mid D_i=0]=E[Y_i(1)]-E[Y_i(0)]
+      note: Selection bias = 0. This is the ATE.
+elements:
+  - id: mark_ate
+    type: annotation
+    target: step_3
+    kind: box
+  - id: n_list
+    type: node
+    shape: rect
+    text: ≈90,000 signed up
+  - id: n_draw
+    type: node
+    shape: chance
+    text: Lottery
+  - id: n_treat
+    type: node
+    shape: rect
+    text: '≈30,000 drawn: D=1'
+    style:
+      color: '#2f6b8f'
+  - id: n_ctrl
+    type: node
+    shape: rect
+    text: '≈60,000 not drawn: D=0'
+    style:
+      color: '#b5482e'
+  - id: a1
+    type: arrow
+    from:
+      ref: n_list
+    to:
+      ref: n_draw
+  - id: a2
+    type: arrow
+    from:
+      ref: n_draw
+    to:
+      ref: n_treat
+    curved: true
+    style:
+      color: '#2f6b8f'
+  - id: a3
+    type: arrow
+    from:
+      ref: n_draw
+    to:
+      ref: n_ctrl
+    curved: true
+    style:
+      color: '#b5482e'
+  - id: lab_indep
+    type: label
+    text: Same distribution of Y(1), Y(0) in both arms
+    attach_to: n_draw
+    side: below
+commands:
+  - draw:
+      - title
+      - step_0
+      - note_0
+    speak: Now that we have seen Oregon draw thirty thousand names, the question is what that draw licenses you to claim — because with any other data, comparing the insured to the uninsured is a mistake, and here it is not.
+  - pause: 0.4
+  - draw:
+      - step_1
+      - note_1
+    speak: 'From Lecture 2: the raw difference in means is the effect on the treated, plus a term comparing the two groups'' untreated outcome Y_i(0).'
+  - highlight:
+      target:
+        - step_1
+      effect: glow
+    speak: That second bracket is the whole problem — the people who get insured would have had different health anyway, and no arithmetic on observed data pulls it apart from the effect.
+  - draw:
+      - step_2
+      - note_2
+    speak: 'The lottery''s entire contribution is this line: a machine that knows nothing about you assigns D, so treatment is independent of both potential outcomes.'
+  - pause: 0.3
+  - highlight:
+      target:
+        - step_2
+      effect: glow
+    speak: Far stronger than equal average age — the full joint distribution of Y(1) and Y(0) matches across arms, motivation and family support and every trait nobody wrote down included.
+  - draw:
+      - step_3
+      - note_3
+    speak: So the untreated outcome has the same expectation in both arms, the bias term is exactly zero, and a difference of raw averages is the average causal effect.
+  - draw:
+      - mark_ate
+    speak: 'No covariates, no functional form: the design is doing the identifying, and the regression is just bookkeeping.'
+    delivery: grave
+  - quiz:
+      intro: A quick check.
+      question: In the decomposition, what does independence set to zero?
+      choices:
+        - The treatment effect itself
+        - The selection-bias term
+        - The variance of Y
+      correct: 2
+      right: Independence makes the untreated outcome equal in expectation across arms, so the selection-bias term vanishes.
+      wrong: The causal effect survives; it is the comparison of untreated outcomes across the two groups that disappears.
+  - clear: {}
+    speak: Now, who exactly does that promise cover?
+  - draw:
+      - n_list
+    speak: Roughly ninety thousand low-income uninsured adults signed onto Oregon's waiting list within five weeks.
+  - draw:
+      - n_draw
+      - a1
+    speak: The state had money for about ten thousand slots, and rationed them by drawing names.
+  - draw:
+      - n_treat
+      - n_ctrl
+      - a2
+      - a3
+    parallel: true
+    speak: Thirty thousand won the chance to apply; the sixty thousand left behind became the control group.
+  - draw:
+      - lab_indep
+    speak: Since the draw ignored everything about them, both arms carry the same distribution of potential outcomes — including the traits you could never put in a regression.
+  - highlight:
+      target:
+        - n_draw
+      effect: circle
+    speak: 'And Oregon never intended an experiment: the lottery was simply the fairest way to ration scarce slots, and economists recognised a randomized trial in a bureaucratic accident.'
+  - quiz:
+      question: Why can't matching on observables promise the same thing?
+      choices:
+        - It needs a larger sample
+        - It balances only what you measured
+        - It cannot handle binary treatment
+      correct: 2
+      right: Matching balances the covariates in your dataset; the lottery balances everything, measured or not.
+      wrong: Sample size is not the issue — matching can only balance the variables you actually observed.
+      required: true
+  - speak: Randomization never makes two people alike; it makes assignment independent of who they are — and that alone turns a difference in averages into a causal effect.
+---
+title: Reading a Balance Table
+level: advanced
+voice: female
+elements:
+  - id: a_title
+    type: text
+    x: 500
+    'y': 690
+    text: 'Oregon lottery: pre-randomization characteristics'
+    font_size: 30
+  - id: a_h1
+    type: text
+    x: 230
+    'y': 620
+    text: Characteristic
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: a_h2
+    type: text
+    x: 520
+    'y': 620
+    text: Selected
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: a_h3
+    type: text
+    x: 690
+    'y': 620
+    text: Not selected
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: a_h4
+    type: text
+    x: 855
+    'y': 620
+    text: Difference
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: a_rule
+    type: path
+    points:
+      - - 60
+        - 595
+      - - 930
+        - 595
+    style:
+      color: '#8f887c'
+  - id: a_r1c1
+    type: text
+    x: 230
+    'y': 540
+    text: Female
+    font_size: 24
+  - id: a_r1c2
+    type: text
+    x: 520
+    'y': 540
+    text: '0.556'
+    font_size: 24
+  - id: a_r1c3
+    type: text
+    x: 690
+    'y': 540
+    text: '0.555'
+    font_size: 24
+  - id: a_r1c4
+    type: text
+    x: 855
+    'y': 540
+    text: '+0.001'
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: a_r2c1
+    type: text
+    x: 230
+    'y': 490
+    text: Age (years)
+    font_size: 24
+  - id: a_r2c2
+    type: text
+    x: 520
+    'y': 490
+    text: '41.2'
+    font_size: 24
+  - id: a_r2c3
+    type: text
+    x: 690
+    'y': 490
+    text: '41.3'
+    font_size: 24
+  - id: a_r2c4
+    type: text
+    x: 855
+    'y': 490
+    text: −0.1
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: a_r3c1
+    type: text
+    x: 230
+    'y': 440
+    text: Prefers English
+    font_size: 24
+  - id: a_r3c2
+    type: text
+    x: 520
+    'y': 440
+    text: '0.92'
+    font_size: 24
+  - id: a_r3c3
+    type: text
+    x: 690
+    'y': 440
+    text: '0.92'
+    font_size: 24
+  - id: a_r3c4
+    type: text
+    x: 855
+    'y': 440
+    text: '0.00'
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: a_r4c1
+    type: text
+    x: 230
+    'y': 390
+    text: Prior hospital stay
+    font_size: 24
+  - id: a_r4c2
+    type: text
+    x: 520
+    'y': 390
+    text: '0.070'
+    font_size: 24
+  - id: a_r4c3
+    type: text
+    x: 690
+    'y': 390
+    text: '0.069'
+    font_size: 24
+  - id: a_r4c4
+    type: text
+    x: 855
+    'y': 390
+    text: '+0.001'
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: a_ftest
+    type: text
+    x: 500
+    'y': 315
+    text: 'Joint F-test on all covariates: does not reject balance'
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: a_mark
+    type: annotation
+    target: a_ftest
+    kind: box
+    style:
+      color: '#2f6b8f'
+  - id: a_hh
+    type: text
+    x: 500
+    'y': 235
+    text: 'By design, one covariate is not balanced: household size'
+    font_size: 23
+    style:
+      color: '#8f887c'
+  - id: b_title
+    type: text
+    x: 500
+    'y': 690
+    text: A lottery that fails the audit (hypothetical)
+    font_size: 30
+  - id: b_h1
+    type: text
+    x: 230
+    'y': 620
+    text: Characteristic
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: b_h2
+    type: text
+    x: 520
+    'y': 620
+    text: Selected
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: b_h3
+    type: text
+    x: 690
+    'y': 620
+    text: Not selected
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: b_h4
+    type: text
+    x: 855
+    'y': 620
+    text: Difference
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: b_rule
+    type: path
+    points:
+      - - 60
+        - 595
+      - - 930
+        - 595
+    style:
+      color: '#8f887c'
+  - id: b_r1c1
+    type: text
+    x: 230
+    'y': 540
+    text: Female
+    font_size: 24
+  - id: b_r1c2
+    type: text
+    x: 520
+    'y': 540
+    text: '0.56'
+    font_size: 24
+  - id: b_r1c3
+    type: text
+    x: 690
+    'y': 540
+    text: '0.55'
+    font_size: 24
+  - id: b_r1c4
+    type: text
+    x: 855
+    'y': 540
+    text: '+0.01'
+    font_size: 24
+  - id: b_r2c1
+    type: text
+    x: 230
+    'y': 490
+    text: Age (years)
+    font_size: 24
+  - id: b_r2c2
+    type: text
+    x: 520
+    'y': 490
+    text: '38.4'
+    font_size: 24
+  - id: b_r2c3
+    type: text
+    x: 690
+    'y': 490
+    text: '42.9'
+    font_size: 24
+  - id: b_r2c4
+    type: text
+    x: 855
+    'y': 490
+    text: −4.5 ***
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: b_r3c1
+    type: text
+    x: 230
+    'y': 440
+    text: Prior hospital stay
+    font_size: 24
+  - id: b_r3c2
+    type: text
+    x: 520
+    'y': 440
+    text: '0.041'
+    font_size: 24
+  - id: b_r3c3
+    type: text
+    x: 690
+    'y': 440
+    text: '0.089'
+    font_size: 24
+  - id: b_r3c4
+    type: text
+    x: 855
+    'y': 440
+    text: −0.048 ***
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: b_r4c1
+    type: text
+    x: 230
+    'y': 390
+    text: Signed up on day 1
+    font_size: 24
+  - id: b_r4c2
+    type: text
+    x: 520
+    'y': 390
+    text: '0.71'
+    font_size: 24
+  - id: b_r4c3
+    type: text
+    x: 690
+    'y': 390
+    text: '0.52'
+    font_size: 24
+  - id: b_r4c4
+    type: text
+    x: 855
+    'y': 390
+    text: +0.19 ***
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: b_ftest
+    type: text
+    x: 500
+    'y': 315
+    text: 'Joint F-test: p < 0.001 — balance rejected'
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: b_mark
+    type: annotation
+    target: b_ftest
+    kind: box
+    style:
+      color: '#b5482e'
+  - id: c_1
+    type: text
+    x: 500
+    'y': 520
+    text: A balance table cannot test independence.
+    font_size: 32
+  - id: c_2
+    type: text
+    x: 500
+    'y': 445
+    text: It tests whether the lottery was run as claimed.
+    font_size: 30
+    style:
+      color: '#2f6b8f'
+  - id: c_mark
+    type: annotation
+    target: c_2
+    kind: box
+    style:
+      color: '#2f6b8f'
+  - id: c_3
+    type: text
+    x: 500
+    'y': 330
+    text: Oregon, 2008 — the first randomized test of extending
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: c_4
+    type: text
+    x: 500
+    'y': 295
+    text: Medicaid coverage in roughly four decades.
+    font_size: 24
+    style:
+      color: '#8f887c'
+commands:
+  - draw:
+      - a_title
+    speak: 'Now that we have seen what independence promises, here is the catch: it is a claim about potential outcomes we never observe, so nobody can test it directly.'
+  - draw:
+      - a_h1
+      - a_h2
+      - a_h3
+      - a_h4
+      - a_rule
+    parallel: true
+    speak: So we test its observable shadow — characteristics fixed before the draw, which winning a lottery could not possibly have changed.
+  - draw:
+      - a_r1c1
+      - a_r1c2
+      - a_r1c3
+      - a_r1c4
+      - a_r2c1
+      - a_r2c2
+      - a_r2c3
+      - a_r2c4
+    parallel: true
+    speak: 'Oregon''s own audit, across the roughly seventy-five thousand people in the study: about fifty-six percent women on each side, and a mean age near forty-one on each side.'
+  - pause: 0.4
+  - draw:
+      - a_r3c1
+      - a_r3c2
+      - a_r3c3
+      - a_r3c4
+      - a_r4c1
+      - a_r4c2
+      - a_r4c3
+      - a_r4c4
+    parallel: true
+    speak: Language from the sign-up form, and hospital stays pulled from state discharge records before the draw — a measure nobody could report to their own advantage.
+  - focus:
+      target:
+        - a_r1c4
+        - a_r2c4
+        - a_r3c4
+        - a_r4c4
+    speak: 'Read down the last column: the gaps are fractions of a percentage point, and they do not all lean the same way.'
+  - draw:
+      - a_ftest
+      - a_mark
+    speak: The decisive test is joint — put every covariate together and ask whether they predict who was drawn; in Oregon, they cannot.
+  - quiz:
+      intro: Quick check.
+      question: In a lottery that truly worked, what should twenty separate balance comparisons at the 5% level show?
+      choices:
+        - All twenty balanced
+        - About one significant by chance
+        - Any starred row voids the study
+      correct: 2
+      right: About one in twenty looks significant by pure chance — which is why the joint test, not a single starred row, decides.
+      wrong: Randomization removes systematic gaps, not sampling noise.
+  - draw:
+      - a_hh
+    speak: 'One covariate is imbalanced on purpose: the lottery drew individuals but covered everyone on their household application, so larger households were likelier to win — which is why every Oregon regression controls for household size.'
+  - clear: {}
+  - draw:
+      - b_title
+      - b_h1
+      - b_h2
+      - b_h3
+      - b_h4
+      - b_rule
+    speak: Now the counterexample — a table from a lottery that did not work.
+  - draw:
+      - b_r1c1
+      - b_r1c2
+      - b_r1c3
+      - b_r1c4
+    parallel: true
+    speak: The first row looks fine, which proves nothing; one balanced characteristic is easy to come by.
+  - draw:
+      - b_r2c1
+      - b_r2c2
+      - b_r2c3
+      - b_r2c4
+      - b_r3c1
+      - b_r3c2
+      - b_r3c3
+      - b_r3c4
+      - b_r4c1
+      - b_r4c2
+      - b_r4c3
+      - b_r4c4
+    parallel: true
+    speak: But the winners are four and a half years younger, half as likely to have been hospitalized before the draw, and far likelier to have signed up on day one.
+  - highlight:
+      target:
+        - b_r2c4
+        - b_r3c4
+        - b_r4c4
+      effect: glow
+      color: '#b5482e'
+    speak: They all point the same way — toward a healthier, keener group — and each is many times its standard error; that is a pattern, not noise.
+  - draw:
+      - b_ftest
+      - b_mark
+    speak: 'The joint test rejects at p below one in a thousand: whatever sorted these two groups, it was not a coin.'
+    delivery: grave
+  - quiz:
+      intro: One more.
+      question: A balance table fails like this. What is the most likely explanation?
+      choices:
+        - The treatment effect is zero
+        - Something shaped the groups after the draw
+        - Randomization simply failed
+      correct: 2
+      right: Systematic gaps usually mean the analysed sample was formed after randomization — differential attrition, or a subgroup defined by post-draw behaviour.
+      wrong: Balance is about how the two groups were formed, not about the size of any effect.
+  - clear: {}
+  - draw:
+      - c_1
+      - c_2
+    speak: 'So the audit is narrower than it looks: it never verifies the assumption about unobservables, it only checks that the machinery behaved.'
+  - draw:
+      - c_3
+      - c_4
+    speak: That check mattered here, because Oregon in 2008 was the first randomized test of extending Medicaid coverage in about four decades — one shot, and everything downstream rests on it.
+  - draw:
+      - c_mark
+    speak: A balance table cannot prove that winners and losers had the same potential outcomes; it can only fail to catch a lottery that broke — and the joint test is what decides.
+    delivery: grave
+---
+title: What a Lottery Can and Cannot Settle
+level: advanced
+voice: female
+template: icon_array
+params:
+  total: 100
+  groups:
+    - label: Covered by the win
+      count: 25
+      color: supply
+  rest_label: Won, never covered
+  title: 100 lottery winners
+elements:
+  - id: null_title
+    type: text
+    text: Coverage and blood pressure, two years
+    x: 500
+    'y': 610
+    font_size: 30
+  - id: effect_axis
+    type: path
+    points:
+      - - 180
+        - 330
+      - - 860
+        - 330
+    style:
+      color: '#8f887c'
+  - id: axis_caption
+    type: text
+    text: Change in systolic blood pressure (mm Hg)
+    x: 500
+    'y': 288
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: zero_line
+    type: path
+    points:
+      - - 560
+        - 310
+      - - 560
+        - 500
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: zero_label
+    type: text
+    text: 0 = no effect
+    x: 650
+    'y': 518
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: est_point
+    type: shape
+    shape: circle
+    x: 530
+    'y': 420
+    radius: 10
+    style:
+      color: '#2f6b8f'
+      fill: '#2f6b8f'
+  - id: est_label
+    type: text
+    text: estimate ≈ −0.5
+    x: 420
+    'y': 372
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: ci_bar
+    type: path
+    points:
+      - - 380
+        - 420
+      - - 680
+        - 420
+    style:
+      color: '#2f6b8f'
+      stroke_width: 6
+  - id: cap_lo
+    type: path
+    points:
+      - - 380
+        - 398
+      - - 380
+        - 442
+    style:
+      color: '#2f6b8f'
+  - id: cap_hi
+    type: path
+    points:
+      - - 680
+        - 398
+      - - 680
+        - 442
+    style:
+      color: '#2f6b8f'
+  - id: label_lo
+    type: text
+    text: −3
+    x: 380
+    'y': 468
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: label_hi
+    type: text
+    text: '+2'
+    x: 680
+    'y': 468
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: width_mark
+    type: annotation
+    target: ci_bar
+    kind: box
+  - id: limit_1
+    type: text
+    text: 'Who: low-income uninsured adults, Oregon, 2008'
+    x: 500
+    'y': 205
+    font_size: 24
+  - id: limit_2
+    type: text
+    text: 'How long: two years'
+    x: 500
+    'y': 160
+    font_size: 24
+  - id: limit_3
+    type: text
+    text: 'What: the effect of the offer, scaled to compliers'
+    x: 500
+    'y': 115
+    font_size: 24
+commands:
+  - draw:
+      - title
+    speak: Now that we have the two-year results in hand, we can ask precisely what that lottery settled — and what no lottery could.
+  - draw:
+      - rest
+    speak: Here are a hundred of the roughly thirty thousand people whose names Oregon drew from the ninety thousand who signed up.
+  - pause: 0.3
+  - draw:
+      - group_0
+      - legend_0
+      - legend_rest
+    speak: 'Winning raised the chance of actually being on Medicaid by about twenty-five percentage points — one in four. The rest never enrolled: paperwork unreturned, income too high, letters gone astray.'
+  - highlight:
+      target:
+        - rest
+      effect: glow
+    speak: The draw was independent of potential outcomes, so winners and losers are exchangeable — but the draw is not coverage, and D, actually holding insurance, still depended on who followed through.
+  - quiz:
+      intro: A quick check before we go on.
+      question: So what does the raw winners-minus-losers difference estimate?
+      choices:
+        - The effect of coverage on everyone
+        - The effect of being offered coverage
+        - The effect of coverage on those who enrolled
+      correct: 2
+      right: It is the intention-to-treat effect — the effect of the offer, diluted by the three in four who never got covered.
+      wrong: 'It cannot be an effect of coverage: three quarters of these winners were never covered at all.'
+  - highlight:
+      target:
+        - group_0
+      effect: glow
+    speak: Dividing that offer effect by the quarter turns it into an effect on compliers — and multiplies the confidence interval by four along with it.
+  - pause: 0.5
+  - clear: {}
+    speak: 'Coverage moved plenty: about a third more outpatient visits, catastrophic out-of-pocket spending down four and a half points, depression screening down nine points — but on blood pressure, cholesterol and blood sugar, nothing.'
+  - draw:
+      - null_title
+      - effect_axis
+      - axis_caption
+      - zero_line
+      - zero_label
+    speak: That silence deserves a magnifying glass, so put one outcome on a line, with zero meaning nothing moved.
+  - draw:
+      - est_point
+      - est_label
+    speak: After two years and roughly twelve thousand in-person examinations, the estimate landed at about minus half a millimetre of mercury — indistinguishable from nothing.
+  - pause: 0.3
+  - draw:
+      - ci_bar
+      - cap_lo
+      - cap_hi
+      - label_lo
+      - label_hi
+    speak: But the interval around it runs from roughly minus three to plus two millimetres.
+  - quiz:
+      question: What does that interval license us to say?
+      choices:
+        - Coverage has no effect on blood pressure
+        - Coverage's effect is at most a few mm Hg
+        - The experiment was badly run
+      correct: 2
+      right: A null bounds an effect, it does not zero it — a three-point fall still sits comfortably inside this interval.
+      wrong: An interval that wide is silence, not proof of zero — it simply rules out large effects.
+  - draw:
+      - width_mark
+    speak: 'And that width is the price of one-in-four take-up: scaling the offer up by four scales the uncertainty up by four too — the precision problem this course comes back to.'
+    delivery: grave
+  - pause: 0.5
+  - draw:
+      - limit_1
+    speak: 'Randomization also says nothing about who was in the room: low-income uninsured adults who put their names on an Oregon list in 2008.'
+  - draw:
+      - limit_2
+    speak: Nor about time — two years, for conditions that do their damage over decades.
+  - draw:
+      - limit_3
+    speak: 'What it does buy is airtight: within these people and this window, the effect of the offer is measured without a single untestable assumption.'
+  - speak: That is the trade the Oregon lottery makes, and the lesson of this whole series — randomization buys certainty about a narrow question, and everything wider is an argument you still have to make.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'The RAND Health Insurance Experiment: randomizing the price of care'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 4 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: The RAND Health Insurance Experiment: randomizing the price of care'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

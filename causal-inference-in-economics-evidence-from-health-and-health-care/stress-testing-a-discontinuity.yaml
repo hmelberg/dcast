@@ -1,0 +1,895 @@
+playlist:
+  title: Stress-testing a discontinuity
+---
+title: Three Ways an RD Can Break
+level: advanced
+voice: male
+template: rd_plot
+params:
+  jump: 2
+  slope: 0.22
+  curvature: 0.006
+  noise: 0.3
+  x_label: Age (running variable)
+  cutoff_label: 65 — Medicare eligibility
+  title: The jump at 65
+elements:
+  - id: tau_mark
+    type: annotation
+    target: jump_bracket
+    kind: circle
+commands:
+  - draw:
+      - axes
+      - title
+    speak: Over the next four parts we'll take the regression discontinuity we built at age sixty-five and try, deliberately, to break it — with bandwidth, with manipulation, and with fuzziness.
+  - draw:
+      - dots_left
+      - dots_right
+    speak: Each dot is an average outcome Y for people in a narrow band of age; the running variable along the bottom is simply how old you are.
+  - draw:
+      - cutoff_line
+    speak: 'At sixty-five Medicare eligibility switches on: roughly one in eight adults just under sixty-five is uninsured, and just past that line almost nobody is.'
+  - speak: Before I fit anything — what licenses us to call the gap at that line causal, rather than age and health merely drifting together?
+  - pause: 1.8
+  - draw:
+      - fit_left
+      - fit_right
+    speak: Nothing else about you changes discontinuously on your birthday, so the smooth part of the age–outcome relationship is soaked up by these two fits, one on each side.
+  - draw:
+      - jump_bracket
+    speak: What the fits cannot explain is the vertical gap between them exactly at sixty-five — and that gap is the estimate, an average effect that lives only right at the cutoff.
+  - pause: 0.5
+  - focus:
+      target:
+        - dots_left
+        - dots_right
+    speak: 'First stress test: that estimate lives at sixty-five, but it is fitted from data reaching away from sixty-five — so how far away should we let it reach?'
+  - pause: 1.5
+  - animate:
+      curvature: 0.03
+    duration: 3
+    speak: Here is the danger — if the true relationship curves, a straight line fitted over a wide window tilts to chase the distant points, and that tilt lands inside the gap.
+  - highlight:
+      target:
+        - jump_bracket
+      effect: glow
+    speak: Narrow the window and the bias shrinks while the noise grows; widen it and you buy precision with bias — part two plots the estimate at every bandwidth at once, and a credible design is flat across a broad middle range.
+  - quiz:
+      intro: A quick check.
+      question: Why does widening the bandwidth change the estimate?
+      choices:
+        - More data means less bias
+        - It pulls in points far from 65, where a straight fit must approximate a curved relationship
+        - It moves the cutoff itself
+      correct: 2
+      right: Wider windows trade variance for bias — curvature far from the cutoff leaks into the measured jump.
+      wrong: More data does cut noise, but it is the distant points that bend the fitted line.
+  - animate:
+      curvature: 0.006
+    duration: 1.5
+    speak: Second stress test. The whole design assumes that whoever sits just below the line is a fair stand-in for whoever sits just above it.
+  - speak: So what would wreck that, if people could see the cutoff coming?
+  - pause: 1.8
+  - camera:
+      center:
+        ref: cutoff_line
+      zoom: 1.8
+    speak: They would sort — and McCrary's density test, standard since 2008, ignores the outcome entirely and simply asks whether the count of observations itself jumps at the line.
+  - camera:
+      reset: true
+    speak: A pile-up just past the threshold is the fingerprint of sorting; age passes by construction, since nobody chooses their date of birth, while reported income next to a Medicaid eligibility threshold is exactly what a household can shade.
+  - quiz:
+      question: Which running variable is vulnerable to manipulation?
+      choices:
+        - Age at your 65th birthday
+        - Reported income relative to a Medicaid eligibility threshold
+      correct: 2
+      right: Income can be timed, reported or shifted; a birthday cannot, which is why the age-65 design is unusually safe here.
+      wrong: Birthdays are fixed before anyone knows the rule — it is income that people can move across a threshold.
+  - highlight:
+      target:
+        - cutoff_line
+      effect: glow
+    speak: 'Third stress test, and the Oregon question again: does crossing the line actually make D equal one?'
+  - pause: 1.8
+  - animate:
+      jump: 0.9
+    duration: 3
+    speak: In the lottery about thirty thousand names were drawn and only around a quarter ended up enrolled — and whenever crossing raises the probability of treatment part-way rather than all the way, the jump you see in Y shrinks in exactly that proportion.
+  - point:
+      at:
+        ref: jump_bracket
+      gesture: underline
+    speak: 'So the fuzzy design divides: the jump in Y over the jump in the probability of D — a Wald ratio, which is instrumental variables with ''past the cutoff'' as the instrument.'
+  - draw:
+      - tau_mark
+    speak: And by the LATE theorem, that ratio is not the effect for everyone turning sixty-five; it is the effect for compliers at the cutoff — those who take up coverage because they crossed it.
+  - quiz:
+      question: In a fuzzy RD, the jump in Y is divided by what?
+      choices:
+        - The bandwidth
+        - The jump in the probability of treatment at the cutoff
+        - The sample size
+      correct: 2
+      right: You divide by the first-stage jump in D — the Wald ratio, delivering the LATE for compliers at the cutoff.
+      wrong: Bandwidth and sample size affect precision; the denominator is the first-stage jump in treatment probability.
+  - speak: 'One jump, three ways to break it: the window you choose, the people who choose their side, and the gap between eligibility and take-up.'
+    delivery: grave
+---
+title: How Wide a Window?
+level: advanced
+voice: male
+template: rd_plot
+params:
+  jump: 3.4
+  slope: 0.18
+  curvature: 0.026
+  noise: 0.3
+  x_label: Age
+  cutoff_label: Age 65
+  title: Any doctor visit, by age
+domain:
+  x:
+    - 0
+    - 10
+  'y':
+    - 0
+    - 7
+elements:
+  - id: sens_axes
+    type: axes
+    x_label: Bandwidth h (years either side of 65)
+    y_label: Estimated jump (pp)
+  - id: ci_hi
+    type: curve
+    expr: 3.4 - 0.02*x^2 + 2.6/sqrt(x)
+    x_from: 1
+    x_to: 10
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: ci_lo
+    type: curve
+    expr: 3.4 - 0.02*x^2 - 2.6/sqrt(x)
+    x_from: 1
+    x_to: 10
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: ci_band
+    type: region
+    between:
+      - ci_hi
+      - ci_lo
+    x_from: 1
+    x_to: 10
+    style:
+      fill: '#8f887c'
+      opacity: 0.18
+  - id: est_curve
+    type: curve
+    expr: 3.4 - 0.02*x^2
+    x_from: 1
+    x_to: 10
+    style:
+      color: '#2f6b8f'
+  - id: label_est
+    type: label
+    text: Estimate at each h
+    attach_to: est_curve
+    side: above-left
+    style:
+      color: '#2f6b8f'
+  - id: p_wide
+    type: point
+    at:
+      x: 9
+      'y': 1.78
+    style:
+      color: '#8f887c'
+  - id: label_wide
+    type: label
+    text: 'h = 9: precise, and drifting'
+    attach_to: p_wide
+    side: below-left
+    style:
+      color: '#8f887c'
+  - id: p_narrow
+    type: point
+    at:
+      x: 1
+      'y': 3.38
+    style:
+      color: '#8f887c'
+  - id: label_narrow
+    type: label
+    text: 'h = 1: right, but useless'
+    attach_to: p_narrow
+    side: above-right
+    style:
+      color: '#8f887c'
+  - id: h_opt
+    type: point
+    at:
+      x: 4
+      'y': 3.08
+    guides: true
+    style:
+      color: '#b5482e'
+  - id: label_hopt
+    type: label
+    text: h* ≈ 4 years (MSE-optimal)
+    attach_to: h_opt
+    side: above-right
+    style:
+      color: '#b5482e'
+  - id: mark_opt
+    type: annotation
+    target: label_hopt
+    kind: box
+commands:
+  - draw:
+      - axes
+      - title
+      - dots_left
+      - dots_right
+    speak: 'Now that we have seen the three ways an RD can break, here is a fourth threat that is entirely of our own making: how wide a window we look at around the cutoff.'
+  - draw:
+      - cutoff_line
+    speak: Running variable is age, the cutoff is the sixty-fifth birthday, and each dot is the share of people in an age bin reporting a doctor visit.
+  - pause: 0.3
+  - draw:
+      - fit_left
+      - fit_right
+      - jump_bracket
+    speak: Fit a line on each side, and the gap at the birthday is our estimate — about three and a half percentage points.
+  - speak: 'So here is the question: why should that single number change at all when I include fifty-five-year-olds instead of stopping at sixty-two?'
+  - pause: 1.8
+  - camera:
+      center:
+        ref: cutoff_line
+      zoom: 2.2
+    speak: Shrink the window and only the birthdays nearest the cutoff count — the most comparable people alive, but so few of them that the two fitted lines wobble with every stray dot.
+  - camera:
+      reset: true
+    speak: 'Widen it and every dot enters the regression: far more precision, but now the distant points come from a curved age profile, and a straight line through a curve leaves a gap at sixty-five that no treatment produced.'
+  - highlight:
+      target:
+        - fit_left
+        - fit_right
+      effect: glow
+    speak: Bias from curvature at one end, variance from thin data at the other — the bandwidth is simply a dial between those two errors.
+  - quiz:
+      intro: A quick check before we go on.
+      question: As you widen the bandwidth, what happens?
+      choices:
+        - Bias falls, variance rises
+        - Bias rises, variance falls
+        - Both fall together
+      correct: 2
+      right: More data tightens the confidence interval, but the distant, curved points let curvature masquerade as a jump.
+      wrong: Extra observations always buy precision — it is bias that a wider window buys you.
+  - clear: {}
+    speak: So a single estimate is not an answer. The honest thing is to show the whole dial.
+  - draw:
+      - sens_axes
+  - draw:
+      - est_curve
+      - label_est
+    speak: Bandwidth on the horizontal axis, in years either side of sixty-five; this line is the estimate you would have reported at each one.
+  - pause: 0.3
+  - draw:
+      - ci_hi
+      - ci_lo
+      - ci_band
+    speak: 'Around it, the ninety-five percent confidence interval: enormous at a bandwidth of one year, and tightening steadily as the window grows.'
+  - speak: The band keeps narrowing all the way to the right. So why not simply take the widest window and enjoy the precision?
+  - pause: 1.8
+  - draw:
+      - p_wide
+      - label_wide
+    speak: 'Because the line beneath it has walked away: at nine years the estimate has fallen to one point eight, tightly estimated and quietly wrong.'
+    delivery: grave
+  - draw:
+      - p_narrow
+      - label_narrow
+    speak: At the other end the estimate is honest but the band is so wide that almost any policy story fits inside it.
+  - pause: 0.5
+  - draw:
+      - h_opt
+      - label_hopt
+      - mark_opt
+    speak: The MSE-optimal bandwidth sits where squared bias and variance balance — here about four years — and what reassures us is not that one dot, but the flat stretch from one to five where the estimate barely moves.
+  - highlight:
+      target:
+        - h_opt
+      effect: glow
+    speak: 'One catch worth carrying: that optimal width minimizes error in the point estimate, not in the interval around it — which is why Calonico, Cattaneo and Titiunik''s robust bias-corrected intervals are now the standard report.'
+  - quiz:
+      question: Your plot is flat from h = 1 to 5, then slides steeply downward from 6 onward. What do you conclude?
+      choices:
+        - The design is broken
+        - Local estimate is stable; the drift is curvature at wide windows
+        - Report h = 9 — it is the most precise
+      correct: 2
+      right: Stability near the cutoff is the reassurance, and the far drift is exactly the curvature bias the plot is built to expose.
+      wrong: A drift only at wide bandwidths is the expected signature of curvature, not a broken design.
+  - speak: A discontinuity estimate is a function of the window you chose — so report the function, not the number.
+    delivery: grave
+---
+title: Who Chooses Which Side?
+level: advanced
+voice: male
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 100
+elements:
+  - id: ax_age
+    type: axes
+    x_label: Age (years)
+    y_label: People in the sample
+  - id: dens_age
+    type: curve
+    expr: 64 - 0.15*x
+    x_from: 10
+    x_to: 90
+    style:
+      color: '#2f6b8f'
+  - id: label_dens_age
+    type: label
+    text: Density of the running variable
+    attach_to: dens_age
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: cut_age
+    type: arrow
+    from:
+      x: 50
+      'y': 0
+    to:
+      x: 50
+      'y': 86
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_cut_age
+    type: label
+    text: '65th birthday: D_i = 1'
+    attach_to: cut_age
+    side: above
+  - id: ax_inc
+    type: axes
+    x_label: Reported income (% of the poverty line)
+    y_label: Applicants
+  - id: bench
+    type: curve
+    expr: 64 - 0.15*x
+    x_from: 10
+    x_to: 90
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_bench
+    type: label
+    text: 'No sorting: smooth'
+    attach_to: bench
+    side: above-left
+    style:
+      color: '#8f887c'
+  - id: cut_inc
+    type: arrow
+    from:
+      x: 50
+      'y': 0
+    to:
+      x: 50
+      'y': 95
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_cut_inc
+    type: label
+    text: 138% of the poverty line
+    attach_to: cut_inc
+    side: above
+  - id: dens_left
+    type: curve
+    expr: 64 - 0.15*x + 26*exp(-0.02*(x-50)*(x-50))
+    x_from: 10
+    x_to: 50
+    style:
+      color: '#b5482e'
+  - id: label_pile
+    type: label
+    text: Excess mass just below
+    attach_to: dens_left
+    side: above-left
+    style:
+      color: '#b5482e'
+  - id: dens_right
+    type: curve
+    expr: 64 - 0.15*x - 16*exp(-0.02*(x-50)*(x-50))
+    x_from: 50
+    x_to: 90
+    style:
+      color: '#b5482e'
+  - id: label_hole
+    type: label
+    text: Missing mass just above
+    attach_to: dens_right
+    side: below-right
+    style:
+      color: '#b5482e'
+  - id: crit
+    type: node
+    shape: decision
+    text: Can you move your own X across the cutoff?
+  - id: birth
+    type: node
+    shape: rect
+    text: A birthday
+    style:
+      color: '#2f6b8f'
+  - id: inc
+    type: node
+    shape: rect
+    text: A reported income
+    style:
+      color: '#b5482e'
+  - id: e_birth
+    type: edge
+    from:
+      ref: crit
+    to:
+      ref: birth
+  - id: e_inc
+    type: edge
+    from:
+      ref: crit
+    to:
+      ref: inc
+  - id: lab_birth
+    type: label
+    text: Fixed at birth — no sorting possible
+    attach_to: birth
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: lab_inc
+    type: label
+    text: Chosen, reported, and worth money
+    attach_to: inc
+    side: below
+    style:
+      color: '#b5482e'
+  - id: verdict
+    type: text
+    text: Knowledge of the line + control of your value + a payoff
+    x: 500
+    'y': 95
+    font_size: 24
+  - id: mark_verdict
+    type: annotation
+    target: verdict
+    kind: box
+commands:
+  - draw:
+      - ax_age
+    speak: 'Now that we have seen how the bandwidth changes the estimate, here is a threat no window can fix: who ends up on each side of the cutoff, and did they choose?'
+  - draw:
+      - dens_age
+      - label_dens_age
+    speak: Forget the outcome for a moment — this curve just counts people at each age around 65, the running variable itself.
+  - draw:
+      - cut_age
+      - label_cut_age
+    speak: At the 65th birthday Medicare switches on, so D_i flips from zero to one exactly at that line.
+  - speak: 'So ask the question the whole design rests on: could anyone in this picture shift themselves from the left of the line to the right?'
+  - pause: 1.8
+  - highlight:
+      target:
+        - dens_age
+      effect: glow
+    speak: Nobody can — a birthday was fixed decades before the policy existed, so the density walks straight through the cutoff with no step in it.
+  - clear: {}
+  - draw:
+      - ax_inc
+      - bench
+      - label_bench
+    speak: 'Change only the running variable: Medicaid eligibility, which turns on at 138 percent of the federal poverty line, where an unsorted count of applicants would glide through like this.'
+  - draw:
+      - cut_inc
+      - label_cut_inc
+    speak: But this cutoff is worth real money — a year of coverage — and every applicant knows exactly where it sits.
+  - speak: What should the histogram of reported income look like if households can nudge their number by a few hundred dollars?
+  - pause: 1.8
+  - draw:
+      - dens_left
+      - label_pile
+    speak: 'A pile-up right under the line: far more applicants there than any smooth density would put there.'
+  - draw:
+      - dens_right
+      - label_hole
+    speak: And it comes out of a hole just above — the same households, moved.
+  - point:
+      at:
+        x: 50
+        'y': 60
+      gesture: circle
+    speak: 'That step is what McCrary''s 2008 density test looks for: fit the density separately on each side and ask whether the jump at the cutoff is distinguishable from zero.'
+  - highlight:
+      target:
+        - dens_left
+        - dens_right
+      effect: pulse
+    speak: It never touches the outcome — it asks only whether people sorted, because if they did, those just below differ systematically from those just above.
+  - quiz:
+      intro: A quick check.
+      question: A density with a spike just below the cutoff and a dip just above suggests what?
+      choices:
+        - The treatment effect is large
+        - People sorted across the cutoff
+        - The bandwidth is too narrow
+      correct: 2
+      right: Excess mass below and missing mass above means people moved themselves across the line, so the two sides are no longer comparable.
+      wrong: The density test says nothing about the size of the effect — it is about who ended up where.
+  - clear: {}
+  - draw:
+      - crit
+    speak: The test is mechanical, but the judgement is not — before running anything, ask this of your running variable.
+  - draw:
+      - e_birth
+      - birth
+      - lab_birth
+    speak: 'A birthday answers no: your date of birth was set long before anyone wrote the rule, which is why that density was smooth by construction.'
+  - draw:
+      - e_inc
+      - inc
+      - lab_inc
+    speak: 'A reported income answers yes: self-reported, adjustable through hours or timing, and worth a year of coverage on the right side of the line.'
+  - draw:
+      - verdict
+      - mark_verdict
+    speak: Manipulation needs all three at once — knowing where the line is, controlling your own value, and a payoff for crossing it.
+  - speak: 'And a failed test is not always cheating: birth weights bunch at round numbers like 1500 grams, pure measurement heaping — while a smooth density is necessary, never sufficient, so it belongs beside covariate balance checks across the cutoff.'
+  - quiz:
+      question: Which running variable is most vulnerable to manipulation?
+      choices:
+        - Age at the 65th birthday
+        - Self-reported income at an eligibility line
+        - A lottery number drawn by the state
+      correct: 2
+      right: Self-reported income is the one applicants can both observe and adjust, with money waiting on the other side.
+      wrong: Ask which value the individual can both see and change — a birthday and a lottery draw are fixed for you.
+  - speak: 'Regression discontinuity buys randomness only if nobody chose their side: Oregon''s lottery earned that by design, a birthday earns it by biology, and a reported income never gets it for free.'
+    delivery: grave
+---
+title: Fuzzy RD, and What Survives
+level: advanced
+voice: male
+domain:
+  x:
+    - 55
+    - 75
+  'y':
+    - 0
+    - 1
+elements:
+  - id: ax1
+    type: axes
+    x_label: Age
+    y_label: Share with coverage (D)
+  - id: d_left
+    type: curve
+    expr: 0.70 + 0.005*(x-55)
+    x_from: 55
+    x_to: 65
+    style:
+      color: '#2f6b8f'
+  - id: d_right
+    type: curve
+    expr: 0.95 + 0.004*(x-65)
+    x_from: 65
+    x_to: 75
+    style:
+      color: '#2f6b8f'
+  - id: dL_pt
+    type: point
+    at:
+      x: 65
+      'y': 0.75
+    guides: true
+  - id: dR_pt
+    type: point
+    at:
+      x: 65
+      'y': 0.95
+  - id: d_gap
+    type: arrow
+    from:
+      ref: dL_pt
+    to:
+      ref: dR_pt
+    style:
+      color: '#b5482e'
+  - id: lbl_d_gap
+    type: label
+    text: Jump in D = 0.20
+    attach_to: d_gap
+    side: right
+    style:
+      color: '#b5482e'
+  - id: ax2
+    type: axes
+    x_label: Age
+    y_label: Share with a check-up (Y)
+  - id: y_left
+    type: curve
+    expr: 0.35 + 0.004*(x-55)
+    x_from: 55
+    x_to: 65
+    style:
+      color: '#8a5fa8'
+  - id: y_right
+    type: curve
+    expr: 0.43 + 0.003*(x-65)
+    x_from: 65
+    x_to: 75
+    style:
+      color: '#8a5fa8'
+  - id: yL_pt
+    type: point
+    at:
+      x: 65
+      'y': 0.39
+    guides: true
+  - id: yR_pt
+    type: point
+    at:
+      x: 65
+      'y': 0.43
+  - id: y_gap
+    type: arrow
+    from:
+      ref: yL_pt
+    to:
+      ref: yR_pt
+    style:
+      color: '#b5482e'
+  - id: lbl_y_gap
+    type: label
+    text: Jump in Y = 0.04
+    attach_to: y_gap
+    side: right
+    style:
+      color: '#b5482e'
+  - id: ratio_text
+    type: text
+    text: 0.04 ÷ 0.20 = 0.20
+    x: 740
+    'y': 620
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: ratio_box
+    type: annotation
+    target: ratio_text
+    kind: box
+  - id: iv1
+    type: text
+    text: Crossing age 65
+    x: 180
+    'y': 600
+    font_size: 26
+  - id: iv2
+    type: text
+    text: Coverage D_i
+    x: 500
+    'y': 600
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: iv3
+    type: text
+    text: Check-up Y_i
+    x: 820
+    'y': 600
+    font_size: 26
+    style:
+      color: '#8a5fa8'
+  - id: a1
+    type: arrow
+    from:
+      ref: iv1
+    to:
+      ref: iv2
+  - id: a2
+    type: arrow
+    from:
+      ref: iv2
+    to:
+      ref: iv3
+  - id: lbl_a1
+    type: label
+    text: +0.20 (first stage)
+    attach_to: a1
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: lbl_a2
+    type: label
+    text: +0.20 for compliers
+    attach_to: a2
+    side: above
+    style:
+      color: '#b5482e'
+  - id: t1
+    type: text
+    text: '1. Bandwidth: does the jump survive a narrower window?'
+    x: 500
+    'y': 430
+    font_size: 26
+  - id: t2
+    type: text
+    text: '2. Density: no pile-up on the lucky side of the line'
+    x: 500
+    'y': 355
+    font_size: 26
+  - id: t3
+    type: text
+    text: '3. Fuzzy ratio: a LATE for compliers at the cutoff'
+    x: 500
+    'y': 280
+    font_size: 26
+  - id: t4
+    type: text
+    text: An RD survives what you tried to break it with.
+    x: 500
+    'y': 160
+    font_size: 30
+    style:
+      color: '#b5482e'
+  - id: ann_t4
+    type: annotation
+    target: t4
+    kind: box
+commands:
+  - draw:
+      - ax1
+    speak: 'Now that we have seen who can choose their side of a cutoff, one crack is left: turning 65 does not actually insure everybody.'
+  - draw:
+      - d_left
+    speak: Just below the birthday, about three quarters of this population hold some coverage, drifting up gently with age.
+  - draw:
+      - d_right
+      - dL_pt
+      - dR_pt
+    speak: On the birthday that share leaps to roughly ninety-five percent — high, but nowhere near everyone.
+  - draw:
+      - d_gap
+      - lbl_d_gap
+    speak: 'The first stage is that leap: nought point two, one person in five moved into coverage by the calendar alone.'
+  - speak: So if the cutoff changes treatment for only a fifth of people, how large should the jump in the outcome be?
+  - pause: 1.8
+  - clear: {}
+  - draw:
+      - ax2
+    speak: Same age axis, now the outcome — the share who had a check-up in the past year.
+  - draw:
+      - y_left
+      - y_right
+      - yL_pt
+      - yR_pt
+    speak: It trends smoothly with age, and at 65 it steps up too — but only a little.
+  - draw:
+      - y_gap
+      - lbl_y_gap
+    speak: 'Four percentage points. That is the reduced form: the effect of the birthday, diluted, because four fifths of these people had nothing about their coverage change.'
+  - speak: Four points of outcome from twenty points of treatment — so what happened to the people the birthday actually insured?
+  - pause: 1.6
+  - draw:
+      - ratio_text
+      - ratio_box
+    speak: 'Undo the dilution by dividing: nought point nought four over nought point two — a twenty-point effect on check-ups.'
+    delivery: grave
+  - quiz:
+      intro: A quick check.
+      question: In this fuzzy design, what is being instrumented by what?
+      choices:
+        - Coverage instruments for age
+        - Crossing the cutoff instruments for coverage
+        - The outcome instruments for coverage
+      correct: 2
+      right: Crossing the cutoff is the instrument; actual coverage D_i is the endogenous treatment it shifts.
+      wrong: Ask which variable the birthday moves first — it moves coverage, not the other way round.
+  - quiz:
+      question: Whose effect is that 0.20?
+      choices:
+        - Everyone who turns 65
+        - Everyone on Medicare
+        - Those whose coverage the birthday itself changed
+      correct: 3
+      right: 'It is a LATE: the compliers at the cutoff, the fifth of people the birthday moved into coverage.'
+  - highlight:
+      target:
+        - ratio_text
+      effect: glow
+    speak: 'Oregon''s lottery had exactly this shape: only about a quarter of the thirty thousand names drawn actually enrolled, and dividing the lottery''s effect by that take-up gave the compliers'' effect there too.'
+  - clear: {}
+  - draw:
+      - iv1
+      - a1
+      - iv2
+      - a2
+      - iv3
+      - lbl_a1
+      - lbl_a2
+    speak: 'So a fuzzy RD is instrumental variables with a razor-thin instrument: the cutoff shifts coverage, coverage shifts care, and the ratio of the two jumps is the Wald estimate.'
+  - draw:
+      - t1
+    speak: 'What survives, then? First the window: an honest RD shows its estimate across many bandwidths instead of one lucky one.'
+  - draw:
+      - t2
+    speak: 'Second the density: no pile-up just past the line — you cannot move your birthday, but you can certainly move your reported income.'
+  - draw:
+      - t3
+    speak: 'Third, honesty about who is being measured: at a fuzzy cutoff, the compliers, and nobody else.'
+  - draw:
+      - t4
+      - ann_t4
+    speak: The discontinuity itself was never the evidence — what you tried to break it with is.
+    delivery: grave
+  - speak: 'Cross a line and you get a causal effect: but only near the line, only for the people the line moved, and only if nobody chose which side to stand on.'
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Building a counterfactual state: synthetic control and Proposition 99'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 15 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Building a counterfactual state: synthetic control and Proposition 99'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

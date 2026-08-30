@@ -1,0 +1,754 @@
+playlist:
+  title: 'The RAND Health Insurance Experiment: randomizing the price of care'
+---
+title: Randomizing a Price, Not a Card
+level: advanced
+voice: male
+template: generic_axes_diagram
+params:
+  x_label: 'Coinsurance: share of the bill the family pays'
+  y_label: Medical care used
+  title: Four prices, one demand curve
+  curves:
+    - id: demand
+      expression: 95 - 0.55*x + 0.0022*x^2
+      label: Demand for care
+      color: demand
+  vlines:
+    - x: 3
+      label: Free (0%)
+    - x: 25
+      label: 25%
+    - x: 50
+      label: 50%
+    - x: 95
+      label: 95%
+elements:
+  - id: n_fam
+    type: node
+    shape: rect
+    text: ≈2,750 families
+  - id: lbl_fam
+    type: label
+    text: 1974–1982 · six U.S. sites
+    attach_to: n_fam
+    side: above
+  - id: n_free
+    type: node
+    shape: rect
+    text: Free care — 0%
+    style:
+      color: '#2f6b8f'
+  - id: n_25
+    type: node
+    shape: rect
+    text: 25%
+  - id: n_50
+    type: node
+    shape: rect
+    text: 50%
+  - id: n_95
+    type: node
+    shape: rect
+    text: 95%
+    style:
+      color: '#b5482e'
+  - id: e_free
+    type: edge
+    from:
+      ref: n_fam
+    to:
+      ref: n_free
+  - id: e_25
+    type: edge
+    from:
+      ref: n_fam
+    to:
+      ref: n_25
+  - id: e_50
+    type: edge
+    from:
+      ref: n_fam
+    to:
+      ref: n_50
+  - id: e_95
+    type: edge
+    from:
+      ref: n_fam
+    to:
+      ref: n_95
+  - id: lbl_cap
+    type: label
+    text: 'Out-of-pocket capped: 5–15% of income, max $1,000 a year'
+    attach_to: n_95
+    side: below
+  - id: mark
+    type: annotation
+    target: label_demand
+    kind: box
+commands:
+  - draw:
+      - n_fam
+    speak: This series follows the one experiment that ever randomized the price of medical care — and the null result from it that is still, forty years on, the most misread sentence in health economics.
+  - pause: 1
+  - draw:
+      - lbl_fam
+    speak: Between 1974 and 1982, RAND enrolled about two thousand seven hundred and fifty families at six sites across the United States, and assigned each family by lottery for three or five years.
+  - pause: 1
+  - draw:
+      - e_free
+      - n_free
+    speak: 'One arm got everything free: the family paid nothing at all at the point of care.'
+  - pause: 1
+  - draw:
+      - e_25
+      - n_25
+      - e_50
+      - n_50
+    parallel: true
+    speak: Two more arms paid a quarter, or half, of every bill they ran up.
+  - pause: 1
+  - draw:
+      - e_95
+      - n_95
+    speak: And the last arm paid ninety-five percent — for everyday care, close to having no insurance at all.
+  - pause: 1
+  - draw:
+      - lbl_cap
+    speak: 'But never ruinously so: out-of-pocket spending was capped at five to fifteen percent of family income, and never more than a thousand dollars a year.'
+  - highlight:
+      target:
+        - n_95
+        - lbl_cap
+      effect: glow
+    speak: That cap is what made a ninety-five percent arm ethical to run — and it means the experiment priced routine care, never catastrophe.
+  - pause: 1
+  - point:
+      at:
+        ref: n_fam
+      gesture: circle
+    speak: Joseph Newhouse led the design, and RAND paid families to enrol so nobody could end up worse off than under their existing coverage; nothing on this scale has been attempted since.
+  - pause: 1
+  - focus:
+      target:
+        - n_free
+        - n_25
+        - n_50
+        - n_95
+    speak: And nobody here was uninsured — everyone held a card, and the lottery set only the price printed on it.
+  - clear: {}
+  - draw:
+      - axes
+      - x_label
+      - y_label
+  - draw:
+      - vline_0
+    speak: 'Put the price the family faces along the bottom, and the care they use up the side: the free arm sits at the far left, at zero.'
+  - pause: 1
+  - draw:
+      - vline_1
+      - vline_2
+      - vline_3
+    parallel: true
+    speak: Twenty-five percent, fifty, and ninety-five stretch out to the right.
+  - pause: 1
+  - highlight:
+      target:
+        - vline_0
+        - vline_3
+      effect: pulse
+    speak: Oregon's D_i equal to one or zero is essentially just these two ends of the axis — one gap, with nothing in between.
+  - pause: 1
+  - draw:
+      - demand
+      - label_demand
+    speak: 'With a randomized price, the estimand stops being that single difference and becomes a slope: how steeply care falls as its price climbs.'
+  - pause: 1
+  - draw:
+      - title
+      - mark
+    speak: Randomizing a price rather than a card buys a whole demand curve where a binary treatment buys one step — and next time, what those families actually spent.
+---
+title: Free Care and the Spending Response
+level: advanced
+voice: male
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 900
+elements:
+  - id: ax
+    type: axes
+    x_label: Coinsurance rate (% of the bill paid by the family)
+    y_label: Mean annual spending per person ($, early 1980s)
+  - id: y_def
+    type: text
+    text: Y_i(p) = annual spending of person i at coinsurance rate p
+    x: 600
+    'y': 165
+    font_size: 24
+  - id: p_free
+    type: point
+    at:
+      x: 0
+      'y': 750
+    style:
+      color: '#b5482e'
+  - id: label_free
+    type: label
+    text: Free care ≈ $750
+    attach_to: p_free
+    side: right
+    style:
+      color: '#b5482e'
+  - id: p_95
+    type: point
+    at:
+      x: 95
+      'y': 540
+    style:
+      color: '#2f6b8f'
+  - id: label_95
+    type: label
+    text: 95% coinsurance ≈ $540
+    attach_to: p_95
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: ref_line
+    type: curve
+    expr: 540 + 0*x
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: gap_arrow
+    type: arrow
+    from:
+      x: 10
+      'y': 545
+    to:
+      x: 10
+      'y': 745
+    style:
+      color: '#b5482e'
+  - id: label_gap
+    type: label
+    text: ≈ $210 more
+    attach_to: gap_arrow
+    side: right
+    style:
+      color: '#b5482e'
+  - id: p_25
+    type: point
+    at:
+      x: 25
+      'y': 630
+  - id: label_25
+    type: label
+    text: 25% ≈ $630
+    attach_to: p_25
+    side: below-right
+  - id: p_50
+    type: point
+    at:
+      x: 50
+      'y': 583
+  - id: label_50
+    type: label
+    text: 50% ≈ $583
+    attach_to: p_50
+    side: below-right
+  - id: demand_curve
+    type: curve
+    expr: 540 + 210*exp(-0.035*x)
+    style:
+      color: '#8a5fa8'
+  - id: elas1
+    type: text
+    text: Arc elasticity ≈ −0.2
+    x: 720
+    'y': 690
+    font_size: 28
+    style:
+      color: '#8a5fa8'
+  - id: elas2
+    type: text
+    text: 10% higher price → ~2% less care
+    x: 720
+    'y': 645
+    font_size: 22
+  - id: t_hist
+    type: text
+    text: 1974–1982  ·  six sites  ·  ≈ 2,750 families  ·  ≈ $80 million
+    x: 500
+    'y': 640
+    font_size: 26
+    style:
+      color: '#8f887c'
+  - id: t_eq
+    type: text
+    text: spending  =  episodes of care  ×  cost per episode
+    x: 500
+    'y': 520
+    font_size: 30
+  - id: t_a
+    type: text
+    text: 'episodes started:  clearly fewer when care was priced'
+    x: 500
+    'y': 420
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: t_b
+    type: text
+    text: 'cost per episode:  much the same in every arm'
+    x: 500
+    'y': 355
+    font_size: 26
+    style:
+      color: '#8f887c'
+  - id: t_close
+    type: text
+    text: Free care → 30–45% more of it,  elasticity ≈ −0.2
+    x: 500
+    'y': 220
+    font_size: 28
+  - id: ann_close
+    type: annotation
+    target: t_close
+    kind: box
+commands:
+  - draw:
+      - ax
+    speak: 'Now that we have seen how RAND randomized a price rather than a card, we can ask the question every insurance design turns on: how much more care do people use when it costs them nothing?'
+  - draw:
+      - y_def
+    speak: Write Y sub i of p for what person i would spend in a year at coinsurance rate p — the same potential outcomes as before, now indexed by a price.
+  - pause: 0.8
+  - draw:
+      - p_free
+      - label_free
+    speak: 'Start at the left: in the free-care arm, families paid nothing, and spent about seven hundred and fifty dollars per person per year, in early-eighties dollars.'
+  - pause: 0.9
+  - draw:
+      - p_95
+      - label_95
+    speak: At the other end, families paying ninety-five percent of every bill, up to a yearly out-of-pocket cap, spent about five hundred and forty.
+  - pause: 0.8
+  - draw:
+      - ref_line
+      - gap_arrow
+      - label_gap
+    speak: 'Because the arms were randomized, that difference in means is the causal effect of the price: roughly two hundred and ten dollars, between thirty and forty-five percent more care once care was free.'
+  - pause: 1
+  - draw:
+      - p_25
+      - p_50
+      - label_25
+      - label_50
+    parallel: true
+    speak: The two middle arms land in between, and not evenly — most of the fall happens in the first step away from a price of zero.
+  - pause: 0.8
+  - draw:
+      - demand_curve
+    speak: 'Join them, and the experiment has traced out something economists normally have to assume: a demand curve for medical care, drawn by random assignment.'
+  - pause: 0.8
+  - draw:
+      - elas1
+      - elas2
+    speak: Its arc elasticity is about minus zero point two — raise the price by ten percent, and the quantity of care falls by roughly two.
+  - point:
+      at:
+        ref: p_free
+      gesture: tap
+    speak: You cannot take the logarithm of a zero price, which is why this is an arc elasticity across the cost-sharing arms, not a slope at the origin.
+  - pause: 1
+  - clear: {}
+  - draw:
+      - t_hist
+    speak: 'That one number took eight years to buy: from 1974 to 1982, six sites, about two thousand seven hundred and fifty families, and roughly eighty million dollars — still the largest randomized experiment in health insurance ever run.'
+  - pause: 0.8
+  - draw:
+      - t_eq
+    speak: And it could answer a second question, because total spending is just episodes of care multiplied by the cost of each episode.
+  - draw:
+      - t_a
+    speak: Almost the whole response sits in the first factor — families facing a price simply began fewer episodes of care.
+  - pause: 0.8
+  - draw:
+      - t_b
+    speak: Once a patient was through the door, what happened next cost about the same in every arm.
+  - highlight:
+      target:
+        - t_a
+        - t_b
+      effect: glow
+    speak: Price moved the patient's decision to seek care; it barely moved the clinician's decision about what to do afterwards.
+  - pause: 0.8
+  - draw:
+      - t_close
+      - ann_close
+    speak: So free care buys thirty to forty-five percent more of it, at an elasticity near minus zero point two — a number still sitting inside today's policy simulations.
+    delivery: grave
+  - speak: 'Which sets up the harder question for next time: all that extra care — did it show up in anyone''s health?'
+---
+title: And Yet the Health Numbers Barely Moved
+level: advanced
+voice: male
+template: forest_plot
+params:
+  measure: MD
+  null_line: 0
+  title: 'Free care vs cost sharing: health at the end'
+  studies:
+    - label: General health index
+      est: 0.01
+      lo: -0.07
+      hi: 0.09
+      weight: 8
+    - label: Physical functioning
+      est: 0.02
+      lo: -0.06
+      hi: 0.1
+      weight: 7
+    - label: Mental health
+      est: -0.01
+      lo: -0.09
+      hi: 0.07
+      weight: 7
+    - label: Risk-of-dying index
+      est: 0.02
+      lo: -0.07
+      hi: 0.11
+      weight: 6
+    - label: Corrected far vision
+      est: 0.12
+      lo: 0.03
+      hi: 0.21
+      weight: 5
+    - label: Blood pressure (poor, sick)
+      est: 0.14
+      lo: 0.03
+      hi: 0.25
+      weight: 4
+elements:
+  - id: mark_bp
+    type: annotation
+    target: study_label_5
+    kind: box
+  - id: t_head
+    type: text
+    text: Who dropped out of the experiment?
+    x: 500
+    'y': 650
+    font_size: 34
+  - id: t_free
+    type: text
+    text: Free plan — almost nobody left
+    x: 500
+    'y': 545
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: t_cs
+    type: text
+    text: Cost-sharing plans — about 1 family in 15 left
+    x: 500
+    'y': 470
+    font_size: 28
+    style:
+      color: '#b5482e'
+  - id: t_q
+    type: text
+    text: If the leavers were the sicker ones, the null is flattered
+    x: 500
+    'y': 370
+    font_size: 25
+  - id: t_ans
+    type: text
+    text: 'Reopened in 2013: spending response holds, health null fragile'
+    x: 500
+    'y': 290
+    font_size: 23
+  - id: t_final
+    type: text
+    text: A flat average is not the same as no effect
+    x: 500
+    'y': 170
+    font_size: 30
+  - id: mark_final
+    type: annotation
+    target: t_final
+    kind: box
+commands:
+  - draw:
+      - axis
+      - null_line
+    speak: Now that we have seen the free plan spend some forty percent more than the plan with the biggest deductible, the question is what all that extra medicine actually bought.
+  - draw:
+      - title
+    speak: 'RAND measured health as carefully as it measured bills: physical exams, blood tests and questionnaires on thousands of participants, at entry and again at the end of their three or five years.'
+  - speak: The physician who built that measurement effort, Robert Brook, published the answer in the New England Journal of Medicine in 1983 — and it disappointed almost everyone.
+  - pause: 1
+  - draw:
+      - study_label_0
+      - study_0
+      - ci_0
+      - est_label_0
+    speak: 'Start with the headline measure, the general health index: physical, mental and social functioning rolled into one score, higher meaning healthier.'
+  - highlight:
+      target:
+        - null_line
+      effect: glow
+    speak: The dot is the free plan's effect in standard deviations, and this vertical line is zero — the two groups ending in the same average health.
+  - pause: 1
+  - draw:
+      - study_label_1
+      - study_1
+      - ci_1
+      - est_label_1
+      - study_label_2
+      - study_2
+      - ci_2
+      - est_label_2
+      - study_label_3
+      - study_3
+      - ci_3
+      - est_label_3
+    parallel: true
+    speak: 'Physical functioning, mental health, and a composite index of the risk of dying tell the same story: tiny estimates, with intervals sitting squarely on zero.'
+  - focus:
+      target:
+        - ci_0
+        - ci_1
+        - ci_2
+        - ci_3
+    speak: Remember what produced these lines — roughly a third more doctor visits and a third more hospital admissions, sustained for years, and no detectable average difference at the end of it.
+  - pause: 1
+  - draw:
+      - study_label_4
+      - study_4
+      - ci_4
+      - est_label_4
+    speak: Two measures did move. Corrected far vision improved under free care — more eye exams, and more people walking out with glasses.
+  - pause: 1
+  - draw:
+      - study_label_5
+      - study_5
+      - ci_5
+      - est_label_5
+    speak: 'And blood pressure fell: about two millimetres of mercury of diastolic pressure, concentrated among low-income participants who arrived hypertensive.'
+  - draw:
+      - mark_bp
+    speak: For that group — poor, sick, and largely undiagnosed — the implied reduction in the risk of dying was on the order of ten percent.
+    delivery: grave
+  - pause: 1
+  - clear: {}
+    speak: So the average was flat, while the effect that did exist sat in a small, identifiable corner of the sample.
+  - draw:
+      - t_head
+    speak: And there is one more reason economists still argue about this null, and it has nothing to do with medicine.
+  - pause: 1
+  - draw:
+      - t_free
+      - t_cs
+    parallel: true
+    speak: 'Families in the cost-sharing plans could walk away, and did: dropout there was roughly one family in fifteen, while almost nobody left the free plan.'
+  - draw:
+      - t_q
+    speak: That asymmetry runs exactly the wrong way — if the people who quit the paying plans were the ones falling ill, the surviving comparison flatters cost sharing.
+  - draw:
+      - t_ans
+    speak: When Aron-Dine, Einav and Finkelstein reopened the data three decades later, the spending response held up, but they argued the health result deserves more humility than its fame suggests.
+  - pause: 1
+  - draw:
+      - t_final
+      - mark_final
+    speak: 'The honest sentence is narrower than the famous one: in this population, over these years, more care left no measurable mark on average health — and the marks it did leave fell on the poorest and sickest.'
+    delivery: grave
+  - speak: Next time, why that sentence is the one people misread.
+---
+title: Reading the Sentence Correctly
+level: advanced
+voice: male
+template: argument_map
+params:
+  title: Reading the sentence
+  conclusion: '"More care did not improve average health."'
+  premises:
+    - text: D = 1 was free care, not a first insurance card.
+      objection: true
+    - text: Working-age families; nobody over 61.
+      objection: true
+    - text: 'Sick and poor did gain: blood pressure, vision, teeth.'
+      objection: true
+    - text: 'Wide intervals: a null is not a zero.'
+      objection: true
+    - text: Average over whom, and at which margin?
+      objection: true
+elements:
+  - id: t_years
+    type: text
+    x: 320
+    'y': 620
+    text: '1974–1982: 2,750 families'
+    font_size: 32
+  - id: t_arms
+    type: text
+    x: 320
+    'y': 545
+    text: 'Price arms: free, 25%, 50%, 95%'
+    font_size: 30
+  - id: t_cap
+    type: text
+    x: 320
+    'y': 470
+    text: 'Cap: $1,000 out of pocket'
+    font_size: 28
+    style:
+      color: '#8f887c'
+  - id: t_spend
+    type: text
+    x: 320
+    'y': 375
+    text: 'Free care: +45% spending'
+    font_size: 32
+    style:
+      color: '#b5482e'
+  - id: t_health
+    type: text
+    x: 320
+    'y': 300
+    text: 'Health index: no change'
+    font_size: 32
+    style:
+      color: '#2f6b8f'
+  - id: mark_conclusion
+    type: annotation
+    target: conclusion_box
+    kind: box
+commands:
+  - draw:
+      - t_years
+    speak: Now that we have watched spending soar while the health numbers sat still, we face the sentence that has been used for forty years to argue that health care barely matters — and we should read it properly before anyone builds policy on it.
+  - pause: 0.9
+  - draw:
+      - t_arms
+    speak: 'Eight years, six American sites: Joseph Newhouse and his RAND team randomized not an insurance card, but a price — free care, or coinsurance of twenty-five, fifty, or ninety-five percent.'
+  - pause: 0.9
+  - draw:
+      - t_cap
+    speak: 'A price is something you can randomize and still defend, because you can cap it: no family paid more than a thousand dollars out of pocket in a year.'
+  - pause: 0.9
+  - draw:
+      - t_spend
+    speak: Under free care, spending ran about forty-five percent above the ninety-five percent arm — demand for medical care slopes downward like everything else.
+  - pause: 0.9
+  - draw:
+      - t_health
+    speak: And on the general health index, the free-care families were, on average, indistinguishable from the cost-sharing families.
+  - pause: 1
+  - clear: {}
+  - draw:
+      - title
+      - conclusion_box
+      - conclusion_text_0
+      - conclusion_text_1
+    speak: 'Hence the quoted line: more care did not improve average health. Every word of it is doing work.'
+  - pause: 0.8
+  - draw:
+      - premise_0
+      - link_0
+    speak: 'Start with the treatment itself: D equals one is free care, and D equals zero is heavy cost sharing — not being uninsured.'
+  - highlight:
+      target:
+        - premise_0
+      effect: glow
+    speak: Oregon randomized a card; RAND randomized a price. Those are two different estimands, and only one of them speaks to coverage.
+  - pause: 0.9
+  - draw:
+      - premise_1
+      - link_1
+    speak: 'Second, the population: working-age families, nobody over sixty-one, nobody institutionalized, and almost nobody already very ill.'
+  - pause: 0.9
+  - draw:
+      - premise_2
+      - link_2
+    speak: 'Third, the outcomes — because not everything sat still: among the poorest participants in the worst health, free care lowered diastolic blood pressure by about three millimetres of mercury.'
+  - focus:
+      target:
+        - premise_2
+    speak: 'A small number with a large meaning: on the risk models of the day, roughly ten percent lower predicted mortality for that group, alongside better corrected vision and dental health.'
+  - pause: 0.9
+  - draw:
+      - premise_3
+      - link_3
+    speak: Fourth, precision. A null result is an interval, not a zero — and RAND's intervals were wide enough to hold modest real gains.
+  - highlight:
+      target:
+        - premise_3
+      effect: glow
+    speak: Three decades later, Aron-Dine, Einav and Finkelstein went back into the RAND data and argued its headline numbers rest on shakier ground than the textbooks admit.
+    delivery: soft
+  - pause: 0.9
+  - draw:
+      - premise_4
+      - link_4
+    speak: 'And fifth, the word doing the quiet work: average — over whom, and at which price margin?'
+  - pause: 0.8
+  - draw:
+      - mark_conclusion
+    speak: 'With every clause attached, the sentence becomes narrow and honest: at this margin, for these people, on these measures, the average difference was too small to see.'
+    delivery: grave
+  - pause: 1
+  - speak: 'That is the series in one line: randomizing a price tells you the effect of that price on those people — which is exactly why we now ask which average a design delivers at all.'
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Which average effect are you even estimating?
+    x: 500
+    'y': 390
+    font_size: 36
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 5 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Which average effect are you even estimating?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

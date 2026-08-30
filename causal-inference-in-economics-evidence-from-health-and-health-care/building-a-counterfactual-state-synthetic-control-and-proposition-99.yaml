@@ -1,0 +1,516 @@
+playlist:
+  title: 'Building a counterfactual state: synthetic control and Proposition 99'
+---
+title: 'One Treated Unit: Proposition 99'
+level: advanced
+voice: female
+domain:
+  x:
+    - 1970
+    - 2000
+  'y':
+    - 0
+    - 145
+elements:
+  - id: axes
+    type: axes
+    x_label: Year
+    y_label: Cigarette packs sold per person
+  - id: ca_pre
+    type: curve
+    expr: 123 - 1.6*(x-1970)
+    x_from: 1970
+    x_to: 1988
+    style:
+      color: '#b5482e'
+  - id: label_ca
+    type: label
+    text: California
+    attach_to: ca_pre
+    side: above
+    style:
+      color: '#b5482e'
+  - id: ca_post
+    type: curve
+    expr: 94 - 4.4*(x-1988)
+    x_from: 1988
+    x_to: 2000
+    style:
+      color: '#b5482e'
+  - id: prop99
+    type: point
+    at:
+      x: 1988
+      'y': 94
+    guides: true
+  - id: label_prop99
+    type: label
+    text: Proposition 99, Nov 1988
+    attach_to: prop99
+    side: above-left
+  - id: us_pre
+    type: curve
+    expr: 130 - 1.2*(x-1970)
+    x_from: 1970
+    x_to: 1988
+    style:
+      color: '#2f6b8f'
+  - id: us_post
+    type: curve
+    expr: 108 - 3.0*(x-1988)
+    x_from: 1988
+    x_to: 2000
+    style:
+      color: '#2f6b8f'
+  - id: label_us
+    type: label
+    text: Rest of the U.S. (average)
+    attach_to: us_pre
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: strike_us
+    type: annotation
+    target: label_us
+    kind: strike
+  - id: d1
+    type: curve
+    expr: 140 - 1.9*(x-1970)
+    style:
+      color: '#8f887c'
+      stroke_width: 1
+  - id: d2
+    type: curve
+    expr: 118 - 1.2*(x-1970)
+    style:
+      color: '#8f887c'
+      stroke_width: 1
+  - id: d3
+    type: curve
+    expr: 128 - 2.4*(x-1970)
+    style:
+      color: '#8f887c'
+      stroke_width: 1
+  - id: d4
+    type: curve
+    expr: 108 - 0.9*(x-1970)
+    style:
+      color: '#8f887c'
+      stroke_width: 1
+  - id: d5
+    type: curve
+    expr: 134 - 1.5*(x-1970)
+    style:
+      color: '#8f887c'
+      stroke_width: 1
+  - id: d6
+    type: curve
+    expr: 116 - 1.7*(x-1970)
+    style:
+      color: '#8f887c'
+      stroke_width: 1
+  - id: label_donors
+    type: label
+    text: 38 donor states
+    attach_to: d1
+    side: above-right
+    style:
+      color: '#8f887c'
+  - id: cf
+    type: curve
+    expr: 94 - 2.6*(x-1988)
+    x_from: 1988
+    x_to: 2000
+    style:
+      color: '#8a5fa8'
+      dash: true
+  - id: label_cf
+    type: label
+    text: Y_CA(0) = ?
+    attach_to: cf
+    side: above
+    style:
+      color: '#8a5fa8'
+  - id: mark_cf
+    type: annotation
+    target: label_cf
+    kind: box
+commands:
+  - draw:
+      - axes
+  - draw:
+      - ca_pre
+      - label_ca
+    speak: 'Over four parts we''ll build a California that never passed Proposition 99 — because without it, a state can''t tell whether its own tax worked, and this red line is what has to be imitated: packs sold per person per year.'
+  - pause: 0.3
+  - draw:
+      - prop99
+      - label_prop99
+    speak: 'In November 1988 California''s voters passed Proposition 99: twenty-five cents of extra tax on every pack, with the revenue earmarked for anti-smoking campaigns.'
+  - draw:
+      - ca_post
+    speak: Sales keep sliding afterwards — from about ninety packs a year down to roughly forty by 2000.
+  - highlight:
+      target:
+        - ca_pre
+      effect: glow
+    speak: 'The awkward part is on the left: the decline was already under way before anyone voted.'
+  - pause: 0.4
+  - draw:
+      - us_pre
+      - us_post
+      - label_us
+    speak: The instinct from lecture eleven is a comparison group — the average of the rest of the United States.
+  - point:
+      at:
+        x: 1979
+        'y': 103
+      gesture: underline
+    speak: 'And parallel trends fails in plain sight: before 1988 California already starts lower and falls faster.'
+  - draw:
+      - strike_us
+    speak: That difference-in-differences would hand Proposition 99 credit for a drop that was happening anyway.
+  - pause: 0.4
+  - erase:
+      - us_pre
+      - us_post
+      - label_us
+      - strike_us
+    parallel: true
+    speak: So widen the search instead of settling for one comparison.
+  - draw:
+      - d1
+      - d2
+      - d3
+      - d4
+      - d5
+      - d6
+      - label_donors
+    parallel: true
+    speak: Thirty-eight states ran no large tobacco-control program of their own in these years — the donor pool, a few of them shown here.
+  - focus:
+      target:
+        - ca_pre
+        - ca_post
+    speak: 'And not one of them traces California: the closest match still differs in prices, demographics, and tastes.'
+  - draw:
+      - cf
+      - label_cf
+    speak: What the question needs is this dashed path — California with D equal to zero after 1988, a potential outcome that with a single treated unit is never observed.
+  - highlight:
+      target:
+        - cf
+      effect: glow
+    speak: No state is that path. A weighted combination of thirty-eight of them might be.
+  - speak: The idea arrived in 2003, when Abadie and Gardeazabal assembled a synthetic Basque Country to price the economic cost of terrorism; California's tobacco tax became its most famous application.
+    delivery: soft
+  - draw:
+      - mark_cf
+    speak: 'So the design changes: we stop picking a comparison state and start constructing one — and next, why a blend beats both the closest match and the plain average.'
+    delivery: grave
+---
+title: Choosing the Weights
+level: advanced
+voice: female
+domain:
+  x:
+    - 1970
+    - 1990
+  'y':
+    - 60
+    - 140
+elements:
+  - id: pred_head
+    type: text
+    text: Matched over 1970–1988
+    x: 268
+    'y': 650
+    font_size: 28
+  - id: p1
+    type: text
+    text: Retail cigarette price
+    x: 268
+    'y': 592
+    font_size: 25
+  - id: p2
+    type: text
+    text: Income per capita
+    x: 268
+    'y': 548
+    font_size: 25
+  - id: p3
+    type: text
+    text: Share aged 15–24
+    x: 268
+    'y': 504
+    font_size: 25
+  - id: p4
+    type: text
+    text: Beer consumption
+    x: 268
+    'y': 460
+    font_size: 25
+  - id: p5
+    type: text
+    text: Sales in 1975, 1980, 1988
+    x: 268
+    'y': 416
+    font_size: 25
+  - id: obj1
+    type: text
+    text: Choose weights w ≥ 0 with Σ w = 1
+    x: 500
+    'y': 250
+    font_size: 26
+  - id: obj2
+    type: text
+    text: minimizing the pre-1988 distance to California
+    x: 500
+    'y': 205
+    font_size: 26
+  - id: w_head
+    type: text
+    text: Synthetic California
+    x: 742
+    'y': 650
+    font_size: 28
+    style:
+      color: '#2f6b8f'
+  - id: w1
+    type: text
+    text: Utah   0.334
+    x: 742
+    'y': 592
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: w2
+    type: text
+    text: Nevada   0.234
+    x: 742
+    'y': 548
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: w3
+    type: text
+    text: Montana   0.199
+    x: 742
+    'y': 504
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: w4
+    type: text
+    text: Colorado   0.164
+    x: 742
+    'y': 460
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: w5
+    type: text
+    text: Connecticut   0.069
+    x: 742
+    'y': 416
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: w0
+    type: text
+    text: Other 33 states   0
+    x: 742
+    'y': 352
+    font_size: 25
+    style:
+      color: '#8f887c'
+  - id: mark_zero
+    type: annotation
+    target: w0
+    kind: box
+  - id: ax
+    type: axes
+    x_label: Year
+    y_label: Packs sold per capita
+  - id: ca_curve
+    type: curve
+    expr: 123 + 1.2*(x-1970) - 0.18*(x-1970)^2
+    style:
+      color: '#b5482e'
+  - id: label_ca
+    type: label
+    text: California
+    attach_to: ca_curve
+    side: below
+    style:
+      color: '#b5482e'
+  - id: rest_curve
+    type: curve
+    expr: 122 + 0.6*(x-1970) - 0.055*(x-1970)^2
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_rest
+    type: label
+    text: Average of 38 states
+    attach_to: rest_curve
+    side: above
+    style:
+      color: '#8f887c'
+  - id: synth_curve
+    type: curve
+    expr: 124 + 1.0*(x-1970) - 0.174*(x-1970)^2
+    style:
+      color: '#2f6b8f'
+      dash: true
+  - id: label_synth
+    type: label
+    text: Synthetic California
+    attach_to: synth_curve
+    side: left
+    style:
+      color: '#2f6b8f'
+  - id: prop_line
+    type: arrow
+    from:
+      x: 1988
+      'y': 137
+    to:
+      x: 1988
+      'y': 64
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: label_prop
+    type: label
+    text: Proposition 99 (1988)
+    attach_to: prop_line
+    side: left
+    style:
+      color: '#8f887c'
+  - id: fit_note
+    type: label
+    text: The only testable claim
+    attach_to: synth_curve
+    side: above-left
+  - id: mark_fit
+    type: annotation
+    target: fit_note
+    kind: box
+commands:
+  - draw:
+      - pred_head
+    speak: Now that we have seen why a blend beats any single donor state, the weights themselves have to come from somewhere — and they come entirely from California's own record before 1989.
+  - draw:
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+    parallel: true
+    speak: Abadie, Diamond and Hainmueller had the algorithm match four predictors of smoking — the retail price of cigarettes, income per capita, the share aged fifteen to twenty-four, and beer consumption — plus California's actual sales in 1975, 1980 and 1988.
+  - draw:
+      - obj1
+      - obj2
+    speak: 'Then one line of optimization: search over all weights that are non-negative and sum to one, and keep whichever set makes that pre-treatment distance smallest.'
+  - pause: 0.4
+  - draw:
+      - w_head
+      - w1
+      - w2
+      - w3
+      - w4
+      - w5
+    speak: 'The winner: Utah with a third of the weight, Nevada a quarter, Montana a fifth, Colorado a sixth, Connecticut the small remainder — synthetic California is those five states, in those proportions.'
+  - draw:
+      - w0
+      - mark_zero
+    speak: 'The other thirty-three donors get exactly zero — because weights cannot go negative, the solution comes out sparse: a handful in, the rest out.'
+  - highlight:
+      target:
+        - w1
+        - w2
+        - w3
+        - w4
+        - w5
+      effect: glow
+    speak: And nothing here was picked for resemblance — Utah and Nevada look nothing like California politically or economically; they are in the blend only because together they reproduce its smoking history.
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - ax
+  - draw:
+      - ca_curve
+      - label_ca
+    speak: 'Here is the history that had to be reproduced: California sold about a hundred and twenty-three packs per person in 1970, and about ninety by 1988.'
+  - draw:
+      - rest_curve
+      - label_rest
+    speak: The simple average of the thirty-eight donor states starts in the same place, then drifts — sitting more than twenty packs above California by 1988.
+  - draw:
+      - synth_curve
+      - label_synth
+    speak: 'The weighted blend does what the average cannot: it tracks California almost year for year, across all nineteen pre-treatment years.'
+  - pause: 0.5
+  - draw:
+      - prop_line
+      - label_prop
+    speak: Proposition 99 passed in November 1988, raising the cigarette tax by twenty-five cents a pack from the first of January 1989.
+  - draw:
+      - fit_note
+      - mark_fit
+    speak: Everything left of that line can be checked against reality; everything right of it is an assumption we can never test.
+  - focus:
+      target:
+        - ca_curve
+        - synth_curve
+    speak: 'So the fit carries the whole credibility argument — and Abadie''s own advice is blunt: when no combination of donors tracks the pre-period closely, you should not run the method at all.'
+    delivery: grave
+  - speak: The weights are chosen by fitting a past we can see, and the counterfactual is only ever as believable as that fit.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Reading a null: power, precision, and the Oregon blood-sugar result'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 16 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Reading a null: power, precision, and the Oregon blood-sugar result'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

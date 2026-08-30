@@ -1,0 +1,1006 @@
+playlist:
+  title: 'Selection on observables: matching, regression, and the leap of faith'
+---
+title: Dropping the Lottery
+level: advanced
+voice: female
+elements:
+  - id: n_lottery
+    type: node
+    shape: chance
+    text: Oregon lottery, 2008
+    style:
+      color: '#8f887c'
+  - id: n_drawn
+    type: node
+    shape: rect
+    text: 'Drawn: ~30,000'
+    style:
+      color: '#2f6b8f'
+  - id: n_notdrawn
+    type: node
+    shape: rect
+    text: 'Not drawn: ~60,000'
+    style:
+      color: '#2f6b8f'
+  - id: e_l_d
+    type: edge
+    from:
+      ref: n_lottery
+    to:
+      ref: n_drawn
+  - id: e_l_n
+    type: edge
+    from:
+      ref: n_lottery
+    to:
+      ref: n_notdrawn
+  - id: ann_strike
+    type: annotation
+    target: n_lottery
+    kind: strike
+  - id: n_ins
+    type: node
+    shape: rect
+    text: Insured   D_i = 1
+    style:
+      color: '#b5482e'
+  - id: n_unins
+    type: node
+    shape: rect
+    text: Uninsured   D_i = 0
+    style:
+      color: '#2f6b8f'
+  - id: a_gap
+    type: arrow
+    from:
+      ref: n_unins
+    to:
+      ref: n_ins
+    curved: true
+  - id: lbl_gap
+    type: label
+    text: E[Y_i | D_i=1] − E[Y_i | D_i=0]
+    attach_to: a_gap
+    side: above
+  - id: n_x
+    type: node
+    shape: rect
+    text: 'X_i: age, sex, income, prior health'
+    style:
+      color: '#8a5fa8'
+  - id: e_x_ins
+    type: edge
+    from:
+      ref: n_x
+    to:
+      ref: n_ins
+  - id: e_x_unins
+    type: edge
+    from:
+      ref: n_x
+    to:
+      ref: n_unins
+  - id: txt_cia
+    type: text
+    text: Y_i(1), Y_i(0)  ⊥  D_i  |  X_i
+    x: 500
+    'y': 150
+    font_size: 34
+  - id: ann_cia
+    type: annotation
+    target: txt_cia
+    kind: box
+  - id: lbl_leap
+    type: label
+    text: The leap of faith
+    attach_to: txt_cia
+    side: below
+    style:
+      color: '#8a5fa8'
+commands:
+  - draw:
+      - n_lottery
+    speak: Over these four parts we ask what it costs to compare insured and uninsured people once the lottery is gone, and when conditioning on what you can measure is allowed to stand in for randomization.
+  - pause: 1
+  - draw:
+      - n_drawn
+      - e_l_d
+    speak: 'Oregon, two thousand and eight: about ninety thousand adults signed up for roughly ten thousand Medicaid slots, and the state drew about thirty thousand names — of whom only about a quarter ever enrolled.'
+  - pause: 1
+  - draw:
+      - n_notdrawn
+      - e_l_n
+    speak: The other sixty thousand were not drawn, and because the draw was random, the two groups matched on income, on prior illness, and on everything nobody ever wrote down.
+  - highlight:
+      target:
+        - n_drawn
+        - n_notdrawn
+      effect: glow
+    speak: That balance in the unmeasured is what the lottery bought, and no amount of careful data work can buy it afterwards.
+  - pause: 1
+  - draw:
+      - ann_strike
+    speak: Now set the ticket aside. Most questions in health economics arrive with no lottery attached at all.
+    delivery: grave
+  - pause: 1
+  - clear: {}
+  - draw:
+      - n_ins
+      - n_unins
+    parallel: true
+    speak: 'What remains is what we usually have: adults who hold coverage, and adults who do not.'
+  - draw:
+      - a_gap
+      - lbl_gap
+    speak: The raw comparison is this gap in average outcomes, and we already know it carries the treatment effect plus selection bias, because the two groups differ before any care is delivered.
+  - pause: 1
+  - draw:
+      - n_x
+      - e_x_ins
+      - e_x_unins
+    speak: 'The remedy on offer is to stop comparing everyone with everyone, and compare only within cells of the characteristics we observe: same age band, same sex, same income, same recorded health history.'
+  - pause: 1
+  - draw:
+      - txt_cia
+    speak: 'Written out, the claim is this: inside a cell of X, which of these people ended up insured is as good as random.'
+  - draw:
+      - ann_cia
+      - lbl_leap
+    speak: That is the leap of faith — assumed, never tested, and everything in the next three parts turns on it.
+    delivery: grave
+  - pause: 1
+  - highlight:
+      target:
+        - n_x
+      effect: glow
+    speak: 'Its strengths are real: it needs no instrument and no policy change, it runs on data you already hold, and it forces you to name in public exactly which variables your claim rests on.'
+  - highlight:
+      target:
+        - a_gap
+      effect: pulse
+    speak: 'Its weakness is just as real: if the uninsured are also more pessimistic about their health, or worse at navigating paperwork, nothing inside the data will warn you that the gap is still contaminated.'
+  - pause: 1
+  - speak: The lottery balanced everything; conditioning on X balances only what you wrote down — and that distance is what this series measures.
+---
+title: What conditional independence asserts
+level: advanced
+voice: female
+template: equation_steps
+params:
+  title: 'Selection on observables: the assumption'
+  steps:
+    - tex: (Y_i(1),\ Y_i(0)) \perp D_i
+      note: What the lottery bought.
+    - tex: (Y_i(1),\ Y_i(0)) \perp D_i \mid X_i
+      note: The leap of faith.
+    - tex: E[Y_i\mid D_i{=}1,X_i]-E[Y_i\mid D_i{=}0,X_i]=E[Y_i(1)-Y_i(0)\mid X_i]
+      note: Within a cell, the difference is causal.
+elements:
+  - id: t2_title
+    type: text
+    text: Two Oregonians, identical on X_i
+    x: 500
+    'y': 700
+    font_size: 30
+  - id: p_ins
+    type: shape
+    shape: person
+    x: 200
+    'y': 540
+  - id: p_unins
+    type: shape
+    shape: person
+    x: 800
+    'y': 540
+  - id: lab_ins
+    type: text
+    text: 'Covered:  D_i = 1'
+    x: 200
+    'y': 432
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: lab_unins
+    type: text
+    text: 'Uninsured:  D_i = 0'
+    x: 800
+    'y': 432
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: x_head
+    type: text
+    text: 'Everything X_i records:'
+    x: 500
+    'y': 640
+    font_size: 24
+  - id: x1
+    type: text
+    text: both 42 years old
+    x: 500
+    'y': 598
+    font_size: 21
+  - id: x2
+    type: text
+    text: income within dollars of the poverty line
+    x: 500
+    'y': 562
+    font_size: 21
+  - id: x3
+    type: text
+    text: neither smokes
+    x: 500
+    'y': 526
+    font_size: 21
+  - id: x4
+    type: text
+    text: same county, same diagnoses on file
+    x: 500
+    'y': 490
+    font_size: 21
+  - id: sep
+    type: path
+    points:
+      - - 120
+        - 400
+      - - 880
+        - 400
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: q_text
+    type: text
+    text: So why is only one of them covered?
+    x: 500
+    'y': 355
+    font_size: 27
+  - id: r1
+    type: text
+    text: Heard about the program at a clinic
+    x: 500
+    'y': 295
+    font_size: 22
+  - id: r2
+    type: text
+    text: Has felt something wrong for months
+    x: 500
+    'y': 248
+    font_size: 22
+  - id: cross2
+    type: annotation
+    target: r2
+    kind: cross
+  - id: r3
+    type: text
+    text: Expects an expensive year ahead
+    x: 500
+    'y': 201
+    font_size: 22
+  - id: cross3
+    type: annotation
+    target: r3
+    kind: cross
+  - id: t3_title
+    type: text
+    text: The leap of faith, weighed
+    x: 500
+    'y': 690
+    font_size: 30
+  - id: div
+    type: path
+    points:
+      - - 500
+        - 640
+      - - 500
+        - 410
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: s_head
+    type: text
+    text: What it does well
+    x: 265
+    'y': 610
+    font_size: 25
+    style:
+      color: '#2f6b8f'
+  - id: s1
+    type: text
+    text: Written in variables you can name
+    x: 265
+    'y': 557
+    font_size: 20
+  - id: s2
+    type: text
+    text: More defensible as X_i gets richer
+    x: 265
+    'y': 513
+    font_size: 20
+  - id: s3
+    type: text
+    text: No instrument, no lottery needed
+    x: 265
+    'y': 469
+    font_size: 20
+  - id: w_head
+    type: text
+    text: Where it breaks
+    x: 735
+    'y': 610
+    font_size: 25
+    style:
+      color: '#b5482e'
+  - id: w1
+    type: text
+    text: Nothing in the data can test it
+    x: 735
+    'y': 557
+    font_size: 20
+  - id: w2
+    type: text
+    text: Balance on X_i is built in, not evidence
+    x: 735
+    'y': 513
+    font_size: 20
+  - id: w3
+    type: text
+    text: One uncoded illness is enough
+    x: 735
+    'y': 469
+    font_size: 20
+  - id: synth
+    type: text
+    text: A claim about the people X_i cannot tell apart
+    x: 500
+    'y': 330
+    font_size: 26
+  - id: synth_box
+    type: annotation
+    target: synth
+    kind: box
+commands:
+  - draw:
+      - title
+      - step_0
+    speak: Now that we have seen the lottery dropped, everything rests on one assumption — and whether you believe it decides whether your Medicaid estimate is a causal effect or a description of who signs up.
+  - pause: 1
+  - draw:
+      - note_0
+    speak: 'This top line is what randomization had been giving us for free: treatment independent of both potential outcomes.'
+  - pause: 1
+  - draw:
+      - step_1
+      - note_1
+    speak: 'Selection on observables weakens that by exactly one symbol: the vertical bar.'
+  - highlight:
+      target:
+        - step_1
+      effect: glow
+    speak: It no longer claims the covered and the uninsured are alike; it claims that once you fix the covariates X_i, whatever is left deciding who holds coverage is unrelated to how healthy each of them would be, treated or untreated.
+  - pause: 1
+  - draw:
+      - step_2
+      - note_2
+    speak: Grant that, and the within-cell difference in average outcomes is the average treatment effect inside that cell — every matching and regression estimate in this lecture stands on this line.
+  - pause: 1
+  - speak: 'So the question is concrete: what would have to be true of Oregon''s uninsured for that bar to be earned?'
+  - clear: {}
+  - draw:
+      - t2_title
+      - p_ins
+      - lab_ins
+      - p_unins
+      - lab_unins
+    speak: 'Take two low-income adults in Oregon, outside any lottery: one is on Medicaid, the other is not.'
+  - pause: 1
+  - draw:
+      - x_head
+      - x1
+      - x2
+      - x3
+      - x4
+    speak: We match them on everything the administrative data records — both forty-two, incomes within dollars of the poverty line, neither smokes, same county, same diagnoses on file.
+  - pause: 1
+  - draw:
+      - sep
+      - q_text
+    speak: 'Then ask the only question that matters: why is one of them covered and the other not?'
+  - draw:
+      - r1
+      - r2
+      - r3
+    parallel: true
+    speak: Three honest answers — one happened to hear about the program at a clinic, one has felt something wrong for months and never been coded for it, and one is bracing for an expensive year.
+  - pause: 1
+  - draw:
+      - cross2
+      - cross3
+    speak: 'Conditional independence asserts that the last two simply never happen: inside this cell, coverage turns only on reasons of the first kind, reasons with no bearing on how sick you would be either way.'
+    delivery: grave
+  - point:
+      at:
+        ref: r3
+      gesture: underline
+    speak: 'Oregon is the standing warning: of roughly thirty thousand names drawn, only about a quarter actually enrolled, and who enrolled was anything but random — exactly the sorting this assumption declares away.'
+  - pause: 1
+  - clear: {}
+  - draw:
+      - t3_title
+      - div
+      - s_head
+      - s1
+      - s2
+      - s3
+    speak: 'In its favour: the assumption is stated entirely in variables you can name and show, and it grows more defensible the richer X_i is — years of prior claims, prior utilisation, prior diagnoses all narrow the room left for sorting.'
+  - pause: 1
+  - draw:
+      - w_head
+      - w1
+      - w2
+      - w3
+    speak: 'Against it: nothing in your data can test it, and perfect balance on X_i is manufactured by the method itself, so a beautiful balance table is evidence of arithmetic, not of the assumption.'
+  - pause: 1
+  - draw:
+      - synth
+      - synth_box
+    speak: 'Which is the sentence to leave with: conditional independence is never a claim about the variables in your table — it is a claim about the people your table cannot tell apart.'
+    delivery: grave
+---
+title: Common Support and the Vanishing Estimand
+level: advanced
+voice: female
+domain:
+  x:
+    - 0
+    - 1
+  'y':
+    - 0
+    - 4
+elements:
+  - id: ax
+    type: axes
+    x_label: Propensity score P(D=1 | X)
+    y_label: Density of applicants
+  - id: d_control
+    type: curve
+    expr: 3.4*exp(-0.5*((x-0.30)/0.15)^2)
+    style:
+      color: '#2f6b8f'
+  - id: lab_control
+    type: label
+    text: Uninsured (D=0)
+    attach_to: d_control
+    side: above-left
+    style:
+      color: '#2f6b8f'
+  - id: d_treated
+    type: curve
+    expr: 3.0*exp(-0.5*((x-0.70)/0.16)^2)
+    style:
+      color: '#b5482e'
+  - id: lab_treated
+    type: label
+    text: Insured (D=1)
+    attach_to: d_treated
+    side: above-right
+    style:
+      color: '#b5482e'
+  - id: support_arrow
+    type: arrow
+    from:
+      x: 0.24
+      'y': 3.7
+    to:
+      x: 0.8
+      'y': 3.7
+    style:
+      color: '#8f887c'
+  - id: lab_support
+    type: label
+    text: 'Common support: 0 < P(D=1 | X) < 1'
+    attach_to: support_arrow
+    side: above
+    style:
+      color: '#8f887c'
+  - id: reg_left
+    type: region
+    between:
+      - d_control
+      - d_treated
+    x_from: 0.02
+    x_to: 0.2
+    style:
+      fill: '#c96567'
+  - id: lab_left
+    type: label
+    text: No insured match
+    attach_to: reg_left
+    side: below-left
+    style:
+      color: '#c96567'
+  - id: reg_right
+    type: region
+    between:
+      - d_treated
+      - d_control
+    x_from: 0.84
+    x_to: 0.99
+    style:
+      fill: '#c96567'
+  - id: lab_right
+    type: label
+    text: No uninsured match
+    attach_to: reg_right
+    side: below-right
+    style:
+      color: '#c96567'
+  - id: n_all
+    type: node
+    shape: rect
+    text: All 90,000 applicants
+  - id: lab_ate
+    type: label
+    text: 'Target: ATE for the applicant population'
+    attach_to: n_all
+    side: above
+  - id: a_drop
+    type: arrow
+    from:
+      ref: n_all
+    to:
+      ref: n_dropped
+    style:
+      color: '#c96567'
+  - id: n_dropped
+    type: node
+    shape: rect
+    text: 20,000 off support
+    style:
+      color: '#c96567'
+  - id: lab_drop
+    type: label
+    text: Silently discarded
+    attach_to: n_dropped
+    side: below
+    style:
+      color: '#c96567'
+  - id: mark_drop
+    type: annotation
+    target: n_dropped
+    kind: cross
+  - id: a_keep
+    type: arrow
+    from:
+      ref: n_all
+    to:
+      ref: n_kept
+  - id: n_kept
+    type: node
+    shape: rect
+    text: 70,000 with a match
+    style:
+      color: '#2f6b8f'
+  - id: lab_keep
+    type: label
+    text: 'Estimand: effect for the matchable'
+    attach_to: n_kept
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: mark_keep
+    type: annotation
+    target: lab_keep
+    kind: box
+commands:
+  - draw:
+      - ax
+  - draw:
+      - d_control
+      - lab_control
+    speak: 'Now that we have seen what conditional independence asserts, here is the second requirement: line up Oregon''s ninety thousand applicants by their propensity score — the chance, given their X, of ending up insured — and the uninsured pile up on the left.'
+  - pause: 1
+  - draw:
+      - d_treated
+      - lab_treated
+    speak: 'The insured sit to the right: older, sicker, more experienced with the system — the very characteristics that carried them into coverage.'
+  - highlight:
+      target:
+        - d_control
+        - d_treated
+      effect: glow
+    speak: That single number is Rosenbaum and Rubin's trick from 1983 — with many covariates, matching on the one-dimensional propensity score does the work of matching on all of X.
+  - pause: 1
+  - draw:
+      - support_arrow
+      - lab_support
+    speak: 'Common support asks only this: that for every value of X the propensity score lies strictly between zero and one, so that both kinds of person actually exist in the data.'
+  - pause: 1
+  - draw:
+      - reg_left
+      - lab_left
+    speak: Out here are applicants whose X makes insurance so unlikely that not one insured person resembles them.
+  - draw:
+      - reg_right
+      - lab_right
+    speak: And over here, people so nearly certain to be covered that no uninsured comparison exists at all.
+  - pause: 1
+  - focus:
+      target:
+        - reg_left
+        - reg_right
+    speak: For these people the missing potential outcome is not merely unobserved — inside this dataset, it is empty.
+    delivery: grave
+  - point:
+      at:
+        ref: reg_right
+      gesture: circle
+    speak: Matching admits that and refuses to pair them; regression does not, and quietly fills the hole by extending a straight line into a region where no data lives.
+  - pause: 1
+  - clear: {}
+    speak: So suppose we do the honest thing and drop them.
+  - draw:
+      - n_all
+      - lab_ate
+    speak: We began wanting the average effect for all ninety thousand people who applied in Oregon — the same population the lottery speaks about.
+  - pause: 1
+  - draw:
+      - a_drop
+      - n_dropped
+      - lab_drop
+    speak: Say twenty thousand of them, roughly one in five, have no one on the other side to be compared with.
+  - draw:
+      - mark_drop
+    speak: They go — in a line of code that reports no error and no warning.
+  - pause: 1
+  - draw:
+      - a_keep
+      - n_kept
+      - lab_keep
+    speak: What remains is seventy thousand matchable applicants, and for them the estimate really is clean.
+  - draw:
+      - mark_keep
+    speak: 'But the estimand has moved: no longer the effect for the policy''s population, but the effect for whoever happened to have a twin.'
+    delivery: grave
+  - pause: 1
+  - highlight:
+      target:
+        - n_dropped
+      effect: pulse
+    speak: Trimming is the honest half of matching — it will not invent a counterfactual it cannot see.
+  - speak: 'The dishonest half is that this drift never enters the standard error: the confidence interval tightens beautifully around the answer to a question nobody asked.'
+  - pause: 1
+  - highlight:
+      target:
+        - lab_ate
+      effect: glow
+    speak: 'The lottery never faces this, because randomization manufactures overlap: every name drawn had comparable names left undrawn — which is exactly why we hold observational estimates up against it.'
+  - speak: Common support is a fact about your data, not an assumption about the world — and every unit you drop to satisfy it silently rewrites the question you are answering.
+    delivery: grave
+---
+title: Where They Differ, Where They Fail Together
+level: advanced
+voice: female
+domain:
+  x:
+    - 0
+    - 100
+  'y':
+    - 0
+    - 10
+elements:
+  - id: ax
+    type: axes
+    x_label: Propensity to be insured, index X
+    y_label: Annual medical spending ($1000s)
+  - id: ctrl
+    type: curve
+    expr: 1.2 + 0.02*x + 0.0003*x^2
+    x_from: 0
+    x_to: 60
+    style:
+      color: '#b5482e'
+  - id: label_ctrl
+    type: label
+    text: 'Uninsured: E[Y | X, D=0]'
+    attach_to: ctrl
+    side: below
+    style:
+      color: '#b5482e'
+  - id: treat
+    type: curve
+    expr: 2.1 + 0.02*x + 0.0003*x^2
+    x_from: 25
+    x_to: 100
+    style:
+      color: '#2f6b8f'
+  - id: label_treat
+    type: label
+    text: 'Insured: E[Y | X, D=1]'
+    attach_to: treat
+    side: above
+    style:
+      color: '#2f6b8f'
+  - id: support
+    type: region
+    between:
+      - ctrl
+      - treat
+    x_from: 25
+    x_to: 60
+    style:
+      fill: '#87a878'
+      opacity: 0.35
+  - id: label_support
+    type: label
+    text: Common support
+    attach_to: support
+    side: below
+  - id: p_c
+    type: point
+    at:
+      x: 40
+      'y': 2.48
+    style:
+      color: '#b5482e'
+  - id: p_t
+    type: point
+    at:
+      x: 40
+      'y': 3.38
+    style:
+      color: '#2f6b8f'
+  - id: match_arrow
+    type: arrow
+    from:
+      x: 40
+      'y': 2.48
+    to:
+      x: 40
+      'y': 3.38
+  - id: label_match
+    type: label
+    text: Matched comparison ≈ $900
+    attach_to: match_arrow
+    side: right
+  - id: reg_fit
+    type: curve
+    expr: 0.755 + 0.0454*x
+    x_from: 25
+    x_to: 60
+    style:
+      color: '#8a5fa8'
+  - id: label_reg
+    type: label
+    text: Regression's fitted line
+    attach_to: reg_fit
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: reg_extrap
+    type: curve
+    expr: 0.755 + 0.0454*x
+    x_from: 60
+    x_to: 100
+    style:
+      color: '#8a5fa8'
+      dash: true
+  - id: extrap_region
+    type: region
+    between:
+      - reg_extrap
+      - treat
+    x_from: 60
+    x_to: 100
+    style:
+      fill: '#c96567'
+      opacity: 0.3
+  - id: label_extrap
+    type: label
+    text: No uninsured here — extrapolation
+    attach_to: extrap_region
+    side: below
+  - id: p_true
+    type: point
+    at:
+      x: 40
+      'y': 3
+    style:
+      color: '#8f887c'
+  - id: label_true
+    type: label
+    text: Her own Y(0) — never observed
+    attach_to: p_true
+    side: left
+    style:
+      color: '#8f887c'
+  - id: bias_arrow
+    type: arrow
+    from:
+      x: 40
+      'y': 2.48
+    to:
+      x: 40
+      'y': 3
+    style:
+      color: '#c96567'
+  - id: label_bias
+    type: label
+    text: Bias ≈ $500
+    attach_to: bias_arrow
+    side: right
+    style:
+      color: '#c96567'
+  - id: effect_arrow
+    type: arrow
+    from:
+      x: 40
+      'y': 3
+    to:
+      x: 40
+      'y': 3.38
+    style:
+      color: '#87a878'
+  - id: label_effect
+    type: label
+    text: True effect ≈ $400
+    attach_to: effect_arrow
+    side: right
+    style:
+      color: '#87a878'
+  - id: cia_text
+    type: text
+    text: (Y(1), Y(0)) ⊥ D | X
+    x: 330
+    'y': 665
+    font_size: 34
+  - id: cia_note
+    type: text
+    text: Given X, who ends up insured is as good as random
+    x: 330
+    'y': 620
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: cia_box
+    type: annotation
+    target: cia_text
+    kind: box
+commands:
+  - draw:
+      - ax
+    speak: Now that we have watched the estimand shrink as unmatched units quietly leave, one practical question remains — matching or regression? — and the answer will matter less than you expect.
+  - draw:
+      - ctrl
+      - label_ctrl
+    speak: The horizontal axis is one index of everything we observe — age, income, prior diagnoses — and this red curve is average annual spending among the uninsured at each value of it.
+  - pause: 1
+  - draw:
+      - treat
+      - label_treat
+    speak: 'In blue, average spending among the insured. Look where each curve begins and ends: no uninsured person in these data sits above sixty, and hardly any insured person below twenty-five.'
+  - pause: 1
+  - draw:
+      - support
+      - label_support
+    speak: Between twenty-five and sixty both kinds of people exist — that band is the common support, the only stretch where a comparison is made rather than assumed.
+  - pause: 1
+  - draw:
+      - p_c
+      - p_t
+      - match_arrow
+      - label_match
+    speak: 'Matching lives inside it: at an index of forty, an insured person spending about three thousand four hundred dollars is set beside an uninsured twin at two thousand five hundred — a difference of roughly nine hundred.'
+  - pause: 1
+  - draw:
+      - reg_fit
+      - label_reg
+    speak: 'Regression does something else: it fits one shape through everything at once — here a straight line — and then trusts that shape.'
+  - draw:
+      - reg_extrap
+      - extrap_region
+      - label_extrap
+    speak: Including out here, where the data contain no uninsured people at all; the line simply continues, and every point on it is a counterfactual invented rather than measured.
+  - highlight:
+      target:
+        - reg_extrap
+        - extrap_region
+      effect: glow
+    speak: 'That is the honest difference: matching refuses the comparison it cannot make, while regression makes it anyway, quietly, through functional form.'
+  - focus:
+      target:
+        - support
+        - p_c
+        - p_t
+        - match_arrow
+    speak: Matching's strength is that it imposes no functional form and cannot extrapolate past the data — its cost is discarded observations, and the need for enough people to find close neighbours at every value of X.
+  - focus:
+      target:
+        - reg_fit
+        - reg_extrap
+        - extrap_region
+    speak: Regression's strength is that it uses every observation and delivers standard errors cheaply — its cost is that it weights comparisons by variance and extrapolates without ever telling you it did.
+  - clear:
+      keep:
+        - ax
+        - ctrl
+        - label_ctrl
+        - treat
+        - label_treat
+        - p_c
+        - p_t
+    speak: Now take away everything that separates them, and look at what they both stand on.
+  - pause: 1
+  - draw:
+      - p_true
+      - label_true
+    speak: 'Here is the quantity neither method can draw: what our insured person would have spent uninsured — her own Y of zero. Suppose it is three thousand, because she enrolled the month she began feeling unwell.'
+  - draw:
+      - bias_arrow
+      - label_bias
+      - effect_arrow
+      - label_effect
+    speak: 'Then the gap splits in two: about four hundred dollars of real effect, and five hundred of pure bias — even though every covariate in X matched perfectly.'
+  - pause: 1
+  - draw:
+      - cia_text
+      - cia_note
+    speak: Both methods need exactly this line — conditional on X, the potential outcomes are independent of treatment; given what we observe, who gets insured is as good as random.
+  - draw:
+      - cia_box
+    speak: 'And nothing in the data can test it: the twins agree on everything we measured, which is precisely why their disagreement on what we did not measure stays invisible.'
+    delivery: grave
+  - highlight:
+      target:
+        - cia_text
+      effect: glow
+    speak: Oregon bought that assumption rather than assuming it — about ninety thousand people signed up, thirty thousand names came out of the drum, and the draw, not the covariates, made the groups comparable.
+  - speak: So choosing between matching and regression is a choice of weighting and functional form — real, but second order; both stand or fall on the same unverifiable leap, and no richer set of controls can check it from the inside.
+    delivery: grave
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Arrows or potential outcomes? Bad controls and colliders
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 10 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Arrows or potential outcomes? Bad controls and colliders'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

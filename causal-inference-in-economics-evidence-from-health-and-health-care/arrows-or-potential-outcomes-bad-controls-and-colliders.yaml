@@ -1,0 +1,845 @@
+playlist:
+  title: Arrows or potential outcomes? Bad controls and colliders
+---
+title: Why Admission Is a Collider
+level: advanced
+voice: male
+template: causal_dag
+params:
+  nodes:
+    - name: Insurance D
+      role: exposure
+    - name: Health Y
+      role: outcome
+    - name: Sickness U
+      role: confounder
+    - name: Admitted A
+      role: collider
+  edges: Insurance D -> Health Y; Sickness U -> Health Y; Insurance D -> Admitted A; Sickness U -> Admitted A
+elements:
+  - id: claim_a
+    type: text
+    text: 'Claim 1: among the admitted, severity is held fixed.'
+    x: 500
+    'y': 715
+    font_size: 22
+    style:
+      color: '#2f6b8f'
+  - id: claim_b
+    type: text
+    text: 'Claim 2: admission is a common effect — conditioning invents an association.'
+    x: 500
+    'y': 678
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: mark_claim
+    type: annotation
+    target: claim_a
+    kind: strike
+    style:
+      color: '#b5482e'
+  - id: tbl_frame
+    type: path
+    points:
+      - - 240
+        - 300
+      - - 660
+        - 300
+      - - 660
+        - 500
+      - - 240
+        - 500
+    closed: true
+    style:
+      color: '#8f887c'
+  - id: tbl_v
+    type: path
+    points:
+      - - 450
+        - 300
+      - - 450
+        - 500
+    style:
+      color: '#8f887c'
+  - id: tbl_h
+    type: path
+    points:
+      - - 240
+        - 400
+      - - 660
+        - 400
+    style:
+      color: '#8f887c'
+  - id: tbl_caption
+    type: text
+    text: Admitted patients only (A_i = 1)
+    x: 450
+    'y': 560
+    font_size: 23
+  - id: head_d1
+    type: text
+    text: Insured (D=1)
+    x: 345
+    'y': 520
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: head_d0
+    type: text
+    text: Uninsured (D=0)
+    x: 555
+    'y': 520
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: head_u1
+    type: text
+    text: Sick U=1
+    x: 150
+    'y': 448
+    font_size: 21
+  - id: head_u0
+    type: text
+    text: Healthy U=0
+    x: 150
+    'y': 348
+    font_size: 21
+  - id: c_sick_ins
+    type: text
+    text: 1,200
+    x: 345
+    'y': 443
+    font_size: 26
+  - id: c_sick_un
+    type: text
+    text: '800'
+    x: 555
+    'y': 443
+    font_size: 26
+  - id: c_h_ins
+    type: text
+    text: 1,600
+    x: 345
+    'y': 343
+    font_size: 26
+  - id: c_h_un
+    type: text
+    text: '400'
+    x: 555
+    'y': 343
+    font_size: 26
+  - id: share_lab
+    type: text
+    text: Share sick
+    x: 150
+    'y': 263
+    font_size: 21
+  - id: share_ins
+    type: text
+    text: 43%
+    x: 345
+    'y': 263
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: share_un
+    type: text
+    text: 67%
+    x: 555
+    'y': 263
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: mean_lab
+    type: text
+    text: Mean health Y
+    x: 150
+    'y': 213
+    font_size: 21
+  - id: mean_ins
+    type: text
+    text: '60.9'
+    x: 345
+    'y': 213
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: mean_un
+    type: text
+    text: '53.3'
+    x: 555
+    'y': 213
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: gap_text
+    type: text
+    text: 'Observed gap: +7.5'
+    x: 825
+    'y': 460
+    font_size: 22
+  - id: truth_text
+    type: text
+    text: 'True effect: −2'
+    x: 825
+    'y': 400
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: po_line
+    type: text
+    text: E[Y_i(0) | D_i=1, A_i=1] = 62.9   ≠   E[Y_i(0) | D_i=0, A_i=1] = 53.3
+    x: 500
+    'y': 120
+    font_size: 24
+  - id: mark_po
+    type: annotation
+    target: po_line
+    kind: box
+commands:
+  - draw:
+      - claim_a
+    speak: 'Now that we have seen a control that makes the comparison worse, here is the defence of it: among hospital patients, severity is roughly held fixed.'
+  - draw:
+      - claim_b
+    speak: 'And here is the objection: admission is caused by both coverage and sickness, so conditioning on it manufactures a link that was never in the population.'
+  - draw:
+      - node_insurance_d
+      - node_health_y
+      - edge_0
+    speak: 'Back to Oregon: D_i is insurance coverage, handed out by lottery, Y_i is the health outcome, and this arrow is the effect we want.'
+  - draw:
+      - node_sickness_u
+      - edge_1
+    speak: Unobserved sickness U_i drives health directly — and because the lottery assigned D_i, U_i is independent of coverage in the full sample.
+  - pause: 0.3
+  - draw:
+      - node_admitted_a
+      - edge_2
+      - edge_3
+    speak: 'Admission A_i sits downstream of both: coverage lowers the price of care and raises admission, and being sick raises it too.'
+  - focus:
+      target:
+        - node_insurance_d
+        - node_admitted_a
+        - node_sickness_u
+        - edge_2
+        - edge_3
+    speak: D to A to U is a path with two arrowheads colliding at A — and a collider blocks its own path, so left alone nothing leaks through it.
+  - highlight:
+      target:
+        - node_admitted_a
+      effect: glow
+    speak: 'Conditioning on A_i opens it: once admission is fixed, learning that someone is insured tells you something about how sick they must have been to get that bed.'
+  - speak: Epidemiologists met this in 1946, when Joseph Berkson showed that studying only hospital patients can link diseases that are entirely unrelated in the general population.
+  - pause: 0.5
+  - clear:
+      keep:
+        - claim_a
+        - claim_b
+  - draw:
+      - tbl_frame
+      - tbl_v
+      - tbl_h
+  - draw:
+      - head_d1
+      - head_d0
+      - head_u1
+      - head_u0
+      - tbl_caption
+    speak: 'Put numbers on it: ten thousand insured, ten thousand uninsured, exactly two thousand genuinely sick in each arm — then keep only those admitted to hospital.'
+  - draw:
+      - c_sick_ins
+      - c_sick_un
+    speak: Of the two thousand sick, 1,200 of the insured are admitted against 800 of the uninsured — coverage buys access.
+  - draw:
+      - c_h_ins
+      - c_h_un
+    speak: 'Among the eight thousand healthy, coverage matters proportionally even more: 1,600 admissions versus 400.'
+  - draw:
+      - share_lab
+      - share_ins
+      - share_un
+    speak: 'Add the columns and the balance is gone: 43 percent of admitted insured are sick, against 67 percent of the admitted uninsured — a negative D–U association the lottery never created.'
+  - pause: 0.4
+  - draw:
+      - mean_lab
+      - mean_ins
+      - mean_un
+      - gap_text
+    speak: 'So mean health among the admitted is 60.9 for the insured and 53.3 for the uninsured: seven and a half points in insurance''s favour.'
+  - draw:
+      - truth_text
+      - mark_claim
+    speak: Yet in this data-generating process coverage lowers the index by two points in every cell — the control did not clean the comparison, it reversed its sign.
+    delivery: grave
+  - draw:
+      - po_line
+      - mark_po
+    speak: 'In potential-outcomes language: among the admitted, Y_i(0) averages 62.9 for the insured and 53.3 for the uninsured, so Y_i(0) is no longer independent of D_i.'
+  - speak: Randomization balances the whole sample; it promises nothing inside a subsample selected by a variable that treatment itself moves.
+---
+title: What the arrow sees and what it hides
+level: advanced
+voice: male
+elements:
+  - id: claim1
+    type: text
+    text: '"Arrows are just decoration."'
+    x: 250
+    'y': 705
+    font_size: 24
+  - id: strike1
+    type: annotation
+    target: claim1
+    kind: strike
+  - id: divider
+    type: path
+    points:
+      - - 500
+        - 665
+      - - 500
+        - 400
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: claim2
+    type: text
+    text: '"Potential outcomes are bookkeeping."'
+    x: 745
+    'y': 705
+    font_size: 22
+  - id: strike2
+    type: annotation
+    target: claim2
+    kind: strike
+  - id: node_D
+    type: node
+    shape: circle
+    text: Coverage D
+    x: 150
+    'y': 600
+  - id: node_Y
+    type: node
+    shape: circle
+    text: Spending Y
+    x: 430
+    'y': 600
+  - id: edge_DY
+    type: edge
+    from:
+      ref: node_D
+    to:
+      ref: node_Y
+    style:
+      color: '#2f6b8f'
+  - id: node_U
+    type: node
+    shape: circle
+    text: Severity U
+    x: 430
+    'y': 450
+  - id: edge_UY
+    type: edge
+    from:
+      ref: node_U
+    to:
+      ref: node_Y
+    style:
+      color: '#8a5fa8'
+  - id: node_A
+    type: node
+    shape: circle
+    text: Admitted A
+    x: 150
+    'y': 450
+  - id: edge_DA
+    type: edge
+    from:
+      ref: node_D
+    to:
+      ref: node_A
+    style:
+      color: '#b5482e'
+  - id: edge_UA
+    type: edge
+    from:
+      ref: node_U
+    to:
+      ref: node_A
+    style:
+      color: '#b5482e'
+  - id: box_A
+    type: annotation
+    target: node_A
+    kind: box
+  - id: eq1
+    type: text
+    text: E[Y_i | D_i=1, A_i=1] − E[Y_i | D_i=0, A_i=1]
+    x: 745
+    'y': 610
+    font_size: 20
+  - id: eq2
+    type: text
+    text: '= E[Y_i(1) − Y_i(0) | D_i=1, A_i=1]'
+    x: 745
+    'y': 555
+    font_size: 20
+  - id: eq3
+    type: text
+    text: + E[Y_i(0)|D_i=1,A_i=1] − E[Y_i(0)|D_i=0,A_i=1]
+    x: 745
+    'y': 505
+    font_size: 18
+    style:
+      color: '#b5482e'
+  - id: eq_note
+    type: text
+    text: Is this term zero? The line cannot say.
+    x: 745
+    'y': 445
+    font_size: 20
+    style:
+      color: '#8f887c'
+  - id: ap1
+    type: text
+    text: 'Angrist–Pischke: never control for an outcome of treatment.'
+    x: 500
+    'y': 600
+    font_size: 21
+  - id: ap2
+    type: text
+    text: 'Pearl: never condition on a collider on a back-door path.'
+    x: 500
+    'y': 555
+    font_size: 21
+  - id: hide_head
+    type: text
+    text: What the arrows cannot draw
+    x: 500
+    'y': 470
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: item1
+    type: text
+    text: '1. Heterogeneity: whose effect is it?'
+    x: 500
+    'y': 405
+    font_size: 21
+  - id: item2
+    type: text
+    text: '2. Monotonicity and compliers: 1 in 4 enrolled'
+    x: 500
+    'y': 350
+    font_size: 21
+  - id: item3
+    type: text
+    text: '3. Sampling variability: reading a null'
+    x: 500
+    'y': 295
+    font_size: 21
+  - id: synth
+    type: text
+    text: The graph picks the expectation; the algebra says what it averages.
+    x: 500
+    'y': 205
+    font_size: 20
+    style:
+      color: '#2f6b8f'
+commands:
+  - draw:
+      - claim1
+    speak: Now that we have seen why admission is a collider, ask which language would have caught it first — some economists say the arrows are decoration.
+  - draw:
+      - divider
+      - claim2
+    speak: Others say the potential-outcomes algebra is mere bookkeeping around a picture; let's put both to work on the same regression.
+  - draw:
+      - node_D
+      - node_Y
+      - edge_DY
+    speak: 'On the left, the graph: coverage D, spending Y, and the arrow we are actually after.'
+  - pause: 0.3
+  - draw:
+      - node_U
+      - edge_UY
+    speak: Unobserved severity U also drives spending — harmless in itself, since a lottery, not severity, decides who is offered coverage.
+  - draw:
+      - node_A
+      - edge_DA
+      - edge_UA
+    speak: 'But both of them push on admission: coverage makes a hospital stay more likely, and so does being sicker.'
+  - pause: 0.3
+  - draw:
+      - box_A
+    speak: Boxing A is exactly what running the regression on admitted patients does.
+  - focus:
+      target:
+        - node_D
+        - node_A
+        - node_U
+        - node_Y
+        - edge_DA
+        - edge_UA
+        - edge_UY
+    speak: 'And the verdict is read straight off the path: D into A, back out to U, on to Y.'
+  - draw:
+      - eq1
+    speak: 'On the right, the same restriction written in expectations: the difference in means among the admitted.'
+  - draw:
+      - eq2
+      - eq3
+    speak: Decompose it as in lecture two — the effect on the admitted, plus a gap in Y_i(0) between insured and uninsured admitted patients.
+  - draw:
+      - eq_note
+    speak: Whether that second term vanishes is a fact about the world; the notation poses the question and then goes quiet.
+  - draw:
+      - strike1
+    speak: 'So the first claim falls: the arrows deliver by inspection what the expectation can only state.'
+    delivery: grave
+  - pause: 0.5
+  - clear:
+      keep:
+        - claim1
+        - strike1
+        - claim2
+  - draw:
+      - ap1
+      - ap2
+    speak: 'The warning itself is old: never control for an outcome of treatment, never condition on a collider — two dialects of one rule, and admission is flagged by both.'
+  - pause: 0.3
+  - draw:
+      - hide_head
+      - item1
+    speak: 'Now ask the graph what it cannot draw: an arrow looks the same whether the effect is large for a few and zero for everyone else.'
+  - draw:
+      - item2
+    speak: In Oregon about thirty thousand names were drawn from ninety thousand sign-ups, and only about a quarter enrolled — compliers and monotonicity live in the potential outcomes, not on the page.
+  - draw:
+      - item3
+    speak: 'And no graph carries a standard error: reading Oregon''s null on blood sugar is a question of precision, not of paths.'
+  - draw:
+      - strike2
+    speak: So the second claim falls too — that bookkeeping is where heterogeneity, compliance and sampling variability are kept.
+    delivery: grave
+  - draw:
+      - synth
+    speak: The graph tells you which conditional expectation to look at; the potential outcomes tell you what it is an average of.
+---
+title: Substance or Language?
+level: advanced
+voice: male
+elements:
+  - id: claim_a
+    type: node
+    shape: rect
+    text: A dispute about substance
+    x: 250
+    'y': 690
+    style:
+      color: '#b5482e'
+  - id: claim_a_sub
+    type: label
+    text: The two frameworks make different causal claims
+    attach_to: claim_a
+    side: below
+    style:
+      color: '#b5482e'
+  - id: claim_b
+    type: node
+    shape: rect
+    text: A dispute about language
+    x: 745
+    'y': 690
+    style:
+      color: '#2f6b8f'
+  - id: claim_b_sub
+    type: label
+    text: Same mathematics, different cheap assumptions
+    attach_to: claim_b
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: cross_a
+    type: annotation
+    target: claim_a
+    kind: cross
+  - id: n_d
+    type: node
+    shape: circle
+    text: D
+    x: 150
+    'y': 330
+  - id: lbl_d
+    type: label
+    text: Coverage (lottery)
+    attach_to: n_d
+    side: below
+  - id: n_y
+    type: node
+    shape: circle
+    text: 'Y'
+    x: 450
+    'y': 330
+  - id: lbl_y
+    type: label
+    text: Inpatient outcome
+    attach_to: n_y
+    side: below
+  - id: e_dy
+    type: arrow
+    from:
+      ref: n_d
+    to:
+      ref: n_y
+  - id: n_u
+    type: node
+    shape: circle
+    text: U
+    x: 300
+    'y': 480
+    style:
+      color: '#8f887c'
+  - id: lbl_u
+    type: label
+    text: Severity (unobserved)
+    attach_to: n_u
+    side: above
+    style:
+      color: '#8f887c'
+  - id: e_uy
+    type: arrow
+    from:
+      ref: n_u
+    to:
+      ref: n_y
+    style:
+      color: '#8f887c'
+  - id: n_a
+    type: node
+    shape: circle
+    text: A
+    x: 300
+    'y': 180
+    style:
+      color: '#8a5fa8'
+  - id: lbl_a
+    type: label
+    text: Admitted to hospital
+    attach_to: n_a
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: e_da
+    type: arrow
+    from:
+      ref: n_d
+    to:
+      ref: n_a
+    style:
+      color: '#8a5fa8'
+  - id: e_ua
+    type: arrow
+    from:
+      ref: n_u
+    to:
+      ref: n_a
+    style:
+      color: '#8a5fa8'
+  - id: lbl_da
+    type: label
+    text: +30% admissions, year 1
+    attach_to: e_da
+    side: left
+    style:
+      color: '#b5482e'
+  - id: po_1
+    type: text
+    text: '{Y_i(1), Y_i(0)} ⟂ D_i'
+    x: 745
+    'y': 420
+    font_size: 26
+  - id: po_1_note
+    type: text
+    text: what the lottery buys
+    x: 745
+    'y': 382
+    font_size: 19
+    style:
+      color: '#8f887c'
+  - id: po_2
+    type: text
+    text: '{Y_i(1), Y_i(0)} ⟂ D_i | A_i = 1'
+    x: 745
+    'y': 300
+    font_size: 24
+  - id: po_2_note
+    type: text
+    text: ✗ fails — A is a common effect of D and U
+    x: 745
+    'y': 262
+    font_size: 19
+    style:
+      color: '#8a5fa8'
+  - id: prot_dag
+    type: node
+    shape: rect
+    text: Draw the DAG
+    x: 250
+    'y': 690
+    style:
+      color: '#8a5fa8'
+  - id: prot_dag_sub
+    type: label
+    text: Choose the conditioning set
+    attach_to: prot_dag
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: prot_po
+    type: node
+    shape: rect
+    text: Write potential outcomes
+    x: 745
+    'y': 690
+  - id: prot_po_sub
+    type: label
+    text: Define the estimand
+    attach_to: prot_po
+    side: below
+  - id: punch
+    type: text
+    text: Among the admitted, D_i ⟂ Y_i(1), Y_i(0) no longer holds
+    x: 500
+    'y': 75
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: punch_box
+    type: annotation
+    target: punch
+    kind: box
+commands:
+  - draw:
+      - claim_a
+      - claim_a_sub
+    speak: 'Now that we have seen what an arrow reveals and what it hides, the last question decides whether you must pick a side: some insist the Pearl–Rubin quarrel is substantive, that the two frameworks make genuinely different causal claims.'
+  - draw:
+      - claim_b
+      - claim_b_sub
+    speak: Others insist it is purely linguistic — identical mathematics, differing only in which assumptions each notation makes cheap to state.
+  - draw:
+      - n_d
+      - n_y
+      - e_dy
+      - lbl_d
+      - lbl_y
+    speak: 'Judge it on our running case: Oregon drew about thirty thousand names from ninety thousand on the list, so D_i, coverage, is randomized, and Y_i is an inpatient outcome.'
+  - pause: 0.3
+  - draw:
+      - n_u
+      - e_uy
+      - lbl_u
+    speak: Severity sits in no dataset, and it moves the outcome on its own.
+  - draw:
+      - n_a
+      - e_da
+      - e_ua
+      - lbl_a
+    speak: Hospital admission is caused by both — coverage raises it, severity raises it — so admission is a collider.
+  - focus:
+      target:
+        - n_a
+        - e_da
+        - e_ua
+    speak: Analysing only the admitted conditions on that collider, and inside the stratum the two parents become dependent.
+  - pause: 0.4
+  - draw:
+      - po_1
+      - po_1_note
+    speak: 'Now the same setup in the other language: the lottery buys independence of the potential outcomes from treatment.'
+  - draw:
+      - po_2
+      - po_2_note
+    speak: And conditioning on admission is precisely the failure of that same independence, given A equals one.
+  - draw:
+      - cross_a
+    speak: Every d-separation claim in the graph is a conditional-independence claim about potential outcomes — nothing here is true in one framework and false in the other, so the substantive reading does not survive.
+    delivery: grave
+  - erase:
+      - claim_a
+      - claim_a_sub
+      - claim_b
+      - claim_b_sub
+      - cross_a
+    speak: 'What differs is economy: the graph makes "which controls are safe" nearly free to state, while potential outcomes make "which average, for whom" nearly free to state — and each framework tends to under-emphasise the question the other answers cheaply.'
+  - draw:
+      - prot_dag
+      - prot_dag_sub
+    speak: 'That gives a protocol. Draw the graph for one job only: choosing the conditioning set — which covariates block back-door paths, and which open collider paths.'
+  - draw:
+      - prot_po
+      - prot_po_sub
+    speak: 'Then write potential outcomes for the other job: naming the estimand — intention-to-treat, or a LATE for lottery compliers, and the population it is defined on.'
+  - draw:
+      - lbl_da
+    speak: 'Apply it to Oregon''s admitted patients: in the first year coverage raised hospital admissions by roughly thirty percent, so that arrow into A is real and large.'
+  - highlight:
+      target:
+        - n_a
+      effect: glow
+    speak: The admitted insured therefore include marginal patients who would never have been admitted without coverage; the admitted uninsured are, on average, sicker.
+  - draw:
+      - punch
+      - punch_box
+    speak: Inside that subsample the lottery's independence is gone, and no covariate adjustment restores it, because the selection ran through a post-treatment variable.
+  - speak: Across the four parts — the control that hurts, the collider behind it, the arrow that exposes it — the graph tells you what to condition on, potential outcomes tell you what you are estimating, and the whole dispute is only about which of those questions your notation asks first.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: Difference-in-differences and the parallel trends assumption
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 11 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Difference-in-differences and the parallel trends assumption'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

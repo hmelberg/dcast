@@ -1,0 +1,182 @@
+playlist:
+  title: Which average effect are you even estimating?
+---
+title: Three Estimands, One Lottery
+level: advanced
+voice: female
+template: equation_steps
+params:
+  title: Three estimands, one lottery
+  steps:
+    - tex: \tau_i = Y_i(1) - Y_i(0)
+      note: Observed for nobody.
+    - tex: ATE = E[\tau_i]
+      note: All low-income Oregon adults
+    - tex: ATT = E[\tau_i \mid D_i = 1]
+      note: The ~10,000 enrolled
+    - tex: ATU = E[\tau_i \mid D_i = 0]
+      note: Everyone still uninsured
+commands:
+  - draw:
+      - title
+      - step_0
+      - note_0
+    speak: Before a state can price a Medicaid expansion it has to know whose effect it is buying — and this series shows that Oregon's lottery delivers at least three answers, starting from an individual effect observed for exactly zero people.
+  - draw:
+      - step_1
+      - note_1
+    speak: Average tau over every low-income Oregon adult — including the ninety thousand who never applied's neighbours who did not — and you have the ATE.
+  - draw:
+      - step_2
+      - note_2
+    speak: Condition on D equals one, the roughly ten thousand who actually enrolled, and the same lottery yields the ATT instead.
+  - pause: 0.3
+  - draw:
+      - step_3
+      - note_3
+    speak: The ATU covers those still uninsured, and the ATE is only the population-weighted average of the two.
+  - highlight:
+      target:
+        - step_2
+        - step_3
+      effect: glow
+    speak: An expansion that enrolls the never-applied is buying the ATU — so the policy-relevant number is the one the experiment reports least often.
+    delivery: grave
+---
+title: When ATT and ATE come apart
+level: advanced
+voice: female
+template: equation_steps
+params:
+  title: ATE = π·ATT + (1−π)·ATU
+  steps:
+    - tex: \text{ATE}=E[Y_i(1)-Y_i(0)]
+      note: Everyone eligible, covered or not.
+    - tex: \text{ATE}=\pi\,\text{ATT}+(1-\pi)\,\text{ATU}
+      note: π = share who take up D_i = 1
+    - tex: \text{ATE}-\text{ATT}=(1-\pi)\big(\text{ATU}-\text{ATT}\big)
+      note: Zero only if effects don't vary with take-up.
+elements:
+  - id: mark
+    type: annotation
+    target: step_2
+    kind: box
+commands:
+  - draw:
+      - title
+      - step_0
+      - note_0
+    speak: 'Now that the lottery has separated our three estimands, one choice remains: which population average a state expanding Medicaid should actually be quoting.'
+  - draw:
+      - step_1
+      - note_1
+    speak: The ATE is only a weighted average — a share π who take up coverage carrying the effect on the treated, the rest carrying the effect on the untreated.
+  - pause: 0.3
+  - draw:
+      - step_2
+      - note_2
+    speak: 'So the two coincide only under homogeneous effects, or when the gain from coverage is uncorrelated with who enrols — and Oregon''s ninety thousand applicants were a self-selected slice: sicker, poorer, and considerably more motivated to sign up.'
+  - highlight:
+      target:
+        - step_2
+      effect: glow
+    speak: 'Which makes that correlation the whole problem: the treated are exactly the people whose effect we have least reason to think is typical.'
+  - draw:
+      - mark
+    speak: An expansion buys coverage for those not yet enrolled — so the number it needs sits on the ATU side; the ATT is the effect on the ones it never had to persuade.
+    delivery: grave
+---
+title: Internally valid, externally wrong
+level: advanced
+voice: female
+template: generic_axes_diagram
+params:
+  title: Internally valid, externally wrong
+  x_label: Individual treatment effect τᵢ = Yᵢ(1) − Yᵢ(0)
+  y_label: Density of τᵢ in the population
+  curves:
+    - id: oregon
+      label: Oregon lottery population
+      expression: 70*exp(-((x-32)^2)/180)
+      color: supply
+    - id: next
+      label: Next state's expansion population
+      expression: 52*exp(-((x-62)^2)/330)
+      color: demand
+  vlines:
+    - x: 32
+      label: Oregon estimate
+    - x: 62
+      label: What the next state would get
+commands:
+  - draw:
+      - axes
+      - x_label
+      - y_label
+      - curve_oregon
+      - label_oregon
+    speak: 'Now that we have seen ATT and ATE come apart inside one population, here is the crack that decides whether a legislature elsewhere should act on Oregon at all: the lottery averages over the people Oregon actually drew — low-income uninsured adults, largely around Portland, with very thin prior access to care.'
+  - draw:
+      - vline_0
+    speak: For the mean of that distribution the estimate is unbiased, randomization guarantees it, and unbiasedness is a property of the estimator, not a promise about anywhere outside Oregon.
+  - draw:
+      - curve_next
+      - label_next
+      - vline_1
+    speak: A different state expands to a different case mix, different baseline access, a different τᵢ distribution — so the policy-relevant mean sits over here, and no amount of internal validity drags it back.
+  - highlight:
+      target:
+        - vline_0
+        - vline_1
+      effect: glow
+    speak: 'Across the three parts: the design, not the question, chooses the population — so name the population before you name the effect, and next time it narrows again, to those who actually take up the coverage they were offered.'
+    delivery: grave
+  - draw:
+      - title
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Nobody complies: intention-to-treat versus the effect of treatment'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 6 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Nobody complies: intention-to-treat versus the effect of treatment'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

@@ -1,0 +1,746 @@
+playlist:
+  title: Bad instruments, weak instruments
+---
+title: Two Ways an IV Dies
+level: advanced
+voice: male
+elements:
+  - id: title_a
+    type: text
+    text: 'Benchmark: the Oregon lottery'
+    x: 500
+    'y': 715
+    font_size: 24
+    style:
+      color: '#8f887c'
+  - id: z_or
+    type: node
+    shape: rect
+    text: 'Z: lottery draw'
+    x: 165
+    'y': 575
+    style:
+      color: '#2f6b8f'
+  - id: d_or
+    type: node
+    shape: rect
+    text: 'D: coverage'
+    x: 490
+    'y': 575
+  - id: y_or
+    type: node
+    shape: rect
+    text: 'Y: outcome'
+    x: 810
+    'y': 575
+  - id: a_zd
+    type: arrow
+    from:
+      ref: z_or
+    to:
+      ref: d_or
+  - id: la_zd
+    type: label
+    text: First stage ≈ 25 pp
+    attach_to: a_zd
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: a_dy
+    type: arrow
+    from:
+      ref: d_or
+    to:
+      ref: y_or
+  - id: a_excl
+    type: arrow
+    from:
+      ref: z_or
+    to:
+      ref: y_or
+    curved: true
+    style:
+      color: '#b5482e'
+      dash: true
+  - id: la_excl
+    type: label
+    text: Exclusion restriction
+    attach_to: a_excl
+    side: above
+    style:
+      color: '#b5482e'
+  - id: x_excl
+    type: annotation
+    target: a_excl
+    kind: cross
+  - id: title_b
+    type: text
+    text: 'The observational cousin: distance to a catheterization hospital'
+    x: 500
+    'y': 415
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: z_di
+    type: node
+    shape: rect
+    text: 'Z: extra distance'
+    x: 165
+    'y': 275
+    style:
+      color: '#2f6b8f'
+  - id: d_di
+    type: node
+    shape: rect
+    text: 'D: catheterization'
+    x: 490
+    'y': 275
+  - id: y_di
+    type: node
+    shape: rect
+    text: 'Y: mortality'
+    x: 810
+    'y': 275
+  - id: b_zd
+    type: arrow
+    from:
+      ref: z_di
+    to:
+      ref: d_di
+  - id: lb_zd
+    type: label
+    text: 'First stage: estimated, not designed'
+    attach_to: b_zd
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: b_dy
+    type: arrow
+    from:
+      ref: d_di
+    to:
+      ref: y_di
+  - id: b_excl
+    type: arrow
+    from:
+      ref: z_di
+    to:
+      ref: y_di
+    curved: true
+    style:
+      color: '#b5482e'
+      dash: true
+  - id: lb_excl
+    type: label
+    text: 'Exclusion restriction: ?'
+    attach_to: b_excl
+    side: above
+    style:
+      color: '#b5482e'
+  - id: formula
+    type: text
+    text: β_IV  =  Cov(Z, Y)  /  Cov(Z, D)
+    x: 500
+    'y': 555
+    font_size: 40
+  - id: box_invalid
+    type: node
+    shape: rect
+    text: 'Invalid: Cov(Z, U) ≠ 0'
+    x: 250
+    'y': 300
+    style:
+      color: '#b5482e'
+  - id: box_weak
+    type: node
+    shape: rect
+    text: 'Weak: Cov(Z, D) ≈ 0'
+    x: 760
+    'y': 300
+    style:
+      color: '#8a5fa8'
+  - id: arr_inv
+    type: arrow
+    from:
+      ref: formula
+    to:
+      ref: box_invalid
+    style:
+      color: '#b5482e'
+  - id: arr_weak
+    type: arrow
+    from:
+      ref: formula
+    to:
+      ref: box_weak
+    style:
+      color: '#8a5fa8'
+  - id: sub_invalid
+    type: label
+    text: Numerator contaminated
+    attach_to: box_invalid
+    side: below
+    style:
+      color: '#b5482e'
+  - id: sub_weak
+    type: label
+    text: Denominator vanishes
+    attach_to: box_weak
+    side: below
+    style:
+      color: '#8a5fa8'
+  - id: mark_formula
+    type: annotation
+    target: formula
+    kind: box
+commands:
+  - draw:
+      - title_a
+      - z_or
+    speak: Nearly every IV paper you'll referee dies in one of exactly two ways — invalid, or weak — and telling them apart decides whether you can fix it with more data or not at all.
+    voice: a
+  - draw:
+      - d_or
+      - a_zd
+      - la_zd
+    speak: 'Start from the one we trust: Oregon, 2008, thirty thousand names drawn, and being drawn raises coverage by about twenty-five percentage points.'
+    voice: b
+  - draw:
+      - y_or
+      - a_dy
+    speak: Twenty-five points on tens of thousands of people — the denominator of the IV ratio is never in doubt here.
+    voice: a
+  - draw:
+      - a_excl
+      - la_excl
+    speak: 'The second requirement is the arrow that must not exist: any route from the draw to health or spending bypassing coverage.'
+    voice: b
+  - draw:
+      - x_excl
+    speak: And Oregon gets to cross it out for free, because the draw was a random number — nothing else about you moved when your name came up.
+    voice: a
+  - pause: 0.4
+  - draw:
+      - title_b
+      - z_di
+      - d_di
+      - b_zd
+      - lb_zd
+    speak: Now the cousin. McClellan, McNeil and Newhouse, 1994, instrumented treatment intensity for elderly heart-attack patients with differential distance to a hospital that could do cardiac catheterization.
+    voice: a
+  - draw:
+      - y_di
+      - b_dy
+    speak: Patients living nearer such a hospital do get catheterized more, so a first stage exists — the design then asks what that extra intensity buys in mortality.
+    voice: b
+  - draw:
+      - b_excl
+      - lb_excl
+    speak: Nobody randomized where these patients live, though, so the arrow we just crossed out comes back with a question mark.
+    voice: a
+  - focus:
+      target:
+        - a_excl
+        - b_excl
+    speak: The two pictures are structurally identical — the whole difference between a credible design and a hopeful one is whether you can cross out that top arrow.
+    voice: b
+  - pause: 0.5
+  - clear: {}
+  - draw:
+      - formula
+    speak: 'Strip the stories away and IV is one ratio: covariance of instrument with outcome, over covariance of instrument with treatment.'
+    voice: a
+  - draw:
+      - arr_inv
+      - box_invalid
+      - sub_invalid
+    speak: Break exclusion and the numerator absorbs something that isn't a treatment effect — invalid, and no sample size on earth repairs it.
+    voice: b
+  - draw:
+      - arr_weak
+      - box_weak
+      - sub_weak
+    speak: Keep exclusion intact but let the denominator drift toward zero, and you're dividing an estimate by noise — weak.
+    voice: a
+  - highlight:
+      target:
+        - box_weak
+      effect: glow
+    speak: 'And where weak begins is genuinely unsettled: Staiger and Stock''s 1997 rule of thumb puts the first-stage F at ten, while Lee, McCrary, Moreira and Porter argued in 2022 that honest five-percent inference needs an F nearer a hundred and five — a threshold much of the published IV literature would fail.'
+    voice: b
+  - draw:
+      - mark_formula
+    speak: 'So every diagnosis in this series lives in this one ratio: a contaminated numerator, or a vanishing denominator.'
+    voice: a
+    delivery: grave
+  - speak: 'Next: the numerator — why distance is defensible, and exactly what breaks it.'
+    voice: b
+---
+title: Where F > 10 came from, and why it is too lenient
+level: advanced
+voice: male
+template: number_line
+params:
+  min: 0
+  max: 120
+  step: 10
+  points:
+    - at: 10
+      label: F = 10
+    - at: 104.7
+      label: F = 104.7
+  intervals:
+    - from: 10
+      to: 104.7
+      label: Called "strong" since 1997
+    - from: 104.7
+      to: 120
+      label: Conventional t-ratio valid
+  arrow_ops:
+    - from: 10
+      to: 104.7
+      label: the bar moved ×10
+elements:
+  - id: cov_label
+    type: label
+    text: nominal 95% CI ≈ 85% coverage
+    attach_to: pt_0
+    side: below-left
+    style:
+      color: '#b5482e'
+  - id: camp_lee
+    type: text
+    text: 'Lee et al.: inflate the SE using F (the tF fix)'
+    x: 500
+    'y': 625
+    font_size: 26
+    style:
+      color: '#2f6b8f'
+  - id: camp_ak
+    type: text
+    text: 'Angrist & Kolesár: screening on F is its own bias'
+    x: 500
+    'y': 560
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: verdict
+    type: annotation
+    target: pt_1
+    kind: circle
+commands:
+  - draw:
+      - line
+    speak: 'Now that we have seen when distance is defensible, take the second way an IV dies — honest but weak — and put on a line the one number that decides whether your IV estimate gets believed: the first-stage F.'
+    voice: a
+  - draw:
+      - tick_0
+      - tick_10
+      - tick_20
+      - tick_30
+      - tick_40
+      - tick_50
+      - tick_60
+      - tick_70
+      - tick_80
+      - tick_90
+      - tick_100
+      - tick_110
+      - tick_120
+    parallel: true
+  - point:
+      at:
+        ref: tick_120
+      gesture: tap
+    speak: 'Worth saying where Oregon sits before we start: about thirty thousand names drawn, a twenty-five point jump in coverage, tens of thousands of people — that first stage runs clean off the right-hand edge of this line.'
+    voice: b
+  - draw:
+      - pt_0
+    speak: 'The trouble is everywhere else. Here is the threshold every referee in this field knows by heart: F above ten.'
+    voice: a
+  - highlight:
+      target:
+        - pt_0
+      effect: glow
+    speak: 'Staiger and Stock, 1997 — and they wrote it as a rule of thumb: a weak first stage pulls two-stage least squares back toward OLS, and F of ten kept that bias under roughly ten percent of the OLS bias.'
+    voice: b
+  - draw:
+      - interval_0
+    speak: So everything to the right of ten acquired a name — strong — and a pass into print.
+    voice: a
+  - point:
+      at:
+        ref: pt_0
+      gesture: circle
+    speak: 'Except that criterion barely applies where we use it most: with a single instrument, 2SLS has no finite moments — no mean there to be biased — which is why Stock and Yogo could only tabulate bias-based critical values from three instruments upward.'
+    voice: b
+  - draw:
+      - cov_label
+    speak: 'Their size-based tables tell the other story: one instrument, F around ten, and a nominal five percent test can reject fifteen percent of the time — a ninety-five percent interval that covers about eighty-five.'
+    voice: a
+  - pause: 0.5
+  - draw:
+      - pt_1
+    speak: 'Which brings us to 2022. Lee, McCrary, Moreira and Porter asked the plain question: how big must F be before the conventional t-ratio, judged against 1.96, actually has five percent size?'
+    voice: b
+  - draw:
+      - hop_0
+    speak: A hundred and four point seven. Not ten.
+    voice: a
+    delivery: grave
+  - draw:
+      - interval_1
+    speak: Only out here does the interval you print mean what its label says.
+    voice: b
+  - highlight:
+      target:
+        - interval_0
+      effect: pulse
+    speak: And everything in between — which is very nearly the whole published stock of just-identified IV — was called strong and is not.
+    voice: a
+  - clear:
+      keep:
+        - line
+        - tick_0
+        - tick_10
+        - tick_20
+        - tick_30
+        - tick_40
+        - tick_50
+        - tick_60
+        - tick_70
+        - tick_80
+        - tick_90
+        - tick_100
+        - tick_110
+        - tick_120
+        - pt_0
+        - pt_1
+        - cov_label
+  - draw:
+      - camp_lee
+    speak: The remedy is where it gets contested. Lee and co-authors say keep your estimate and inflate the standard error by a factor read off your own F — their tF procedure.
+    voice: b
+  - draw:
+      - camp_ak
+    speak: 'Angrist and Kolesár push back hard: in the just-identified case the screening is itself the problem, because conditioning on a large F selects the samples where the first stage came out big by luck, and that selection carries a bias of its own.'
+    voice: a
+  - highlight:
+      target:
+        - camp_lee
+        - camp_ak
+      effect: glow
+    speak: Both camps agree the old rule is broken; they disagree about whether the fix is a much bigger threshold or no threshold at all — and that is genuinely unsettled.
+    voice: b
+  - draw:
+      - verdict
+    speak: 'So F above ten was never a certificate of strength: it was a 1997 approximation about bias, quietly repurposed as a guarantee about inference that it cannot give.'
+    voice: a
+---
+title: 'Worse Than Nothing: Bias, Coverage, and the Verdict'
+level: advanced
+voice: male
+template: generic_axes_diagram
+params:
+  x_label: Estimated mortality reduction (pp)
+  y_label: Sampling density
+  title: When the first stage fails
+  curves:
+    - id: strong
+      label: Strong IV (F ≫ 100)
+      expression: 62*exp(-0.5*((x-30)/6)*((x-30)/6))
+      color: supply
+    - id: weak
+      label: Weak IV (F ≈ 5)
+      expression: 30*exp(-0.5*((x-52)/12.5)*((x-52)/12.5))
+      color: accent
+    - id: irrelevant
+      label: Irrelevant IV (F ≈ 1)
+      expression: 20*exp(-0.5*((x-72)/19)*((x-72)/19))
+      color: demand
+  vlines:
+    - x: 30
+      label: True LATE ≈ 2 pp
+    - x: 75
+      label: OLS ≈ 8 pp
+elements:
+  - id: truth_line
+    type: path
+    points:
+      - - 330
+        - 160
+      - - 330
+        - 570
+    style:
+      color: '#8f887c'
+      dash: true
+  - id: truth_label
+    type: text
+    text: True LATE
+    x: 330
+    'y': 600
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: ols_line
+    type: path
+    points:
+      - - 720
+        - 160
+      - - 720
+        - 570
+    style:
+      color: '#b5482e'
+      dash: true
+  - id: ols_label
+    type: text
+    text: OLS plim
+    x: 720
+    'y': 600
+    font_size: 22
+    style:
+      color: '#b5482e'
+  - id: ci_1
+    type: path
+    points:
+      - - 580
+        - 520
+      - - 710
+        - 520
+    style:
+      color: '#b5482e'
+      stroke_width: 3
+  - id: ci_2
+    type: path
+    points:
+      - - 615
+        - 460
+      - - 765
+        - 460
+    style:
+      color: '#b5482e'
+      stroke_width: 3
+  - id: ci_3
+    type: path
+    points:
+      - - 545
+        - 400
+      - - 690
+        - 400
+    style:
+      color: '#b5482e'
+      stroke_width: 3
+  - id: ci_4
+    type: path
+    points:
+      - - 630
+        - 340
+      - - 790
+        - 340
+    style:
+      color: '#b5482e'
+      stroke_width: 3
+  - id: ci_5
+    type: path
+    points:
+      - - 255
+        - 270
+      - - 835
+        - 270
+    style:
+      color: '#2f6b8f'
+      stroke_width: 3
+  - id: coverage_note
+    type: text
+    text: Nominal 95% intervals — real coverage far below
+    x: 500
+    'y': 110
+    font_size: 22
+  - id: ctrl_1
+    type: text
+    text: 'Lee–McCrary–Moreira–Porter (2022): valid t needs F ≈ 105'
+    x: 500
+    'y': 700
+    font_size: 21
+    style:
+      color: '#2f6b8f'
+  - id: ctrl_2
+    type: text
+    text: 'Angrist–Kolesár (2024): just-ID IV ≈ median-unbiased'
+    x: 500
+    'y': 655
+    font_size: 21
+    style:
+      color: '#b5482e'
+  - id: chk_title
+    type: text
+    text: What to report
+    x: 500
+    'y': 640
+    font_size: 30
+  - id: chk_1
+    type: text
+    text: 1.  First-stage coefficient and F
+    x: 500
+    'y': 565
+    font_size: 24
+  - id: chk_2
+    type: text
+    text: '2.  A weak-IV-robust set: Anderson–Rubin or tF'
+    x: 500
+    'y': 505
+    font_size: 24
+  - id: chk_3
+    type: text
+    text: 3.  The OLS estimate beside the IV estimate
+    x: 500
+    'y': 445
+    font_size: 24
+  - id: verdict
+    type: text
+    text: Weak IV returns selection bias — dressed as causal
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: verdict_box
+    type: annotation
+    target: verdict
+    kind: box
+commands:
+  - draw:
+      - axes
+      - x_label
+      - y_label
+      - title
+    speak: Now that we have seen where the F greater than ten rule came from, let's watch what a weak instrument actually does to the estimate — and to the interval around it.
+    voice: a
+  - draw:
+      - vline_0
+    speak: 'Keep last week''s example: distance to a catheterization hospital, and suppose the true LATE for the patients distance moves is a two point fall in one-year mortality.'
+    voice: b
+  - draw:
+      - vline_1
+    speak: While the raw comparison of catheterized and non-catheterized patients says eight points, because cardiologists send the healthier patients to the cath lab.
+    voice: a
+  - draw:
+      - strong
+      - label_strong
+    speak: With an Oregon-strength first stage — a lottery that moves coverage by about twenty-five points — the 2SLS sampling distribution sits over the truth, tight and essentially unbiased.
+    voice: b
+  - draw:
+      - weak
+      - label_weak
+    speak: 'Weaken it to an F of about five and the whole distribution slides toward OLS and fattens: relative bias of roughly one over F, a fifth of the way back to selection bias.'
+    voice: a
+  - draw:
+      - irrelevant
+      - label_irrelevant
+    speak: And with no first stage at all, 2SLS centres on the OLS probability limit — you have not estimated a LATE, you have recomputed selection bias with extra steps.
+    voice: b
+    delivery: grave
+  - point:
+      at:
+        ref: irrelevant
+      gesture: circle
+    speak: 'That''s the asymmetry that matters: weak-instrument bias has a direction — it walks home to OLS.'
+    voice: a
+  - highlight:
+      target:
+        - irrelevant
+      effect: glow
+    speak: And with one instrument it isn't even a bell — it's a ratio of two nearly zero-mean normals, heavy-tailed and skewed.
+    voice: b
+  - clear: {}
+  - draw:
+      - truth_line
+      - truth_label
+      - ols_line
+      - ols_label
+    speak: Bias is only half the damage — now the intervals, with truth on the left and the OLS limit on the right.
+    voice: a
+  - draw:
+      - ci_1
+      - ci_2
+      - ci_3
+      - ci_4
+    parallel: true
+    speak: 'Each bar is one resample''s conventional 2SLS interval, nominally ninety-five percent: too short, because a weak first stage understates the spread, and centred in the wrong place.'
+    voice: b
+  - draw:
+      - ci_5
+      - coverage_note
+    speak: The occasional draw where the first stage came out strong gives an interval wide enough to catch the truth — and so wide it tells you nothing.
+    voice: a
+  - draw:
+      - ctrl_1
+    speak: 'Which is where the field genuinely splits: Lee, McCrary, Moreira and Porter show that keeping a nominal five percent t-test honest needs a first-stage F of about one hundred and five.'
+    voice: b
+  - draw:
+      - ctrl_2
+    speak: Angrist and Kolesár reply that just-identified IV is close to median-unbiased, that conventional intervals behave far better than that threshold implies, and that screening hard on F creates a pretest problem of its own — unresolved, and it decides whether half the applied IV literature survives.
+    voice: a
+  - clear: {}
+  - draw:
+      - chk_title
+      - chk_1
+      - chk_2
+      - chk_3
+    speak: 'So the reporting rule that follows: the first stage and its F, a weak-instrument-robust set such as Anderson–Rubin, and the OLS estimate printed beside the IV estimate so a reader can see which way the collapse would go.'
+    voice: b
+  - draw:
+      - verdict
+      - verdict_box
+    speak: 'Because across this series the two deaths are not symmetric: a bad instrument breaks exclusion and hands you a confidently wrong number, while a weak one keeps every assumption and quietly returns selection bias — wearing the credibility of a causal design.'
+    voice: a
+    delivery: grave
+  - speak: Distance was defensible because we could argue exclusion; the lottery was usable because the first stage was overwhelming — an instrument is only ever as good as both halves at once.
+    voice: b
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Selection on observables: matching, regression, and the leap of faith'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 9 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Selection on observables: matching, regression, and the leap of faith'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}

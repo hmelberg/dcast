@@ -1,0 +1,321 @@
+playlist:
+  title: 'Why insured people can look sicker: selection bias, decomposed'
+---
+title: The Puzzle on the Sign-Up Sheet
+level: advanced
+voice: male
+elements:
+  - id: belief
+    type: text
+    text: '"Compare the insured with the uninsured — that shows you what insurance does."'
+    x: 500
+    'y': 700
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: ax
+    type: axes
+    x_label: Two groups of Oregon adults
+    y_label: Illness and spending
+  - id: pt_unins
+    type: point
+    at:
+      x: 30
+      'y': 35
+    style:
+      color: '#2f6b8f'
+  - id: lab_unins
+    type: label
+    text: Uninsured (D = 0)
+    attach_to: pt_unins
+    side: below
+    style:
+      color: '#2f6b8f'
+  - id: pt_expect
+    type: point
+    at:
+      x: 70
+      'y': 16
+    style:
+      color: '#8f887c'
+  - id: lab_expect
+    type: label
+    text: What coverage is supposed to do
+    attach_to: pt_expect
+    side: below
+    style:
+      color: '#8f887c'
+  - id: pt_ins
+    type: point
+    at:
+      x: 70
+      'y': 64
+    style:
+      color: '#b5482e'
+  - id: lab_ins
+    type: label
+    text: Insured (D = 1)
+    attach_to: pt_ins
+    side: above
+    style:
+      color: '#b5482e'
+  - id: gap_arrow
+    type: arrow
+    from:
+      ref: pt_unins
+    to:
+      ref: pt_ins
+  - id: lab_gap
+    type: label
+    text: E[Y | D=1] − E[Y | D=0] > 0
+    attach_to: gap_arrow
+    side: left
+  - id: t_year
+    type: text
+    text: Oregon, 2008
+    x: 500
+    'y': 690
+    font_size: 30
+  - id: t_signup
+    type: text
+    text: ≈ 90,000 adults sign up
+    x: 270
+    'y': 600
+    font_size: 26
+    style:
+      color: '#b5482e'
+  - id: t_slots
+    type: text
+    text: ≈ 10,000 Medicaid slots
+    x: 740
+    'y': 600
+    font_size: 26
+  - id: arr_queue
+    type: arrow
+    from:
+      x: 430
+      'y': 600
+    to:
+      x: 600
+      'y': 600
+  - id: t_lottery
+    type: text
+    text: ≈ 30,000 names drawn by lottery; about one in four finished enrolling
+    x: 500
+    'y': 540
+    font_size: 19
+    style:
+      color: '#8f887c'
+  - id: who_a
+    type: shape
+    shape: person
+    x: 300
+    'y': 395
+    style:
+      color: '#b5482e'
+  - id: t_a1
+    type: text
+    text: Signed up
+    x: 300
+    'y': 300
+    font_size: 24
+    style:
+      color: '#b5482e'
+  - id: t_a2
+    type: text
+    text: A diagnosis already in hand,
+    x: 300
+    'y': 262
+    font_size: 20
+  - id: t_a3
+    type: text
+    text: symptoms, a rationed prescription
+    x: 300
+    'y': 232
+    font_size: 20
+  - id: who_b
+    type: shape
+    shape: person
+    x: 700
+    'y': 395
+    style:
+      color: '#2f6b8f'
+  - id: t_b1
+    type: text
+    text: Didn't bother
+    x: 700
+    'y': 300
+    font_size: 24
+    style:
+      color: '#2f6b8f'
+  - id: t_b2
+    type: text
+    text: Feels fine this year
+    x: 700
+    'y': 262
+    font_size: 20
+  - id: eq1
+    type: text
+    text: Yᵢ = Dᵢ·Yᵢ(1) + (1 − Dᵢ)·Yᵢ(0)
+    x: 500
+    'y': 560
+    font_size: 32
+  - id: eq1b
+    type: text
+    text: One is observed. The other never happens.
+    x: 500
+    'y': 490
+    font_size: 22
+    style:
+      color: '#8f887c'
+  - id: eq2
+    type: text
+    text: E[Y | D=1] − E[Y | D=0]  =  causal effect  +  ?
+    x: 500
+    'y': 350
+    font_size: 28
+  - id: mark_q
+    type: annotation
+    target: eq2
+    kind: box
+  - id: eq3
+    type: text
+    text: 'the second term: who chose to sign up'
+    x: 500
+    'y': 250
+    font_size: 22
+    style:
+      color: '#8a5fa8'
+commands:
+  - draw:
+      - belief
+    speak: 'Across four parts we''ll take one innocent-looking number apart: the raw gap in health between insured and uninsured people, and why it can point in exactly the wrong direction.'
+  - draw:
+      - ax
+  - draw:
+      - pt_unins
+      - lab_unins
+    speak: Start with uninsured adults — D equals zero — with illness and medical spending running up the vertical axis.
+  - draw:
+      - pt_expect
+      - lab_expect
+    speak: 'If coverage does what we hope, the insured should land lower: problems caught early, less illness carried around.'
+  - speak: So before I draw it — does the insured group's dot sit below that one, or above it?
+  - pause: 1.7
+  - erase:
+      - pt_expect
+      - lab_expect
+  - draw:
+      - pt_ins
+      - lab_ins
+    speak: In plain cross-sections, adults on Medicaid tend to report worse health and to use more care than uninsured adults.
+  - point:
+      at:
+        ref: pt_ins
+      gesture: circle
+    speak: The covered dot sits above the uncovered one — the wrong way round entirely.
+  - draw:
+      - gap_arrow
+      - lab_gap
+    speak: So the naive difference — mean outcome among the insured minus mean outcome among the uninsured — comes out positive.
+  - camera:
+      center:
+        ref: gap_arrow
+      zoom: 1.8
+    speak: Read literally, this number says coverage makes people sicker. Nobody believes that, so what is it actually measuring?
+    delivery: grave
+  - camera:
+      reset: true
+  - clear: {}
+  - draw:
+      - t_year
+      - t_signup
+    speak: 'Oregon, 2008: the state reopened its Medicaid waiting list, and about ninety thousand adults put their names down.'
+  - draw:
+      - t_slots
+      - arr_queue
+      - t_lottery
+    speak: There was money for roughly ten thousand, so the state drew about thirty thousand names, of whom around a quarter finished enrolling.
+  - speak: 'Set the arithmetic aside and ask the harder question: which ninety thousand?'
+  - pause: 1.7
+  - draw:
+      - who_a
+      - t_a1
+      - t_a2
+      - t_a3
+    speak: 'The people who queue are the people who expect to need care: a diagnosis already in hand, symptoms last winter, a prescription being rationed.'
+  - draw:
+      - who_b
+      - t_b1
+      - t_b2
+    speak: Those who feel fine this year mostly don't bother standing in that queue at all.
+  - focus:
+      target:
+        - who_a
+        - t_a1
+        - t_a2
+        - t_a3
+    speak: The sign-up sheet has already sorted Oregon by expected illness — before a single person is covered.
+  - clear: {}
+  - draw:
+      - eq1
+    speak: In the notation we'll keep all course, every person has an outcome with coverage, Y of one, and an outcome without it, Y of zero — and D decides which one we get to see.
+  - draw:
+      - eq1b
+    speak: The other never happens, so whose Y-of-zero are we borrowing when the insured group's own is missing?
+  - pause: 1.7
+  - draw:
+      - eq2
+      - mark_q
+    speak: Somebody else's. The naive gap is the causal effect plus a second term built entirely out of who chose to sign up.
+    delivery: grave
+  - draw:
+      - eq3
+    speak: Insured people can look sicker because that comparison never compared like with like — next time we split this gap into its two exact terms.
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'The Oregon lottery: what randomization actually buys you'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 3 of 18
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: The Oregon lottery: what randomization actually buys you'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}
