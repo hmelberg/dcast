@@ -1,0 +1,318 @@
+playlist:
+  title: 'Time trade-off and standard gamble: whose values, and what lies below zero?'
+---
+title: Time Trade-Off, Step by Step
+voice: female
+template: number_line
+params:
+  min: 0
+  max: 10
+  step: 1
+  points:
+    - at: 10
+      label: 'Life A: 10 years'
+    - at: 6
+      label: 'Life B: 6 years'
+  intervals:
+    - from: 0
+      to: 6
+      label: 6 years in full health
+    - from: 6
+      to: 10
+      label: 4 years given up
+  arrow_ops:
+    - from: 10
+      to: 5
+      label: 5?
+    - from: 5
+      to: 7
+      label: 7?
+    - from: 7
+      to: 6
+      label: '6'
+elements:
+  - id: equation
+    type: text
+    text: u = x / t = 6 / 10 = 0.6
+    x: 500
+    'y': 150
+    font_size: 36
+  - id: eq_box
+    type: annotation
+    target: equation
+    kind: box
+commands:
+  - draw:
+      - line
+      - tick_0
+      - tick_1
+      - tick_2
+      - tick_3
+      - tick_4
+      - tick_5
+      - tick_6
+      - tick_7
+      - tick_8
+      - tick_9
+      - tick_10
+    parallel: true
+    speak: Now that we have seen the two instruments side by side, let's run one of them properly — because the single number it produces will multiply every year of life in the nusinersen model.
+  - draw:
+      - pt_0
+    speak: 'Life A is fixed: ten years in the SMA health state we described, and then death.'
+  - point:
+      at:
+        ref: pt_0
+      gesture: tap
+    speak: Against it stands Life B — full health, but shorter — and the interviewer hunts for the length at which you stop caring which one you get.
+  - draw:
+      - hop_0
+    speak: 'First offer: five years in full health instead of ten in the state. Most respondents refuse — five is too much life to hand over.'
+  - draw:
+      - hop_1
+    speak: 'So the interviewer swings back up: seven years of full health, and now Life B is clearly the better deal.'
+  - draw:
+      - hop_2
+    speak: Down, up, down — the offers close in from both sides until the choice becomes genuinely hard.
+  - draw:
+      - pt_1
+    speak: At six years the respondent cannot choose. That indifference is the measurement; everything before it was only the search.
+  - pause: 0.5
+  - draw:
+      - interval_0
+    speak: Six years in full health, weighed as exactly equal to ten years in the SMA state.
+  - draw:
+      - equation
+    speak: 'Divide the shorter healthy life by the longer sick one: u equals six over ten, zero point six.'
+  - draw:
+      - eq_box
+    speak: A year in this state counts as sixty percent of a healthy year.
+    delivery: grave
+  - quiz:
+      intro: A quick check before we go on.
+      question: The next respondent is indifferent at 8 years instead of 6. What is u?
+      choices:
+        - '0.8'
+        - '0.2'
+        - '1.25'
+      correct: 1
+      right: u is 8 over 10, or 0.8 — giving up fewer years means the state is judged closer to full health.
+      wrong: 'Read it as the ratio of the two lifetimes: eight divided by ten.'
+  - clear:
+      keep:
+        - line
+        - tick_0
+        - tick_1
+        - tick_2
+        - tick_3
+        - tick_4
+        - tick_5
+        - tick_6
+        - tick_7
+        - tick_8
+        - tick_9
+        - tick_10
+        - pt_0
+        - pt_1
+        - interval_0
+        - equation
+        - eq_box
+  - draw:
+      - interval_1
+    speak: 'But look at which years were sacrificed: never the next four — always the last four, the ones furthest away.'
+  - focus:
+      target:
+        - interval_1
+    speak: Distant years feel cheap, because we are impatient — so an impatient respondent hands over more of them, and the ratio lands lower than the state really deserves.
+  - highlight:
+      target:
+        - equation
+      effect: glow
+    speak: 'One camp draws the obvious conclusion: an uncorrected time trade-off measures impatience as much as health, so the utilities should be adjusted upward.'
+  - point:
+      at:
+        ref: equation
+      gesture: underline
+    speak: The other answers that the QALY calculation already discounts future years at four percent, so correcting inside the utility counts the same impatience twice — and no one agrees on the rate to correct with.
+  - quiz:
+      question: If respondents discount distant years, what does the raw ratio x over t do to the utility?
+      choices:
+        - Understates it
+        - Overstates it
+        - Leaves it unchanged
+      correct: 1
+      right: It understates it — cheap distant years get traded away freely, so x comes out too low.
+      wrong: 'Think about which years get sacrificed: the far-off ones, which already count for less.'
+  - highlight:
+      target:
+        - pt_1
+      effect: glow
+    speak: 'And this haggling is not a classroom exercise: the EQ-5D value sets that price health states in Norway and across Europe are built from thousands of interviews shaped exactly like this one.'
+  - speak: 'So the time trade-off answers a health state with a length of life: zero point six is not a feeling, it is a ratio of two lifetimes.'
+level: basic
+---
+title: Whose Values Count?
+voice: female
+template: two_by_two_table
+params:
+  title: Valuing SMA type 2 — illustrative numbers
+  row_label: Who was asked
+  col_label: Same state, same instrument
+  row_values:
+    - General public
+    - Patients & families
+  col_values:
+    - Value of the state
+    - Five extra years
+  cells:
+    - - u = 0.35
+      - 1.75 QALYs
+    - - u = 0.60
+      - 3.00 QALYs
+  cell_notes:
+    - - imagining the state
+      - 5 × 0.35
+    - - living in the state
+      - 5 × 0.60
+  highlight:
+    - - 0
+      - 0
+    - - 0
+      - 1
+elements:
+  - id: pick
+    type: annotation
+    target: row_header_0
+    kind: box
+commands:
+  - draw:
+      - title
+      - grid
+    speak: 'Now that we have seen why the standard gamble reads higher than the time trade-off, a harder question: the instrument is settled, but whose answers get written into the tariff — and that choice can halve a drug''s measured benefit.'
+  - draw:
+      - row_title
+      - col_title
+      - row_header_0
+      - row_header_1
+      - col_header_0
+  - draw:
+      - cell_0_0
+    speak: Ask a representative sample of Norwegian citizens to imagine life with SMA type two — powered wheelchair, help with dressing, ventilation at night — and their time trade-off answers land, in round illustrative numbers, near zero point three five.
+  - pause: 0.3
+  - draw:
+      - cell_1_0
+    speak: Ask the people and families who actually live in that state, and the same instrument, on the same description, gives something closer to zero point six.
+  - point:
+      at:
+        ref: cell_1_0
+      gesture: circle
+    speak: That gap of twenty-five utility points is wider than the gain most treatments ever deliver.
+  - focus:
+      target:
+        - cell_1_0
+        - row_header_1
+    speak: Patients adapt — they rebuild a life around the state and quietly recalibrate the scale they are answering on; the literature calls it response shift.
+  - focus:
+      target:
+        - cell_0_0
+        - row_header_0
+    speak: The public are imagining, and imagination fixes on what is lost — the wheelchair fills the frame while the friendships, the schooling, the ordinary Tuesday drop out of it. That is the focusing illusion.
+  - pause: 0.4
+  - draw:
+      - col_header_1
+    speak: Now watch what that difference does to an actual QALY calculation.
+  - draw:
+      - cell_0_1
+    speak: 'Say nusinersen buys a child five extra years in that state: valued at zero point three five, those years are worth one point seven five QALYs.'
+  - draw:
+      - cell_1_1
+    speak: Valued at zero point six, the very same five years are worth three QALYs — nearly double the benefit, for exactly the same drug at exactly the same price.
+  - quiz:
+      intro: Quick check.
+      question: Using public values rather than patient values, a treatment that only adds years in that state looks…
+      choices:
+        - More cost-effective
+        - Less cost-effective
+        - Unchanged
+      correct: 2
+      right: Less — each added year is multiplied by a smaller utility, so the same five years buy fewer QALYs.
+      wrong: 'The other way round: a lower utility scales every added year down, so the QALY gain shrinks.'
+  - draw:
+      - hl_0_0
+      - hl_0_1
+      - pick
+    speak: 'And yet Norwegian guidance, like NICE''s, buys the top row: health states described by patients, but valued by a sample of the general public.'
+  - highlight:
+      target:
+        - row_header_0
+      effect: glow
+    speak: Not because citizens judge the state better — the people living it plainly know it best — but because they fund the budget, bear the care displaced elsewhere, and could wake up in that state tomorrow.
+  - quiz:
+      question: So why do the guidelines use general-population values?
+      choices:
+        - The public judge health states more accurately
+        - The public fund the system and bear the risk
+        - Patients refuse to answer TTO
+      correct: 2
+      right: The public pay for the budget and could end up in any state themselves — it is a claim about standing, not about accuracy.
+      wrong: Not accuracy — patients know the state far better; it is that the public fund the budget and bear the displaced care.
+  - highlight:
+      target:
+        - cell_1_1
+      effect: pulse
+    speak: 'The objection is old and unresolved: the philosopher John Harris called it double jeopardy — you are unlucky enough to live in the state, and then your extra years are counted at a discount the healthy majority set for you.'
+  - highlight:
+      target:
+        - cell_0_1
+      effect: pulse
+    speak: Defenders answer that adapted values would punish exactly the states people cope with best — a system paying least to fix what patients have learned to live with.
+  - speak: So a utility is never a property of the illness alone; it is the illness plus the person we chose to ask — and that choice was made long before any clinical evidence arrived.
+    delivery: grave
+level: basic
+---
+elements:
+  - id: nx_kicker
+    type: text
+    text: Next
+    x: 500
+    'y': 465
+    font_size: 24
+    style:
+      opacity: 0.6
+  - id: nx_title
+    type: text
+    text: 'Severity: absolute shortfall, proportional shortfall, or something else?'
+    x: 500
+    'y': 390
+    font_size: 34
+    draw:
+      mode: sketch
+      duration: 1
+  - id: nx_line
+    type: path
+    points:
+      - - 330
+        - 352
+      - - 670
+        - 348
+  - id: nx_count
+    type: text
+    text: 9 of 20
+    x: 500
+    'y': 300
+    font_size: 26
+    style:
+      opacity: 0.7
+    draw:
+      mode: sketch
+      duration: 0.7
+commands:
+  - draw:
+      - nx_kicker
+      - nx_title
+      - nx_line
+    speak: 'Next: Severity: absolute shortfall, proportional shortfall, or something else?'
+  - draw:
+      - nx_count
+  - pause: 1.5
+  - clear: {}
