@@ -57,6 +57,24 @@
         "health-technology-assessment-deciding/README.md"
       ],
       "updated": "2026-09-02"
+    },
+    {
+      "slug": "registerdata-i-praksis-python-og-pandas",
+      "title": "Registerdata i praksis: Python og pandas på NPR, Legemiddelregisteret og HELFO",
+      "files": [
+        "registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.yaml",
+        "registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.yaml",
+        "registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.yaml",
+        "registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.yaml",
+        "registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.yaml",
+        "registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.yaml",
+        "registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.yaml",
+        "registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.yaml",
+        "registerdata-i-praksis-python-og-pandas/course.md",
+        "registerdata-i-praksis-python-og-pandas/index.html",
+        "registerdata-i-praksis-python-og-pandas/README.md"
+      ],
+      "updated": "2026-09-04"
     }
   ]
 }

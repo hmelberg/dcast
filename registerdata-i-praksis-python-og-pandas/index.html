@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registerdata i praksis: Python og pandas på NPR, Legemiddelregisteret og HELFO</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { max-width: 44rem; margin: 3rem auto; padding: 0 1.25rem;
+         font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  h1 { font-size: 1.9rem; margin-bottom: 0.3rem; }
+  .intro { opacity: 0.8; margin-top: 0; }
+  ol { list-style: none; padding: 0; }
+  li { border-top: 1px solid rgba(128,128,128,0.3); padding: 1rem 0; }
+  .n { opacity: 0.5; font-variant-numeric: tabular-nums; margin-right: 0.5rem; }
+  .t { font-size: 1.1rem; font-weight: 600; }
+  .q { margin: 0.35rem 0 0; padding-left: 1.6rem; opacity: 0.8; }
+  .q li { border: 0; padding: 0.1rem 0; list-style: disc; }
+  .soon { opacity: 0.55; font-size: 0.85rem; font-weight: 400; }
+  footer { margin-top: 3rem; font-size: 0.85rem; opacity: 0.6; }
+  .join { border: 1px solid rgba(128,128,128,0.35); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  .join input { font: inherit; padding: 0.35rem 0.5rem; margin: 0.25rem 0.25rem 0.25rem 0; max-width: 100%; }
+  .join button { font: inherit; padding: 0.35rem 0.8rem; }
+  .join .privacy, .join .small { font-size: 0.85rem; opacity: 0.7; margin: 0.5rem 0 0; }
+  .mark { display: inline-block; min-width: 3.2rem; margin-right: 0.5rem; cursor: pointer; font-variant-numeric: tabular-nums; }
+  .review { margin: 0.5rem 0 0 3.7rem; font-size: 0.9rem; }
+  .review li { border: 0; padding: 0.25rem 0; list-style: none; }
+</style>
+<h1>Registerdata i praksis: Python og pandas på NPR, Legemiddelregisteret og HELFO</h1>
+<p class="intro">Åtte drawcasts om hvordan du faktisk får norske helseregisterdata inn i pandas, koblet sammen, og gjort om til noe du kan svare på et spørsmål med. Vi følger én kohort med type 2-diabetes fra rå fil til ferdig figur — og snakker underveis om hva registrene ikke måler.</p>
+<section class="join" data-course="hmelberg/dcast/registerdata-i-praksis-python-og-pandas" data-enroll="https://drawcast.anvil.app" data-title="Registerdata i praksis: Python og pandas på NPR, Legemiddelregisteret og HELFO">
+<form id="join-form">
+  <b>Join this course</b>
+  <input id="join-name" placeholder="Name (optional)" autocomplete="name">
+  <input id="join-email" type="email" placeholder="Email (optional — lets you find your code again)" autocomplete="email">
+  <button id="join-button" type="submit">Join</button>
+  <p class="privacy">We store your name, email and answers so you and the course's teachers can see your progress. "Forget me" deletes all of it. The learner backend is hosted in the UK.</p>
+</form>
+<div id="join-you" hidden>
+  <b>Your course code:</b> <code id="join-code"></code>
+  <span class="small">— <a href="#" id="join-switch">use another code</a> · <a href="#" id="join-forget">Forget me</a></span>
+  <p id="join-progress-note" class="small"></p>
+</div>
+<div id="join-switch-box" hidden><input id="join-switch-input" placeholder="fjell-rev-havn"> <button id="join-switch-button" type="button">Use this code</button></div>
+<p id="join-status" class="small"></p>
+</section>
+<script>(function () {
+  var box = document.querySelector(".join");
+  if (!box) return;
+  var api = (box.getAttribute("data-enroll") || "").replace(/\/+$/, "");
+  var course = box.getAttribute("data-course") || "";
+  var KEY = "drawcast.learners";
+  var CODE_RE = /^[a-z]{3,7}-[a-z]{3,7}-[a-z]{3,7}$/;
+  function $(id) { return document.getElementById(id); }
+  function store() { try { return localStorage; } catch (e) { return null; } }
+  function read() { var s = store(); if (!s) return {}; try { var v = JSON.parse(s.getItem(KEY) || "{}"); return v && typeof v === "object" ? v : {}; } catch (e) { return {}; } }
+  function write(map) { var s = store(); if (!s) return; try { s.setItem(KEY, JSON.stringify(map)); } catch (e) {} }
+  function entry() { var e = read()[course]; return e && typeof e.code === "string" && typeof e.api === "string" ? e : null; }
+  function save(code, name) { var m = read(); m[course] = { code: code, api: api, name: name || null }; write(m); }
+  function forget() { var m = read(); delete m[course]; write(m); }
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function normalize(raw) { var s = String(raw || "").trim().toLowerCase().split(/\s+/).join("-"); return CODE_RE.test(s) ? s : null; }
+  // A malformed percent-escape ("?learner=100%") must not throw: this script
+  // runs top to bottom before a single listener is attached, so one bad
+  // character in the address would take the whole join box down with it.
+  function dec(s) { try { return decodeURIComponent(s); } catch (e) { return null; } }
+  function post(path, body) {
+    return fetch(api + "/_/api/" + path, { method: "POST", headers: { "content-type": "text/plain" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, body: j }; }, function () { return { ok: r.ok, status: r.status, body: {} }; }); });
+  }
+  function pageUrl() { return location.origin + location.pathname; }
+  function runSlug() { var m = /[?&]run=([^&#]+)/.exec(location.search || ""); return m ? dec(m[1]) : null; }
+
+  var arriving = /[?&]learner=([^&#]+)/.exec(location.search || "");
+  if (arriving) {
+    var code = normalize(dec(arriving[1]));
+    if (code) save(code, (entry() || {}).name);
+    try { history.replaceState(null, "", location.pathname + (location.hash || "")); } catch (e) {}
+  }
+
+  // Ruling A: data-cast lives on both the <li> and its <a> (spec markup), so
+  // link rewriting (a[data-cast], re-queried in rewriteLinks) and progress
+  // marks (li[data-cast], here) use distinct selectors — rewriting
+  // "[data-cast]" as a whole would also clobber the anchor's innerHTML.
+  var lis = document.querySelectorAll("li[data-cast]");
+  // Every render rebuilds the marks from THIS, not from what the last render
+  // left behind: prepending into the live innerHTML stacked a second score
+  // onto the first every time a code was switched.
+  var originals = [];
+  for (var oi = 0; oi < lis.length; oi++) originals.push(lis[oi].innerHTML);
+  function restore() { for (var ri = 0; ri < lis.length; ri++) lis[ri].innerHTML = originals[ri]; }
+  /** code === null strips the parameter instead of adding one — after
+   *  "Forget me" the links must not keep carrying a deleted code.
+   *
+   *  The anchors are looked up HERE, at every call, and never cached: writing
+   *  li.innerHTML above destroys the <a data-cast> inside and parses a fresh
+   *  one with the pristine href, so a list captured at script start would be
+   *  a handful of detached nodes and the live links would keep the href they
+   *  were published with. The page and the viewer are cross-origin — this
+   *  link is the only way the code travels. */
+  function rewriteLinks(code) {
+    var anchors = document.querySelectorAll("a[data-cast]");
+    for (var i = 0; i < anchors.length; i++) {
+      var a = anchors[i];
+      var href = a.getAttribute("href");
+      if (href == null) continue;
+      href = href.replace(/&learner=[^&]*/, "");
+      a.setAttribute("href", code ? href + "&learner=" + code : href);
+    }
+  }
+  function mark(lecture) {
+    var right = 0, total = lecture.answers.length;
+    for (var i = 0; i < total; i++) if (lecture.answers[i].correct) right++;
+    var sym = lecture.completed ? "✓" : lecture.opened ? "○" : "·";
+    return { label: total ? sym + " " + right + "/" + total : sym, right: right, total: total };
+  }
+  function answersHtml(lecture) {
+    var out = "<ol class=\"answers\">";
+    for (var i = 0; i < lecture.answers.length; i++) {
+      var a = lecture.answers[i];
+      var given = a.given && a.given.length ? a.given.join(" → ") : "(skipped)";
+      out += "<li>" + (a.correct ? "✓" : "✗") + " <b>" + esc(a.question) + "</b><br>you: " + esc(given) + "<br>expected: " + esc(a.expected) + "</li>";
+    }
+    return out + "</ol>";
+  }
+  function showProgress(e) {
+    // Both continuations below start with the same staleness guard: this GET
+    // was made for ONE code, and "Forget me" (or a switch) while it is in
+    // flight changes which code the page belongs to. A late answer for a code
+    // that is no longer the entry must touch nothing — otherwise it writes the
+    // forgotten code back onto the links it was just taken off.
+    fetch(api + "/_/api/progress?code=" + encodeURIComponent(e.code)).then(function (r) { return r.ok ? r.json() : null; }).then(function (p) {
+      var cur = entry();
+      if (!cur || cur.code !== e.code) return;
+      if (!p || !p.lectures) { $("join-progress-note").textContent = "Progress is unavailable right now."; rewriteLinks(e.code); return; }
+      var byCast = {};
+      for (var i = 0; i < p.lectures.length; i++) byCast[p.lectures[i].cast] = p.lectures[i];
+      restore(); // a lecture this code has no progress for must lose the last code's mark
+      for (var j = 0; j < lis.length; j++) {
+        var li = lis[j], lecture = byCast[li.getAttribute("data-cast")];
+        if (!lecture) continue;
+        var m = mark(lecture);
+        li.innerHTML = "<span class=\"mark\" title=\"click for your answers\">" + esc(m.label) + "</span>" + originals[j] + (m.total ? "<div class=\"review\" hidden>" + answersHtml(lecture) + "</div>" : "");
+      }
+      // The rebuild just re-parsed every link: put the code back on the
+      // anchors the browser has NOW, not on the ones we started with.
+      rewriteLinks(e.code);
+      $("join-progress-note").textContent = "✓ completed · ○ opened · click a score to review your answers";
+    }, function () {
+      var cur = entry();
+      if (!cur || cur.code !== e.code) return;
+      $("join-progress-note").textContent = "Progress is unavailable right now.";
+      rewriteLinks(e.code);
+    });
+  }
+  function render() {
+    var e = entry();
+    $("join-form").hidden = !!e;
+    $("join-you").hidden = !e;
+    $("join-switch-box").hidden = true;
+    if (e) {
+      $("join-code").textContent = e.code;
+      rewriteLinks(e.code);
+      showProgress(e);
+    } else {
+      restore();
+      rewriteLinks(null);
+      $("join-progress-note").textContent = "";
+    }
+  }
+
+  $("join-form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    $("join-status").textContent = "Joining…";
+    var name = ($("join-name").value || "").trim() || null;
+    var email = ($("join-email").value || "").trim() || null;
+    var title = box.getAttribute("data-title") || course;
+    post("enroll", { course: course, title: title, page: pageUrl(), run: runSlug(), name: name, email: email }).then(function (r) {
+      if (!r.ok) {
+        $("join-status").textContent = r.body && r.body.error === "email" ? "This course needs an email address." : r.body && r.body.error === "closed" ? "This course is not open for enrolment." : "Could not join — please try again.";
+        return;
+      }
+      if (r.body.resent) { $("join-status").textContent = "You are already enrolled — we sent your code to your email again."; return; }
+      save(r.body.code, name);
+      $("join-status").textContent = r.body.email_sent ? "Your course code is below. We sent it to you as well." : "Your course code is below. Write it down — it is your only key.";
+      render();
+    }, function () { $("join-status").textContent = "Could not join — please try again."; });
+  });
+  $("join-forget").addEventListener("click", function (ev) {
+    ev.preventDefault();
+    var e = entry();
+    if (!e) return;
+    post("forget", { code: e.code }).then(function (r) {
+      if (r.ok) { forget(); $("join-status").textContent = "Forgotten. Your data has been deleted."; render(); return; }
+      if (r.status === 404 && r.body && r.body.error === "code") { forget(); $("join-status").textContent = "This code was not known to the server — removed from this browser."; render(); return; }
+      $("join-status").textContent = "Could not delete right now — please try again.";
+    }, function () { $("join-status").textContent = "Could not reach the server — try again."; });
+  });
+  $("join-switch").addEventListener("click", function (ev) { ev.preventDefault(); $("join-switch-box").hidden = false; });
+  $("join-switch-button").addEventListener("click", function (ev) {
+    ev.preventDefault();
+    var code = normalize($("join-switch-input").value);
+    if (!code) { $("join-status").textContent = "That is not a course code (three words, like fjell-rev-havn)."; return; }
+    save(code, null);
+    $("join-status").textContent = "";
+    render();
+  });
+  document.addEventListener && document.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (!t || !t.getAttribute || !t.classList || !t.classList.contains("mark")) return;
+    var li = t.parentNode, review = li && li.querySelector && li.querySelector(".review");
+    if (review) review.hidden = !review.hidden;
+  });
+  render();
+})();</script>
+<ol>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.yaml"><span class="n">1</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.yaml">Tre registre, tre helt ulike rader — hvor kommer dataene fra?</a><ul class="q"><li>Hva representerer egentlig én rad i npr, i lmr og i kuhr?</li><li>Hvorfor ble alle tre registrene bygget for administrasjon og refusjon, ikke for forskning — og hva gjør det med dataene dine?</li><li>Hvorfor er 2007 et vannskille for Norsk pasientregister, og hva skjedde med Reseptregisteret i 2024?</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.yaml"><span class="n">2</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.yaml">Hvordan leser du en 12 GB registerfil uten at maskinen dør?</a><ul class="q"><li>Hvorfor sprenger pd.read_csv minnet, og hva gjør dtype, category og usecols med regnskapet?</li><li>Når lønner det seg å bytte fra CSV til parquet, og hva koster konverteringen?</li><li>Hvordan leser du filen i chunks uten å miste pasienter som ligger på tvers av to biter?</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.yaml"><span class="n">3</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.yaml">Hva er det egentlig som binder en sykehuskontakt til en resept?</a><ul class="q"><li>Hvorfor er pid og en dato det eneste du har — og hva betyr det for hva du kan spørre om?</li><li>Hvorfor blir det plutselig tre ganger så mange rader etter en merge, og hva redder validate= deg fra?</li><li>Left join eller inner join: hvordan gir de to ulike kohorter av de samme pasientene?</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.yaml"><span class="n">4</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.yaml">Holder én E11-kode for å kalle noen diabetiker?</a><ul class="q"><li>Hvordan filtrerer du på ICD-10 og ATC uten å miste undergrupper — str.startswith, isin eller regex?</li><li>Hva skjer med kohorten når du krever to kontakter i stedet for én, eller legger til ATC A10 fra lmr?</li><li>Hva vinner og hva taper du på en streng kohortdefinisjon?</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.yaml"><span class="n">5</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.yaml">Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?</a><ul class="q"><li>Hvordan går du fra én rad per kontakt til én rad per pasient uten å miste det du trenger senere?</li><li>Når bruker du groupby().agg(), når transform(), og når pivot_table?</li><li>Hvorfor er første og siste dato per pid nesten alltid de to viktigste kolonnene i kohort?</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.yaml"><span class="n">6</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.yaml">Tid er alt: washout, ny bruker og legemiddeldekning i pandas</a><ul class="q"><li>Hva er en washout-periode, og hvorfor avgjør den om pasienten telles som ny bruker?</li><li>Hvordan gjør du utleveringsdatoer og DDD om til sammenhengende perioder med legemiddeldekning?</li><li>Hvorfor er insidens og prevalens to helt forskjellige spørringer mot det samme datasettet?</li><li>Hva gjør merge_asof som en vanlig merge ikke klarer?</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.yaml"><span class="n">7</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.yaml">Tallene selv: bruk av diabeteslegemidler og kontakter i Norge</a><ul class="q"><li>Antall brukere av A10-legemidler per år, hentet fra Legemiddelregisterets åpne statistikkbank</li><li>Alders- og kjønnsfordeling blant brukerne — hva ser du i pyramiden?</li><li>Kontakttyper i NPR: døgnopphold, dagbehandling og poliklinikk side om side</li><li>Fra groupby til figur: én tabell, tre plott, med matplotlib rett på pandas-objektet</li></ul></li>
+<li data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.yaml"><span class="n">8</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.yaml" data-cast="hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.yaml">Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn</a><ul class="q"><li>Hvorfor betyr flere registrerte diagnoser og takster ikke nødvendigvis mer sykdom?</li><li>Hva er prikking, og hvorfor må celler med få pasienter undertrykkes før du publiserer figuren?</li><li>Hvem bestemmer hvem som får koble disse registrene — og hva skjedde egentlig med Helseanalyseplattformen?</li><li>Hvorfor er notebooken din en del av metoden, ikke et vedlegg til den?</li></ul></li>
+</ol>
+<footer>Made with <a href="https://drawcast.app/">drawcast</a></footer>
+</html>
