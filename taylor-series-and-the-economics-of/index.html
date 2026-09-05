@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Taylor Series and the Economics of Approximation</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { max-width: 44rem; margin: 3rem auto; padding: 0 1.25rem;
+         font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  h1 { font-size: 1.9rem; margin-bottom: 0.3rem; }
+  .intro { opacity: 0.8; margin-top: 0; }
+  ol { list-style: none; padding: 0; }
+  li { border-top: 1px solid rgba(128,128,128,0.3); padding: 1rem 0; }
+  .n { opacity: 0.5; font-variant-numeric: tabular-nums; margin-right: 0.5rem; }
+  .t { font-size: 1.1rem; font-weight: 600; }
+  .q { margin: 0.35rem 0 0; padding-left: 1.6rem; opacity: 0.8; }
+  .q li { border: 0; padding: 0.1rem 0; list-style: disc; }
+  .soon { opacity: 0.55; font-size: 0.85rem; font-weight: 400; }
+  footer { margin-top: 3rem; font-size: 0.85rem; opacity: 0.6; }
+  .join { border: 1px solid rgba(128,128,128,0.35); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  .join p { margin: 0; }
+  .join .door { display: inline-block; margin-top: 0.6rem; font-weight: 600; }
+  .join .privacy { font-size: 0.85rem; opacity: 0.7; margin: 0.5rem 0 0; }
+</style>
+<h1>Taylor Series and the Economics of Approximation</h1>
+<p class="intro">Three lectures on why economists spend so much of their lives replacing true functions with polynomials. We build the Taylor expansion carefully, then watch its second-order term become risk aversion and its first-order term become nearly all of modern macro.</p>
+<section class="join">
+<p><b>Join this course</b> — it keeps track of progress for signed-in learners: what you have opened, finished and answered, for you and the course's teachers.</p>
+<p><a class="door" href="https://drawcast.app/#taylor-series-and-the-economics-of">Join this course in drawcast →</a></p>
+<p class="privacy">Joining stores your account's email address — the account holds no name — and what you open, finish and answer, so you and the course's teachers can see your progress. The learner backend is hosted in the UK.</p>
+</section>
+<ol>
+<li><span class="n">1</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.yaml">Why should a polynomial built at one point tell you anything about its neighbours?</a><ul class="q"><li>If I only know f, f', f'' … at the single point a, what right do I have to say anything about f somewhere else?</li><li>What exactly is the remainder R_n measuring, and why does the Lagrange form make the error a statement about the derivative you did not use?</li><li>Why does a Taylor series sometimes converge beautifully and sometimes not converge to the function at all — what does 1/(1+x²) know that we don't?</li><li>In practice, what makes economists stop at n = 1 or n = 2 rather than pushing n higher?</li></ul></li>
+<li><span class="n">2</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.yaml">What is the second derivative doing in the utility function?</a><ul class="q"><li>Expand u(c) around mean consumption c̄: why does the first-order term vanish in expectation and leave curvature alone with the variance?</li><li>How does that one term become the Arrow–Pratt measure A(c) = −u''/u', and why is the level of u irrelevant to it?</li><li>What does the certainty equivalent look like once we accept a quadratic approximation — and what have we quietly assumed about skewness and fat tails by stopping at second order?</li><li>The equity premium puzzle: given the observed US premium of roughly six percentage points a year, what γ does the second-order argument demand, and should we blame the preference or the approximation?</li></ul></li>
+<li><span class="n">3</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.yaml">Is log-linearizing around the steady state a technique or a bet?</a><ul class="q"><li>Why do macroeconomists write x̂ = ln(x/x̄), and in what sense is that just a first-order Taylor expansion wearing a hat?</li><li>Walk the Euler equation of our CRRA household from its nonlinear form to its linearized form — which terms survive and which are declared second-order small?</li><li>If first-order approximations can rank welfare across policies incorrectly, and the zero lower bound is a kink rather than a smooth curve, when does the local polynomial stop being an honest model?</li><li>First-order, second-order, or global solution methods — what is actually being traded away at each step?</li></ul></li>
+</ol>
+<footer>Made with <a href="https://drawcast.app/">drawcast</a></footer>
+</html>
