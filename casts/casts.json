@@ -11,6 +11,12 @@
       "title": "Twenty players. Eight places.",
       "file": "twenty-players-eight-places.yaml",
       "updated": "2026-09-03"
+    },
+    {
+      "slug": "drawcastdemo",
+      "title": "A drawcast, drawing itself",
+      "file": "drawcastdemo.yaml",
+      "updated": "2026-09-17"
     }
   ]
 }
