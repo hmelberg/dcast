@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Doing Data Analysis in microdata.no: A Scripting Course</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { max-width: 44rem; margin: 3rem auto; padding: 0 1.25rem;
+         font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  h1 { font-size: 1.9rem; margin-bottom: 0.3rem; }
+  .intro { opacity: 0.8; margin-top: 0; }
+  ol { list-style: none; padding: 0; }
+  li { border-top: 1px solid rgba(128,128,128,0.3); padding: 1rem 0; }
+  .n { opacity: 0.5; font-variant-numeric: tabular-nums; margin-right: 0.5rem; }
+  .t { font-size: 1.1rem; font-weight: 600; }
+  .q { margin: 0.35rem 0 0; padding-left: 1.6rem; opacity: 0.8; }
+  .q li { border: 0; padding: 0.1rem 0; list-style: disc; }
+  .soon { opacity: 0.55; font-size: 0.85rem; font-weight: 400; }
+  footer { margin-top: 3rem; font-size: 0.85rem; opacity: 0.6; }
+  .join { border: 1px solid rgba(128,128,128,0.35); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  .join p { margin: 0; }
+  .join .door { display: inline-block; margin-top: 0.6rem; font-weight: 600; }
+  .join .privacy { font-size: 0.85rem; opacity: 0.7; margin: 0.5rem 0 0; }
+</style>
+<h1>Doing Data Analysis in microdata.no: A Scripting Course</h1>
+<p class="intro">A ten-lecture, hands-on introduction to the scripting language behind microdata.no, Norway's remote-execution service for register microdata. We build one script from five lines to a full gender-wage-gap analysis, learning imports, collapsing, merging, transformation and disclosure control along the way.</p>
+
+<ol>
+<li><span class="n">1</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/five-lines-to-your-first-plot.yaml">Five lines to your first plot</a><ul class="q"><li>What is the shortest script that produces a real result: a mean, a table and a histogram of wage income by sex?</li><li>Why does every script have to begin with `require no.ssb.fdb:... as db` and `create-dataset`?</li><li>Where does the result appear if you never get to see a single individual's data?</li></ul></li>
+<li><span class="n">2</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/what-is-actually-inside-the-datastore.yaml">What is actually inside the datastore</a><ul class="q"><li>Which registers and which years does the microdata.no datastore cover, and who is the unit of observation?</li><li>How is a variable described in the metadata catalogue — name, unit type, value labels, time coverage?</li><li>What the cohort born in 1985 looks like in the data: how many people, and which variables exist for them</li></ul></li>
+<li><span class="n">3</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/building-datasets-i-create-dataset-and.yaml">Building datasets I: create-dataset and the four shapes of import</a><ul class="q"><li>Why does `import db/BEFOLKNING_KJOENN as sex` need no date while `import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage` needs two?</li><li>What is the difference between a fixed variable, a status variable measured on a date, an accumulated variable measured over a period and an event variable?</li><li>What happens to the rows of your dataset the first time you import — and why is the first import the one that defines the population?</li></ul></li>
+<li><span class="n">4</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/building-datasets-ii-collapse-and-merge.yaml">Building datasets II: collapse and merge, or how to change the unit of analysis</a><ul class="q"><li>How do you turn a dataset of persons into a dataset of municipalities with `collapse (mean) wage, by(kommune)`?</li><li>How does `merge` put the municipal mean wage back onto every person — and what does microdata do when the key does not match?</li><li>When should you collapse before merging rather than after, and how do you tell you got it wrong?</li></ul></li>
+<li><span class="n">5</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/making-new-variables-generate-replace.yaml">Making new variables: generate, replace, recode and labels</a><ul class="q"><li>How do you build an education-level variable from the raw NUDB_BU codes with `recode` and `define-labels`?</li><li>Why does `generate` fail on a variable that already exists, and when do you need `replace` instead?</li><li>How do conditional expressions (`if`) work on a dataset you can never inspect row by row?</li></ul></li>
+<li><span class="n">6</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/defining-the-population-keep-drop-and.yaml">Defining the population: keep, drop, and the people who quietly disappear</a><ul class="q"><li>What is the difference between `keep if` on a condition and dropping a variable — and why do beginners confuse them?</li><li>How do missing values and people who emigrated or died mid-year silently shrink your cohort?</li><li>Common belief: the register data are complete, so selection is not a problem. Why does the 1985 cohort shrink anyway between import and analysis?</li></ul></li>
+<li><span class="n">7</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/output-that-tells-the-truth-tabulate.yaml">Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter</a><ul class="q"><li>Which command answers which question — when is `tabulate` enough and when do you need `summarize` or a histogram?</li><li>What does a boxplot of wage income by sex show that a mean difference hides?</li><li>Strengths and weaknesses: what can microdata's plotting commands do, and where do you have to export aggregates and plot elsewhere?</li></ul></li>
+<li><span class="n">8</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/why-your-output-came-back-censored.yaml">Why your output came back censored</a><ul class="q"><li>Why does microdata.no refuse to print a cell with very few observations, and what exactly does the service do to your results before you see them?</li><li>How should you rewrite a script that keeps hitting suppression — coarser categories, larger populations, fewer crossings?</li><li>The real debate: how much statistical disclosure control can you add before the research answer changes?</li></ul></li>
+<li><span class="n">9</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/many-years-at-once-panels-event-data-and.yaml">Many years at once: panels, event data and the gap over the life cycle</a><ul class="q"><li>How do you import wage income for 2010 through 2022 and end up with a usable panel rather than thirteen unnamed columns?</li><li>How do event variables (spells with a start and an end) differ from yearly snapshots, and when do you need them?</li><li>What does the gender wage gap in the 1985 cohort look like from age 25 to age 37, and what does the shape suggest?</li></ul></li>
+<li><span class="n">10</span><a class="t" href="https://drawcast.app/#gh=hmelberg/dcast/microdata/the-whole-script-end-to-end-and-what-to.yaml">The whole script, end to end — and what to do when it breaks</a><ul class="q"><li>Can we read the complete gender-wage-gap script from `require` to the final regression and say what each block does?</li><li>What do the most common error messages actually mean, and how do you isolate the failing line?</li><li>Why pin the datastore version, and what else does a colleague need to reproduce your result a year from now?</li></ul></li>
+</ol>
+<footer>Made with <a href="https://drawcast.app/">drawcast</a></footer>
+</html>

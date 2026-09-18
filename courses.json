@@ -88,6 +88,26 @@
         "taylor-series-and-the-economics-of/README.md"
       ],
       "updated": "2026-09-06"
+    },
+    {
+      "slug": "microdata",
+      "title": "Doing Data Analysis in microdata.no: A Scripting Course",
+      "files": [
+        "microdata/five-lines-to-your-first-plot.yaml",
+        "microdata/what-is-actually-inside-the-datastore.yaml",
+        "microdata/building-datasets-i-create-dataset-and.yaml",
+        "microdata/building-datasets-ii-collapse-and-merge.yaml",
+        "microdata/making-new-variables-generate-replace.yaml",
+        "microdata/defining-the-population-keep-drop-and.yaml",
+        "microdata/output-that-tells-the-truth-tabulate.yaml",
+        "microdata/why-your-output-came-back-censored.yaml",
+        "microdata/many-years-at-once-panels-event-data-and.yaml",
+        "microdata/the-whole-script-end-to-end-and-what-to.yaml",
+        "microdata/course.md",
+        "microdata/index.html",
+        "microdata/README.md"
+      ],
+      "updated": "2026-09-18"
     }
   ]
 }
