@@ -17,6 +17,12 @@
       "title": "A drawcast, drawing itself",
       "file": "drawcastdemo.yaml",
       "updated": "2026-09-17"
+    },
+    {
+      "slug": "does-it-work-in-practice-evidence-limits",
+      "title": "Does it work in practice? Evidence, limits, and alternatives",
+      "file": "does-it-work-in-practice-evidence-limits.yaml",
+      "updated": "2026-09-28"
     }
   ]
 }
