@@ -1,0 +1,199 @@
+# Nobody complies: intention-to-treat versus the effect of treatment
+next: {"title":"Instrumental variables and the LATE theorem","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/instrumental-variables-and-the-late-theorem.cast"}
+
+## Winning Is Not Enrolling
+voice: male
+level: advanced
+use: icon_array
+with:
+    total: 100
+    groups:
+      - {label: 'Enrolled: D=1', count: 25, color: supply}
+    rest_label: Won, never enrolled
+    title: 100 Oregon lottery winners
+
+A: Across these four parts we separate two numbers that policy debates confuse constantly: the effect of being offered insurance, and the effect of having it — and Oregon is where the gap opens.
+    draw title
+
+A: Here are a hundred of the roughly thirty thousand people whose names came out of the drum in 2008 — every one of them has Z_i = 1, an offer to apply for Medicaid.
+    draw rest group_0
+
+B: And the blue ones — those are the people who actually ended up covered?
+    point at.ref group_0 gesture circle
+
+A: About a quarter of winners: D_i = 1. The rest never returned the paperwork in time, moved, or turned out ineligible — offer in hand, no coverage.
+    draw legend_0 legend_rest
+
+    pause 0.4
+
+B: So the lottery randomized the letter, not the insurance.
+    highlight rest effect glow
+
+A: Precisely — Z_i is random by construction, and D_i follows it for only one person in four; that shortfall is not a flaw in the design, it is how ninety thousand applicants behave.
+    highlight group_0 effect glow
+
+    clear
+
+A: Now the one comparison the experiment licenses: everybody drawn against everybody not drawn, taken as they were assigned.
+    text t_win "Everyone drawn — Z_i = 1" x 250 y 610 font_size 30
+    text t_lose "Everyone not drawn — Z_i = 0" x 750 y 610 font_size 30
+    arrow arrow_diff t_lose -> t_win
+    label lab_diff "difference in average outcome Y" below attach_to arrow_diff
+
+A: That difference in average outcomes is the intention-to-treat effect.
+    text t_itt "ITT = E[Y_i | Z_i = 1] − E[Y_i | Z_i = 0]" x 500 y 440 font_size 36
+
+B: But three quarters of that 'treated' side were never treated — so the number must be wrong.
+    point at.ref t_win gesture tap
+
+A: Not wrong — diluted. It is an honest causal effect, averaged over a group where most people never took up the thing we care about.
+    text t_note1 "Unbiased — but only 1 in 4 on the Z=1 side ever had D_i = 1" x 500 y 345 font_size 26
+
+A: And that mixture is itself a policy quantity: a state budgeting for an expansion gets exactly this, take-up shortfall included.
+    text t_note2 "The effect of the offer — what mailing 30,000 letters actually buys" x 500 y 285 font_size 26
+
+B: Oh — so a headline reading 'Medicaid barely moved health' could be quoting an effect that is three-quarters made of people without Medicaid.
+    highlight t_note1 effect pulse
+
+A: That misreading is the standing danger — Oregon is the only randomized insurance experiment the United States has run since RAND, so its numbers get quoted for decades.
+    text t_punch "ITT ≠ effect of coverage" #b5482e x 500 y 180 font_size 32
+    mark mark_punch target t_punch kind box
+
+A: Winning is not enrolling: the winners-versus-losers contrast is clean and causal — about the offer, diluted by everyone who never showed up.
+    delivery grave
+
+## Scaling up the dilution
+voice: male
+level: advanced
+use: equation_steps
+with:
+    title: Scaling up the dilution
+    steps:
+      - {tex: '\text{ITT} = E[Y_i \mid Z_i = 1] - E[Y_i \mid Z_i = 0] = 0.05', note: 'Winners minus losers, everyone counted'}
+      - {tex: 'E[D_i \mid Z_i = 1] - E[D_i \mid Z_i = 0] = 0.25', note: Only a quarter were moved onto coverage}
+      - {tex: '0.05 = 0.25 \times \tau_{\text{moved}}', note: 'The dilution, written down'}
+      - {tex: '\tau_{\text{moved}} = \dfrac{0.05}{0.25} = 0.20', note: Divide the dilution out}
+
+    mark box_answer target step_3 kind box hidden true
+
+    draw title
+
+A: Now that we've seen the trap in comparing enrollees with non-enrollees, we keep the randomization untouched and repair the dilution by arithmetic — starting from the honest winners-minus-losers difference; say it comes out at five percentage points more people with a regular source of care.
+    draw step_0 note_0
+
+B: But those five points are spread over thirty thousand winners, three quarters of whom never got coverage at all.
+    point at.ref step_0 gesture underline
+
+A: Exactly — and that dilution is itself measurable: winning the lottery raised the share actually covered by about twenty-five points, not a hundred.
+    draw step_1 note_1
+
+A: And it's a difference in coverage rates, winners minus losers — a few losers found coverage by other routes, so they belong in this denominator too.
+    highlight step_1 effect glow
+
+    pause 0.3
+
+A: So the intention-to-treat effect is a weighted average: three quarters of the winners were untouched and contribute nothing, and five points equals a quarter times whatever coverage did to the people it reached.
+    draw step_2 note_2
+
+B: Then dividing by a quarter gives the effect of insurance on everyone in the lottery — four times bigger, twenty points across the whole pool?
+    point at.ref step_2 gesture tap
+
+A: The arithmetic is right — twenty points — but the population is not everyone: it is only the people whose coverage the lottery actually changed.
+    draw step_3 note_3 box_answer
+
+B: Oh — so the number gets bigger, and at the same time the group it describes gets narrower.
+    point at.ref box_answer gesture circle
+
+A: And the division only earns its keep if the untouched three quarters really contributed zero — that winning a lottery you never used did nothing on its own; what licenses that step is next lecture's business.
+    highlight step_2 effect pulse
+
+    pause 0.4
+
+B: Then why do the regulators reading trial reports insist on the diluted number instead of this rescaled one?
+    clear keep ["title"]
+
+A: Medicine met this problem first: Austin Bradford Hill's 1948 streptomycin trial for tuberculosis made randomized allocation the standard, and it immediately produced patients who stopped taking their pills.
+    portrait hill of "Austin Bradford Hill" cameo true
+
+A: The regulatory answer, written into the international trial guidelines, is intention-to-treat: analyse every patient as randomized, whatever they actually swallowed — because a drug that people abandon is a drug that does not work.
+    erase hill
+
+B: So the diluted number is the trustworthy one, and our division buys reach at the price of an assumption.
+    show step_0 note_0 step_1 note_1 step_2 note_2 step_3 note_3 box_answer
+
+A: That is the whole repair: intention-to-treat divided by the compliance it produced — a bigger effect about a smaller group of people.
+    highlight step_3 effect glow delivery grave
+
+## Which Number Does the Policy Question Want?
+voice: male
+level: advanced
+use: decision_tree
+with:
+    root:
+      id: q
+      type: decision
+      label: The policy question
+      children: [{label: Run the offer again?, node: {id: offer, type: terminal, label: 'ITT: +4 pp'}}, {label: What does the program cost?, node: {id: budget, type: terminal, label: ITT again}}, {label: What does coverage do to a person?, node: {id: person, type: terminal, label: +4 ÷ 0.25 = +16 pp}}]
+
+A: Now that we have seen how dividing by the take-up rate scales the diluted effect back up, one question is left: which of the two numbers do you actually report?
+    draw node_q label_q
+
+B: Surely the rescaled one — the diluted number is just the damaged version of the truth, isn't it?
+    point at.ref node_q gesture tap
+
+A: That is the trap of this whole lecture. Let's send three real questions down from this box.
+
+A: First: should Oregon run this lottery again? Carry over our running numbers — an intention-to-treat effect of four points across everyone whose name was drawn.
+    draw edge_q_offer branchlabel_q_offer node_offer label_offer
+
+    pause 0.3
+
+B: But only about a quarter of them ever enrolled, so those four points are watered down by the three who did not.
+    point at.ref label_offer gesture circle
+
+A: Watered down, and exactly right — the state can mail an invitation, it cannot make anyone return the form, so four points per name drawn is what the offer delivers.
+    highlight node_offer label_offer effect glow
+
+    pause 0.4
+
+A: Second: what does the program cost? Mailings, slots, administration — all counted per name drawn, so the effect has to be counted per name drawn too.
+    draw edge_q_budget branchlabel_q_budget node_budget label_budget
+
+B: So two arrows already land on the diluted number.
+    point at.ref node_budget gesture tap
+
+A: Third, a different animal entirely: what does having Medicaid do to a person who has it? Four points divided by a take-up of a quarter — sixteen.
+    draw edge_q_person branchlabel_q_person node_person label_person
+
+A: That sixteen says nothing about Oregon's mailing list; it is a statement about coverage itself.
+    focus node_person label_person branchlabel_q_person
+
+B: Then a state running the same program should also find four points, right?
+    point at.ref node_offer gesture circle
+
+A: Only if the same quarter signs up. Double the take-up and the offer delivers twice as much, while the effect on a covered person has not budged.
+    highlight label_offer label_person effect pulse delivery grave
+
+A: So an agency deciding whether to fund outreach wants the intention-to-treat number, while an economist pricing a national expansion wants the rescaled one — quote the wrong one and you either oversell the program or undersell the insurance.
+    focus node_offer node_person
+
+A: Which is why the estimand is chosen up here, by the question — never down there, by the data.
+    mark mark_q target label_q kind box
+
+B: Same experiment, same regression — two questions, two different right answers.
+    point at.ref mark_q gesture underline
+
+A: Across this series: winning was not enrolling, comparing enrollees with non-enrollees threw the randomization away, and dividing by take-up bought it back — the diluted number was never damaged, it was simply the answer to a different question.
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Instrumental variables and the LATE theorem
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:5 title "Which average effect are you even estimating?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:7 title "Instrumental variables and the LATE theorem" size 320 x 735 y 395
+
+    link end_again href lecture:6 title "Watch again" form text open here x 500 y 160
+    text end_count "6 of 18" x 500 y 95 font_size 22 style.opacity 0.6

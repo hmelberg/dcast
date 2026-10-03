@@ -1,0 +1,116 @@
+# When treatment arrives at different times: staggered DiD in trouble
+next: {"title":"Regression discontinuity: what happens at your 65th birthday","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/regression-discontinuity-what-happens-at-your-65th-birthday.cast"}
+
+## Clean Controls and the Event-Time Plot
+voice: male
+level: advanced
+use: event_study
+with:
+    periods_pre: 4
+    periods_post: 4
+    effect: -2.4
+    ramp: true
+    pre_trend: 0
+    ci: 0.5
+    y_label: Change in uninsured rate (pp)
+    title: 'ATT(g,t): clean controls only'
+
+    box c14 "g = 2014" x 180 y 600 hidden true
+    label l14 "24 states + D.C." below attach_to c14 hidden true
+    box c15 "g = 2015" x 345 y 470 hidden true
+    label l15 "PA, IN, AK" below attach_to c15 hidden true
+    box c16 "g = 2016" x 505 y 340 hidden true
+    label l16 "MT, LA" below attach_to c16 hidden true
+    box never "Never treated" x 815 y 480 hidden true
+    label lnev "TX, FL, GA" below attach_to never hidden true
+    arrow a14 c14 -> never #2f6b8f hidden true
+    arrow a15 c15 -> never #2f6b8f hidden true
+    arrow a16 c16 -> never #2f6b8f hidden true
+    label label_clean "Clean control" above #2f6b8f attach_to a15 hidden true
+    arrow a_nyt c14 -> c16 curved dashed #2f6b8f hidden true
+    label label_nyt "Not yet treated" left #2f6b8f attach_to a_nyt hidden true
+    arrow a_bad c16 -> c15 curved #b5482e hidden true
+    label label_bad "Already treated" below #b5482e attach_to a_bad hidden true
+    mark ann_bad target a_bad kind cross hidden true
+
+Now that we have seen how Bacon's weights let already-treated states slip in as controls, let's rebuild the estimator from clean comparisons only — starting with one cohort: the twenty-four states plus D.C. that expanded Medicaid in January 2014.
+    draw c14 l14
+
+Pennsylvania and Indiana followed in 2015, Alaska that September, Montana and Louisiana in 2016 — each adoption date defines its own group, G equal to the year the state switched on.
+    draw c15 l15 c16 l16
+
+And Texas, Florida and Georgia never expanded at all — the group these estimators care about most.
+    draw never lnev
+
+    pause 0.3
+
+The building block is ATT of g and t: for cohort g, at calendar time t, the average gap between the outcome observed and the outcome that cohort would have had under never being treated.
+    text att "ATT(g,t) = E[ Y_t(g) − Y_t(∞) | G = g ]" x 500 y 140 font_size 30
+
+Every one of those gaps is estimated against units whose treatment status never changes across the window.
+    draw a14 a15 a16 label_clean parallel true
+
+Or against states not yet treated: before 2016, Montana and Louisiana are as untreated as Texas, so they are legitimate controls for the 2014 cohort.
+    draw a_nyt label_nyt
+
+What is never allowed is this — the 2016 cohort compared against 2015 adopters whose own treatment effect is already running.
+    draw a_bad label_bad
+
+That comparison, the one that manufactured the negative weights, is simply not in the estimand.
+    draw ann_bad delivery grave
+
+    wait
+
+    clear
+
+    draw axes zero_line treat_line
+
+Now line the cohorts up by time since their own expansion rather than by calendar year, and average the ATT of g and t at each event time. Before expansion the estimates sit on zero.
+    draw coef_0 coef_1 coef_2 coef_3
+
+After expansion the uninsured rate falls: in this illustration about half a percentage point in the first year, reaching roughly two and a half by the fourth as enrollment builds.
+    draw coef_4 coef_5 coef_6 coef_7
+
+The pre-period points are not decoration — one is normalized to zero by construction, and the rest are your only visible check on parallel trends and anticipation.
+    highlight coef_0 coef_1 coef_2 coef_3 effect glow
+
+Sun and Abraham reach the same picture from the regression side: interact cohort dummies with relative-time dummies, then average those interactions with cohort shares, so no coefficient borrows another cohort's post-period.
+    highlight coef_4 coef_5 coef_6 coef_7 effect pulse
+
+    wait
+
+Now the price. Because ATT is defined against never-treated potential outcomes, no state may respond before its start date — and expansions were legislated and announced months ahead, so hospitals and insurers had time to move.
+    point at.ref treat_line gesture underline
+
+Second, parallel trends must hold cohort by cohort, and in the not-yet-treated version it must hold at every horizon, not only around each switch.
+    point at.ref zero_line gesture underline
+
+Third, precision: each ATT is estimated off a slice of the panel, and Callaway and Sant'Anna's simultaneous bands, bootstrapped and clustered by state, are visibly wider than the pointwise standard error two-way fixed effects handed you.
+    point at.ref coef_7 gesture circle
+
+    wait
+
+Here the field genuinely argues: Baker, Larcker and Wang re-ran published staggered designs and found conclusions that shift once the contaminated comparisons come out, while others reply that in many applications the reweighting barely moves the point estimate at all.
+    highlight coef_4 coef_5 coef_6 coef_7 effect glow
+
+And the choice of clean control is itself contested — never-expanders are disproportionately Southern and poorer, so the cleanest group may be the least comparable, while not-yet-treated controls buy back power at the cost of one more assumption.
+    focus coef_0 coef_1 coef_2 coef_3
+
+    pause 0.4
+
+The Oregon lottery needed none of this: one date, one randomization, the counterfactual handed to you. Here the counterfactual is assembled cohort by cohort, and every seam is an assumption you must defend.
+
+So these estimators do not repair the regression — they change the estimand: ATT for each cohort and period, built only against never-treated or not-yet-treated states, aggregated on purpose rather than by accident, and paid for in wider bands.
+    draw title
+
+## Where next
+end_page: true
+
+Next: Regression discontinuity: what happens at your 65th birthday
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:11 title "Difference-in-differences and the parallel trends assumption" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:13 title "Regression discontinuity: what happens at your 65th birthday" size 320 x 735 y 395
+
+    link end_again href lecture:12 title "Watch again" form text open here x 500 y 160
+    text end_count "12 of 18" x 500 y 95 font_size 22 style.opacity 0.6

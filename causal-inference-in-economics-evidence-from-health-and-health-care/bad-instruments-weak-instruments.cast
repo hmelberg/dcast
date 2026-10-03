@@ -1,0 +1,244 @@
+# Bad instruments, weak instruments
+next: {"title":"Selection on observables: matching, regression, and the leap of faith","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/selection-on-observables-matching-regression-and-the-leap-of-faith.cast"}
+
+## Two Ways an IV Dies
+voice: male
+level: advanced
+
+    text title_a "Benchmark: the Oregon lottery" #8f887c x 500 y 715 font_size 24 hidden true
+    box z_or "Z: lottery draw" #2f6b8f x 165 y 575 hidden true
+    box d_or "D: coverage" x 490 y 575 hidden true
+    box y_or "Y: outcome" x 810 y 575 hidden true
+    arrow a_zd z_or -> d_or hidden true
+    label la_zd "First stage ≈ 25 pp" below #2f6b8f attach_to a_zd hidden true
+    arrow a_dy d_or -> y_or hidden true
+    arrow a_excl z_or -> y_or curved dashed #b5482e hidden true
+    label la_excl "Exclusion restriction" above #b5482e attach_to a_excl hidden true
+    mark x_excl target a_excl kind cross hidden true
+    text title_b "The observational cousin: distance to a catheterization hospital" #8f887c x 500 y 415 font_size 22 hidden true
+    box z_di "Z: extra distance" #2f6b8f x 165 y 275 hidden true
+    box d_di "D: catheterization" x 490 y 275 hidden true
+    box y_di "Y: mortality" x 810 y 275 hidden true
+    arrow b_zd z_di -> d_di hidden true
+    label lb_zd "First stage: estimated, not designed" below #2f6b8f attach_to b_zd hidden true
+    arrow b_dy d_di -> y_di hidden true
+    arrow b_excl z_di -> y_di curved dashed #b5482e hidden true
+    label lb_excl "Exclusion restriction: ?" above #b5482e attach_to b_excl hidden true
+    text formula "β_IV  =  Cov(Z, Y)  /  Cov(Z, D)" x 500 y 555 font_size 40 hidden true
+    box box_invalid "Invalid: Cov(Z, U) ≠ 0" #b5482e x 250 y 300 hidden true
+    box box_weak "Weak: Cov(Z, D) ≈ 0" #8a5fa8 x 760 y 300 hidden true
+    arrow arr_inv formula -> box_invalid #b5482e hidden true
+    arrow arr_weak formula -> box_weak #8a5fa8 hidden true
+    label sub_invalid "Numerator contaminated" below #b5482e attach_to box_invalid hidden true
+    label sub_weak "Denominator vanishes" below #8a5fa8 attach_to box_weak hidden true
+
+A: Nearly every IV paper you'll referee dies in one of exactly two ways — invalid, or weak — and telling them apart decides whether you can fix it with more data or not at all.
+    draw title_a z_or
+
+B: Start from the one we trust: Oregon, 2008, thirty thousand names drawn, and being drawn raises coverage by about twenty-five percentage points.
+    draw d_or a_zd la_zd
+
+A: Twenty-five points on tens of thousands of people — the denominator of the IV ratio is never in doubt here.
+    draw y_or a_dy
+
+B: The second requirement is the arrow that must not exist: any route from the draw to health or spending bypassing coverage.
+    draw a_excl la_excl
+
+A: And Oregon gets to cross it out for free, because the draw was a random number — nothing else about you moved when your name came up.
+    draw x_excl
+
+    pause 0.4
+
+A: Now the cousin. McClellan, McNeil and Newhouse, 1994, instrumented treatment intensity for elderly heart-attack patients with differential distance to a hospital that could do cardiac catheterization.
+    draw title_b z_di d_di b_zd lb_zd
+
+B: Patients living nearer such a hospital do get catheterized more, so a first stage exists — the design then asks what that extra intensity buys in mortality.
+    draw y_di b_dy
+
+A: Nobody randomized where these patients live, though, so the arrow we just crossed out comes back with a question mark.
+    draw b_excl lb_excl
+
+B: The two pictures are structurally identical — the whole difference between a credible design and a hopeful one is whether you can cross out that top arrow.
+    focus a_excl b_excl
+
+    pause 0.5
+
+    clear
+
+A: Strip the stories away and IV is one ratio: covariance of instrument with outcome, over covariance of instrument with treatment.
+    draw formula
+
+B: Break exclusion and the numerator absorbs something that isn't a treatment effect — invalid, and no sample size on earth repairs it.
+    draw arr_inv box_invalid sub_invalid
+
+A: Keep exclusion intact but let the denominator drift toward zero, and you're dividing an estimate by noise — weak.
+    draw arr_weak box_weak sub_weak
+
+B: And where weak begins is genuinely unsettled: Staiger and Stock's 1997 rule of thumb puts the first-stage F at ten, while Lee, McCrary, Moreira and Porter argued in 2022 that honest five-percent inference needs an F nearer a hundred and five — a threshold much of the published IV literature would fail.
+    highlight box_weak effect glow
+
+A: So every diagnosis in this series lives in this one ratio: a contaminated numerator, or a vanishing denominator.
+    mark mark_formula target formula kind box
+    delivery grave
+
+B: Next: the numerator — why distance is defensible, and exactly what breaks it.
+
+## Where F > 10 came from, and why it is too lenient
+voice: male
+level: advanced
+use: number_line
+with:
+    min: 0
+    max: 120
+    step: 10
+    points:
+      - {at: 10, label: F = 10}
+      - {at: 104.7, label: F = 104.7}
+    intervals:
+      - {from: 10, to: 104.7, label: Called "strong" since 1997}
+      - {from: 104.7, to: 120, label: Conventional t-ratio valid}
+    arrow_ops:
+      - {from: 10, to: 104.7, label: the bar moved ×10}
+
+A: Now that we have seen when distance is defensible, take the second way an IV dies — honest but weak — and put on a line the one number that decides whether your IV estimate gets believed: the first-stage F.
+    draw line
+
+    draw tick_0 tick_10 tick_20 tick_30 tick_40 tick_50 tick_60 tick_70 tick_80 tick_90 tick_100 tick_110 tick_120 parallel true
+
+B: Worth saying where Oregon sits before we start: about thirty thousand names drawn, a twenty-five point jump in coverage, tens of thousands of people — that first stage runs clean off the right-hand edge of this line.
+    point at.ref tick_120 gesture tap
+
+A: The trouble is everywhere else. Here is the threshold every referee in this field knows by heart: F above ten.
+    draw pt_0
+
+B: Staiger and Stock, 1997 — and they wrote it as a rule of thumb: a weak first stage pulls two-stage least squares back toward OLS, and F of ten kept that bias under roughly ten percent of the OLS bias.
+    highlight pt_0 effect glow
+
+A: So everything to the right of ten acquired a name — strong — and a pass into print.
+    draw interval_0
+
+B: Except that criterion barely applies where we use it most: with a single instrument, 2SLS has no finite moments — no mean there to be biased — which is why Stock and Yogo could only tabulate bias-based critical values from three instruments upward.
+    point at.ref pt_0 gesture circle
+
+A: Their size-based tables tell the other story: one instrument, F around ten, and a nominal five percent test can reject fifteen percent of the time — a ninety-five percent interval that covers about eighty-five.
+    label cov_label "nominal 95% CI ≈ 85% coverage" below-left #b5482e attach_to pt_0
+
+    pause 0.5
+
+B: Which brings us to 2022. Lee, McCrary, Moreira and Porter asked the plain question: how big must F be before the conventional t-ratio, judged against 1.96, actually has five percent size?
+    draw pt_1
+
+A: A hundred and four point seven. Not ten.
+    draw hop_0 delivery grave
+
+B: Only out here does the interval you print mean what its label says.
+    draw interval_1
+
+A: And everything in between — which is very nearly the whole published stock of just-identified IV — was called strong and is not.
+    highlight interval_0 effect pulse
+
+    clear keep ["line","tick_0","tick_10","tick_20","tick_30","tick_40","tick_50","tick_60","tick_70","tick_80","tick_90","tick_100","tick_110","tick_120","pt_0","pt_1","cov_label"]
+
+B: The remedy is where it gets contested. Lee and co-authors say keep your estimate and inflate the standard error by a factor read off your own F — their tF procedure.
+    text camp_lee "Lee et al.: inflate the SE using F (the tF fix)" #2f6b8f x 500 y 625 font_size 26
+
+A: Angrist and Kolesár push back hard: in the just-identified case the screening is itself the problem, because conditioning on a large F selects the samples where the first stage came out big by luck, and that selection carries a bias of its own.
+    text camp_ak "Angrist & Kolesár: screening on F is its own bias" #b5482e x 500 y 560 font_size 26
+
+B: Both camps agree the old rule is broken; they disagree about whether the fix is a much bigger threshold or no threshold at all — and that is genuinely unsettled.
+    highlight camp_lee camp_ak effect glow
+
+A: So F above ten was never a certificate of strength: it was a 1997 approximation about bias, quietly repurposed as a guarantee about inference that it cannot give.
+    mark verdict target pt_1 kind circle
+
+## Worse Than Nothing: Bias, Coverage, and the Verdict
+voice: male
+level: advanced
+use: generic_axes_diagram
+with:
+    x_label: Estimated mortality reduction (pp)
+    y_label: Sampling density
+    title: When the first stage fails
+    curves:
+      - {id: strong, label: Strong IV (F ≫ 100), expression: 62*exp(-0.5*((x-30)/6)*((x-30)/6)), color: supply}
+      - {id: weak, label: Weak IV (F ≈ 5), expression: 30*exp(-0.5*((x-52)/12.5)*((x-52)/12.5)), color: accent}
+      - {id: irrelevant, label: Irrelevant IV (F ≈ 1), expression: 20*exp(-0.5*((x-72)/19)*((x-72)/19)), color: demand}
+    vlines:
+      - {x: 30, label: True LATE ≈ 2 pp}
+      - {x: 75, label: OLS ≈ 8 pp}
+
+A: Now that we have seen where the F greater than ten rule came from, let's watch what a weak instrument actually does to the estimate — and to the interval around it.
+    draw axes x_label y_label title
+
+B: Keep last week's example: distance to a catheterization hospital, and suppose the true LATE for the patients distance moves is a two point fall in one-year mortality.
+    draw vline_0
+
+A: While the raw comparison of catheterized and non-catheterized patients says eight points, because cardiologists send the healthier patients to the cath lab.
+    draw vline_1
+
+B: With an Oregon-strength first stage — a lottery that moves coverage by about twenty-five points — the 2SLS sampling distribution sits over the truth, tight and essentially unbiased.
+    draw strong label_strong
+
+A: Weaken it to an F of about five and the whole distribution slides toward OLS and fattens: relative bias of roughly one over F, a fifth of the way back to selection bias.
+    draw weak label_weak
+
+B: And with no first stage at all, 2SLS centres on the OLS probability limit — you have not estimated a LATE, you have recomputed selection bias with extra steps.
+    draw irrelevant label_irrelevant delivery grave
+
+A: That's the asymmetry that matters: weak-instrument bias has a direction — it walks home to OLS.
+    point at.ref irrelevant gesture circle
+
+B: And with one instrument it isn't even a bell — it's a ratio of two nearly zero-mean normals, heavy-tailed and skewed.
+    highlight irrelevant effect glow
+
+    clear
+
+A: Bias is only half the damage — now the intervals, with truth on the left and the OLS limit on the right.
+    path truth_line dashed #8f887c points [[330,160],[330,570]]
+    text truth_label "True LATE" #8f887c x 330 y 600 font_size 22
+    path ols_line dashed #b5482e points [[720,160],[720,570]]
+    text ols_label "OLS plim" #b5482e x 720 y 600 font_size 22
+
+B: Each bar is one resample's conventional 2SLS interval, nominally ninety-five percent: too short, because a weak first stage understates the spread, and centred in the wrong place.
+    path ci_1 thick #b5482e points [[580,520],[710,520]]
+    path ci_2 thick #b5482e points [[615,460],[765,460]]
+    path ci_3 thick #b5482e points [[545,400],[690,400]]
+    path ci_4 thick #b5482e points [[630,340],[790,340]]
+    parallel true
+
+A: The occasional draw where the first stage came out strong gives an interval wide enough to catch the truth — and so wide it tells you nothing.
+    path ci_5 thick #2f6b8f points [[255,270],[835,270]]
+    text coverage_note "Nominal 95% intervals — real coverage far below" x 500 y 110 font_size 22
+
+B: Which is where the field genuinely splits: Lee, McCrary, Moreira and Porter show that keeping a nominal five percent t-test honest needs a first-stage F of about one hundred and five.
+    text ctrl_1 "Lee–McCrary–Moreira–Porter (2022): valid t needs F ≈ 105" #2f6b8f x 500 y 700 font_size 21
+
+A: Angrist and Kolesár reply that just-identified IV is close to median-unbiased, that conventional intervals behave far better than that threshold implies, and that screening hard on F creates a pretest problem of its own — unresolved, and it decides whether half the applied IV literature survives.
+    text ctrl_2 "Angrist–Kolesár (2024): just-ID IV ≈ median-unbiased" #b5482e x 500 y 655 font_size 21
+
+    clear
+
+B: So the reporting rule that follows: the first stage and its F, a weak-instrument-robust set such as Anderson–Rubin, and the OLS estimate printed beside the IV estimate so a reader can see which way the collapse would go.
+    text chk_title "What to report" x 500 y 640 font_size 30
+    text chk_1 "1.  First-stage coefficient and F" x 500 y 565 font_size 24
+    text chk_2 "2.  A weak-IV-robust set: Anderson–Rubin or tF" x 500 y 505 font_size 24
+    text chk_3 "3.  The OLS estimate beside the IV estimate" x 500 y 445 font_size 24
+
+A: Because across this series the two deaths are not symmetric: a bad instrument breaks exclusion and hands you a confidently wrong number, while a weak one keeps every assumption and quietly returns selection bias — wearing the credibility of a causal design.
+    text verdict "Weak IV returns selection bias — dressed as causal" #b5482e x 500 y 300 font_size 26
+    mark verdict_box target verdict kind box
+    delivery grave
+
+B: Distance was defensible because we could argue exclusion; the lottery was usable because the first stage was overwhelming — an instrument is only ever as good as both halves at once.
+
+## Where next
+end_page: true
+
+Next: Selection on observables: matching, regression, and the leap of faith
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:7 title "Instrumental variables and the LATE theorem" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:9 title "Selection on observables: matching, regression, and the leap of faith" size 320 x 735 y 395
+
+    link end_again href lecture:8 title "Watch again" form text open here x 500 y 160
+    text end_count "8 of 18" x 500 y 95 font_size 22 style.opacity 0.6
