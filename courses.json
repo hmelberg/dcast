@@ -21,36 +21,6 @@
       "updated": "2026-10-03"
     },
     {
-      "slug": "health-technology-assessment-deciding",
-      "title": "Health Technology Assessment: Deciding What a Health System Should Buy",
-      "files": [
-        "health-technology-assessment-deciding/it-works-so-why-is-anyone-still-saying.cast",
-        "health-technology-assessment-deciding/the-patients-you-never-meet-opportunity.cast",
-        "health-technology-assessment-deciding/where-did-this-whole-enterprise-come.cast",
-        "health-technology-assessment-deciding/norway-s-priority-setting-system.cast",
-        "health-technology-assessment-deciding/whose-costs-count-the-perspective.cast",
-        "health-technology-assessment-deciding/what-is-a-qaly-really-claiming-about-you.cast",
-        "health-technology-assessment-deciding/how-can-you-possibly-measure-how-bad-an.cast",
-        "health-technology-assessment-deciding/time-trade-off-and-standard-gamble-whose.cast",
-        "health-technology-assessment-deciding/severity-absolute-shortfall-proportional.cast",
-        "health-technology-assessment-deciding/what-counts-as-a-cost-and-why-does-the.cast",
-        "health-technology-assessment-deciding/cea-cua-cba-and-why-cost-of-illness.cast",
-        "health-technology-assessment-deciding/what-is-a-life-worth-in-money-and-who.cast",
-        "health-technology-assessment-deciding/why-model-at-all-and-which-model-shape.cast",
-        "health-technology-assessment-deciding/building-a-markov-model-states-cycles.cast",
-        "health-technology-assessment-deciding/the-icer-the-plane-and-why-net-benefit.cast",
-        "health-technology-assessment-deciding/where-does-the-threshold-come-from.cast",
-        "health-technology-assessment-deciding/which-uncertainties-can-more-money.cast",
-        "health-technology-assessment-deciding/showing-what-you-don-t-know-from-tornado.cast",
-        "health-technology-assessment-deciding/if-we-are-unsure-should-we-decide-now-or.cast",
-        "health-technology-assessment-deciding/is-the-qaly-fair-and-should-the-number.cast",
-        "health-technology-assessment-deciding/course.md",
-        "health-technology-assessment-deciding/index.html",
-        "health-technology-assessment-deciding/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "taylor-series-and-the-economics-of",
       "title": "Taylor Series and the Economics of Approximation",
       "files": [
@@ -121,6 +91,36 @@
         "causal-inference-in-economics-evidence-from-health-and-health-care/course.md",
         "causal-inference-in-economics-evidence-from-health-and-health-care/index.html",
         "causal-inference-in-economics-evidence-from-health-and-health-care/README.md"
+      ],
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "health-technology-assessment-deciding",
+      "title": "Health Technology Assessment: Deciding What a Health System Should Buy",
+      "files": [
+        "health-technology-assessment-deciding/it-works-so-why-is-anyone-still-saying.cast",
+        "health-technology-assessment-deciding/the-patients-you-never-meet-opportunity.cast",
+        "health-technology-assessment-deciding/where-did-this-whole-enterprise-come.cast",
+        "health-technology-assessment-deciding/norway-s-priority-setting-system.cast",
+        "health-technology-assessment-deciding/whose-costs-count-the-perspective.cast",
+        "health-technology-assessment-deciding/what-is-a-qaly-really-claiming-about-you.cast",
+        "health-technology-assessment-deciding/how-can-you-possibly-measure-how-bad-an.cast",
+        "health-technology-assessment-deciding/time-trade-off-and-standard-gamble-whose.cast",
+        "health-technology-assessment-deciding/severity-absolute-shortfall-proportional.cast",
+        "health-technology-assessment-deciding/what-counts-as-a-cost-and-why-does-the.cast",
+        "health-technology-assessment-deciding/cea-cua-cba-and-why-cost-of-illness.cast",
+        "health-technology-assessment-deciding/what-is-a-life-worth-in-money-and-who.cast",
+        "health-technology-assessment-deciding/why-model-at-all-and-which-model-shape.cast",
+        "health-technology-assessment-deciding/building-a-markov-model-states-cycles.cast",
+        "health-technology-assessment-deciding/the-icer-the-plane-and-why-net-benefit.cast",
+        "health-technology-assessment-deciding/where-does-the-threshold-come-from.cast",
+        "health-technology-assessment-deciding/which-uncertainties-can-more-money.cast",
+        "health-technology-assessment-deciding/showing-what-you-don-t-know-from-tornado.cast",
+        "health-technology-assessment-deciding/if-we-are-unsure-should-we-decide-now-or.cast",
+        "health-technology-assessment-deciding/is-the-qaly-fair-and-should-the-number.cast",
+        "health-technology-assessment-deciding/course.md",
+        "health-technology-assessment-deciding/index.html",
+        "health-technology-assessment-deciding/README.md"
       ],
       "updated": "2026-10-03"
     }
