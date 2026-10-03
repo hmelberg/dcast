@@ -1,0 +1,269 @@
+# Genes as instruments: Mendelian randomization
+next: {"title":"Choosing a design, and turning an estimate into a policy","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/choosing-a-design-and-turning-an-estimate-into-a-policy.cast"}
+
+## Nature's Lottery Draw
+voice: female
+level: advanced
+use: punnett_square
+with:
+    parent1: Aa
+    parent2: Aa
+    trait:
+      dominant: carries *2 — flushes
+      recessive: '*1/*1 — no flush'
+    highlight: dominant
+    show_ratio: true
+
+Nobody will ever randomize you into thirty years of heavy drinking — so over four parts we ask whether a gene can stand in for the lottery we cannot run.
+    text ore_title "Oregon, 2008" #2f6b8f x 265 y 560 font_size 32
+    text ore_text "≈90,000 apply — 30,000 names drawn" #2f6b8f x 265 y 500 font_size 22
+
+Oregon drew thirty thousand names from ninety thousand applicants, once, in 2008; meiosis runs its own draw at every conception, twice over.
+    text nat_title "Every conception" #b5482e x 735 y 560 font_size 32
+    text nat_text "2 alleles carried — 1 transmitted" #b5482e x 735 y 500 font_size 22
+    path divider dashed #8f887c points [[500,610],[500,470]]
+
+Both allocate by chance, but only one of them has been running since long before there were economists to exploit it.
+    text cmp_text "Allocation by chance — once in Oregon, twice at every conception" x 500 y 400 font_size 24
+
+    pause 0.4
+
+    clear
+
+Take the gene this series lives on: ALDH2 on chromosome 12, and two parents who each carry one low-activity *2 copy and one normal *1.
+    draw parent1_label parent2_label grid
+
+Write A for the *2 allele and a for *1: each parent transmits one of their two copies with probability one half, and which one is pure chance.
+    draw grid__ch0 grid__ch1 grid__rh0 grid__rh1
+
+    pause 0.3
+
+The two transmissions are independent, so all four cells are equally likely — a two-ticket draw with no selection anywhere in it.
+    draw grid__c0_0 grid__c0_1 grid__c1_0 grid__c1_1 parallel true
+
+    pause 0.4
+
+Three of the four inherit at least one *2 copy, letting acetaldehyde pile up after a drink — so in this lottery the losing hand is a flush.
+    draw hl_0_0 hl_0_1 hl_1_0 parallel true
+
+Three to one: Mendel's segregation ratio is the oldest randomized allocation rule in science, and it re-runs every generation.
+    draw ratio
+
+    pause 0.5
+
+Read the conditioning carefully, though — the draw is random within these parents' genotypes, not across a population.
+    focus parent1_label parent2_label
+
+Across populations, allele frequencies track ancestry, and so do diet, income and disease; population stratification is confounding under another name, which is why credible studies condition on ancestry components or compare siblings within a family.
+
+    clear
+
+So what has the lottery bought us? First, independence: conditional on the parents, the allele is dealt before any covariate exists to be unbalanced.
+    text head3 "What nature's lottery buys you" x 500 y 640 font_size 34
+    text p1 "1. Random within parental genotype" x 500 y 545 font_size 26
+
+Second, temporal order — the genotype is fixed at conception, decades before smoking, income or illness, so no outcome can reach back and cause it.
+    text p2 "2. Fixed at conception — nothing downstream can reverse-cause it" x 500 y 460 font_size 26
+
+Third, the part nature does not hand you: relevance, the requirement that the allele actually shifts the exposure.
+    text p3 "3. Relevance is not free: the allele must move the exposure" #b5482e x 500 y 375 font_size 26
+    mark mark3 target p3 kind box
+
+In our notation Z_i is the number of *2 copies, D_i is alcohol intake, Y_i the health outcome — and the next part measures that first stage in a real population.
+    text zline "Z_i = copies of *2   →   D_i = alcohol intake   →   Y_i = health" #2f6b8f x 500 y 250 font_size 26
+
+    pause 0.4
+
+Nature randomizes the allele; it never promised to randomize what the allele does — and that gap is the rest of this series.
+    delivery grave
+
+## Pleiotropy in a Lab Coat
+voice: female
+level: advanced
+use: causal_dag
+with:
+    title: Two arrows out of one gene
+    nodes:
+      - {name: ALDH2 variant, role: exposure}
+      - {name: Alcohol intake, role: mediator}
+      - {name: Heart disease, role: outcome}
+      - {name: Aldehyde toxicity, role: collider}
+      - {name: Ancestry, role: confounder}
+      - {name: Family environment, role: confounder}
+    edges: ALDH2 variant -> Alcohol intake; Alcohol intake -> Heart disease; ALDH2 variant -> Aldehyde toxicity; Aldehyde toxicity -> Heart disease; Ancestry -> ALDH2 variant; Ancestry -> Heart disease; Family environment -> ALDH2 variant; Family environment -> Heart disease
+    highlight_backdoor: true
+
+    mark mark_horizontal target node_aldehyde_toxicity kind circle hidden true
+
+Now that the ALDH2 flush has given us a genuinely strong first stage, the question that decides whether we may publish a number at all is whether this gene touches the heart by any route other than the glass.
+    draw title node_aldh2_variant
+
+One copy of the star-two allele lets acetaldehyde accumulate, drinking turns unpleasant, and intake falls — to near zero among homozygotes.
+    draw node_alcohol_intake edge_0
+
+    pause 0.3
+
+Alcohol then acts on blood pressure and the heart: this arrow is the effect we actually want.
+    draw node_heart_disease edge_1
+
+Strictly in series — that is vertical pleiotropy, and far from a violation it is the instrument doing its job.
+    focus node_aldh2_variant node_alcohol_intake node_heart_disease edge_0 edge_1
+
+    pause 0.4
+
+But the same variant leaves acetaldehyde itself circulating, and acetaldehyde is a group-one carcinogen and a vasodilator in its own right.
+    draw node_aldehyde_toxicity edge_2
+
+A second arrow reaches the outcome without ever passing through drinking — horizontal pleiotropy, which is our exclusion restriction from lecture seven wearing a lab coat.
+    draw edge_3 mark_horizontal delivery grave
+
+And the damage is arithmetic: the Wald ratio converges not to beta but to beta plus gamma over pi — direct effect over first stage. Bias you inherit.
+    text wald "plim β̂_IV = β + γ / π" #b5482e x 500 y 58 font_size 30
+
+    pause 0.5
+
+Randomization at conception holds within a mating pool, not across them: ancestry moves allele frequencies and disease risk together — pool populations carelessly and you can discover a gene for chopstick use.
+    draw node_ancestry edge_4 edge_5
+
+Dynastic effects next: your genotype is correlated with your parents', and their genotype built the household that acted on you directly.
+    draw node_family_environment edge_6 edge_7
+
+Both are omitted-variable bias in genetic dress — they break independence before exclusion is even reached, which is why credible work adjusts for ancestry components or moves inside families.
+    focus node_ancestry node_family_environment edge_4 edge_5 edge_6 edge_7
+
+    pause 0.5
+
+    clear keep ["title"]
+
+Modern Mendelian randomization rarely rests on one variant: a polygenic score aggregates hundreds of SNPs, and the first stage becomes so strong that lecture eight's weak-instrument worry simply evaporates.
+    text t_head "Polygenic score: hundreds of SNPs, one instrument" x 500 y 600 font_size 30
+    text t_f "First stage: F in the hundreds" #2f6b8f x 500 y 520 font_size 26
+
+Which is the trap — a score selected for prediction is selected precisely for touching everything it can, so strength is bought with hundreds of new direct paths.
+    text t_cost "Exclusion: hundreds of ways to fail" #b5482e x 500 y 462 font_size 26
+
+So exclusion gets tested rather than assumed: MR-Egger reads a nonzero intercept as directional pleiotropy, and the weighted median survives if over half the instrument weight is valid.
+    text t_m1 "MR-Egger — nonzero intercept ⇒ directional pleiotropy" x 500 y 372 font_size 24
+    text t_m2 "Weighted median — consistent if >50% of weight is valid" x 500 y 316 font_size 24
+
+Within-sibship designs difference out ancestry and the family home — the one setting where comparing yourself with your sibling is scientifically productive.
+    text t_m3 "Within-sibship MR — differences out ancestry and home" x 500 y 260 font_size 24
+
+Each carries assumptions of its own, and whether a polygenic score can ever satisfy exclusion remains openly disputed in the field.
+    text t_bottom "Falsification tests, not proof." #b5482e x 500 y 160 font_size 30
+    mark mark_bottom target t_bottom kind box
+
+Everything hangs on one arrow leaving the gene rather than two: Mendelian randomization does not escape the exclusion restriction, it relocates it into biology, where it is harder to see and no easier to test.
+    show node_aldh2_variant node_alcohol_intake node_heart_disease node_aldehyde_toxicity edge_0 edge_1 edge_2 edge_3 mark_horizontal delivery grave
+
+## What the gene can and cannot tell you
+voice: female
+level: advanced
+domain: {"x":[0,70],"y":[0,25]}
+
+    path grid_h #8f887c points [[60,612],[960,612]] hidden true
+    path grid_v1 #8f887c points [[335,225],[335,618]] hidden true
+    path grid_v2 #8f887c points [[672,225],[672,618]] hidden true
+    text t1 "One checklist, two lotteries" x 500 y 700 font_size 30 hidden true
+    text head_1 "Oregon lottery" #2f6b8f x 500 y 648 font_size 23 hidden true
+    text head_2 "ALDH2 rs671" #b5482e x 816 y 648 font_size 23 hidden true
+    text r1 "Relevance" x 195 y 555 font_size 22 hidden true
+    text c11 "+25 pp coverage" #2f6b8f x 500 y 555 font_size 19 hidden true
+    text c12 "≈ half the drinks/week" #b5482e x 816 y 555 font_size 19 hidden true
+    text r2 "Independence" x 195 y 460 font_size 22 hidden true
+    text c21 "A state computer, 2008" #2f6b8f x 500 y 460 font_size 19 hidden true
+    text c22 "Meiosis, at conception" #b5482e x 816 y 460 font_size 19 hidden true
+    text r3 "Exclusion" x 195 y 365 font_size 22 hidden true
+    text c31 "Letter changes nothing else" #2f6b8f x 500 y 365 font_size 19 hidden true
+    text c32 "No horizontal pleiotropy" #b5482e x 816 y 365 font_size 19 hidden true
+    mark mark_excl target c32 kind box hidden true
+
+Now that we have seen pleiotropy break the exclusion restriction, the question a ministry will actually ask you is whether an MR estimate can be taken to a policy — so let's hold the gene and the Oregon lottery to the same four-item checklist.
+    draw grid_h grid_v1 grid_v2 t1 head_1 head_2
+
+Relevance: the Oregon draw raised Medicaid coverage by about twenty-five percentage points, and one copy of the rs671 variant roughly halves weekly drinking — both first stages are strong.
+    draw r1 c11 c12
+
+    pause 0.3
+
+Independence: Oregon's assignment came from a state computer in 2008, the gene's from meiosis at conception — and nobody chose whether to enter that second draw.
+    draw r2 c21 c22
+
+    pause 0.3
+
+Exclusion: the letter must move health only through coverage, the variant only through alcohol — and this is the door pleiotropy walks through.
+    draw r3 c31 c32
+
+    pause 0.3
+
+Monotonicity: nobody enrolled in Medicaid because they lost the lottery, and nobody drinks more because their face turns red — no defiers on either side.
+    text r4 "Monotonicity" x 195 y 270 font_size 22
+    text c41 "No one enrolls on losing" #2f6b8f x 500 y 270 font_size 19
+    text c42 "Flush never raises drinking" #b5482e x 816 y 270 font_size 19
+
+    pause 0.5
+
+Three of these four rungs the gene climbs more easily than the lottery does; this one it can never climb, only argue.
+    draw mark_excl delivery grave
+
+    clear
+
+    axes ax x_label "Age (years)" y_label "Drinks per week"
+
+Take two men of the same cohort: the one with two functional alleles drinks more through his twenties and settles near twenty units a week.
+    curve curve_wt #2f6b8f expr 20/(1+exp(-(x-22)/2.5))
+    label label_wt "Two functional alleles" above #2f6b8f attach_to curve_wt
+
+    pause 0.3
+
+His neighbour carries the variant, flushes on the second drink, and settles at about half that — from his first drink to his last.
+    curve curve_het #b5482e expr 10/(1+exp(-(x-22)/2.5))
+    label label_het "Carries rs671: flushes" below #b5482e attach_to curve_het
+
+    pause 0.3
+
+So the instrument's contrast is this entire slab: four decades at half the dose, not one year of it.
+    region region_gap x_from 0 x_to 70 between ["curve_wt","curve_het"] style.fill #f2c14e
+    label label_gap "Lifetime exposure contrast" above-left attach_to region_gap
+
+Run exactly this contrast in the China Kadoorie Biobank — half a million adults — and stroke risk climbs steadily with genotype-predicted alcohol, with no protective sweet spot for moderate drinking.
+    highlight region_gap effect glow
+
+    pause 0.4
+
+Now the object a finance ministry actually controls: a tax that shaves five units a week off midlife drinking for five years — this thin green sliver.
+    curve curve_policy dashed #d0865f expr "20/(1+exp(-(x-22)/2.5)) - 5*exp(-((x-45)*(x-45))/12)"
+    region region_policy x_from 38 x_to 52 between ["curve_wt","curve_policy"] style.fill #87a878
+    label label_policy "Five-year alcohol tax" below-right #d0865f attach_to region_policy
+
+The gene's local average treatment effect is anything but late: it switches on before the first drink and never switches off.
+    point at.ref region_gap gesture circle
+
+    clear
+
+What the gene can give you is the sign and the scale of lifetime exposure, uncontaminated by reverse causation or by the habits that travel with drinking.
+    text syn_title "What the gene can and cannot tell you" x 500 y 590 font_size 30
+    text s1 "Can: the sign and scale of lifetime exposure" #2f6b8f x 500 y 480 font_size 24
+
+What it cannot give you is a policy effect — rescaling that lifetime slab down to a five-year sliver is extrapolation, not estimation.
+    text s2 "Cannot: the effect of any policy you could pass" #b5482e x 500 y 400 font_size 24
+
+And what it always gives you is a LATE, defined by compliers you never chose — the heterozygotes the flush actually moves, just as Oregon's estimate belonged to the quarter who enrolled.
+    text s3 "Always: a LATE, on compliers you did not choose" x 500 y 320 font_size 24
+    mark mark_s3 target s3 kind box
+
+    pause 0.4
+
+Nature randomizes the allele for free, and that buys independence outright; exclusion and the complier definition you still pay for — in biology, and in how far you dare carry the number.
+
+## Where next
+end_page: true
+
+Next: Choosing a design, and turning an estimate into a policy
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:16 title "Reading a null: power, precision, and the Oregon blood-sugar result" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:18 title "Choosing a design, and turning an estimate into a policy" size 320 x 735 y 395
+
+    link end_again href lecture:17 title "Watch again" form text open here x 500 y 160
+    text end_count "17 of 18" x 500 y 95 font_size 22 style.opacity 0.6

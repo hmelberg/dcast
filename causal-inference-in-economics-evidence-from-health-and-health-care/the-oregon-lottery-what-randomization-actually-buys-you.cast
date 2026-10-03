@@ -1,0 +1,302 @@
+# The Oregon lottery: what randomization actually buys you
+next: {"title":"The RAND Health Insurance Experiment: randomizing the price of care","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/the-rand-health-insurance-experiment-randomizing-the-price-of-care.cast"}
+
+## Independence: (Y(1),Y(0)) ⊥ D
+voice: female
+level: advanced
+use: equation_steps
+with:
+    title: What the lottery buys
+    steps:
+      - {tex: 'Y_i = D_i\,Y_i(1) + (1-D_i)\,Y_i(0)', note: We see one outcome per person.}
+      - {tex: 'E[Y_i\mid D_i=1]-E[Y_i\mid D_i=0]=\underbrace{E[Y_i(1)-Y_i(0)\mid D_i=1]}_{\text{ATT}}+\underbrace{E[Y_i(0)\mid D_i=1]-E[Y_i(0)\mid D_i=0]}_{\text{selection bias}}', note: Lecture 2's decomposition.}
+      - {tex: '\bigl(Y_i(1),\,Y_i(0)\bigr)\ \perp\ D_i', note: What the draw delivers.}
+      - {tex: 'E[Y_i\mid D_i=1]-E[Y_i\mid D_i=0]=E[Y_i(1)]-E[Y_i(0)]', note: Selection bias = 0. This is the ATE.}
+
+    mark mark_ate target step_3 kind box hidden true
+    box n_list "≈90,000 signed up" hidden true
+    chance n_draw "Lottery" hidden true
+    box n_treat "≈30,000 drawn: D=1" #2f6b8f hidden true
+    box n_ctrl "≈60,000 not drawn: D=0" #b5482e hidden true
+    arrow a1 n_list -> n_draw hidden true
+    arrow a2 n_draw -> n_treat curved #2f6b8f hidden true
+    arrow a3 n_draw -> n_ctrl curved #b5482e hidden true
+
+Now that we have seen Oregon draw thirty thousand names, the question is what that draw licenses you to claim — because with any other data, comparing the insured to the uninsured is a mistake, and here it is not.
+    draw title step_0 note_0
+
+    pause 0.4
+
+From Lecture 2: the raw difference in means is the effect on the treated, plus a term comparing the two groups' untreated outcome Y_i(0).
+    draw step_1 note_1
+
+That second bracket is the whole problem — the people who get insured would have had different health anyway, and no arithmetic on observed data pulls it apart from the effect.
+    highlight step_1 effect glow
+
+The lottery's entire contribution is this line: a machine that knows nothing about you assigns D, so treatment is independent of both potential outcomes.
+    draw step_2 note_2
+
+    pause 0.3
+
+Far stronger than equal average age — the full joint distribution of Y(1) and Y(0) matches across arms, motivation and family support and every trait nobody wrote down included.
+    highlight step_2 effect glow
+
+So the untreated outcome has the same expectation in both arms, the bias term is exactly zero, and a difference of raw averages is the average causal effect.
+    draw step_3 note_3
+
+No covariates, no functional form: the design is doing the identifying, and the regression is just bookkeeping.
+    draw mark_ate delivery grave
+
+    quiz "In the decomposition, what does independence set to zero?" intro "A quick check."
+        right: Independence makes the untreated outcome equal in expectation across arms, so the selection-bias term vanishes.
+        wrong: The causal effect survives; it is the comparison of untreated outcomes across the two groups that disappears.
+        * The treatment effect itself
+        + The selection-bias term
+        * The variance of Y
+
+Now, who exactly does that promise cover?
+    clear
+
+Roughly ninety thousand low-income uninsured adults signed onto Oregon's waiting list within five weeks.
+    draw n_list
+
+The state had money for about ten thousand slots, and rationed them by drawing names.
+    draw n_draw a1
+
+Thirty thousand won the chance to apply; the sixty thousand left behind became the control group.
+    draw n_treat n_ctrl a2 a3 parallel true
+
+Since the draw ignored everything about them, both arms carry the same distribution of potential outcomes — including the traits you could never put in a regression.
+    label lab_indep "Same distribution of Y(1), Y(0) in both arms" below attach_to n_draw
+
+And Oregon never intended an experiment: the lottery was simply the fairest way to ration scarce slots, and economists recognised a randomized trial in a bureaucratic accident.
+    highlight n_draw effect circle
+
+    quiz "Why can't matching on observables promise the same thing?" required true
+        right: Matching balances the covariates in your dataset; the lottery balances everything, measured or not.
+        wrong: Sample size is not the issue — matching can only balance the variables you actually observed.
+        * It needs a larger sample
+        + It balances only what you measured
+        * It cannot handle binary treatment
+
+Randomization never makes two people alike; it makes assignment independent of who they are — and that alone turns a difference in averages into a causal effect.
+
+## Reading a Balance Table
+voice: female
+level: advanced
+
+    text a_title "Oregon lottery: pre-randomization characteristics" x 500 y 690 font_size 30 hidden true
+    text a_h1 "Characteristic" #8f887c x 230 y 620 font_size 25 hidden true
+    text a_h2 "Selected" #8f887c x 520 y 620 font_size 25 hidden true
+    text a_h3 "Not selected" #8f887c x 690 y 620 font_size 25 hidden true
+    text a_h4 "Difference" #8f887c x 855 y 620 font_size 25 hidden true
+    path a_rule #8f887c points [[60,595],[930,595]] hidden true
+    text a_r1c1 "Female" x 230 y 540 font_size 24 hidden true
+    text a_r1c2 "0.556" x 520 y 540 font_size 24 hidden true
+    text a_r1c3 "0.555" x 690 y 540 font_size 24 hidden true
+    text a_r1c4 "+0.001" #2f6b8f x 855 y 540 font_size 24 hidden true
+    text a_r2c1 "Age (years)" x 230 y 490 font_size 24 hidden true
+    text a_r2c2 "41.2" x 520 y 490 font_size 24 hidden true
+    text a_r2c3 "41.3" x 690 y 490 font_size 24 hidden true
+    text a_r2c4 "−0.1" #2f6b8f x 855 y 490 font_size 24 hidden true
+    text a_r3c1 "Prefers English" x 230 y 440 font_size 24 hidden true
+    text a_r3c2 "0.92" x 520 y 440 font_size 24 hidden true
+    text a_r3c3 "0.92" x 690 y 440 font_size 24 hidden true
+    text a_r3c4 "0.00" #2f6b8f x 855 y 440 font_size 24 hidden true
+    text a_r4c1 "Prior hospital stay" x 230 y 390 font_size 24 hidden true
+    text a_r4c2 "0.070" x 520 y 390 font_size 24 hidden true
+    text a_r4c3 "0.069" x 690 y 390 font_size 24 hidden true
+    text a_r4c4 "+0.001" #2f6b8f x 855 y 390 font_size 24 hidden true
+    text a_ftest "Joint F-test on all covariates: does not reject balance" #2f6b8f x 500 y 315 font_size 26 hidden true
+    mark a_mark #2f6b8f target a_ftest kind box hidden true
+    text a_hh "By design, one covariate is not balanced: household size" #8f887c x 500 y 235 font_size 23 hidden true
+    text b_title "A lottery that fails the audit (hypothetical)" x 500 y 690 font_size 30 hidden true
+    text b_h1 "Characteristic" #8f887c x 230 y 620 font_size 25 hidden true
+    text b_h2 "Selected" #8f887c x 520 y 620 font_size 25 hidden true
+    text b_h3 "Not selected" #8f887c x 690 y 620 font_size 25 hidden true
+    text b_h4 "Difference" #8f887c x 855 y 620 font_size 25 hidden true
+    path b_rule #8f887c points [[60,595],[930,595]] hidden true
+    text b_r1c1 "Female" x 230 y 540 font_size 24 hidden true
+    text b_r1c2 "0.56" x 520 y 540 font_size 24 hidden true
+    text b_r1c3 "0.55" x 690 y 540 font_size 24 hidden true
+    text b_r1c4 "+0.01" x 855 y 540 font_size 24 hidden true
+    text b_r2c1 "Age (years)" x 230 y 490 font_size 24 hidden true
+    text b_r2c2 "38.4" x 520 y 490 font_size 24 hidden true
+    text b_r2c3 "42.9" x 690 y 490 font_size 24 hidden true
+    text b_r2c4 "−4.5 ***" #b5482e x 855 y 490 font_size 24 hidden true
+    text b_r3c1 "Prior hospital stay" x 230 y 440 font_size 24 hidden true
+    text b_r3c2 "0.041" x 520 y 440 font_size 24 hidden true
+    text b_r3c3 "0.089" x 690 y 440 font_size 24 hidden true
+    text b_r3c4 "−0.048 ***" #b5482e x 855 y 440 font_size 24 hidden true
+    text b_r4c1 "Signed up on day 1" x 230 y 390 font_size 24 hidden true
+    text b_r4c2 "0.71" x 520 y 390 font_size 24 hidden true
+    text b_r4c3 "0.52" x 690 y 390 font_size 24 hidden true
+    text b_r4c4 "+0.19 ***" #b5482e x 855 y 390 font_size 24 hidden true
+    text b_ftest "Joint F-test: p < 0.001 — balance rejected" #b5482e x 500 y 315 font_size 26 hidden true
+    mark b_mark #b5482e target b_ftest kind box hidden true
+    text c_1 "A balance table cannot test independence." x 500 y 520 font_size 32 hidden true
+    text c_2 "It tests whether the lottery was run as claimed." #2f6b8f x 500 y 445 font_size 30 hidden true
+    mark c_mark #2f6b8f target c_2 kind box hidden true
+
+Now that we have seen what independence promises, here is the catch: it is a claim about potential outcomes we never observe, so nobody can test it directly.
+    draw a_title
+
+So we test its observable shadow — characteristics fixed before the draw, which winning a lottery could not possibly have changed.
+    draw a_h1 a_h2 a_h3 a_h4 a_rule parallel true
+
+Oregon's own audit, across the roughly seventy-five thousand people in the study: about fifty-six percent women on each side, and a mean age near forty-one on each side.
+    draw a_r1c1 a_r1c2 a_r1c3 a_r1c4 a_r2c1 a_r2c2 a_r2c3 a_r2c4 parallel true
+
+    pause 0.4
+
+Language from the sign-up form, and hospital stays pulled from state discharge records before the draw — a measure nobody could report to their own advantage.
+    draw a_r3c1 a_r3c2 a_r3c3 a_r3c4 a_r4c1 a_r4c2 a_r4c3 a_r4c4 parallel true
+
+Read down the last column: the gaps are fractions of a percentage point, and they do not all lean the same way.
+    focus a_r1c4 a_r2c4 a_r3c4 a_r4c4
+
+The decisive test is joint — put every covariate together and ask whether they predict who was drawn; in Oregon, they cannot.
+    draw a_ftest a_mark
+
+    quiz "In a lottery that truly worked, what should twenty separate balance comparisons at the 5% level show?" intro "Quick check."
+        right: About one in twenty looks significant by pure chance — which is why the joint test, not a single starred row, decides.
+        wrong: Randomization removes systematic gaps, not sampling noise.
+        * All twenty balanced
+        + About one significant by chance
+        * Any starred row voids the study
+
+One covariate is imbalanced on purpose: the lottery drew individuals but covered everyone on their household application, so larger households were likelier to win — which is why every Oregon regression controls for household size.
+    draw a_hh
+
+    clear
+
+Now the counterexample — a table from a lottery that did not work.
+    draw b_title b_h1 b_h2 b_h3 b_h4 b_rule
+
+The first row looks fine, which proves nothing; one balanced characteristic is easy to come by.
+    draw b_r1c1 b_r1c2 b_r1c3 b_r1c4 parallel true
+
+But the winners are four and a half years younger, half as likely to have been hospitalized before the draw, and far likelier to have signed up on day one.
+    draw b_r2c1 b_r2c2 b_r2c3 b_r2c4 b_r3c1 b_r3c2 b_r3c3 b_r3c4 b_r4c1 b_r4c2 b_r4c3 b_r4c4 parallel true
+
+They all point the same way — toward a healthier, keener group — and each is many times its standard error; that is a pattern, not noise.
+    highlight b_r2c4 b_r3c4 b_r4c4 effect glow color #b5482e
+
+The joint test rejects at p below one in a thousand: whatever sorted these two groups, it was not a coin.
+    draw b_ftest b_mark delivery grave
+
+    quiz "A balance table fails like this. What is the most likely explanation?" intro "One more."
+        right: Systematic gaps usually mean the analysed sample was formed after randomization — differential attrition, or a subgroup defined by post-draw behaviour.
+        wrong: Balance is about how the two groups were formed, not about the size of any effect.
+        * The treatment effect is zero
+        + Something shaped the groups after the draw
+        * Randomization simply failed
+
+    clear
+
+So the audit is narrower than it looks: it never verifies the assumption about unobservables, it only checks that the machinery behaved.
+    draw c_1 c_2
+
+That check mattered here, because Oregon in 2008 was the first randomized test of extending Medicaid coverage in about four decades — one shot, and everything downstream rests on it.
+    text c_3 "Oregon, 2008 — the first randomized test of extending" #8f887c x 500 y 330 font_size 24
+    text c_4 "Medicaid coverage in roughly four decades." #8f887c x 500 y 295 font_size 24
+
+A balance table cannot prove that winners and losers had the same potential outcomes; it can only fail to catch a lottery that broke — and the joint test is what decides.
+    draw c_mark delivery grave
+
+## What a Lottery Can and Cannot Settle
+voice: female
+level: advanced
+use: icon_array
+with:
+    total: 100
+    groups:
+      - {label: Covered by the win, count: 25, color: supply}
+    rest_label: Won, never covered
+    title: 100 lottery winners
+
+Now that we have the two-year results in hand, we can ask precisely what that lottery settled — and what no lottery could.
+    draw title
+
+Here are a hundred of the roughly thirty thousand people whose names Oregon drew from the ninety thousand who signed up.
+    draw rest
+
+    pause 0.3
+
+Winning raised the chance of actually being on Medicaid by about twenty-five percentage points — one in four. The rest never enrolled: paperwork unreturned, income too high, letters gone astray.
+    draw group_0 legend_0 legend_rest
+
+The draw was independent of potential outcomes, so winners and losers are exchangeable — but the draw is not coverage, and D, actually holding insurance, still depended on who followed through.
+    highlight rest effect glow
+
+    quiz "So what does the raw winners-minus-losers difference estimate?"
+        intro: A quick check before we go on.
+        right: It is the intention-to-treat effect — the effect of the offer, diluted by the three in four who never got covered.
+        wrong: It cannot be an effect of coverage: three quarters of these winners were never covered at all.
+        * The effect of coverage on everyone
+        + The effect of being offered coverage
+        * The effect of coverage on those who enrolled
+
+Dividing that offer effect by the quarter turns it into an effect on compliers — and multiplies the confidence interval by four along with it.
+    highlight group_0 effect glow
+
+    pause 0.5
+
+Coverage moved plenty: about a third more outpatient visits, catastrophic out-of-pocket spending down four and a half points, depression screening down nine points — but on blood pressure, cholesterol and blood sugar, nothing.
+    clear
+
+That silence deserves a magnifying glass, so put one outcome on a line, with zero meaning nothing moved.
+    text null_title "Coverage and blood pressure, two years" x 500 y 610 font_size 30
+    path effect_axis #8f887c points [[180,330],[860,330]]
+    text axis_caption "Change in systolic blood pressure (mm Hg)" #8f887c x 500 y 288 font_size 22
+    path zero_line dashed #8f887c points [[560,310],[560,500]]
+    text zero_label "0 = no effect" #8f887c x 650 y 518 font_size 22
+
+After two years and roughly twelve thousand in-person examinations, the estimate landed at about minus half a millimetre of mercury — indistinguishable from nothing.
+    shape est_point #2f6b8f shape circle x 530 y 420 radius 10 style.fill #2f6b8f
+    text est_label "estimate ≈ −0.5" #2f6b8f x 420 y 372 font_size 22
+
+    pause 0.3
+
+But the interval around it runs from roughly minus three to plus two millimetres.
+    path ci_bar #2f6b8f points [[380,420],[680,420]] style.stroke_width 6
+    path cap_lo #2f6b8f points [[380,398],[380,442]]
+    path cap_hi #2f6b8f points [[680,398],[680,442]]
+    text label_lo "−3" #2f6b8f x 380 y 468 font_size 22
+    text label_hi "+2" #2f6b8f x 680 y 468 font_size 22
+
+    quiz "What does that interval license us to say?"
+        right: A null bounds an effect, it does not zero it — a three-point fall still sits comfortably inside this interval.
+        wrong: An interval that wide is silence, not proof of zero — it simply rules out large effects.
+        * Coverage has no effect on blood pressure
+        + Coverage's effect is at most a few mm Hg
+        * The experiment was badly run
+
+And that width is the price of one-in-four take-up: scaling the offer up by four scales the uncertainty up by four too — the precision problem this course comes back to.
+    mark width_mark target ci_bar kind box
+    delivery grave
+
+    pause 0.5
+
+Randomization also says nothing about who was in the room: low-income uninsured adults who put their names on an Oregon list in 2008.
+    text limit_1 "Who: low-income uninsured adults, Oregon, 2008" x 500 y 205 font_size 24
+
+Nor about time — two years, for conditions that do their damage over decades.
+    text limit_2 "How long: two years" x 500 y 160 font_size 24
+
+What it does buy is airtight: within these people and this window, the effect of the offer is measured without a single untestable assumption.
+    text limit_3 "What: the effect of the offer, scaled to compliers" x 500 y 115 font_size 24
+
+That is the trade the Oregon lottery makes, and the lesson of this whole series — randomization buys certainty about a narrow question, and everything wider is an argument you still have to make.
+
+## Where next
+end_page: true
+
+Next: The RAND Health Insurance Experiment: randomizing the price of care
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:2 title "Why insured people can look sicker: selection bias, decomposed" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:4 title "The RAND Health Insurance Experiment: randomizing the price of care" size 320 x 735 y 395
+
+    link end_again href lecture:3 title "Watch again" form text open here x 500 y 160
+    text end_count "3 of 18" x 500 y 95 font_size 22 style.opacity 0.6

@@ -1,0 +1,374 @@
+# The RAND Health Insurance Experiment: randomizing the price of care
+next: {"title":"Which average effect are you even estimating?","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/which-average-effect-are-you-even-estimating.cast"}
+
+## Randomizing a Price, Not a Card
+voice: male
+level: advanced
+use: generic_axes_diagram
+with:
+    x_label: 'Coinsurance: share of the bill the family pays'
+    y_label: Medical care used
+    title: Four prices, one demand curve
+    curves:
+      - {id: demand, expression: 95 - 0.55*x + 0.0022*x^2, label: Demand for care, color: demand}
+    vlines:
+      - {x: 3, label: Free (0%)}
+      - {x: 25, label: 25%}
+      - {x: 50, label: 50%}
+      - {x: 95, label: 95%}
+
+    box n_fam "≈2,750 families" hidden true
+    label lbl_fam "1974–1982 · six U.S. sites" above attach_to n_fam hidden true
+    box n_free "Free care — 0%" #2f6b8f hidden true
+    box n_25 "25%" hidden true
+    box n_50 "50%" hidden true
+    box n_95 "95%" #b5482e hidden true
+    edge e_free n_fam -> n_free hidden true
+    edge e_25 n_fam -> n_25 hidden true
+    edge e_50 n_fam -> n_50 hidden true
+    edge e_95 n_fam -> n_95 hidden true
+    label lbl_cap "Out-of-pocket capped: 5–15% of income, max $1,000 a year" below attach_to n_95 hidden true
+    mark mark target label_demand kind box hidden true
+
+This series follows the one experiment that ever randomized the price of medical care — and the null result from it that is still, forty years on, the most misread sentence in health economics.
+    draw n_fam
+
+    pause 1
+
+Between 1974 and 1982, RAND enrolled about two thousand seven hundred and fifty families at six sites across the United States, and assigned each family by lottery for three or five years.
+    draw lbl_fam
+
+    pause 1
+
+One arm got everything free: the family paid nothing at all at the point of care.
+    draw e_free n_free
+
+    pause 1
+
+Two more arms paid a quarter, or half, of every bill they ran up.
+    draw e_25 n_25 e_50 n_50 parallel true
+
+    pause 1
+
+And the last arm paid ninety-five percent — for everyday care, close to having no insurance at all.
+    draw e_95 n_95
+
+    pause 1
+
+But never ruinously so: out-of-pocket spending was capped at five to fifteen percent of family income, and never more than a thousand dollars a year.
+    draw lbl_cap
+
+That cap is what made a ninety-five percent arm ethical to run — and it means the experiment priced routine care, never catastrophe.
+    highlight n_95 lbl_cap effect glow
+
+    pause 1
+
+Joseph Newhouse led the design, and RAND paid families to enrol so nobody could end up worse off than under their existing coverage; nothing on this scale has been attempted since.
+    point at.ref n_fam gesture circle
+
+    pause 1
+
+And nobody here was uninsured — everyone held a card, and the lottery set only the price printed on it.
+    focus n_free n_25 n_50 n_95
+
+    clear
+
+    draw axes x_label y_label
+
+Put the price the family faces along the bottom, and the care they use up the side: the free arm sits at the far left, at zero.
+    draw vline_0
+
+    pause 1
+
+Twenty-five percent, fifty, and ninety-five stretch out to the right.
+    draw vline_1 vline_2 vline_3 parallel true
+
+    pause 1
+
+Oregon's D_i equal to one or zero is essentially just these two ends of the axis — one gap, with nothing in between.
+    highlight vline_0 vline_3 effect pulse
+
+    pause 1
+
+With a randomized price, the estimand stops being that single difference and becomes a slope: how steeply care falls as its price climbs.
+    draw demand label_demand
+
+    pause 1
+
+Randomizing a price rather than a card buys a whole demand curve where a binary treatment buys one step — and next time, what those families actually spent.
+    draw title mark
+
+## Free Care and the Spending Response
+voice: male
+level: advanced
+domain: {"x":[0,100],"y":[0,900]}
+
+    axes ax x_label "Coinsurance rate (% of the bill paid by the family)" y_label "Mean annual spending per person ($, early 1980s)" hidden true
+    text y_def "Y_i(p) = annual spending of person i at coinsurance rate p" x 600 y 165 font_size 24 hidden true
+    dot p_free #b5482e at.x 0 at.y 750 hidden true
+    label label_free "Free care ≈ $750" right #b5482e attach_to p_free hidden true
+    dot p_95 #2f6b8f at.x 95 at.y 540 hidden true
+    label label_95 "95% coinsurance ≈ $540" above #2f6b8f attach_to p_95 hidden true
+    curve ref_line dashed #8f887c expr "540 + 0*x" hidden true
+    arrow gap_arrow #b5482e from.x 10 from.y 545 to.x 10 to.y 745 hidden true
+    label label_gap "≈ $210 more" right #b5482e attach_to gap_arrow hidden true
+    dot p_25 at.x 25 at.y 630 hidden true
+    label label_25 "25% ≈ $630" below-right attach_to p_25 hidden true
+    dot p_50 at.x 50 at.y 583 hidden true
+    label label_50 "50% ≈ $583" below-right attach_to p_50 hidden true
+
+Now that we have seen how RAND randomized a price rather than a card, we can ask the question every insurance design turns on: how much more care do people use when it costs them nothing?
+    draw ax
+
+Write Y sub i of p for what person i would spend in a year at coinsurance rate p — the same potential outcomes as before, now indexed by a price.
+    draw y_def
+
+    pause 0.8
+
+Start at the left: in the free-care arm, families paid nothing, and spent about seven hundred and fifty dollars per person per year, in early-eighties dollars.
+    draw p_free label_free
+
+    pause 0.9
+
+At the other end, families paying ninety-five percent of every bill, up to a yearly out-of-pocket cap, spent about five hundred and forty.
+    draw p_95 label_95
+
+    pause 0.8
+
+Because the arms were randomized, that difference in means is the causal effect of the price: roughly two hundred and ten dollars, between thirty and forty-five percent more care once care was free.
+    draw ref_line gap_arrow label_gap
+
+    pause 1
+
+The two middle arms land in between, and not evenly — most of the fall happens in the first step away from a price of zero.
+    draw p_25 p_50 label_25 label_50 parallel true
+
+    pause 0.8
+
+Join them, and the experiment has traced out something economists normally have to assume: a demand curve for medical care, drawn by random assignment.
+    curve demand_curve #8a5fa8 expr "540 + 210*exp(-0.035*x)"
+
+    pause 0.8
+
+Its arc elasticity is about minus zero point two — raise the price by ten percent, and the quantity of care falls by roughly two.
+    text elas1 "Arc elasticity ≈ −0.2" #8a5fa8 x 720 y 690 font_size 28
+    text elas2 "10% higher price → ~2% less care" x 720 y 645 font_size 22
+
+You cannot take the logarithm of a zero price, which is why this is an arc elasticity across the cost-sharing arms, not a slope at the origin.
+    point at.ref p_free gesture tap
+
+    pause 1
+
+    clear
+
+That one number took eight years to buy: from 1974 to 1982, six sites, about two thousand seven hundred and fifty families, and roughly eighty million dollars — still the largest randomized experiment in health insurance ever run.
+    text t_hist "1974–1982  ·  six sites  ·  ≈ 2,750 families  ·  ≈ $80 million" #8f887c x 500 y 640 font_size 26
+
+    pause 0.8
+
+And it could answer a second question, because total spending is just episodes of care multiplied by the cost of each episode.
+    text t_eq "spending  =  episodes of care  ×  cost per episode" x 500 y 520 font_size 30
+
+Almost the whole response sits in the first factor — families facing a price simply began fewer episodes of care.
+    text t_a "episodes started:  clearly fewer when care was priced" #b5482e x 500 y 420 font_size 26
+
+    pause 0.8
+
+Once a patient was through the door, what happened next cost about the same in every arm.
+    text t_b "cost per episode:  much the same in every arm" #8f887c x 500 y 355 font_size 26
+
+Price moved the patient's decision to seek care; it barely moved the clinician's decision about what to do afterwards.
+    highlight t_a t_b effect glow
+
+    pause 0.8
+
+So free care buys thirty to forty-five percent more of it, at an elasticity near minus zero point two — a number still sitting inside today's policy simulations.
+    text t_close "Free care → 30–45% more of it,  elasticity ≈ −0.2" x 500 y 220 font_size 28
+    mark ann_close target t_close kind box
+    delivery grave
+
+Which sets up the harder question for next time: all that extra care — did it show up in anyone's health?
+
+## And Yet the Health Numbers Barely Moved
+voice: male
+level: advanced
+use: forest_plot
+with:
+    measure: MD
+    null_line: 0
+    title: 'Free care vs cost sharing: health at the end'
+    studies:
+      - {label: General health index, est: 0.01, lo: -0.07, hi: 0.09, weight: 8}
+      - {label: Physical functioning, est: 0.02, lo: -0.06, hi: 0.1, weight: 7}
+      - {label: Mental health, est: -0.01, lo: -0.09, hi: 0.07, weight: 7}
+      - {label: Risk-of-dying index, est: 0.02, lo: -0.07, hi: 0.11, weight: 6}
+      - {label: Corrected far vision, est: 0.12, lo: 0.03, hi: 0.21, weight: 5}
+      - {label: 'Blood pressure (poor, sick)', est: 0.14, lo: 0.03, hi: 0.25, weight: 4}
+
+Now that we have seen the free plan spend some forty percent more than the plan with the biggest deductible, the question is what all that extra medicine actually bought.
+    draw axis null_line
+
+RAND measured health as carefully as it measured bills: physical exams, blood tests and questionnaires on thousands of participants, at entry and again at the end of their three or five years.
+    draw title
+
+The physician who built that measurement effort, Robert Brook, published the answer in the New England Journal of Medicine in 1983 — and it disappointed almost everyone.
+
+    pause 1
+
+Start with the headline measure, the general health index: physical, mental and social functioning rolled into one score, higher meaning healthier.
+    draw study_label_0 study_0 ci_0 est_label_0
+
+The dot is the free plan's effect in standard deviations, and this vertical line is zero — the two groups ending in the same average health.
+    highlight null_line effect glow
+
+    pause 1
+
+Physical functioning, mental health, and a composite index of the risk of dying tell the same story: tiny estimates, with intervals sitting squarely on zero.
+    draw study_label_1 study_1 ci_1 est_label_1 study_label_2 study_2 ci_2 est_label_2 study_label_3 study_3 ci_3 est_label_3 parallel true
+
+Remember what produced these lines — roughly a third more doctor visits and a third more hospital admissions, sustained for years, and no detectable average difference at the end of it.
+    focus ci_0 ci_1 ci_2 ci_3
+
+    pause 1
+
+Two measures did move. Corrected far vision improved under free care — more eye exams, and more people walking out with glasses.
+    draw study_label_4 study_4 ci_4 est_label_4
+
+    pause 1
+
+And blood pressure fell: about two millimetres of mercury of diastolic pressure, concentrated among low-income participants who arrived hypertensive.
+    draw study_label_5 study_5 ci_5 est_label_5
+
+For that group — poor, sick, and largely undiagnosed — the implied reduction in the risk of dying was on the order of ten percent.
+    mark mark_bp target study_label_5 kind box
+    delivery grave
+
+    pause 1
+
+So the average was flat, while the effect that did exist sat in a small, identifiable corner of the sample.
+    clear
+
+And there is one more reason economists still argue about this null, and it has nothing to do with medicine.
+    text t_head "Who dropped out of the experiment?" x 500 y 650 font_size 34
+
+    pause 1
+
+Families in the cost-sharing plans could walk away, and did: dropout there was roughly one family in fifteen, while almost nobody left the free plan.
+    text t_free "Free plan — almost nobody left" #2f6b8f x 500 y 545 font_size 28
+    text t_cs "Cost-sharing plans — about 1 family in 15 left" #b5482e x 500 y 470 font_size 28
+    parallel true
+
+That asymmetry runs exactly the wrong way — if the people who quit the paying plans were the ones falling ill, the surviving comparison flatters cost sharing.
+    text t_q "If the leavers were the sicker ones, the null is flattered" x 500 y 370 font_size 25
+
+When Aron-Dine, Einav and Finkelstein reopened the data three decades later, the spending response held up, but they argued the health result deserves more humility than its fame suggests.
+    text t_ans "Reopened in 2013: spending response holds, health null fragile" x 500 y 290 font_size 23
+
+    pause 1
+
+The honest sentence is narrower than the famous one: in this population, over these years, more care left no measurable mark on average health — and the marks it did leave fell on the poorest and sickest.
+    text t_final "A flat average is not the same as no effect" x 500 y 170 font_size 30
+    mark mark_final target t_final kind box
+    delivery grave
+
+Next time, why that sentence is the one people misread.
+
+## Reading the Sentence Correctly
+voice: male
+level: advanced
+use: argument_map
+with:
+    title: Reading the sentence
+    conclusion: '"More care did not improve average health."'
+    premises:
+      - {text: 'D = 1 was free care, not a first insurance card.', objection: true}
+      - {text: Working-age families; nobody over 61., objection: true}
+      - {text: 'Sick and poor did gain: blood pressure, vision, teeth.', objection: true}
+      - {text: 'Wide intervals: a null is not a zero.', objection: true}
+      - {text: 'Average over whom, and at which margin?', objection: true}
+
+Now that we have watched spending soar while the health numbers sat still, we face the sentence that has been used for forty years to argue that health care barely matters — and we should read it properly before anyone builds policy on it.
+    text t_years "1974–1982: 2,750 families" x 320 y 620 font_size 32
+
+    pause 0.9
+
+Eight years, six American sites: Joseph Newhouse and his RAND team randomized not an insurance card, but a price — free care, or coinsurance of twenty-five, fifty, or ninety-five percent.
+    text t_arms "Price arms: free, 25%, 50%, 95%" x 320 y 545 font_size 30
+
+    pause 0.9
+
+A price is something you can randomize and still defend, because you can cap it: no family paid more than a thousand dollars out of pocket in a year.
+    text t_cap "Cap: $1,000 out of pocket" #8f887c x 320 y 470 font_size 28
+
+    pause 0.9
+
+Under free care, spending ran about forty-five percent above the ninety-five percent arm — demand for medical care slopes downward like everything else.
+    text t_spend "Free care: +45% spending" #b5482e x 320 y 375 font_size 32
+
+    pause 0.9
+
+And on the general health index, the free-care families were, on average, indistinguishable from the cost-sharing families.
+    text t_health "Health index: no change" #2f6b8f x 320 y 300 font_size 32
+
+    pause 1
+
+    clear
+
+Hence the quoted line: more care did not improve average health. Every word of it is doing work.
+    draw title conclusion_box conclusion_text_0 conclusion_text_1
+
+    pause 0.8
+
+Start with the treatment itself: D equals one is free care, and D equals zero is heavy cost sharing — not being uninsured.
+    draw premise_0 link_0
+
+Oregon randomized a card; RAND randomized a price. Those are two different estimands, and only one of them speaks to coverage.
+    highlight premise_0 effect glow
+
+    pause 0.9
+
+Second, the population: working-age families, nobody over sixty-one, nobody institutionalized, and almost nobody already very ill.
+    draw premise_1 link_1
+
+    pause 0.9
+
+Third, the outcomes — because not everything sat still: among the poorest participants in the worst health, free care lowered diastolic blood pressure by about three millimetres of mercury.
+    draw premise_2 link_2
+
+A small number with a large meaning: on the risk models of the day, roughly ten percent lower predicted mortality for that group, alongside better corrected vision and dental health.
+    focus premise_2
+
+    pause 0.9
+
+Fourth, precision. A null result is an interval, not a zero — and RAND's intervals were wide enough to hold modest real gains.
+    draw premise_3 link_3
+
+Three decades later, Aron-Dine, Einav and Finkelstein went back into the RAND data and argued its headline numbers rest on shakier ground than the textbooks admit.
+    highlight premise_3 effect glow delivery soft
+
+    pause 0.9
+
+And fifth, the word doing the quiet work: average — over whom, and at which price margin?
+    draw premise_4 link_4
+
+    pause 0.8
+
+With every clause attached, the sentence becomes narrow and honest: at this margin, for these people, on these measures, the average difference was too small to see.
+    mark mark_conclusion target conclusion_box kind box
+    delivery grave
+
+    pause 1
+
+That is the series in one line: randomizing a price tells you the effect of that price on those people — which is exactly why we now ask which average a design delivers at all.
+
+## Where next
+end_page: true
+
+Next: Which average effect are you even estimating?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:3 title "The Oregon lottery: what randomization actually buys you" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:5 title "Which average effect are you even estimating?" size 320 x 735 y 395
+
+    link end_again href lecture:4 title "Watch again" form text open here x 500 y 160
+    text end_count "4 of 18" x 500 y 95 font_size 22 style.opacity 0.6

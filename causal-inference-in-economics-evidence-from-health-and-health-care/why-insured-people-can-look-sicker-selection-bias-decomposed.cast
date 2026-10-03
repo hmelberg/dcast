@@ -1,0 +1,100 @@
+# Why insured people can look sicker: selection bias, decomposed
+next: {"title":"The Oregon lottery: what randomization actually buys you","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/the-oregon-lottery-what-randomization-actually-buys-you.cast"}
+
+## The Puzzle on the Sign-Up Sheet
+voice: male
+level: advanced
+
+Across four parts we'll take one innocent-looking number apart: the raw gap in health between insured and uninsured people, and why it can point in exactly the wrong direction.
+    text belief "\"Compare the insured with the uninsured — that shows you what insurance does.\"" #8f887c x 500 y 700 font_size 22
+
+    axes ax x_label "Two groups of Oregon adults" y_label "Illness and spending"
+
+Start with uninsured adults — D equals zero — with illness and medical spending running up the vertical axis.
+    dot pt_unins #2f6b8f at.x 30 at.y 35
+    label lab_unins "Uninsured (D = 0)" below #2f6b8f attach_to pt_unins
+
+If coverage does what we hope, the insured should land lower: problems caught early, less illness carried around.
+    dot pt_expect #8f887c at.x 70 at.y 16
+    label lab_expect "What coverage is supposed to do" below #8f887c attach_to pt_expect
+
+So before I draw it — does the insured group's dot sit below that one, or above it?
+
+    pause 1.7
+
+    erase pt_expect lab_expect
+
+In plain cross-sections, adults on Medicaid tend to report worse health and to use more care than uninsured adults.
+    dot pt_ins #b5482e at.x 70 at.y 64
+    label lab_ins "Insured (D = 1)" above #b5482e attach_to pt_ins
+
+The covered dot sits above the uncovered one — the wrong way round entirely.
+    point at.ref pt_ins gesture circle
+
+So the naive difference — mean outcome among the insured minus mean outcome among the uninsured — comes out positive.
+    arrow gap_arrow pt_unins -> pt_ins
+    label lab_gap "E[Y | D=1] − E[Y | D=0] > 0" left attach_to gap_arrow
+
+Read literally, this number says coverage makes people sicker. Nobody believes that, so what is it actually measuring?
+    camera center.ref gap_arrow zoom 1.8 delivery grave
+
+    camera reset true
+
+    clear
+
+Oregon, 2008: the state reopened its Medicaid waiting list, and about ninety thousand adults put their names down.
+    text t_year "Oregon, 2008" x 500 y 690 font_size 30
+    text t_signup "≈ 90,000 adults sign up" #b5482e x 270 y 600 font_size 26
+
+There was money for roughly ten thousand, so the state drew about thirty thousand names, of whom around a quarter finished enrolling.
+    text t_slots "≈ 10,000 Medicaid slots" x 740 y 600 font_size 26
+    arrow arr_queue from.x 430 from.y 600 to.x 600 to.y 600
+    text t_lottery "≈ 30,000 names drawn by lottery; about one in four finished enrolling" #8f887c x 500 y 540 font_size 19
+
+Set the arithmetic aside and ask the harder question: which ninety thousand?
+
+    pause 1.7
+
+The people who queue are the people who expect to need care: a diagnosis already in hand, symptoms last winter, a prescription being rationed.
+    shape who_a #b5482e shape person x 300 y 395
+    text t_a1 "Signed up" #b5482e x 300 y 300 font_size 24
+    text t_a2 "A diagnosis already in hand," x 300 y 262 font_size 20
+    text t_a3 "symptoms, a rationed prescription" x 300 y 232 font_size 20
+
+Those who feel fine this year mostly don't bother standing in that queue at all.
+    shape who_b #2f6b8f shape person x 700 y 395
+    text t_b1 "Didn't bother" #2f6b8f x 700 y 300 font_size 24
+    text t_b2 "Feels fine this year" x 700 y 262 font_size 20
+
+The sign-up sheet has already sorted Oregon by expected illness — before a single person is covered.
+    focus who_a t_a1 t_a2 t_a3
+
+    clear
+
+In the notation we'll keep all course, every person has an outcome with coverage, Y of one, and an outcome without it, Y of zero — and D decides which one we get to see.
+    text eq1 "Yᵢ = Dᵢ·Yᵢ(1) + (1 − Dᵢ)·Yᵢ(0)" x 500 y 560 font_size 32
+
+The other never happens, so whose Y-of-zero are we borrowing when the insured group's own is missing?
+    text eq1b "One is observed. The other never happens." #8f887c x 500 y 490 font_size 22
+
+    pause 1.7
+
+Somebody else's. The naive gap is the causal effect plus a second term built entirely out of who chose to sign up.
+    text eq2 "E[Y | D=1] − E[Y | D=0]  =  causal effect  +  ?" x 500 y 350 font_size 28
+    mark mark_q target eq2 kind box
+    delivery grave
+
+Insured people can look sicker because that comparison never compared like with like — next time we split this gap into its two exact terms.
+    text eq3 "the second term: who chose to sign up" #8a5fa8 x 500 y 250 font_size 22
+
+## Where next
+end_page: true
+
+Next: The Oregon lottery: what randomization actually buys you
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:1 title "What makes a question causal?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:3 title "The Oregon lottery: what randomization actually buys you" size 320 x 735 y 395
+
+    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
+    text end_count "2 of 18" x 500 y 95 font_size 22 style.opacity 0.6

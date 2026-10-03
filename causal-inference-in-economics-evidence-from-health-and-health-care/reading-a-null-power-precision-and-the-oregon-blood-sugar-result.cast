@@ -1,0 +1,142 @@
+# Reading a null: power, precision, and the Oregon blood-sugar result
+next: {"title":"Genes as instruments: Mendelian randomization","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/genes-as-instruments-mendelian-randomization.cast"}
+
+## Absence of Evidence
+voice: male
+level: advanced
+use: forest_plot
+with:
+    measure: MD
+    null_line: 0
+    title: Effect on elevated blood sugar (percentage points)
+    studies:
+      - {label: HbA1c ≥ 6.5% (Oregon), est: -0.93, lo: -2.47, hi: 0.61, weight: 8}
+      - {label: A precise zero (hypothetical), est: -0.05, lo: -0.3, hi: 0.2, weight: 5}
+
+Across these four parts we take apart one table — the most argued-over null result in health economics — and show that the whole answer lives in a standard error, not in a p-value.
+    draw title axis
+
+Everything hangs on this dashed line: zero, meaning insurance changed nothing.
+    draw null_line
+
+Two years after Oregon's lottery, the study brought in about twelve thousand people — twelve thousand two hundred, to be exact — and measured blood pressure, cholesterol, and glycated hemoglobin: blood sugar.
+    draw study_label_0
+
+Here is the blood-sugar result — for compliers, the LATE we built in lecture seven: the share above the diabetic threshold fell by about nine tenths of a percentage point.
+    draw study_0
+
+    pause 0.4
+
+And here is its ninety-five percent confidence interval: from roughly minus two and a half points to plus six tenths.
+    draw ci_0 est_label_0
+
+It covers zero, so the p-value sits far above five percent — and blood pressure and cholesterol came back the same way: no stars, no significance.
+    point at.ref null_line gesture tap
+
+So the headline wrote itself: Medicaid buys care, but doesn't improve physical health. Hmm — well, that reading is what this whole series is about.
+    delivery soft
+
+Because two very different findings can both look like nothing.
+    draw study_label_1 delivery brisk
+
+Imagine a hypothetical study with the same near-zero estimate, but measured this tightly.
+    draw study_1 ci_1 est_label_1
+
+That bar says: whatever Medicaid does to blood sugar, it is at most a couple of tenths of a point. That is evidence of absence — an informative zero.
+    focus study_1 ci_1 est_label_1 study_label_1
+
+Oregon's bar says nothing of the sort. Its left end sits at minus two and a half percentage points — and only about five percent of the sample had elevated blood sugar to begin with.
+    highlight ci_0 effect glow delivery grave
+
+So this interval is compatible with Medicaid roughly halving the rate of elevated blood sugar, and equally compatible with it doing absolutely nothing.
+    mark mark_ci target ci_0 kind box
+
+    pause 0.5
+
+When the results appeared in 2013, critics read the table as proof that Medicaid fails to improve physical health, while health economists — Austin Frakt and Aaron Carroll among the loudest — replied that the study was never precise enough to see a benefit worth having.
+    highlight est_label_0 effect pulse
+
+Neither side did the arithmetic wrong; they disagree about what an insignificant estimate licenses you to claim, and the two-year data simply cannot settle it.
+
+Absence of evidence is not evidence of absence — and the difference between the two is the width of this bar, not the star beside the p-value.
+    point at.ref ci_0 gesture underline delivery grave
+
+Next time we stop asking whether the interval covers zero, and start asking what else it covers.
+
+## The interval, not the star
+voice: male
+level: advanced
+use: number_line
+with:
+    min: -0.5
+    max: 0.5
+    step: 0.25
+    points:
+      - {at: -0.01, label: LATE = −0.01}
+      - {at: -0.3, label: 'A real gain: −0.3'}
+    intervals:
+      - {from: -0.09, to: 0.08, label: '95% CI: −0.09 to 0.08'}
+    arrow_ops:
+      - {from: 0, to: -0.05, label: Big effect for 1 in 20 → −0.05 on the mean}
+
+Now that we have seen why a missing star is not evidence of absence, let's do the thing a p-value cannot: put Oregon's blood-sugar estimate on a line, in percentage points of glycated hemoglobin, and read off what it rules out.
+    draw line tick_-0.5 tick_-0.25 tick_0 tick_0.25 tick_0.5
+
+Here is the number — the effect of coverage on the compliers, the LATE from the lottery instrument: minus 0.01 percentage points. Essentially nothing.
+    draw pt_0
+
+    pause 0.3
+
+And here is the part that actually carries information: the ninety-five percent interval, from minus 0.09 to plus 0.08.
+    draw interval_0
+
+Every value inside this band is one the data cannot reject; every value outside it, the data can.
+    camera center.ref interval_0 zoom 2.2
+
+The p-value told us only that zero sits somewhere in here — it never told us how narrow here is.
+    point at.ref interval_0 gesture underline
+
+So, to judge that band we need a benchmark: how large an effect would have been worth having?
+    camera reset true
+
+Metformin, the first-line diabetes drug, lowers glycated hemoglobin by roughly a full percentage point; even a third of a point — out here — would be a genuine clinical gain.
+    draw pt_1
+
+And that value lies far outside the interval. Oregon rules it out.
+    mark cross_meaningful target pt_1 kind cross
+    delivery grave
+
+Which is a finding, not a failure — the study established that the average effect on blood sugar is smaller than a tenth of a point in either direction.
+    highlight interval_0 effect glow
+
+But hold on — smaller than a tenth of a point, averaged over whom?
+    clear keep ["line","tick_-0.5","tick_-0.25","tick_0","tick_0.25","tick_0.5","pt_0","interval_0"]
+
+The control group's average was about 5.17 percent. Most of these adults simply did not have diabetes; only around one in twenty had blood sugar in the diabetic range.
+    highlight pt_0 effect glow
+
+So suppose Medicaid gave that one in twenty a full point of improvement — a large clinical effect. Spread over everyone, the average moves five hundredths of a point. To here.
+    draw hop_0
+
+Which is comfortably inside the interval. A tight bound on the average is perfectly compatible with a big effect on the few people who were actually sick.
+    point at.ref hop_0 gesture circle delivery grave
+
+And this is precisely where the fight broke out: Baicker and her co-authors wrote that their intervals could not rule out clinically significant changes, while commentators read the same table as proof that Medicaid does not improve physical health — nobody disputing the number, everybody disputing which parameter it bounds.
+    highlight interval_0 effect pulse delivery soft
+
+And the mechanism was plainly moving: coverage significantly raised diabetes diagnoses and the use of diabetes medication, even as the average marker stood still.
+    text note_dx "Medicaid did raise diabetes diagnosis and medication use" #2f6b8f x 500 y 140 font_size 24
+
+Report the interval, not the star: Oregon ruled out large average improvements in blood sugar — it never ruled out a modest one, or a large one for the handful who had the disease.
+
+## Where next
+end_page: true
+
+Next: Genes as instruments: Mendelian randomization
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:15 title "Building a counterfactual state: synthetic control and Proposition 99" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:17 title "Genes as instruments: Mendelian randomization" size 320 x 735 y 395
+
+    link end_again href lecture:16 title "Watch again" form text open here x 500 y 160
+    text end_count "16 of 18" x 500 y 95 font_size 22 style.opacity 0.6
