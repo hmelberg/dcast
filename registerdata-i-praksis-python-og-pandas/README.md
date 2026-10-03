@@ -1,42 +1,42 @@
-# Registerdata i praksis: Python og pandas på NPR, Legemiddelregisteret og HELFO
+# Register data in practice: Python and pandas on NPR, the Norwegian drug register and HELFO
 
-Åtte drawcasts om hvordan du faktisk får norske helseregisterdata inn i pandas, koblet sammen, og gjort om til noe du kan svare på et spørsmål med. Vi følger én kohort med type 2-diabetes fra rå fil til ferdig figur — og snakker underveis om hva registrene ikke måler.
+Eight drawcasts on how you actually get Norwegian health register data into pandas, link it, and turn it into something that can answer a question. We follow one cohort with type 2 diabetes from raw file to finished figure — and talk along the way about what the registers don't measure.
 
-1. [Tre registre, tre helt ulike rader — hvor kommer dataene fra?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.cast)
-   - Hva representerer egentlig én rad i npr, i lmr og i kuhr?
-   - Hvorfor ble alle tre registrene bygget for administrasjon og refusjon, ikke for forskning — og hva gjør det med dataene dine?
-   - Hvorfor er 2007 et vannskille for Norsk pasientregister, og hva skjedde med Reseptregisteret i 2024?
-2. [Hvordan leser du en 12 GB registerfil uten at maskinen dør?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.cast)
-   - Hvorfor sprenger pd.read\_csv minnet, og hva gjør dtype, category og usecols med regnskapet?
-   - Når lønner det seg å bytte fra CSV til parquet, og hva koster konverteringen?
-   - Hvordan leser du filen i chunks uten å miste pasienter som ligger på tvers av to biter?
-3. [Hva er det egentlig som binder en sykehuskontakt til en resept?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.cast)
-   - Hvorfor er pid og en dato det eneste du har — og hva betyr det for hva du kan spørre om?
-   - Hvorfor blir det plutselig tre ganger så mange rader etter en merge, og hva redder validate= deg fra?
-   - Left join eller inner join: hvordan gir de to ulike kohorter av de samme pasientene?
-4. [Holder én E11-kode for å kalle noen diabetiker?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.cast)
-   - Hvordan filtrerer du på ICD-10 og ATC uten å miste undergrupper — str.startswith, isin eller regex?
-   - Hva skjer med kohorten når du krever to kontakter i stedet for én, eller legger til ATC A10 fra lmr?
-   - Hva vinner og hva taper du på en streng kohortdefinisjon?
-5. [Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.cast)
-   - Hvordan går du fra én rad per kontakt til én rad per pasient uten å miste det du trenger senere?
-   - Når bruker du groupby().agg(), når transform(), og når pivot\_table?
-   - Hvorfor er første og siste dato per pid nesten alltid de to viktigste kolonnene i kohort?
-6. [Tid er alt: washout, ny bruker og legemiddeldekning i pandas](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.cast)
-   - Hva er en washout-periode, og hvorfor avgjør den om pasienten telles som ny bruker?
-   - Hvordan gjør du utleveringsdatoer og DDD om til sammenhengende perioder med legemiddeldekning?
-   - Hvorfor er insidens og prevalens to helt forskjellige spørringer mot det samme datasettet?
-   - Hva gjør merge\_asof som en vanlig merge ikke klarer?
-7. [Tallene selv: bruk av diabeteslegemidler og kontakter i Norge](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.cast)
-   - Antall brukere av A10-legemidler per år, hentet fra Legemiddelregisterets åpne statistikkbank
-   - Alders- og kjønnsfordeling blant brukerne — hva ser du i pyramiden?
-   - Kontakttyper i NPR: døgnopphold, dagbehandling og poliklinikk side om side
-   - Fra groupby til figur: én tabell, tre plott, med matplotlib rett på pandas-objektet
-8. [Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.cast)
-   - Hvorfor betyr flere registrerte diagnoser og takster ikke nødvendigvis mer sykdom?
-   - Hva er prikking, og hvorfor må celler med få pasienter undertrykkes før du publiserer figuren?
-   - Hvem bestemmer hvem som får koble disse registrene — og hva skjedde egentlig med Helseanalyseplattformen?
-   - Hvorfor er notebooken din en del av metoden, ikke et vedlegg til den?
+1. [Three registers, three very different rows — where does the data come from?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.cast)
+   - What does one row really represent in npr, in lmr and in kuhr?
+   - Why were all three registers built for administration and reimbursement, not for research — and what does that do to your data?
+   - Why is 2007–2008 a watershed for the Norwegian Patient Registry, and what happened to the Prescription Database in 2022?
+2. [How do you read a 12 GB register file without crashing your machine?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.cast)
+   - Why does pd.read\_csv blow up memory, and what do dtype, category and usecols do to the bill?
+   - When does it pay to switch from CSV to parquet, and what does the conversion cost?
+   - How do you read the file in chunks without losing patients who straddle two chunks?
+3. [What actually links a hospital contact to a prescription?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.cast)
+   - Why are pid and a date all you have — and what does that mean for the questions you can ask?
+   - Why are there suddenly three times as many rows after a merge, and what does validate= save you from?
+   - Left join or inner join: how do they give two different cohorts from the same patients?
+4. [Is one E11 code enough to call someone diabetic?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.cast)
+   - How do you filter on ICD-10 and ATC without losing subgroups — str.startswith, isin or regex?
+   - What happens to the cohort when you require two contacts instead of one, or add ATC A10 from lmr?
+   - What do you gain and lose with a strict cohort definition?
+5. [From events to patients: how do you collapse millions of rows into one row per person?](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.cast)
+   - How do you go from one row per contact to one row per patient without losing what you need later?
+   - When do you use groupby().agg(), when transform(), and when pivot\_table?
+   - Why are the first and last date per pid almost always the two most important columns in kohort?
+6. [Time is everything: washout, new users and drug coverage in pandas](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.cast)
+   - What is a washout period, and why does it decide whether a patient counts as a new user?
+   - How do you turn dispensing dates and DDD into continuous periods of drug coverage?
+   - Why are incidence and prevalence two completely different queries against the same dataset?
+   - What does merge\_asof do that an ordinary merge cannot?
+7. [The numbers themselves: diabetes drug use and contacts in Norway](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.cast)
+   - The number of users of A10 drugs per year, from the drug register's open statistics bank
+   - Age and sex distribution among the users — what do you see in the pyramid?
+   - Contact types in NPR: inpatient stays, day treatment and outpatient visits side by side
+   - From groupby to figure: one table, three plots, with matplotlib straight on the pandas object
+8. [What the registers don't measure — and why your analysis must withstand scrutiny](https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.cast)
+   - Why do more registered diagnoses and fee codes not necessarily mean more disease?
+   - What is small-cell suppression, and why must cells with few patients be suppressed before you publish the figure?
+   - Who decides who may link these registers — and what really happened to the Health Analytics Platform (Helseanalyseplattformen)?
+   - Why is your notebook part of the method, not an appendix to it?
 
 ---
 
