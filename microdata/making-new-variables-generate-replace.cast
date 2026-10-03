@@ -1,793 +1,362 @@
-playlist:
-  title: 'Making new variables: generate, replace, recode and labels'
-  prompt: How do you build an education-level variable from the raw NUDB_BU codes with `recode` and `define-labels`? Why does `generate` fail on a variable that already exists, and when do you need `replace` instead? How do conditional expressions (`if`) work on a dataset you can never inspect row by row?
-  next:
-    title: 'Defining the population: keep, drop, and the people who quietly disappear'
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/defining-the-population-keep-drop-and.yaml
----
-title: Codes, Not Categories
+# Making new variables: generate, replace, recode and labels
+prompt: "How do you build an education-level variable from the raw NUDB_BU codes with `recode` and `define-labels`? Why does `generate` fail on a variable that already exists, and when do you need `replace` instead? How do conditional expressions (`if`) work on a dataset you can never inspect row by row?"
+next: {"title":"Defining the population: keep, drop, and the people who quietly disappear","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/defining-the-population-keep-drop-and.cast"}
+
+## Codes, Not Categories
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 7
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      keep if birth >= '198501'
-      drop if birth > '198512'
-      import db/NUDB_BU 2022-01-01 as educ
-      tabulate educ
-    marks:
-      - NUDB_BU
-  - id: hd
-    type: text
-    text: From codes to categories
-    x: 500
-    'y': 650
-    font_size: 32
-  - id: n1
-    type: node
-    shape: rect
-    text: generate
-    x: 300
-    'y': 540
-    width: 280
-    height: 64
-    style:
-      color: '#2f6b8f'
-  - id: d1
-    type: label
-    text: makes a new variable
-    attach_to: n1
-    side: right
-    style:
-      color: '#2f6b8f'
-  - id: n2
-    type: node
-    shape: rect
-    text: replace
-    at:
-      ref: n1
-      side: below
-      gap: 28
-    width: 280
-    height: 64
-    style:
-      color: '#2f6b8f'
-  - id: d2
-    type: label
-    text: changes an existing one
-    attach_to: n2
-    side: right
-    style:
-      color: '#2f6b8f'
-  - id: n3
-    type: node
-    shape: rect
-    text: recode
-    at:
-      ref: n2
-      side: below
-      gap: 28
-    width: 280
-    height: 64
-    style:
-      color: '#b5482e'
-  - id: d3
-    type: label
-    text: collapses codes into levels
-    attach_to: n3
-    side: right
-    style:
-      color: '#b5482e'
-  - id: n4
-    type: node
-    shape: rect
-    text: define-labels
-    at:
-      ref: n3
-      side: below
-      gap: 28
-    width: 280
-    height: 64
-    style:
-      color: '#b5482e'
-  - id: d4
-    type: label
-    text: gives levels their names
-    attach_to: n4
-    side: right
-    style:
-      color: '#b5482e'
-  - id: tools
-    type: group
-    members:
-      - hd
-      - n1
-      - d1
-      - n2
-      - d2
-      - n3
-      - d3
-      - n4
-      - d4
-    fit:
-      x: 80
-      'y': 80
-      w: 840
-      h: 600
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: Across these four parts we turn raw register codes into variables you can actually read — starting with what the register hands back when you ask it a simple question.
-  - draw:
-      - md_line_2
-    speak: 'Same dataset as always: persons, the one we have been building since lecture three.'
-  - draw:
-      - md_line_3
-    speak: Birth year and month, straight from the population register.
-  - draw:
-      - md_line_4
-      - md_line_5
-    speak: 'And the two lines that fence in our cohort: everyone born in 1985, about fifty thousand people.'
-  - draw:
-      - md_line_6
-    speak: Now the new variable — each person's highest completed education, as it stood on the first of January.
-  - draw:
-      - md_mark_1
-    speak: BU stands for befolkningens utdanningsnivå, the education level of the population.
-  - draw:
-      - md_line_7
-    speak: 'And one command to look at it: tabulate simply counts how many people sit on each value.'
-  - draw:
-      - md_out
-    delivery: grave
-    speak: 'Here is what comes back: a column of numbers with a count beside each, and not one word about education.'
-  - pause: 0.4
-  - focus:
-      target:
-        - md_out
-    speak: These are NUS codes — the Norwegian standard classification of education — where the first digit carries the level and the rest the field of study.
-  - point:
-      at:
-        ref: md_out
-      gesture: circle
-    speak: Asking a register what someone studied and getting this back is like asking a sommelier for a recommendation and being handed a barcode.
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: A leading two is lower secondary school and a leading eight is a doctorate — perfectly true, and written absolutely nowhere in your data.
-  - pause: 0.3
-  - clear: {}
-    speak: And because codes are numbers, nothing stops you from averaging them — a mean education of four hundred thousand, which is exactly as meaningful as it sounds.
-  - draw:
-      - hd
-      - n1
-      - d1
-    speak: 'So the codes have to become categories, and four commands do that work: generate builds a brand-new variable out of an expression.'
-  - draw:
-      - n2
-      - d2
-    speak: replace changes a variable that already exists — and the two flatly refuse to do each other's job, which is part three.
-  - draw:
-      - n3
-      - d3
-    speak: recode collapses whole ranges of codes into a handful of levels; that is part two, and it is what rescues this education variable.
-  - draw:
-      - n4
-      - d4
-    speak: Then define-labels and assign-labels hang words on those levels, so your next table says higher degree instead of a leading seven.
-  - speak: The register stores codes because codes never drift in meaning — giving them meaning is your job, and that is the whole of this series.
-  - quiz:
-      intro: Quick check before part two.
-      question: Why is running summarize on the raw NUDB_BU codes a bad idea?
-      choices:
-        - The codes are text, not numbers
-        - It averages identifiers as if they were quantities
-        - tabulate is simply faster
-        - Education is missing for everyone
-      correct: 2
-      right: The codes are identifiers, so their mean is arithmetic on labels — recode them into levels first.
-      wrong: Look again at what the numbers in that column actually stand for.
----
-title: 'recode and define-labels: from codes to categories'
+
+    ```microdata md width 960 font_size 16 show below lines 7 frame screen marks ["NUDB_BU"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    keep if birth >= '198501'
+    drop if birth > '198512'
+    import db/NUDB_BU 2022-01-01 as educ
+    tabulate educ
+    ```
+    text hd "From codes to categories" x 500 y 650 font_size 32 hidden true
+    box n1 "generate" #2f6b8f x 300 y 540 width 280 height 64 hidden true
+    label d1 "makes a new variable" right #2f6b8f attach_to n1 hidden true
+    box n2 "replace" below n1 gap 28 #2f6b8f width 280 height 64 hidden true
+    label d2 "changes an existing one" right #2f6b8f attach_to n2 hidden true
+    box n3 "recode" below n2 gap 28 #b5482e width 280 height 64 hidden true
+    label d3 "collapses codes into levels" right #b5482e attach_to n3 hidden true
+    box n4 "define-labels" below n3 gap 28 #b5482e width 280 height 64 hidden true
+    label d4 "gives levels their names" right #b5482e attach_to n4 hidden true
+    group tools members ["hd","n1","d1","n2","d2","n3","d3","n4","d4"] fit.h 600 fit.w 840 fit.x 80 fit.y 80 hidden true
+
+Across these four parts we turn raw register codes into variables you can actually read — starting with what the register hands back when you ask it a simple question.
+    draw md md_line_1 parallel true
+
+Same dataset as always: persons, the one we have been building since lecture three.
+    draw md_line_2
+
+Birth year and month, straight from the population register.
+    draw md_line_3
+
+And the two lines that fence in our cohort: everyone born in 1985, about fifty thousand people.
+    draw md_line_4 md_line_5
+
+Now the new variable — each person's highest completed education, as it stood on the first of January.
+    draw md_line_6
+
+BU stands for befolkningens utdanningsnivå, the education level of the population.
+    draw md_mark_1
+
+And one command to look at it: tabulate simply counts how many people sit on each value.
+    draw md_line_7
+
+Here is what comes back: a column of numbers with a count beside each, and not one word about education.
+    draw md_out delivery grave
+
+    pause 0.4
+
+These are NUS codes — the Norwegian standard classification of education — where the first digit carries the level and the rest the field of study.
+    focus md_out
+
+Asking a register what someone studied and getting this back is like asking a sommelier for a recommendation and being handed a barcode.
+    point at.ref md_out gesture circle
+
+A leading two is lower secondary school and a leading eight is a doctorate — perfectly true, and written absolutely nowhere in your data.
+    highlight md_out effect glow
+
+    pause 0.3
+
+And because codes are numbers, nothing stops you from averaging them — a mean education of four hundred thousand, which is exactly as meaningful as it sounds.
+    clear
+
+So the codes have to become categories, and four commands do that work: generate builds a brand-new variable out of an expression.
+    draw hd n1 d1
+
+replace changes a variable that already exists — and the two flatly refuse to do each other's job, which is part three.
+    draw n2 d2
+
+recode collapses whole ranges of codes into a handful of levels; that is part two, and it is what rescues this education variable.
+    draw n3 d3
+
+Then define-labels and assign-labels hang words on those levels, so your next table says higher degree instead of a leading seven.
+    draw n4 d4
+
+The register stores codes because codes never drift in meaning — giving them meaning is your job, and that is the whole of this series.
+
+    quiz "Why is running summarize on the raw NUDB_BU codes a bad idea?"
+        intro: Quick check before part two.
+        right: The codes are identifiers, so their mean is arithmetic on labels — recode them into levels first.
+        wrong: Look again at what the numbers in that column actually stand for.
+        * The codes are text, not numbers
+        + It averages identifiers as if they were quantities
+        * tabulate is simply faster
+        * Education is missing for everyone
+
+## recode and define-labels: from codes to categories
 voice: female
-elements:
-  - id: dig1
-    type: text
-    text: '6'
-    font_size: 60
-    x: 400
-    'y': 590
-    style:
-      color: '#b5482e'
-  - id: dig_rest
-    type: text
-    text: '43101'
-    font_size: 60
-    at:
-      ref: dig1
-      side: right
-      gap: 12
-  - id: mark_dig1
-    type: annotation
-    target: dig1
-    kind: circle
-  - id: l_level
-    type: label
-    text: the level
-    attach_to: dig1
-    side: below
-    style:
-      color: '#b5482e'
-  - id: l_field
-    type: label
-    text: the field of study
-    attach_to: dig_rest
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: m1
-    type: text
-    text: 0–2   →   1   Compulsory
-    font_size: 28
-    x: 500
-    'y': 420
-  - id: m2
-    type: text
-    text: 3–5   →   2   Upper secondary
-    font_size: 28
-    at:
-      ref: m1
-      side: below
-      gap: 18
-  - id: m3
-    type: text
-    text: 6–8   →   3   Higher education
-    font_size: 28
-    at:
-      ref: m2
-      side: below
-      gap: 18
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 7
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    marks:
-      - (0/299999=1)
-      - (600000/899999=3)
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      // new this week: highest completed education
-      import db/NUDB_BU 2022-10-01 as bu
-      generate educ = bu
-      recode educ (0/299999=1) (300000/599999=2) (600000/899999=3)
-      define-labels educlab 1 'Compulsory' 2 'Upper secondary' 3 'Higher'
-      assign-labels educ educlab
-      tabulate educ
-commands:
-  - draw:
-      - dig1
-      - dig_rest
-    speak: 'Now that we have seen that NUDB_BU hands back codes and not categories, we have a problem: you cannot ask how the gender wage gap varies with education while education has a thousand values.'
-  - draw:
-      - l_field
-    speak: 'Here is one of them: six-four-three-one-oh-one. The five digits on the right pin down the subject, in a classification fine enough to give horticulture and reindeer husbandry their own entries — this is a Norwegian register, after all.'
-  - draw:
-      - mark_dig1
-      - l_level
-    speak: 'The digit on the left carries the whole ladder: zero is no completed schooling, six a first degree, eight a doctorate.'
-  - highlight:
-      target:
-        - dig1
-      effect: glow
-    speak: Statistics Norway built the hierarchy so the coarse question is settled leftmost — so a range over the full six-digit number is secretly a question about one digit.
-  - draw:
-      - m1
-      - m2
-      - m3
-    speak: 'Three buckets, then: zero to two compulsory school, three to five upper secondary, six to eight higher education.'
-  - pause: 0.4
-  - clear: {}
-    speak: Back to the script we have been growing since lecture three.
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    parallel: true
-  - draw:
-      - md_line_6
-      - md_line_7
-    speak: This week's new line imports highest completed education, dated the first of October — the autumn reference date the education register uses.
-  - draw:
-      - md_line_8
-    speak: 'First a copy: generate builds a new variable from an old one, and the copy is what we flatten, so the six-digit original survives for later.'
-  - draw:
-      - md_line_9
-    speak: Now recode. Each bracket says every value in this range becomes this number — and it rewrites the variable in place, which is exactly why we made the copy.
-  - draw:
-      - md_mark_1
-    speak: Everything below three hundred thousand — every code whose first digit is zero, one or two — comes back as a plain one.
-  - draw:
-      - md_mark_2
-    speak: The ladder tops out at eight, and no bracket here touches the nines, which mean unspecified — often all the register knows about someone educated abroad.
-  - draw:
-      - md_line_10
-    speak: 'A one, a two and a three are honest but unreadable, so define-labels builds a little dictionary: the value, then the words.'
-  - draw:
-      - md_line_11
-    speak: And assign-labels hangs that dictionary on the variable — the numbers underneath are untouched, only what the output calls them changes.
-  - draw:
-      - md_line_12
-      - md_out
-    speak: Then tabulate, and the counts come back in words instead of codes.
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    delivery: grave
-    speak: 'Copy, collapse, name: on a dataset you can never open, three lines are how a thousand-code classification becomes a variable you can cross the wage gap against.'
-  - quiz:
-      intro: One check before we stop.
-      question: Our three ranges never mention codes starting with 9. What happens to a person whose education is coded as unspecified?
-      choices:
-        - Counted as higher education
-        - Keeps its original six-digit code
-        - Dropped from the dataset
-      correct: 2
-      right: It keeps its original code — recode only touches the values you list, so unspecified education turns up in the table as a stray number.
-      wrong: recode changes nothing it was not told to change.
-  - explore:
-      code: md
-    speak: Move the cut-points, or add a fourth level so doctorates stand alone, and run it yourself.
----
-title: generate Refuses, replace Obeys
+
+    text dig1 "6" #b5482e x 400 y 590 font_size 60 hidden true
+    text dig_rest "43101" right dig1 gap 12 font_size 60 hidden true
+    mark mark_dig1 target dig1 kind circle hidden true
+    label l_level "the level" below #b5482e attach_to dig1 hidden true
+    label l_field "the field of study" below #2f6b8f attach_to dig_rest hidden true
+    text m1 "0–2   →   1   Compulsory" x 500 y 420 font_size 28 hidden true
+    text m2 "3–5   →   2   Upper secondary" below m1 gap 18 font_size 28 hidden true
+    text m3 "6–8   →   3   Higher education" below m2 gap 18 font_size 28 hidden true
+    ```microdata md width 960 font_size 16 show below lines 7 frame screen marks ["(0/299999=1)","(600000/899999=3)"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    // new this week: highest completed education
+    import db/NUDB_BU 2022-10-01 as bu
+    generate educ = bu
+    recode educ (0/299999=1) (300000/599999=2) (600000/899999=3)
+    define-labels educlab 1 'Compulsory' 2 'Upper secondary' 3 'Higher'
+    assign-labels educ educlab
+    tabulate educ
+    ```
+
+Now that we have seen that NUDB_BU hands back codes and not categories, we have a problem: you cannot ask how the gender wage gap varies with education while education has a thousand values.
+    draw dig1 dig_rest
+
+Here is one of them: six-four-three-one-oh-one. The five digits on the right pin down the subject, in a classification fine enough to give horticulture and reindeer husbandry their own entries — this is a Norwegian register, after all.
+    draw l_field
+
+The digit on the left carries the whole ladder: zero is no completed schooling, six a first degree, eight a doctorate.
+    draw mark_dig1 l_level
+
+Statistics Norway built the hierarchy so the coarse question is settled leftmost — so a range over the full six-digit number is secretly a question about one digit.
+    highlight dig1 effect glow
+
+Three buckets, then: zero to two compulsory school, three to five upper secondary, six to eight higher education.
+    draw m1 m2 m3
+
+    pause 0.4
+
+Back to the script we have been growing since lecture three.
+    clear
+
+    draw md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 parallel true
+
+This week's new line imports highest completed education, dated the first of October — the autumn reference date the education register uses.
+    draw md_line_6 md_line_7
+
+First a copy: generate builds a new variable from an old one, and the copy is what we flatten, so the six-digit original survives for later.
+    draw md_line_8
+
+Now recode. Each bracket says every value in this range becomes this number — and it rewrites the variable in place, which is exactly why we made the copy.
+    draw md_line_9
+
+Everything below three hundred thousand — every code whose first digit is zero, one or two — comes back as a plain one.
+    draw md_mark_1
+
+The ladder tops out at eight, and no bracket here touches the nines, which mean unspecified — often all the register knows about someone educated abroad.
+    draw md_mark_2
+
+A one, a two and a three are honest but unreadable, so define-labels builds a little dictionary: the value, then the words.
+    draw md_line_10
+
+And assign-labels hangs that dictionary on the variable — the numbers underneath are untouched, only what the output calls them changes.
+    draw md_line_11
+
+Then tabulate, and the counts come back in words instead of codes.
+    draw md_line_12 md_out
+
+Copy, collapse, name: on a dataset you can never open, three lines are how a thousand-code classification becomes a variable you can cross the wage gap against.
+    highlight md_out effect glow delivery grave
+
+    quiz "Our three ranges never mention codes starting with 9. What happens to a person whose education is coded as unspecified?"
+        intro: One check before we stop.
+        right: It keeps its original code — recode only touches the values you list, so unspecified education turns up in the table as a stray number.
+        wrong: recode changes nothing it was not told to change.
+        * Counted as higher education
+        + Keeps its original six-digit code
+        * Dropped from the dataset
+
+Move the cut-points, or add a fourth level so doctorates stand alone, and run it yourself.
+    explore code md
+
+## generate Refuses, replace Obeys
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 7
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      generate wage_k = wage / 1000
-      replace wage_k = 2000 if wage_k > 2000
-      summarize wage_k
-    marks:
-      - generate wage_k
-      - replace wage_k = 2000
-      - as wage
-  - id: col_sex
-    type: node
-    shape: rect
-    text: sex
-    x: 260
-    'y': 520
-    width: 190
-    height: 100
-  - id: col_wage
-    type: node
-    shape: rect
-    text: wage
-    width: 190
-    height: 100
-    at:
-      ref: col_sex
-      side: right
-      gap: 24
-    style:
-      color: '#2f6b8f'
-  - id: col_wk
-    type: node
-    shape: rect
-    text: wage_k
-    width: 190
-    height: 100
-    at:
-      ref: col_wage
-      side: right
-      gap: 24
-    style:
-      color: '#8a5fa8'
-  - id: gen_cmd
-    type: text
-    text: generate wage_k = wage / 1000
-    at:
-      ref: col_wage
-      side: below
-      gap: 70
-    style:
-      color: '#b5482e'
-  - id: ann_gen
-    type: annotation
-    target: gen_cmd
-    kind: strike
-  - id: rep_cmd
-    type: text
-    text: replace wage_k = 2000 if wage_k > 2000
-    at:
-      ref: gen_cmd
-      side: below
-      gap: 60
-    style:
-      color: '#2f6b8f'
-  - id: arrow_rep
-    type: arrow
-    from:
-      ref: rep_cmd
-    to:
-      ref: col_wk
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: rule
-    type: text
-    text: generate creates a name — replace edits one
-    at:
-      ref: rep_cmd
-      side: below
-      gap: 56
-  - id: ann_rule
-    type: annotation
-    target: rule
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: 'Now that we have turned raw education codes into labelled groups, here is the mistake that version stops you making: in Stata you can quietly destroy a variable with a typo, and here you cannot.'
-  - draw:
-      - md_line_2
-      - md_line_3
-      - md_line_4
-    speak: 'Lines two to four are last week''s work: an empty dataset, sex, and wage income as it stood on the first of January twenty twenty-two.'
-  - draw:
-      - md_line_5
-    speak: 'Wage arrives in kroner, so we build a column in thousands: six hundred forty-two thousand three hundred becomes six hundred forty-two point three.'
-  - draw:
-      - md_mark_1
-    speak: 'generate means one thing only: claim a name nobody is using. Ask it for wage_k a second time and the script stops dead.'
-  - pause: 0.4
-  - draw:
-      - md_line_6
-    speak: For a column that already exists the verb is replace — here capping wage_k at two thousand, two million kroner, so one 1985-model shipping heir cannot drag the whole cohort's mean around.
-  - draw:
-      - md_mark_2
-    speak: 'Same left-hand side, mirror-image rule: replace needs a column that is already there, because writing into nothing is a typo too.'
-  - draw:
-      - md_line_7
-      - md_out
-    speak: 'And summarize is the only check you get: the column exists, and the maximum sits exactly on our cap.'
-  - draw:
-      - md_mark_3
-    speak: Which is the whole point — your imported wage lives three lines up, and a slip of the finger in a generate would land right on top of it.
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: You would never catch it, because this little table is the only thing you will ever see of these people.
-  - clear: {}
-  - draw:
-      - col_sex
-      - col_wage
-      - col_wk
-    parallel: true
-    speak: 'Picture the dataset the way the server does: sealed envelopes with names written on the outside, and no way to open them.'
-  - draw:
-      - gen_cmd
-    speak: generate wage_k asks for a brand new envelope carrying that name.
-  - draw:
-      - ann_gen
-    speak: 'Refused — there is already one. The machine is that colleague who says: are you quite sure, you have one of those already.'
-  - draw:
-      - rep_cmd
-      - arrow_rep
-    speak: replace wage_k reaches into the envelope that exists and rewrites what is inside it, deliberately and on the record.
-  - draw:
-      - rule
-      - ann_rule
-    delivery: grave
-    speak: generate creates a name, replace edits one — so the error message is not a nuisance, it is the only witness you have that a column was about to vanish unseen.
-  - highlight:
-      target:
-        - rep_cmd
-      effect: glow
-    speak: That little if on the end? That is next time, when we write conditions for people we can never look at.
-  - quiz:
-      intro: Quick check.
-      question: 'You imported wage on line four. Line eight says: generate wage = wage / 1000. What happens?'
-      choices:
-        - wage is quietly overwritten
-        - The script stops with an error
-        - A second column called wage appears
-      correct: 2
-      right: The script stops — generate only ever claims an unused name, so the column you imported survives.
-      wrong: Nothing is overwritten — generate will not write over a name that already exists.
----
-title: Writing if conditions blind
+
+    ```microdata md width 960 font_size 16 show below lines 7 frame screen marks ["generate wage_k","replace wage_k = 2000","as wage"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    generate wage_k = wage / 1000
+    replace wage_k = 2000 if wage_k > 2000
+    summarize wage_k
+    ```
+
+Now that we have turned raw education codes into labelled groups, here is the mistake that version stops you making: in Stata you can quietly destroy a variable with a typo, and here you cannot.
+    draw md md_line_1 parallel true
+
+Lines two to four are last week's work: an empty dataset, sex, and wage income as it stood on the first of January twenty twenty-two.
+    draw md_line_2 md_line_3 md_line_4
+
+Wage arrives in kroner, so we build a column in thousands: six hundred forty-two thousand three hundred becomes six hundred forty-two point three.
+    draw md_line_5
+
+generate means one thing only: claim a name nobody is using. Ask it for wage_k a second time and the script stops dead.
+    draw md_mark_1
+
+    pause 0.4
+
+For a column that already exists the verb is replace — here capping wage_k at two thousand, two million kroner, so one 1985-model shipping heir cannot drag the whole cohort's mean around.
+    draw md_line_6
+
+Same left-hand side, mirror-image rule: replace needs a column that is already there, because writing into nothing is a typo too.
+    draw md_mark_2
+
+And summarize is the only check you get: the column exists, and the maximum sits exactly on our cap.
+    draw md_line_7 md_out
+
+Which is the whole point — your imported wage lives three lines up, and a slip of the finger in a generate would land right on top of it.
+    draw md_mark_3
+
+You would never catch it, because this little table is the only thing you will ever see of these people.
+    highlight md_out effect glow
+
+    clear
+
+Picture the dataset the way the server does: sealed envelopes with names written on the outside, and no way to open them.
+    box col_sex "sex" x 260 y 520 width 190 height 100
+    box col_wage "wage" right col_sex gap 24 #2f6b8f width 190 height 100
+    box col_wk "wage_k" right col_wage gap 24 #8a5fa8 width 190 height 100
+    parallel true
+
+generate wage_k asks for a brand new envelope carrying that name.
+    text gen_cmd "generate wage_k = wage / 1000" below col_wage gap 70 #b5482e
+
+Refused — there is already one. The machine is that colleague who says: are you quite sure, you have one of those already.
+    mark ann_gen target gen_cmd kind strike
+
+replace wage_k reaches into the envelope that exists and rewrites what is inside it, deliberately and on the record.
+    text rep_cmd "replace wage_k = 2000 if wage_k > 2000" below gen_cmd gap 60 #2f6b8f
+    arrow arrow_rep rep_cmd -> col_wk curved #2f6b8f
+
+generate creates a name, replace edits one — so the error message is not a nuisance, it is the only witness you have that a column was about to vanish unseen.
+    text rule "generate creates a name — replace edits one" below rep_cmd gap 56
+    mark ann_rule target rule kind box
+    delivery grave
+
+That little if on the end? That is next time, when we write conditions for people we can never look at.
+    highlight rep_cmd effect glow
+
+    quiz "You imported wage on line four. Line eight says: generate wage = wage / 1000. What happens?" intro "Quick check."
+        right: The script stops — generate only ever claims an unused name, so the column you imported survives.
+        wrong: Nothing is overwritten — generate will not write over a name that already exists.
+        * wage is quietly overwritten
+        + The script stops with an error
+        * A second column called wage appears
+
+## Writing if conditions blind
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: above
-    width: 940
-    font_size: 15
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      destring born
-      generate cohort85 = 0
-      replace cohort85 = 1 if born >= 198501
-      replace cohort85 = 0 if born > 198512
-      generate oslo = 0
-      replace oslo = 1 if kommune == '0301'
-      generate toppinntekt = 0
-      replace toppinntekt = 1 if wage > 600000
-      tabulate sex toppinntekt
-  - id: n1
-    type: node
-    shape: rect
-    text: import
-    x: 140
-    'y': 500
-    width: 180
-    height: 88
-  - id: n2
-    type: node
-    shape: rect
-    text: recode + labels
-    at:
-      ref: n1
-      side: right
-      gap: 40
-    width: 230
-    height: 88
-  - id: n3
-    type: node
-    shape: rect
-    text: generate
-    at:
-      ref: n2
-      side: right
-      gap: 40
-    width: 180
-    height: 88
-  - id: n4
-    type: node
-    shape: rect
-    text: replace … if
-    at:
-      ref: n3
-      side: right
-      gap: 40
-    width: 200
-    height: 88
-    style:
-      color: '#b5482e'
-  - id: n5
-    type: node
-    shape: rect
-    text: tabulate / summarize
-    x: 500
-    'y': 290
-    width: 300
-    height: 90
-    style:
-      color: '#2f6b8f'
-  - id: e1
-    type: arrow
-    from:
-      ref: n1
-    to:
-      ref: n2
-  - id: e2
-    type: arrow
-    from:
-      ref: n2
-    to:
-      ref: n3
-  - id: e3
-    type: arrow
-    from:
-      ref: n3
-    to:
-      ref: n4
-  - id: e4
-    type: arrow
-    from:
-      ref: n4
-    to:
-      ref: n5
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: punch
-    type: label
-    text: You never debug a row — you debug a count.
-    attach_to: n5
-    side: below
-  - id: mark
-    type: annotation
-    target: punch
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that we have seen generate refuse and replace obey, one word is left — if — and it has to work on a dataset where you can never look at a single row.
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-  - draw:
-      - md_line_7
-    speak: 'Birth month arrives as text: one-nine-eight-five-zero-three is six characters, not a number. destring makes it a number, and only then does a greater-than sign mean anything.'
-  - pause: 0.3
-  - draw:
-      - md_line_8
-      - md_line_9
-    speak: So everyone starts at zero, and then the flag goes up for everyone born from January 1985 onward.
-  - draw:
-      - md_line_10
-    speak: And straight back down for anyone born after December — because that first condition also swept in every 1986 and 1987 baby, and you cannot scroll down to spot them.
-  - highlight:
-      target:
-        - md_line_9
-        - md_line_10
-      effect: glow
-    speak: 'That is the shape of every blind condition: the rows it does not match are not dropped and not flagged — they simply keep whatever they already had.'
-  - pause: 0.4
-  - draw:
-      - md_line_11
-      - md_line_12
-    speak: 'Municipality works the other way round: Oslo is zero-three-zero-one, the leading zero is part of the code, so it stays inside quotes.'
-  - point:
-      at:
-        ref: md_line_12
-      gesture: underline
-    speak: Forget the quotes and the flag just stays zero everywhere — no error, no warning. A condition that matches nobody is not a bug here; it is a very quiet Tuesday.
-  - pause: 0.3
-  - draw:
-      - md_line_13
-      - md_line_14
-    speak: 'Now the wage flag: zero for everyone, then a one for anyone over six hundred thousand kroner in 2022.'
-  - highlight:
-      target:
-        - md_line_14
-      effect: glow
-    speak: 'But a person with no wage recorded has no number to compare, and you cannot see which side of the condition they landed on — so ask on purpose: sysmiss of wage is the only way to put that question.'
-  - draw:
-      - md_line_15
-      - md_out
-    speak: tabulate sex toppinntekt — and this little table is the only pair of eyes you get.
-  - point:
-      at:
-        ref: md_out
-      gesture: circle
-    speak: Nothing in it says missing, so summarize wage as well and compare its N with the cohort — any shortfall is hiding somewhere inside these cells.
-  - quiz:
-      intro: Quick check before we zoom out.
-      question: After generate oslo = 0 and replace oslo = 1 if kommune == '0301', what does someone in Bergen have?
-      choices:
-        - '0'
-        - Missing
-        - They are dropped
-      correct: 1
-      right: Zero — replace only touches the rows its condition matches; everyone else keeps the value generate gave them.
-      wrong: Not quite — replace never removes anyone and never blanks anyone.
-  - clear: {}
-  - draw:
-      - n1
-      - e1
-      - n2
-    speak: 'Step back over these four parts: the raw codes came in, and recode with define-labels turned them into categories a table can actually print.'
-  - draw:
-      - e2
-      - n3
-      - e3
-      - n4
-    speak: generate opens a column exactly once — and refuses the second time — while replace goes back in and fills it, condition by condition.
-  - draw:
-      - e4
-      - n5
-    speak: 'And every one of those conditions is verified in one place only: the counts that come back.'
-  - draw:
-      - punch
-      - mark
-    speak: Which is the habit this whole block has really been teaching.
-    delivery: grave
-  - speak: Your new variables are only as true as the counts you check them against — and next time we point the very same conditions at the population itself, with keep and drop.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Defining the population: keep, drop, and the people who quietly disappear'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 6 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Defining the population: keep, drop, and the people who quietly disappear'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+
+    ```microdata md width 940 font_size 15 show above frame screen draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    destring born
+    generate cohort85 = 0
+    replace cohort85 = 1 if born >= 198501
+    replace cohort85 = 0 if born > 198512
+    generate oslo = 0
+    replace oslo = 1 if kommune == '0301'
+    generate toppinntekt = 0
+    replace toppinntekt = 1 if wage > 600000
+    tabulate sex toppinntekt
+    ```
+    box n1 "import" x 140 y 500 width 180 height 88 hidden true
+    box n2 "recode + labels" right n1 gap 40 width 230 height 88 hidden true
+    box n3 "generate" right n2 gap 40 width 180 height 88 hidden true
+    box n4 "replace … if" right n3 gap 40 #b5482e width 200 height 88 hidden true
+    box n5 "tabulate / summarize" #2f6b8f x 500 y 290 width 300 height 90 hidden true
+    arrow e1 n1 -> n2 hidden true
+    arrow e2 n2 -> n3 hidden true
+    arrow e3 n3 -> n4 hidden true
+    arrow e4 n4 -> n5 curved #2f6b8f hidden true
+
+Now that we have seen generate refuse and replace obey, one word is left — if — and it has to work on a dataset where you can never look at a single row.
+    draw md md_line_1 md_line_2 parallel true
+
+    draw md_line_3 md_line_4 md_line_5 md_line_6
+
+Birth month arrives as text: one-nine-eight-five-zero-three is six characters, not a number. destring makes it a number, and only then does a greater-than sign mean anything.
+    draw md_line_7
+
+    pause 0.3
+
+So everyone starts at zero, and then the flag goes up for everyone born from January 1985 onward.
+    draw md_line_8 md_line_9
+
+And straight back down for anyone born after December — because that first condition also swept in every 1986 and 1987 baby, and you cannot scroll down to spot them.
+    draw md_line_10
+
+That is the shape of every blind condition: the rows it does not match are not dropped and not flagged — they simply keep whatever they already had.
+    highlight md_line_9 md_line_10 effect glow
+
+    pause 0.4
+
+Municipality works the other way round: Oslo is zero-three-zero-one, the leading zero is part of the code, so it stays inside quotes.
+    draw md_line_11 md_line_12
+
+Forget the quotes and the flag just stays zero everywhere — no error, no warning. A condition that matches nobody is not a bug here; it is a very quiet Tuesday.
+    point at.ref md_line_12 gesture underline
+
+    pause 0.3
+
+Now the wage flag: zero for everyone, then a one for anyone over six hundred thousand kroner in 2022.
+    draw md_line_13 md_line_14
+
+But a person with no wage recorded has no number to compare, and you cannot see which side of the condition they landed on — so ask on purpose: sysmiss of wage is the only way to put that question.
+    highlight md_line_14 effect glow
+
+tabulate sex toppinntekt — and this little table is the only pair of eyes you get.
+    draw md_line_15 md_out
+
+Nothing in it says missing, so summarize wage as well and compare its N with the cohort — any shortfall is hiding somewhere inside these cells.
+    point at.ref md_out gesture circle
+
+    quiz "After generate oslo = 0 and replace oslo = 1 if kommune == '0301', what does someone in Bergen have?"
+        intro: Quick check before we zoom out.
+        right: Zero — replace only touches the rows its condition matches; everyone else keeps the value generate gave them.
+        wrong: Not quite — replace never removes anyone and never blanks anyone.
+        + 0
+        * Missing
+        * They are dropped
+
+    clear
+
+Step back over these four parts: the raw codes came in, and recode with define-labels turned them into categories a table can actually print.
+    draw n1 e1 n2
+
+generate opens a column exactly once — and refuses the second time — while replace goes back in and fills it, condition by condition.
+    draw e2 n3 e3 n4
+
+And every one of those conditions is verified in one place only: the counts that come back.
+    draw e4 n5
+
+Which is the habit this whole block has really been teaching.
+    label punch "You never debug a row — you debug a count." below attach_to n5
+    mark mark target punch kind box
+    delivery grave
+
+Your new variables are only as true as the counts you check them against — and next time we point the very same conditions at the population itself, with keep and drop.
+
+## Where next
+end_page: true
+
+Next: Defining the population: keep, drop, and the people who quietly disappear
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:4 title "Building datasets II: collapse and merge, or how to change the unit of analysis" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:6 title "Defining the population: keep, drop, and the people who quietly disappear" size 320 x 735 y 395
+
+    link end_again href lecture:5 title "Watch again" form text open here x 500 y 160
+    text end_count "5 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

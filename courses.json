@@ -90,26 +90,6 @@
       "updated": "2026-09-06"
     },
     {
-      "slug": "microdata",
-      "title": "Doing Data Analysis in microdata.no: A Scripting Course",
-      "files": [
-        "microdata/five-lines-to-your-first-plot.yaml",
-        "microdata/what-is-actually-inside-the-datastore.yaml",
-        "microdata/building-datasets-i-create-dataset-and.yaml",
-        "microdata/building-datasets-ii-collapse-and-merge.yaml",
-        "microdata/making-new-variables-generate-replace.yaml",
-        "microdata/defining-the-population-keep-drop-and.yaml",
-        "microdata/output-that-tells-the-truth-tabulate.yaml",
-        "microdata/why-your-output-came-back-censored.yaml",
-        "microdata/many-years-at-once-panels-event-data-and.yaml",
-        "microdata/the-whole-script-end-to-end-and-what-to.yaml",
-        "microdata/course.md",
-        "microdata/index.html",
-        "microdata/README.md"
-      ],
-      "updated": "2026-09-18"
-    },
-    {
       "slug": "understanding-the-qaly",
       "title": "Understanding the QALY: Definition, Calculation, and Debates",
       "files": [
@@ -123,6 +103,26 @@
         "understanding-the-qaly/README.md"
       ],
       "updated": "2026-09-28"
+    },
+    {
+      "slug": "microdata",
+      "title": "Doing Data Analysis in microdata.no: A Scripting Course",
+      "files": [
+        "microdata/five-lines-to-your-first-plot.cast",
+        "microdata/what-is-actually-inside-the-datastore.cast",
+        "microdata/building-datasets-i-create-dataset-and.cast",
+        "microdata/building-datasets-ii-collapse-and-merge.cast",
+        "microdata/making-new-variables-generate-replace.cast",
+        "microdata/defining-the-population-keep-drop-and.cast",
+        "microdata/output-that-tells-the-truth-tabulate.cast",
+        "microdata/why-your-output-came-back-censored.cast",
+        "microdata/many-years-at-once-panels-event-data-and.cast",
+        "microdata/the-whole-script-end-to-end-and-what-to.cast",
+        "microdata/course.md",
+        "microdata/index.html",
+        "microdata/README.md"
+      ],
+      "updated": "2026-10-03"
     }
   ]
 }

@@ -1,1207 +1,612 @@
-playlist:
-  title: The whole script, end to end — and what to do when it breaks
-  prompt: Can we read the complete gender-wage-gap script from `require` to the final regression and say what each block does? What do the most common error messages actually mean, and how do you isolate the failing line? Why pin the datastore version, and what else does a colleague need to reproduce your result a year from now?
----
-title: The script on one page
+# The whole script, end to end — and what to do when it breaks
+prompt: "Can we read the complete gender-wage-gap script from `require` to the final regression and say what each block does? What do the most common error messages actually mean, and how do you isolate the failing line? Why pin the datastore version, and what else does a colleague need to reproduce your result a year from now?"
+
+## The script on one page
+voice: male
 level: advanced
+
+    ```microdata md width 900 font_size 15 show code lines 22 frame screen marks ["no.ssb.fdb:54","keep if wage > 0","regress logwage female educ"] hidden true
+    // 1. Setup
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    // 2. Import
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/NUDB_BU 2020-01-01 as educ
+    import db/BEFOLKNING_KOMMNR_FORMELL 2020-01-01 as kommune
+    import db/INNTEKT_WLONN 2020-12-31 as wage
+    // 3. New variables
+    generate cohort = int(birth/100)
+    generate female = 0
+    replace female = 1 if sex == '2'
+    // 4. Population
+    keep if cohort == 1985
+    keep if wage > 0
+    // 5. Describe
+    tabulate female
+    summarize wage
+    // 6. Estimate
+    generate logwage = ln(wage)
+    regress logwage female educ
+    ```
+
+A: Nine lectures have each added a line to the same script; today it goes on one page, so that when it breaks you know which of its six blocks you are actually in.
+    draw md md_line_1 parallel true
+
+B: Block one is setup: pick the datastore, version fifty-four, call it db, and open an empty dataset called persons.
+    draw md_line_2 md_line_3
+
+A: That colon fifty-four is a version pin, and in a year it is the difference between your colleague's number and yours.
+    draw md_mark_1
+
+B: Block two imports. Sex and birth year-month take no date, because neither of them moves.
+    draw md_line_4 md_line_5 md_line_6
+
+A: Education, municipality and wage each carry one, because they are facts about a moment: schooling as of January twenty twenty, wage income on the last day of that year.
+    draw md_line_7 md_line_8 md_line_9
+
+B: Five imports in, and we still have not seen a single person. That is not an oversight, that is the design.
+    point at.ref md_line_9 gesture underline
+
+    wait
+
+A: Block three builds what the datastore does not hold: birth arrives as one-nine-eight-five-zero-four, so integer-divide by a hundred and the cohort falls out.
+    draw md_line_10 md_line_11
+
+B: Then the dummy — zero for everyone, one wherever the sex code is the string two.
+    draw md_line_12 md_line_13
+
+A: Block four defines the population: everyone born in 1985, some fifty thousand people.
+    draw md_line_14 md_line_15
+
+B: And then positive wage income only — which quietly drops everyone with no earnings, and those people are not spread evenly across the two sexes.
+    draw md_line_16 md_mark_2
+
+A: So the estimate you are about to see is conditional on working at all: three lines of code, and the hardest question in the paper.
+    focus md_line_14 md_line_15 md_line_16
+
+    wait
+
+B: Block five describes before it explains: how big the two groups are, and what wage income looks like.
+    draw md_line_17 md_line_18 md_line_19
+
+A: Then the log, taken here and not earlier, because the logarithm of zero is where scripts go to die.
+    draw md_line_20 md_line_21
+
+B: Block six is one line: log wage income on the female dummy and education.
+    draw md_line_22
+
+A: One coefficient, and everything above it is an argument about what that coefficient means — for a cohort like this, women's wage income on the order of twenty per cent lower.
+    draw md_mark_3 delivery grave
+
+B: Wage income, not hourly pay: part-time hours and months out of work are inside that number, so a gap measured here is a gap in earnings, not in rates.
+    highlight md_line_9 effect glow
+
+    wait
+
+A: Setup, import, new variables, population, describe, estimate — six blocks, always that order, because each one can only use what the one above it made.
+    focus md_line_1 md_line_4 md_line_10 md_line_14 md_line_17 md_line_20
+
+B: Which is why a failure reported on the last line usually happened three blocks higher: the regression is just the first command that cared.
+    point at.ref md_line_15 gesture tap
+
+    ask "Click the line that makes this script reproducible a year from now." widget click answer md_line_2
+        intro: One check before we open block one.
+        right: The require line — the datastore pinned at version fifty-four, so a colleague runs against the same metadata you did.
+        wrong: Reproducibility is settled before a single variable is imported.
+
+A: You can now read this page as six blocks instead of twenty-two lines — and say, for any error, which block owns it. Next time we open the first two.
+
+## Setup and import
 voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 22
-    width: 900
-    font_size: 15
-    frame: screen
-    code: |-
-      // 1. Setup
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      // 2. Import
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/NUDB_BU 2020-01-01 as educ
-      import db/BEFOLKNING_KOMMNR_FORMELL 2020-01-01 as kommune
-      import db/INNTEKT_WLONN 2020-12-31 as wage
-      // 3. New variables
-      generate cohort = int(birth/100)
-      generate female = 0
-      replace female = 1 if sex == '2'
-      // 4. Population
-      keep if cohort == 1985
-      keep if wage > 0
-      // 5. Describe
-      tabulate female
-      summarize wage
-      // 6. Estimate
-      generate logwage = ln(wage)
-      regress logwage female educ
-    marks:
-      - no.ssb.fdb:54
-      - keep if wage > 0
-      - regress logwage female educ
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    voice: a
-    speak: Nine lectures have each added a line to the same script; today it goes on one page, so that when it breaks you know which of its six blocks you are actually in.
-  - draw:
-      - md_line_2
-      - md_line_3
-    voice: b
-    speak: 'Block one is setup: pick the datastore, version fifty-four, call it db, and open an empty dataset called persons.'
-  - draw:
-      - md_mark_1
-    voice: a
-    speak: That colon fifty-four is a version pin, and in a year it is the difference between your colleague's number and yours.
-  - draw:
-      - md_line_4
-      - md_line_5
-      - md_line_6
-    voice: b
-    speak: Block two imports. Sex and birth year-month take no date, because neither of them moves.
-  - draw:
-      - md_line_7
-      - md_line_8
-      - md_line_9
-    voice: a
-    speak: 'Education, municipality and wage each carry one, because they are facts about a moment: schooling as of January twenty twenty, wage income on the last day of that year.'
-  - point:
-      at:
-        ref: md_line_9
-      gesture: underline
-    voice: b
-    speak: Five imports in, and we still have not seen a single person. That is not an oversight, that is the design.
-  - wait: click
-  - draw:
-      - md_line_10
-      - md_line_11
-    voice: a
-    speak: 'Block three builds what the datastore does not hold: birth arrives as one-nine-eight-five-zero-four, so integer-divide by a hundred and the cohort falls out.'
-  - draw:
-      - md_line_12
-      - md_line_13
-    voice: b
-    speak: Then the dummy — zero for everyone, one wherever the sex code is the string two.
-  - draw:
-      - md_line_14
-      - md_line_15
-    voice: a
-    speak: 'Block four defines the population: everyone born in 1985, some fifty thousand people.'
-  - draw:
-      - md_line_16
-      - md_mark_2
-    voice: b
-    speak: And then positive wage income only — which quietly drops everyone with no earnings, and those people are not spread evenly across the two sexes.
-  - focus:
-      target:
-        - md_line_14
-        - md_line_15
-        - md_line_16
-    voice: a
-    speak: 'So the estimate you are about to see is conditional on working at all: three lines of code, and the hardest question in the paper.'
-  - wait: click
-  - draw:
-      - md_line_17
-      - md_line_18
-      - md_line_19
-    voice: b
-    speak: 'Block five describes before it explains: how big the two groups are, and what wage income looks like.'
-  - draw:
-      - md_line_20
-      - md_line_21
-    voice: a
-    speak: Then the log, taken here and not earlier, because the logarithm of zero is where scripts go to die.
-  - draw:
-      - md_line_22
-    voice: b
-    speak: 'Block six is one line: log wage income on the female dummy and education.'
-  - draw:
-      - md_mark_3
-    voice: a
-    delivery: grave
-    speak: One coefficient, and everything above it is an argument about what that coefficient means — for a cohort like this, women's wage income on the order of twenty per cent lower.
-  - highlight:
-      target:
-        - md_line_9
-      effect: glow
-    voice: b
-    speak: 'Wage income, not hourly pay: part-time hours and months out of work are inside that number, so a gap measured here is a gap in earnings, not in rates.'
-  - wait: click
-  - focus:
-      target:
-        - md_line_1
-        - md_line_4
-        - md_line_10
-        - md_line_14
-        - md_line_17
-        - md_line_20
-    voice: a
-    speak: Setup, import, new variables, population, describe, estimate — six blocks, always that order, because each one can only use what the one above it made.
-  - point:
-      at:
-        ref: md_line_15
-      gesture: tap
-    voice: b
-    speak: 'Which is why a failure reported on the last line usually happened three blocks higher: the regression is just the first command that cared.'
-  - ask:
-      intro: One check before we open block one.
-      question: Click the line that makes this script reproducible a year from now.
-      widget: click
-      answer: md_line_2
-      right: The require line — the datastore pinned at version fifty-four, so a colleague runs against the same metadata you did.
-      wrong: Reproducibility is settled before a single variable is imported.
-  - voice: a
-    speak: You can now read this page as six blocks instead of twenty-two lines — and say, for any error, which block owns it. Next time we open the first two.
----
-title: Setup and import
 level: advanced
+
+    ```microdata script width 900 font_size 18 show code lines 9 frame screen marks ["no.ssb.fdb:54","create-dataset persons","BEFOLKNING_KJOENN as sex","2022-01-01",{"text":"import db/INNTEKT_WLONN 2022-01-01 as wage","kind":"underline"}] draw.mode type hidden true
+    // 1. Setup
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    // 2. Import
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    ```
+    ```microdata check width 900 font_size 18 show above lines 5 frame screen hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    tabulate sex
+    ```
+
+A: Now that we have seen the whole script on one page, let us type the top of it properly: the setup block and the imports.
+    draw script script_line_1 parallel true
+
+A: Line one, every single time: require no dot ssb dot fdb, colon fifty-four, as db.
+    draw script_line_2
+
+B: And fifty-four is a version of the datastore, pinned by hand — not the newest one, the one you chose.
+    draw script_mark_1
+
+A: It is the least interesting character in the script, and the only one that can quietly ruin a year of work.
+    highlight script_mark_1 effect glow
+
+B: Then create-dataset persons: an empty table with a name, and every command after this line works on that table.
+    draw script_line_3
+
+A: Lowercase noun, one unit of analysis — persons, because every row here is going to be one person born in 1985, and there are roughly fifty thousand of them.
+    draw script_mark_2
+
+    wait
+
+B: Block two, and so far the dataset is a name with no columns at all.
+    draw script_line_4
+
+A: First import: BEFOLKNING underscore KJOENN, the population register's sex variable, renamed to sex.
+    draw script_line_5
+
+B: No date on that line — sex does not change from one reference date to the next, so this is the dateless shape of import.
+    draw script_mark_3
+
+A: Same shape for the cohort variable: BEFOLKNING underscore FOEDSELS underscore AAR underscore MND, as birth.
+    draw script_line_6
+
+B: You type that name exactly once. That is the entire argument for the alias.
+    highlight script_line_6 effect glow
+
+A: Now municipality, BEFOLKNING underscore KOMMNR underscore FORMELL — and here a date appears: the first of January 2022.
+    draw script_line_7
+
+B: Because people move. Without a date the question which municipality has no answer; with one it means where they were formally registered on that day.
+    draw script_mark_4
+
+A: Education next, NUDB underscore BU, highest completed — dated shape again, and the same date, so all the columns are one consistent snapshot.
+    draw script_line_8
+
+    wait
+
+B: And the outcome we actually care about: INNTEKT underscore WLONN, wage income, dated, as wage.
+    draw script_line_9
+
+A: This is where people trip. Wage income is an annual sum, so that date is not New Year's Day — it selects the period the date falls in, the income year 2022.
+    draw script_mark_5
+
+B: Write 2022-12-31 instead and you get exactly the same column — which is comforting once you know it, and baffling until then.
+    highlight script_mark_5 effect pulse
+
+A: Five imports written. So what do we actually have in hand?
+    clear
+
+B: Here is the same setup trimmed to two variables, just so the output fits on the whiteboard.
+    draw check check_line_1 check_line_2 check_line_3 check_line_4 parallel true
+
+A: And one printing command, tabulate sex — because the only way to know an import landed is to ask the server to count it.
+    draw check_line_5
+
+B: Two codes come back, one and two, men and women, with a count beside each — computed on microdata's synthetic data, never on anybody real.
+    draw check_out
+
+A: One row per person, one column per import — and it is the first import that fixed which rows exist at all.
+    highlight check_out effect glow
+
+B: Anyone that wage line does not cover comes back as sysmiss, a genuine missing value — never a quiet zero.
+    point at.ref check_line_4 gesture underline
+
+    quiz "Which of these two imports needs a date?"
+        intro: Quick check before we go on.
+        right: Wage income is measured over a period, so the date picks the income year; sex does not change, so it takes no date at all.
+        wrong: Ask which of the two could have a different value next year.
+        * BEFOLKNING_KJOENN
+        + INNTEKT_WLONN
+        * Neither of them
+
+A: So the top of every script does three things: it pins a datastore version, it names one table with one unit of analysis, and then — one date at a time — it decides what as of when means for each column.
+    highlight check effect pulse delivery grave
+
+B: Next part: from that imported population to the regression — keeping the 1985 cohort, and measuring the gap itself.
+
+## From population to regression
 voice: male
-elements:
-  - id: script
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    lines: 9
-    width: 900
-    font_size: 18
-    draw:
-      mode: type
-    code: |-
-      // 1. Setup
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      // 2. Import
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-    marks:
-      - no.ssb.fdb:54
-      - create-dataset persons
-      - BEFOLKNING_KJOENN as sex
-      - '2022-01-01'
-      - text: import db/INNTEKT_WLONN 2022-01-01 as wage
-        kind: underline
-  - id: check
-    type: code
-    language: microdata
-    show: above
-    frame: screen
-    lines: 5
-    width: 900
-    font_size: 18
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      tabulate sex
-commands:
-  - draw:
-      - script
-      - script_line_1
-    parallel: true
-    speak: 'Now that we have seen the whole script on one page, let us type the top of it properly: the setup block and the imports.'
-    voice: a
-  - draw:
-      - script_line_2
-    speak: 'Line one, every single time: require no dot ssb dot fdb, colon fifty-four, as db.'
-    voice: a
-  - draw:
-      - script_mark_1
-    speak: And fifty-four is a version of the datastore, pinned by hand — not the newest one, the one you chose.
-    voice: b
-  - highlight:
-      target:
-        - script_mark_1
-      effect: glow
-    speak: It is the least interesting character in the script, and the only one that can quietly ruin a year of work.
-    voice: a
-  - draw:
-      - script_line_3
-    speak: 'Then create-dataset persons: an empty table with a name, and every command after this line works on that table.'
-    voice: b
-  - draw:
-      - script_mark_2
-    speak: Lowercase noun, one unit of analysis — persons, because every row here is going to be one person born in 1985, and there are roughly fifty thousand of them.
-    voice: a
-  - wait: click
-  - draw:
-      - script_line_4
-    speak: Block two, and so far the dataset is a name with no columns at all.
-    voice: b
-  - draw:
-      - script_line_5
-    speak: 'First import: BEFOLKNING underscore KJOENN, the population register''s sex variable, renamed to sex.'
-    voice: a
-  - draw:
-      - script_mark_3
-    speak: No date on that line — sex does not change from one reference date to the next, so this is the dateless shape of import.
-    voice: b
-  - draw:
-      - script_line_6
-    speak: 'Same shape for the cohort variable: BEFOLKNING underscore FOEDSELS underscore AAR underscore MND, as birth.'
-    voice: a
-  - highlight:
-      target:
-        - script_line_6
-      effect: glow
-    speak: You type that name exactly once. That is the entire argument for the alias.
-    voice: b
-  - draw:
-      - script_line_7
-    speak: 'Now municipality, BEFOLKNING underscore KOMMNR underscore FORMELL — and here a date appears: the first of January 2022.'
-    voice: a
-  - draw:
-      - script_mark_4
-    speak: Because people move. Without a date the question which municipality has no answer; with one it means where they were formally registered on that day.
-    voice: b
-  - draw:
-      - script_line_8
-    speak: Education next, NUDB underscore BU, highest completed — dated shape again, and the same date, so all the columns are one consistent snapshot.
-    voice: a
-  - wait: click
-  - draw:
-      - script_line_9
-    speak: 'And the outcome we actually care about: INNTEKT underscore WLONN, wage income, dated, as wage.'
-    voice: b
-  - draw:
-      - script_mark_5
-    speak: This is where people trip. Wage income is an annual sum, so that date is not New Year's Day — it selects the period the date falls in, the income year 2022.
-    voice: a
-  - highlight:
-      target:
-        - script_mark_5
-      effect: pulse
-    speak: Write 2022-12-31 instead and you get exactly the same column — which is comforting once you know it, and baffling until then.
-    voice: b
-  - clear: {}
-    speak: Five imports written. So what do we actually have in hand?
-    voice: a
-  - draw:
-      - check
-      - check_line_1
-      - check_line_2
-      - check_line_3
-      - check_line_4
-    parallel: true
-    speak: Here is the same setup trimmed to two variables, just so the output fits on the whiteboard.
-    voice: b
-  - draw:
-      - check_line_5
-    speak: And one printing command, tabulate sex — because the only way to know an import landed is to ask the server to count it.
-    voice: a
-  - draw:
-      - check_out
-    speak: Two codes come back, one and two, men and women, with a count beside each — computed on microdata's synthetic data, never on anybody real.
-    voice: b
-  - highlight:
-      target:
-        - check_out
-      effect: glow
-    speak: One row per person, one column per import — and it is the first import that fixed which rows exist at all.
-    voice: a
-  - point:
-      at:
-        ref: check_line_4
-      gesture: underline
-    speak: Anyone that wage line does not cover comes back as sysmiss, a genuine missing value — never a quiet zero.
-    voice: b
-  - quiz:
-      intro: Quick check before we go on.
-      question: Which of these two imports needs a date?
-      choices:
-        - BEFOLKNING_KJOENN
-        - INNTEKT_WLONN
-        - Neither of them
-      correct: 2
-      right: Wage income is measured over a period, so the date picks the income year; sex does not change, so it takes no date at all.
-      wrong: Ask which of the two could have a different value next year.
-  - highlight:
-      target:
-        - check
-      effect: pulse
-    speak: 'So the top of every script does three things: it pins a datastore version, it names one table with one unit of analysis, and then — one date at a time — it decides what as of when means for each column.'
-    voice: a
-    delivery: grave
-  - speak: 'Next part: from that imported population to the regression — keeping the 1985 cohort, and measuring the gap itself.'
-    voice: b
----
-title: From population to regression
+
+    ```microdata md width 960 font_size 15 show left lines 9 frame screen marks ["keep if cohort == 1985","collapse(mean) mwage, by(kommune)","merge muni, by(kommune)","regress wage female elevel mwage"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset muni
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as mwage
+    collapse(mean) mwage, by(kommune)
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    destring birth
+    generate cohort = int(birth/100)
+    keep if cohort == 1985
+    destring educ
+    generate elevel = int(educ/100000)
+    recode elevel (0/2 = 1) (3/5 = 2) (6/8 = 3)
+    generate female = 0
+    replace female = 1 if sex == '2'
+    // tabulate female elevel - the check from lecture 7
+    merge muni, by(kommune)
+    regress wage female elevel mwage
+    ```
+
+A: Now that we have the require line and the imports, everything left is what decides what the final number MEANS — one coefficient, and twenty lines of choices standing behind it.
+    draw md md_line_6 md_line_7 md_line_8 md_line_9 md_line_10
+
+B: Birth month arrives as text — one nine eight five zero four — so destring makes it a number, and integer division by a hundred leaves the birth year.
+    draw md_line_11 md_line_12
+
+A: And a single line defines the whole study population: keep if cohort equals 1985. Five and a half million people become some sixty thousand.
+    draw md_line_13
+
+B: Put it here, before anything is computed, and the other cohorts never get processed. The server bills you in patience rather than kroner.
+    draw md_mark_1
+
+    wait
+
+A: Education is a six-digit NUS code whose first digit is the level, so dividing by a hundred thousand and taking the integer keeps exactly that digit.
+    draw md_line_14 md_line_15
+
+B: Recode then folds those levels into three: compulsory, upper secondary, higher education.
+    draw md_line_16
+
+A: Sex is a string code, so the dummy is built by hand — zero for everyone, then one wherever the code is two.
+    draw md_line_17 md_line_18
+
+B: And the cross-tab from lecture seven, checking that no female-by-education cell is empty, survives as a comment — which is where good intentions live.
+    draw md_line_19
+
+    wait
+
+A: Now the part that trips people up. Right at the top, before persons exists, a second dataset: muni, with just municipality and wage.
+    draw md_line_2 md_line_3 md_line_4
+
+B: Collapse averages wage inside each municipality, and the unit of analysis changes under you — sixty thousand people become about three hundred and fifty rows.
+    draw md_line_5
+
+A: The by variable IS the new unit. Nothing in the dataset is a person any more.
+    draw md_mark_2
+
+B: Back in persons, merge pulls that average in on kommune, so every person in Bergen now carries Bergen's mean wage as a column of their own.
+    draw md_line_20
+
+A: Worth stopping on: that mean is computed from the same people we are about to explain. Manski called it the reflection problem — the group average and the individual are not independent evidence.
+    highlight md_line_20 effect glow
+
+    wait
+
+B: So, the last line: wage income on the female dummy, education level, and the municipal mean.
+    draw md_line_21
+
+A: A coefficient table comes back — one row per variable, a standard error beside it, and the row everyone will quote.
+    draw md_out
+
+B: Kroner per year: the average difference between women and men born in 1985, with education level and municipal mean held fixed.
+    draw md_mark_4
+
+A: Not the effect of being a woman. Hours, part-time work, occupation and career breaks are all still inside that number — a conditional average difference, nothing more.
+    highlight md_out effect glow delivery grave
+
+B: And this table is all you ever see: no residuals, no individuals, no scatter of the people behind the line.
+    point at.ref md_out gesture underline
+
+    quiz "What does the coefficient on female in this regression measure?"
+        intro: Quick check before we hand this script to a colleague.
+        right: It is a conditional average difference — the gap left after education level and municipal mean are held fixed, with hours and occupation still inside it.
+        wrong: It is not a causal effect: nothing in the script holds hours, occupation or career breaks constant.
+        * The causal effect of being a woman on wages
+        + The average wage-income difference between women and men in the cohort, holding education level and municipal mean fixed
+        * The share of women in the 1985 cohort
+
+A: Twenty-two lines: require, import, destring, generate, keep, recode, collapse, merge, regress. Only the last one mentions the gender gap — and every line above it decided which gap you measured.
+    delivery grave
+
+## What the error means
 voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: left
-    lines: 9
-    width: 960
-    font_size: 15
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset muni
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as mwage
-      collapse(mean) mwage, by(kommune)
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      destring birth
-      generate cohort = int(birth/100)
-      keep if cohort == 1985
-      destring educ
-      generate elevel = int(educ/100000)
-      recode elevel (0/2 = 1) (3/5 = 2) (6/8 = 3)
-      generate female = 0
-      replace female = 1 if sex == '2'
-      // tabulate female elevel - the check from lecture 7
-      merge muni, by(kommune)
-      regress wage female elevel mwage
-    marks:
-      - keep if cohort == 1985
-      - collapse(mean) mwage, by(kommune)
-      - merge muni, by(kommune)
-      - regress wage female elevel mwage
-commands:
-  - draw:
-      - md
-      - md_line_6
-      - md_line_7
-      - md_line_8
-      - md_line_9
-      - md_line_10
-    speak: Now that we have the require line and the imports, everything left is what decides what the final number MEANS — one coefficient, and twenty lines of choices standing behind it.
-    voice: a
-  - draw:
-      - md_line_11
-      - md_line_12
-    speak: Birth month arrives as text — one nine eight five zero four — so destring makes it a number, and integer division by a hundred leaves the birth year.
-    voice: b
-  - draw:
-      - md_line_13
-    speak: 'And a single line defines the whole study population: keep if cohort equals 1985. Five and a half million people become some sixty thousand.'
-    voice: a
-  - draw:
-      - md_mark_1
-    speak: Put it here, before anything is computed, and the other cohorts never get processed. The server bills you in patience rather than kroner.
-    voice: b
-  - wait: click
-  - draw:
-      - md_line_14
-      - md_line_15
-    speak: Education is a six-digit NUS code whose first digit is the level, so dividing by a hundred thousand and taking the integer keeps exactly that digit.
-    voice: a
-  - draw:
-      - md_line_16
-    speak: 'Recode then folds those levels into three: compulsory, upper secondary, higher education.'
-    voice: b
-  - draw:
-      - md_line_17
-      - md_line_18
-    speak: Sex is a string code, so the dummy is built by hand — zero for everyone, then one wherever the code is two.
-    voice: a
-  - draw:
-      - md_line_19
-    speak: And the cross-tab from lecture seven, checking that no female-by-education cell is empty, survives as a comment — which is where good intentions live.
-    voice: b
-  - wait: click
-  - draw:
-      - md_line_2
-      - md_line_3
-      - md_line_4
-    speak: 'Now the part that trips people up. Right at the top, before persons exists, a second dataset: muni, with just municipality and wage.'
-    voice: a
-  - draw:
-      - md_line_5
-    speak: Collapse averages wage inside each municipality, and the unit of analysis changes under you — sixty thousand people become about three hundred and fifty rows.
-    voice: b
-  - draw:
-      - md_mark_2
-    speak: The by variable IS the new unit. Nothing in the dataset is a person any more.
-    voice: a
-  - draw:
-      - md_line_20
-    speak: Back in persons, merge pulls that average in on kommune, so every person in Bergen now carries Bergen's mean wage as a column of their own.
-    voice: b
-  - highlight:
-      target:
-        - md_line_20
-      effect: glow
-    speak: 'Worth stopping on: that mean is computed from the same people we are about to explain. Manski called it the reflection problem — the group average and the individual are not independent evidence.'
-    voice: a
-  - wait: click
-  - draw:
-      - md_line_21
-    speak: 'So, the last line: wage income on the female dummy, education level, and the municipal mean.'
-    voice: b
-  - draw:
-      - md_out
-    speak: A coefficient table comes back — one row per variable, a standard error beside it, and the row everyone will quote.
-    voice: a
-  - draw:
-      - md_mark_4
-    speak: 'Kroner per year: the average difference between women and men born in 1985, with education level and municipal mean held fixed.'
-    voice: b
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: Not the effect of being a woman. Hours, part-time work, occupation and career breaks are all still inside that number — a conditional average difference, nothing more.
-    voice: a
-    delivery: grave
-  - point:
-      at:
-        ref: md_out
-      gesture: underline
-    speak: 'And this table is all you ever see: no residuals, no individuals, no scatter of the people behind the line.'
-    voice: b
-  - quiz:
-      intro: Quick check before we hand this script to a colleague.
-      question: What does the coefficient on female in this regression measure?
-      choices:
-        - The causal effect of being a woman on wages
-        - The average wage-income difference between women and men in the cohort, holding education level and municipal mean fixed
-        - The share of women in the 1985 cohort
-      correct: 2
-      right: It is a conditional average difference — the gap left after education level and municipal mean are held fixed, with hours and occupation still inside it.
-      wrong: 'It is not a causal effect: nothing in the script holds hours, occupation or career breaks constant.'
-  - speak: 'Twenty-two lines: require, import, destring, generate, keep, recode, collapse, merge, regress. Only the last one mentions the gender gap — and every line above it decided which gap you measured.'
-    voice: a
-    delivery: grave
----
-title: What the error means
+
+    text heading "What the error means" x 500 y 715 font_size 28 hidden true
+    box you "Your browser" #2f6b8f x 200 y 470 width 230 height 90 hidden true
+    path wall dashed #8f887c points [[440,110],[440,640]] hidden true
+    label l_wall "the wall" above #8f887c attach_to wall hidden true
+    box server "microdata.no server" x 730 y 520 width 280 height 90 hidden true
+    box vault "One row per person" #b5482e x 730 y 290 width 280 height 100 hidden true
+    arrow a_query server -> vault curved #8f887c hidden true
+
+A: Now that we have seen the whole script run from require all the way to the regression, let us watch it fail — because it will.
+    draw heading you
+
+B: And where it fails matters: not on your laptop, but over here, behind the wall, where one row is one person you will never see.
+    draw server vault a_query wall l_wall
+
+A: You send the entire script, every time, from line one — nothing sits there remembering your variables between runs.
+    arrow a_script you -> server curved #2f6b8f
+    label l_script "the whole script, from line 1" above #2f6b8f attach_to a_script
+
+B: And exactly two kinds of thing come back: a table of numbers, or a message.
+    arrow a_back server -> you curved #b5482e
+    label l_back "a table — or a message" below #b5482e attach_to a_back
+
+A: That message is your entire debugger. No browsing rows, no printing the first five cases — one line of text, and your own script.
+    highlight a_back l_back effect glow
+
+    wait
+
+B: So here are the four messages you will actually meet, on the same script as always: the 1985 cohort and their wages.
+    clear keep ["heading"]
+
+A: The wage import, typed from memory as inntekt-loenn.
+    text l1_bad "import db/INNTEKT_LOENN 2022-01-01 as wage" x 500 y 620 font_size 24
+
+B: Unknown variable. No suggestion, no near-match, no did-you-mean.
+    text m1 "error: unknown variable INNTEKT_LOENN" below l1_bad gap 16 #b5482e font_size 24
+
+A: It is INNTEKT underscore W-LONN, W for wage — and that name is checked against the metadata catalogue before a single row is touched, so a typo costs you a second rather than a place in the queue.
+    text l1_fix "import db/INNTEKT_WLONN 2022-01-01 as wage" below m1 gap 16 #2f6b8f font_size 24
+
+B: Second message, and it is the one you get while tidying up: require, then straight into the import.
+    text l2a "require no.ssb.fdb:54 as db" below l1_fix gap 56 font_size 24
+    text l2b "import db/BEFOLKNING_KJOENN as sex" below l2a gap 14 font_size 24
+
+A: No dataset in memory — which sounds like the server forgot something, and means you did.
+    text m2 "error: no dataset in memory" below l2b gap 16 #b5482e font_size 24
+
+B: An import needs somewhere to land; delete create-dataset and every import below it is homeless.
+    text l2_fix "create-dataset persons   // the line you deleted" below m2 gap 16 #2f6b8f font_size 22
+
+    wait
+
+A: Those two were about names and order. The next two are about what a row actually is.
+    clear keep ["heading"]
+
+B: From lecture four: we collapse wages to municipality means, then try to merge them back onto our people.
+    text l3a "collapse (mean) wage by kommune" x 500 y 620 font_size 24
+    text l3b "merge wage into persons" below l3a gap 14 font_size 24
+
+A: Different units of analysis — municipality against person.
+    text m3 "error: different units of analysis — municipality vs person" below l3b gap 16 #b5482e font_size 22
+
+B: After the collapse a row is a municipality: three hundred and fifty-odd rows where fifty thousand people stood, and nobody here will quietly spread an average back over individuals for you.
+    text n3 "after collapse, one row = one municipality" below m3 gap 14 #8f887c font_size 20
+
+A: Then, keeping the women in the cohort: sex equals two.
+    text l4_bad "keep if sex == 2" below n3 gap 52 font_size 24
+
+B: Type mismatch. KJOENN is a coded string, not a count — the code for a woman is the character two, not the number.
+    text m4 "error: type mismatch — text compared with a number" below l4_bad gap 16 #b5482e font_size 22
+
+A: Quote it and the line runs. Two characters, forty minutes. Same family as writing wage equals dot when what the language wants is sysmiss.
+    text l4_fix "keep if sex == '2'" below m4 gap 16 #2f6b8f font_size 24
+    text n4 "and: sysmiss(wage), never wage == ." below l4_fix gap 14 #8f887c font_size 20
+
+    wait
+
+B: Four messages, two families. Names and state, caught up front — against the catalogue, and against your script's own order.
+    clear keep ["heading"]
+
+A: Nothing has run yet when these two fire; they are about your text, not your data.
+    box g1 "Names and state" #2f6b8f x 270 y 470 width 340 height 100
+    label g1_when "before a single row is touched" above #8f887c attach_to g1
+    label g1_ex "unknown variable · no dataset" below attach_to g1
+    parallel true
+
+B: Shape and type are caught while it runs, against the structure of the dataset you yourself built two lines earlier.
+    box g2 "Shape and type" #b5482e x 730 y 470 width 340 height 100
+    label g2_when "while the script runs" above #8f887c attach_to g2
+    label g2_ex "units of analysis · type mismatch" below attach_to g2
+    parallel true
+
+    wait
+
+A: And every one of them talks about your script or the metadata. Not one names a person, a row, or a value.
+    text punch "No message names a person, a row, or a value." #b5482e x 500 y 210 font_size 28
+    mark ann_punch target punch kind box
+    delivery grave
+
+B: That is the same disclosure rule that censored your output in lecture eight, reaching into the error messages — a message that quoted a value would itself be a small leak.
+    highlight punch effect glow
+
+    quiz "Which message can microdata.no never send you?"
+        intro: One quick check before we hand this over.
+        right: No message can quote a row — the errors describe your script and the metadata, never the data behind the wall.
+        wrong: Three of those are everyday messages; only one would require the server to show you a person.
+        * unknown variable: INNTEKT_LOENN
+        * no dataset in memory
+        + row 41 391 has a missing wage
+        * type mismatch: text vs number
+
+A: So debugging here is never reading the data — it is reading your script against the metadata, and against the shape of what you built. Which leaves next time's question: which line was it.
+    point at.ref punch gesture underline
+
+## Finding the failing line
 voice: male
-elements:
-  - id: heading
-    type: text
-    text: What the error means
-    x: 500
-    'y': 715
-    font_size: 28
-  - id: you
-    type: node
-    shape: rect
-    text: Your browser
-    x: 200
-    'y': 470
-    width: 230
-    height: 90
-    style:
-      color: '#2f6b8f'
-  - id: wall
-    type: path
-    points:
-      - [440, 110]
-      - [440, 640]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: l_wall
-    type: label
-    text: the wall
-    attach_to: wall
-    side: above
-    style:
-      color: '#8f887c'
-  - id: server
-    type: node
-    shape: rect
-    text: microdata.no server
-    x: 730
-    'y': 520
-    width: 280
-    height: 90
-  - id: vault
-    type: node
-    shape: rect
-    text: One row per person
-    x: 730
-    'y': 290
-    width: 280
-    height: 100
-    style:
-      color: '#b5482e'
-  - id: a_query
-    type: arrow
-    from:
-      ref: server
-    to:
-      ref: vault
-    curved: true
-    style:
-      color: '#8f887c'
-  - id: a_script
-    type: arrow
-    from:
-      ref: you
-    to:
-      ref: server
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: l_script
-    type: label
-    text: the whole script, from line 1
-    attach_to: a_script
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: a_back
-    type: arrow
-    from:
-      ref: server
-    to:
-      ref: you
-    curved: true
-    style:
-      color: '#b5482e'
-  - id: l_back
-    type: label
-    text: a table — or a message
-    attach_to: a_back
-    side: below
-    style:
-      color: '#b5482e'
-  - id: l1_bad
-    type: text
-    text: import db/INNTEKT_LOENN 2022-01-01 as wage
-    x: 500
-    'y': 620
-    font_size: 24
-  - id: m1
-    type: text
-    text: 'error: unknown variable INNTEKT_LOENN'
-    font_size: 24
-    at:
-      ref: l1_bad
-      side: below
-      gap: 16
-    style:
-      color: '#b5482e'
-  - id: l1_fix
-    type: text
-    text: import db/INNTEKT_WLONN 2022-01-01 as wage
-    font_size: 24
-    at:
-      ref: m1
-      side: below
-      gap: 16
-    style:
-      color: '#2f6b8f'
-  - id: l2a
-    type: text
-    text: require no.ssb.fdb:54 as db
-    font_size: 24
-    at:
-      ref: l1_fix
-      side: below
-      gap: 56
-  - id: l2b
-    type: text
-    text: import db/BEFOLKNING_KJOENN as sex
-    font_size: 24
-    at:
-      ref: l2a
-      side: below
-      gap: 14
-  - id: m2
-    type: text
-    text: 'error: no dataset in memory'
-    font_size: 24
-    at:
-      ref: l2b
-      side: below
-      gap: 16
-    style:
-      color: '#b5482e'
-  - id: l2_fix
-    type: text
-    text: create-dataset persons   // the line you deleted
-    font_size: 22
-    at:
-      ref: m2
-      side: below
-      gap: 16
-    style:
-      color: '#2f6b8f'
-  - id: l3a
-    type: text
-    text: collapse (mean) wage by kommune
-    x: 500
-    'y': 620
-    font_size: 24
-  - id: l3b
-    type: text
-    text: merge wage into persons
-    font_size: 24
-    at:
-      ref: l3a
-      side: below
-      gap: 14
-  - id: m3
-    type: text
-    text: 'error: different units of analysis — municipality vs person'
-    font_size: 22
-    at:
-      ref: l3b
-      side: below
-      gap: 16
-    style:
-      color: '#b5482e'
-  - id: n3
-    type: text
-    text: after collapse, one row = one municipality
-    font_size: 20
-    at:
-      ref: m3
-      side: below
-      gap: 14
-    style:
-      color: '#8f887c'
-  - id: l4_bad
-    type: text
-    text: keep if sex == 2
-    font_size: 24
-    at:
-      ref: n3
-      side: below
-      gap: 52
-  - id: m4
-    type: text
-    text: 'error: type mismatch — text compared with a number'
-    font_size: 22
-    at:
-      ref: l4_bad
-      side: below
-      gap: 16
-    style:
-      color: '#b5482e'
-  - id: l4_fix
-    type: text
-    text: keep if sex == '2'
-    font_size: 24
-    at:
-      ref: m4
-      side: below
-      gap: 16
-    style:
-      color: '#2f6b8f'
-  - id: n4
-    type: text
-    text: 'and: sysmiss(wage), never wage == .'
-    font_size: 20
-    at:
-      ref: l4_fix
-      side: below
-      gap: 14
-    style:
-      color: '#8f887c'
-  - id: g1
-    type: node
-    shape: rect
-    text: Names and state
-    x: 270
-    'y': 470
-    width: 340
-    height: 100
-    style:
-      color: '#2f6b8f'
-  - id: g1_when
-    type: label
-    text: before a single row is touched
-    attach_to: g1
-    side: above
-    style:
-      color: '#8f887c'
-  - id: g1_ex
-    type: label
-    text: unknown variable · no dataset
-    attach_to: g1
-    side: below
-  - id: g2
-    type: node
-    shape: rect
-    text: Shape and type
-    x: 730
-    'y': 470
-    width: 340
-    height: 100
-    style:
-      color: '#b5482e'
-  - id: g2_when
-    type: label
-    text: while the script runs
-    attach_to: g2
-    side: above
-    style:
-      color: '#8f887c'
-  - id: g2_ex
-    type: label
-    text: units of analysis · type mismatch
-    attach_to: g2
-    side: below
-  - id: punch
-    type: text
-    text: No message names a person, a row, or a value.
-    x: 500
-    'y': 210
-    font_size: 28
-    style:
-      color: '#b5482e'
-  - id: ann_punch
-    type: annotation
-    target: punch
-    kind: box
-commands:
-  - draw:
-      - heading
-      - you
-    speak: Now that we have seen the whole script run from require all the way to the regression, let us watch it fail — because it will.
-    voice: a
-  - draw:
-      - server
-      - vault
-      - a_query
-      - wall
-      - l_wall
-    speak: 'And where it fails matters: not on your laptop, but over here, behind the wall, where one row is one person you will never see.'
-    voice: b
-  - draw:
-      - a_script
-      - l_script
-    speak: You send the entire script, every time, from line one — nothing sits there remembering your variables between runs.
-    voice: a
-  - draw:
-      - a_back
-      - l_back
-    speak: 'And exactly two kinds of thing come back: a table of numbers, or a message.'
-    voice: b
-  - highlight:
-      target:
-        - a_back
-        - l_back
-      effect: glow
-    speak: That message is your entire debugger. No browsing rows, no printing the first five cases — one line of text, and your own script.
-    voice: a
-  - wait: click
-  - clear:
-      keep:
-        - heading
-    speak: 'So here are the four messages you will actually meet, on the same script as always: the 1985 cohort and their wages.'
-    voice: b
-  - draw:
-      - l1_bad
-    speak: The wage import, typed from memory as inntekt-loenn.
-    voice: a
-  - draw:
-      - m1
-    speak: Unknown variable. No suggestion, no near-match, no did-you-mean.
-    voice: b
-  - draw:
-      - l1_fix
-    speak: It is INNTEKT underscore W-LONN, W for wage — and that name is checked against the metadata catalogue before a single row is touched, so a typo costs you a second rather than a place in the queue.
-    voice: a
-  - draw:
-      - l2a
-      - l2b
-    speak: 'Second message, and it is the one you get while tidying up: require, then straight into the import.'
-    voice: b
-  - draw:
-      - m2
-    speak: No dataset in memory — which sounds like the server forgot something, and means you did.
-    voice: a
-  - draw:
-      - l2_fix
-    speak: An import needs somewhere to land; delete create-dataset and every import below it is homeless.
-    voice: b
-  - wait: click
-  - clear:
-      keep:
-        - heading
-    speak: Those two were about names and order. The next two are about what a row actually is.
-    voice: a
-  - draw:
-      - l3a
-      - l3b
-    speak: 'From lecture four: we collapse wages to municipality means, then try to merge them back onto our people.'
-    voice: b
-  - draw:
-      - m3
-    speak: Different units of analysis — municipality against person.
-    voice: a
-  - draw:
-      - n3
-    speak: 'After the collapse a row is a municipality: three hundred and fifty-odd rows where fifty thousand people stood, and nobody here will quietly spread an average back over individuals for you.'
-    voice: b
-  - draw:
-      - l4_bad
-    speak: 'Then, keeping the women in the cohort: sex equals two.'
-    voice: a
-  - draw:
-      - m4
-    speak: Type mismatch. KJOENN is a coded string, not a count — the code for a woman is the character two, not the number.
-    voice: b
-  - draw:
-      - l4_fix
-      - n4
-    speak: Quote it and the line runs. Two characters, forty minutes. Same family as writing wage equals dot when what the language wants is sysmiss.
-    voice: a
-  - wait: click
-  - clear:
-      keep:
-        - heading
-    speak: Four messages, two families. Names and state, caught up front — against the catalogue, and against your script's own order.
-    voice: b
-  - draw:
-      - g1
-      - g1_when
-      - g1_ex
-    parallel: true
-    speak: Nothing has run yet when these two fire; they are about your text, not your data.
-    voice: a
-  - draw:
-      - g2
-      - g2_when
-      - g2_ex
-    parallel: true
-    speak: Shape and type are caught while it runs, against the structure of the dataset you yourself built two lines earlier.
-    voice: b
-  - wait: click
-  - draw:
-      - punch
-      - ann_punch
-    speak: And every one of them talks about your script or the metadata. Not one names a person, a row, or a value.
-    voice: a
-    delivery: grave
-  - highlight:
-      target:
-        - punch
-      effect: glow
-    speak: That is the same disclosure rule that censored your output in lecture eight, reaching into the error messages — a message that quoted a value would itself be a small leak.
-    voice: b
-  - quiz:
-      intro: One quick check before we hand this over.
-      question: Which message can microdata.no never send you?
-      choices:
-        - 'unknown variable: INNTEKT_LOENN'
-        - no dataset in memory
-        - row 41 391 has a missing wage
-        - 'type mismatch: text vs number'
-      correct: 3
-      right: No message can quote a row — the errors describe your script and the metadata, never the data behind the wall.
-      wrong: Three of those are everyday messages; only one would require the server to show you a person.
-  - point:
-      at:
-        ref: punch
-      gesture: underline
-    speak: 'So debugging here is never reading the data — it is reading your script against the metadata, and against the shape of what you built. Which leaves next time''s question: which line was it.'
-    voice: a
----
-title: Finding the failing line
 level: advanced
+
+    ```microdata md width 940 font_size 15 show left frame screen marks ["// check A: summarize wage","// check B: summarize wage","import db/INNTEKT_WLONN 2022-01-01 as wage","drop if sysmiss(wage)"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    // check A: summarize wage
+    keep if sex == '2'
+    drop if sysmiss(wage)
+    // check B: summarize wage
+    summarize wage
+    ```
+
+A: Now that we can read what the error says, the harder question: the message names the last line, and the last line is almost never the culprit.
+    draw md md_line_1 md_line_2 parallel true
+
+B: Here is the skeleton of our gender-gap script — sex, birth month and wage income, imported onto one dataset.
+    draw md_line_3 md_line_4 md_line_5
+
+A: Then the population block: keep the women, and drop anyone with no wage record at all.
+    draw md_line_7 md_line_8
+
+B: And the payoff line — a summarize here, the regression with education and municipality in the full script.
+    draw md_line_10
+
+A: You run it, the server says no observations, and it points here — at the one line that is definitely innocent.
+    point at.ref md_line_10 gesture tap
+
+    wait
+
+B: So instead of guessing, we put checkpoints in: commented summarizes, one per block, switched on when you need them.
+    draw md_line_6 md_line_9 parallel true
+
+A: Switch on check A, run only that far, and you see the dataset straight after import.
+    draw md_mark_1
+
+B: A count, a mean, a spread. The numbers hardly matter — what matters is that there are any.
+    draw md_out
+
+A: This bites harder here than in Stata: you cannot browse a single row, so an aggregate like this is the only window you have into your own data.
+    highlight md_out effect glow
+
+B: Check B, after the population block, says how many survived it — about twenty-five thousand women from the eighty-five cohort, or nobody at all.
+    draw md_mark_2
+
+    wait
+
+A: Block by block is fine on ten lines. Our real script is forty, and that is forty runs.
+    point at.ref md_line_10 gesture underline
+
+B: Forty runs and a lunch break.
+    highlight md_line_1 md_line_10 effect pulse
+
+A: So halve it instead: one check in the middle, right after the imports, and run only that much.
+    draw md_mark_3
+
+B: Healthy there, and the bug is below it; broken, and it is above. Either way half the script stops being your problem.
+    highlight md_line_5 effect glow
+
+A: Halve what remains, and again — forty lines takes six runs, not forty, because you are counting in log two of the length.
+    point at.ref md_line_8 gesture tap
+
+B: Same trick as git bisect, which is how kernel developers find one bad commit among thousands.
+    highlight md effect pulse
+
+    wait
+
+A: And the sixth run lands here. The version that broke said keep if sysmiss wage — keep exactly the people who have no wage.
+    draw md_mark_4
+
+B: Twenty-five thousand women in, zero rows out, and the regression four blocks later never had a chance.
+    highlight md_line_8 effect glow delivery grave
+
+A: The message named the end of the file. The damage was done in the middle of it.
+    point at.ref md_line_10 gesture circle
+
+B: The fix is one word: drop the missing, do not keep them.
+    erase md_mark_1 md_mark_2 md_mark_3
+
+A: Leave the checkpoints in the file afterwards — a commented-out summarize costs nothing and saves the next afternoon.
+    highlight md_line_6 md_line_9 effect glow
+
+B: Try it yourself: turn check A into a real line, or break the keep on purpose, and watch where the state stops making sense.
+    explore code md
+
+A: One bad line never means a broken script. It means you were not printing the state often enough to see where it stopped being true.
+    delivery grave
+
+## Handing it over
 voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: left
-    width: 940
-    font_size: 15
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      // check A: summarize wage
-      keep if sex == '2'
-      drop if sysmiss(wage)
-      // check B: summarize wage
-      summarize wage
-    marks:
-      - '// check A: summarize wage'
-      - '// check B: summarize wage'
-      - import db/INNTEKT_WLONN 2022-01-01 as wage
-      - drop if sysmiss(wage)
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: 'Now that we can read what the error says, the harder question: the message names the last line, and the last line is almost never the culprit.'
-    voice: a
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    speak: Here is the skeleton of our gender-gap script — sex, birth month and wage income, imported onto one dataset.
-    voice: b
-  - draw:
-      - md_line_7
-      - md_line_8
-    speak: 'Then the population block: keep the women, and drop anyone with no wage record at all.'
-    voice: a
-  - draw:
-      - md_line_10
-    speak: And the payoff line — a summarize here, the regression with education and municipality in the full script.
-    voice: b
-  - point:
-      at:
-        ref: md_line_10
-      gesture: tap
-    speak: You run it, the server says no observations, and it points here — at the one line that is definitely innocent.
-    voice: a
-  - wait: click
-  - draw:
-      - md_line_6
-      - md_line_9
-    parallel: true
-    speak: 'So instead of guessing, we put checkpoints in: commented summarizes, one per block, switched on when you need them.'
-    voice: b
-  - draw:
-      - md_mark_1
-    speak: Switch on check A, run only that far, and you see the dataset straight after import.
-    voice: a
-  - draw:
-      - md_out
-    speak: A count, a mean, a spread. The numbers hardly matter — what matters is that there are any.
-    voice: b
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: 'This bites harder here than in Stata: you cannot browse a single row, so an aggregate like this is the only window you have into your own data.'
-    voice: a
-  - draw:
-      - md_mark_2
-    speak: Check B, after the population block, says how many survived it — about twenty-five thousand women from the eighty-five cohort, or nobody at all.
-    voice: b
-  - wait: click
-  - point:
-      at:
-        ref: md_line_10
-      gesture: underline
-    speak: Block by block is fine on ten lines. Our real script is forty, and that is forty runs.
-    voice: a
-  - highlight:
-      target:
-        - md_line_1
-        - md_line_10
-      effect: pulse
-    speak: Forty runs and a lunch break.
-    voice: b
-  - draw:
-      - md_mark_3
-    speak: 'So halve it instead: one check in the middle, right after the imports, and run only that much.'
-    voice: a
-  - highlight:
-      target:
-        - md_line_5
-      effect: glow
-    speak: Healthy there, and the bug is below it; broken, and it is above. Either way half the script stops being your problem.
-    voice: b
-  - point:
-      at:
-        ref: md_line_8
-      gesture: tap
-    speak: Halve what remains, and again — forty lines takes six runs, not forty, because you are counting in log two of the length.
-    voice: a
-  - highlight:
-      target:
-        - md
-      effect: pulse
-    speak: Same trick as git bisect, which is how kernel developers find one bad commit among thousands.
-    voice: b
-  - wait: click
-  - draw:
-      - md_mark_4
-    speak: And the sixth run lands here. The version that broke said keep if sysmiss wage — keep exactly the people who have no wage.
-    voice: a
-  - highlight:
-      target:
-        - md_line_8
-      effect: glow
-    speak: Twenty-five thousand women in, zero rows out, and the regression four blocks later never had a chance.
-    voice: b
-    delivery: grave
-  - point:
-      at:
-        ref: md_line_10
-      gesture: circle
-    speak: The message named the end of the file. The damage was done in the middle of it.
-    voice: a
-  - erase:
-      - md_mark_1
-      - md_mark_2
-      - md_mark_3
-    speak: 'The fix is one word: drop the missing, do not keep them.'
-    voice: b
-  - highlight:
-      target:
-        - md_line_6
-        - md_line_9
-      effect: glow
-    speak: Leave the checkpoints in the file afterwards — a commented-out summarize costs nothing and saves the next afternoon.
-    voice: a
-  - explore:
-      code: md
-    speak: 'Try it yourself: turn check A into a real line, or break the keep on purpose, and watch where the state stops making sense.'
-    voice: b
-  - speak: One bad line never means a broken script. It means you were not printing the state often enough to see where it stopped being true.
-    voice: a
-    delivery: grave
----
-title: Handing it over
-voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: above
-    lines: 9
-    width: 900
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      // gender gap, 1985 cohort — output pulled 2026-03-14
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/NUDB_BU 2022-12-31 as educ
-      import db/INNTEKT_WLONN 2022-12-31 as wage
-      generate byear = int(birth / 100)
-      keep if byear == 1985
-      keep if wage > 0
-      generate female = sex == '2'
-      generate logwage = ln(wage)
-      regress logwage female educ
-    marks:
-      - no.ssb.fdb:54
-      - import db/INNTEKT_WLONN 2022-12-31 as wage
-      - keep if byear == 1985
-      - // gender gap, 1985 cohort — output pulled 2026-03-14
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: 'Now that we can isolate a failing line, the last question is the one a referee asks: if someone reruns this script next spring, do they get your twelve log points back?'
-    voice: a
-  - draw:
-      - md_line_2
-    speak: And the answer hides in the line everybody types and nobody reads — require, no dot ssb dot fdb, colon fifty-four.
-    voice: b
-  - draw:
-      - md_mark_1
-    speak: 'Fifty-four is a version of the datastore: the registers exactly as they stood when that version was cut.'
-    voice: a
-  - speak: So next spring, when the store has moved on to fifty-seven?
-    voice: b
-  - highlight:
-      target:
-        - md_line_2
-      effect: glow
-    speak: Then you get fifty-seven's data — corrected 2022 wage figures, late address registrations — and the coefficient moves in the third decimal.
-    voice: a
-  - point:
-      at:
-        ref: md_line_2
-      gesture: underline
-    speak: 'Which is what survey people find hardest here: a register is not a photograph of a year, it is a ledger that keeps being corrected long after the year is over.'
-    voice: b
-  - wait: click
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    speak: Version pinned. Now the variable names, which are half the documentation — BEFOLKNING underscore KJOENN is one specific coding, not just "sex".
-    voice: a
-  - draw:
-      - md_line_6
-      - md_line_7
-    speak: And every time-dependent import carries its date, because wage income at the end of 2022 is a different variable from wage income at the end of 2021.
-    voice: b
-  - draw:
-      - md_mark_2
-    speak: Tell a colleague only "wage income for the 1985 cohort" and they will reproduce something. Just not this.
-    voice: a
-  - draw:
-      - md_line_8
-      - md_line_9
-      - md_line_10
-    speak: 'Then who counts: born in 1985, and earning something that year.'
-    voice: b
-  - draw:
-      - md_mark_3
-    speak: Two lines with an argument buried in them — drop the zero-earners and you have dropped much of the population the gap is about.
-    voice: a
-  - wait: click
-  - draw:
-      - md_line_11
-      - md_line_12
-      - md_line_13
-    speak: 'The last block is the estimate: a female indicator, log wage, and the regression we have been building since lecture one.'
-    voice: b
-  - draw:
-      - md_out
-    speak: About twelve log points — one cohort, one year, one version of the registers.
-    voice: a
-  - draw:
-      - md_mark_4
-    speak: 'Which is why the top line is not courtesy: version, cohort, and the date the output was pulled.'
-    voice: b
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: That pull date earns its place, because censoring applies to the run, not the script — the same command can come back suppressed on a day a cell happens to be too small.
-    voice: a
-  - focus:
-      target:
-        - md
-    speak: And nobody can send you the data file. The script is the only artefact that travels, which does simplify version control.
-    voice: b
-  - wait: click
-  - focus:
-      target:
-        - md_line_2
-        - md_line_7
-        - md_line_9
-        - md_line_13
-    speak: 'Four lines carry the whole result: the version, the variable with its date, the population rule, and the estimator. Everything else is plumbing.'
-    voice: a
-  - highlight:
-      target:
-        - md
-      effect: glow
-    delivery: grave
-    speak: 'So the series ends where it began: in microdata the script is not documentation of the analysis, it is the analysis — pin the version, date the variables, say who is in, and the twelve log points come back a year from now.'
-    voice: b
-  - quiz:
-      intro: One last check before you hand it over.
-      question: A colleague reruns your script on datastore version 57 and gets a slightly different coefficient. Most likely reason?
-      choices:
-        - They mistyped something
-        - The registers were revised between versions
-        - Regression results are random
-      correct: 2
-      right: Register data is revised between versions — version 57 holds corrections version 54 never had, which is exactly why you pin the version.
-      wrong: A typo would usually break the script outright rather than nudge the third decimal.
+
+    ```microdata md width 900 font_size 16 show above lines 9 frame screen marks ["no.ssb.fdb:54","import db/INNTEKT_WLONN 2022-12-31 as wage","keep if byear == 1985","// gender gap, 1985 cohort — output pulled 2026-03-14"] draw.mode type hidden true
+    // gender gap, 1985 cohort — output pulled 2026-03-14
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/NUDB_BU 2022-12-31 as educ
+    import db/INNTEKT_WLONN 2022-12-31 as wage
+    generate byear = int(birth / 100)
+    keep if byear == 1985
+    keep if wage > 0
+    generate female = sex == '2'
+    generate logwage = ln(wage)
+    regress logwage female educ
+    ```
+
+A: Now that we can isolate a failing line, the last question is the one a referee asks: if someone reruns this script next spring, do they get your twelve log points back?
+    draw md md_line_1 parallel true
+
+B: And the answer hides in the line everybody types and nobody reads — require, no dot ssb dot fdb, colon fifty-four.
+    draw md_line_2
+
+A: Fifty-four is a version of the datastore: the registers exactly as they stood when that version was cut.
+    draw md_mark_1
+
+B: So next spring, when the store has moved on to fifty-seven?
+
+A: Then you get fifty-seven's data — corrected 2022 wage figures, late address registrations — and the coefficient moves in the third decimal.
+    highlight md_line_2 effect glow
+
+B: Which is what survey people find hardest here: a register is not a photograph of a year, it is a ledger that keeps being corrected long after the year is over.
+    point at.ref md_line_2 gesture underline
+
+    wait
+
+A: Version pinned. Now the variable names, which are half the documentation — BEFOLKNING underscore KJOENN is one specific coding, not just "sex".
+    draw md_line_3 md_line_4 md_line_5
+
+B: And every time-dependent import carries its date, because wage income at the end of 2022 is a different variable from wage income at the end of 2021.
+    draw md_line_6 md_line_7
+
+A: Tell a colleague only "wage income for the 1985 cohort" and they will reproduce something. Just not this.
+    draw md_mark_2
+
+B: Then who counts: born in 1985, and earning something that year.
+    draw md_line_8 md_line_9 md_line_10
+
+A: Two lines with an argument buried in them — drop the zero-earners and you have dropped much of the population the gap is about.
+    draw md_mark_3
+
+    wait
+
+B: The last block is the estimate: a female indicator, log wage, and the regression we have been building since lecture one.
+    draw md_line_11 md_line_12 md_line_13
+
+A: About twelve log points — one cohort, one year, one version of the registers.
+    draw md_out
+
+B: Which is why the top line is not courtesy: version, cohort, and the date the output was pulled.
+    draw md_mark_4
+
+A: That pull date earns its place, because censoring applies to the run, not the script — the same command can come back suppressed on a day a cell happens to be too small.
+    highlight md_out effect glow
+
+B: And nobody can send you the data file. The script is the only artefact that travels, which does simplify version control.
+    focus md
+
+    wait
+
+A: Four lines carry the whole result: the version, the variable with its date, the population rule, and the estimator. Everything else is plumbing.
+    focus md_line_2 md_line_7 md_line_9 md_line_13
+
+B: So the series ends where it began: in microdata the script is not documentation of the analysis, it is the analysis — pin the version, date the variables, say who is in, and the twelve log points come back a year from now.
+    highlight md effect glow delivery grave
+
+    quiz "A colleague reruns your script on datastore version 57 and gets a slightly different coefficient. Most likely reason?"
+        intro: One last check before you hand it over.
+        right: Register data is revised between versions — version 57 holds corrections version 54 never had, which is exactly why you pin the version.
+        wrong: A typo would usually break the script outright rather than nudge the third decimal.
+        * They mistyped something
+        + The registers were revised between versions
+        * Regression results are random
+
+## Where next
+end_page: true
+
+    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:9 title "Many years at once: panels, event data and the gap over the life cycle" size 320 x 500 y 395
+
+    link end_again href lecture:10 title "Watch again" form text open here x 500 y 160
+    text end_count "10 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
