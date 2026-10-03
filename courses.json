@@ -1,26 +1,6 @@
 {
   "courses": [
     {
-      "slug": "microdata",
-      "title": "Doing Data Analysis in microdata.no: A Scripting Course",
-      "files": [
-        "microdata/five-lines-to-your-first-plot.cast",
-        "microdata/what-is-actually-inside-the-datastore.cast",
-        "microdata/building-datasets-i-create-dataset-and.cast",
-        "microdata/building-datasets-ii-collapse-and-merge.cast",
-        "microdata/making-new-variables-generate-replace.cast",
-        "microdata/defining-the-population-keep-drop-and.cast",
-        "microdata/output-that-tells-the-truth-tabulate.cast",
-        "microdata/why-your-output-came-back-censored.cast",
-        "microdata/many-years-at-once-panels-event-data-and.cast",
-        "microdata/the-whole-script-end-to-end-and-what-to.cast",
-        "microdata/course.md",
-        "microdata/index.html",
-        "microdata/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "taylor-series-and-the-economics-of",
       "title": "Taylor Series and the Economics of Approximation",
       "files": [
@@ -121,6 +101,26 @@
         "health-technology-assessment-deciding/course.md",
         "health-technology-assessment-deciding/index.html",
         "health-technology-assessment-deciding/README.md"
+      ],
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "microdata",
+      "title": "Dataanalyse i microdata.no: et skriptkurs",
+      "files": [
+        "microdata/five-lines-to-your-first-plot.cast",
+        "microdata/what-is-actually-inside-the-datastore.cast",
+        "microdata/building-datasets-i-create-dataset-and.cast",
+        "microdata/building-datasets-ii-collapse-and-merge.cast",
+        "microdata/making-new-variables-generate-replace.cast",
+        "microdata/defining-the-population-keep-drop-and.cast",
+        "microdata/output-that-tells-the-truth-tabulate.cast",
+        "microdata/why-your-output-came-back-censored.cast",
+        "microdata/many-years-at-once-panels-event-data-and.cast",
+        "microdata/the-whole-script-end-to-end-and-what-to.cast",
+        "microdata/course.md",
+        "microdata/index.html",
+        "microdata/README.md"
       ],
       "updated": "2026-10-03"
     }
