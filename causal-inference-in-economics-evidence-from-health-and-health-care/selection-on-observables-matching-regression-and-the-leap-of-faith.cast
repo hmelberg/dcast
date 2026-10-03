@@ -1,0 +1,367 @@
+# Selection on observables: matching, regression, and the leap of faith
+next: {"title":"Arrows or potential outcomes? Bad controls and colliders","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/arrows-or-potential-outcomes-bad-controls-and-colliders.cast"}
+
+## Dropping the Lottery
+voice: female
+level: advanced
+
+    chance n_lottery "Oregon lottery, 2008" #8f887c hidden true
+    box n_drawn "Drawn: ~30,000" #2f6b8f hidden true
+    box n_notdrawn "Not drawn: ~60,000" #2f6b8f hidden true
+    edge e_l_d n_lottery -> n_drawn hidden true
+    edge e_l_n n_lottery -> n_notdrawn hidden true
+
+Over these four parts we ask what it costs to compare insured and uninsured people once the lottery is gone, and when conditioning on what you can measure is allowed to stand in for randomization.
+    draw n_lottery
+
+    pause 1
+
+Oregon, two thousand and eight: about ninety thousand adults signed up for roughly ten thousand Medicaid slots, and the state drew about thirty thousand names — of whom only about a quarter ever enrolled.
+    draw n_drawn e_l_d
+
+    pause 1
+
+The other sixty thousand were not drawn, and because the draw was random, the two groups matched on income, on prior illness, and on everything nobody ever wrote down.
+    draw n_notdrawn e_l_n
+
+That balance in the unmeasured is what the lottery bought, and no amount of careful data work can buy it afterwards.
+    highlight n_drawn n_notdrawn effect glow
+
+    pause 1
+
+Now set the ticket aside. Most questions in health economics arrive with no lottery attached at all.
+    mark ann_strike target n_lottery kind strike
+    delivery grave
+
+    pause 1
+
+    clear
+
+What remains is what we usually have: adults who hold coverage, and adults who do not.
+    box n_ins "Insured   D_i = 1" #b5482e
+    box n_unins "Uninsured   D_i = 0" #2f6b8f
+    parallel true
+
+The raw comparison is this gap in average outcomes, and we already know it carries the treatment effect plus selection bias, because the two groups differ before any care is delivered.
+    arrow a_gap n_unins -> n_ins curved
+    label lbl_gap "E[Y_i | D_i=1] − E[Y_i | D_i=0]" above attach_to a_gap
+
+    pause 1
+
+The remedy on offer is to stop comparing everyone with everyone, and compare only within cells of the characteristics we observe: same age band, same sex, same income, same recorded health history.
+    box n_x "X_i: age, sex, income, prior health" #8a5fa8
+    edge e_x_ins n_x -> n_ins
+    edge e_x_unins n_x -> n_unins
+
+    pause 1
+
+Written out, the claim is this: inside a cell of X, which of these people ended up insured is as good as random.
+    text txt_cia "Y_i(1), Y_i(0)  ⊥  D_i  |  X_i" x 500 y 150 font_size 34
+
+That is the leap of faith — assumed, never tested, and everything in the next three parts turns on it.
+    mark ann_cia target txt_cia kind box
+    label lbl_leap "The leap of faith" below #8a5fa8 attach_to txt_cia
+    delivery grave
+
+    pause 1
+
+Its strengths are real: it needs no instrument and no policy change, it runs on data you already hold, and it forces you to name in public exactly which variables your claim rests on.
+    highlight n_x effect glow
+
+Its weakness is just as real: if the uninsured are also more pessimistic about their health, or worse at navigating paperwork, nothing inside the data will warn you that the gap is still contaminated.
+    highlight a_gap effect pulse
+
+    pause 1
+
+The lottery balanced everything; conditioning on X balances only what you wrote down — and that distance is what this series measures.
+
+## What conditional independence asserts
+voice: female
+level: advanced
+use: equation_steps
+with:
+    title: 'Selection on observables: the assumption'
+    steps:
+      - {tex: '(Y_i(1),\ Y_i(0)) \perp D_i', note: What the lottery bought.}
+      - {tex: '(Y_i(1),\ Y_i(0)) \perp D_i \mid X_i', note: The leap of faith.}
+      - {tex: 'E[Y_i\mid D_i{=}1,X_i]-E[Y_i\mid D_i{=}0,X_i]=E[Y_i(1)-Y_i(0)\mid X_i]', note: 'Within a cell, the difference is causal.'}
+
+    text t2_title "Two Oregonians, identical on X_i" x 500 y 700 font_size 30 hidden true
+    shape p_ins shape person x 200 y 540 hidden true
+    shape p_unins shape person x 800 y 540 hidden true
+    text lab_ins "Covered:  D_i = 1" #2f6b8f x 200 y 432 font_size 22 hidden true
+    text lab_unins "Uninsured:  D_i = 0" #b5482e x 800 y 432 font_size 22 hidden true
+    text x_head "Everything X_i records:" x 500 y 640 font_size 24 hidden true
+    text x1 "both 42 years old" x 500 y 598 font_size 21 hidden true
+    text x2 "income within dollars of the poverty line" x 500 y 562 font_size 21 hidden true
+    text x3 "neither smokes" x 500 y 526 font_size 21 hidden true
+    text x4 "same county, same diagnoses on file" x 500 y 490 font_size 21 hidden true
+    path sep dashed #8f887c points [[120,400],[880,400]] hidden true
+    text q_text "So why is only one of them covered?" x 500 y 355 font_size 27 hidden true
+    text r1 "Heard about the program at a clinic" x 500 y 295 font_size 22 hidden true
+    text r2 "Has felt something wrong for months" x 500 y 248 font_size 22 hidden true
+    mark cross2 target r2 kind cross hidden true
+    text r3 "Expects an expensive year ahead" x 500 y 201 font_size 22 hidden true
+    mark cross3 target r3 kind cross hidden true
+
+Now that we have seen the lottery dropped, everything rests on one assumption — and whether you believe it decides whether your Medicaid estimate is a causal effect or a description of who signs up.
+    draw title step_0
+
+    pause 1
+
+This top line is what randomization had been giving us for free: treatment independent of both potential outcomes.
+    draw note_0
+
+    pause 1
+
+Selection on observables weakens that by exactly one symbol: the vertical bar.
+    draw step_1 note_1
+
+It no longer claims the covered and the uninsured are alike; it claims that once you fix the covariates X_i, whatever is left deciding who holds coverage is unrelated to how healthy each of them would be, treated or untreated.
+    highlight step_1 effect glow
+
+    pause 1
+
+Grant that, and the within-cell difference in average outcomes is the average treatment effect inside that cell — every matching and regression estimate in this lecture stands on this line.
+    draw step_2 note_2
+
+    pause 1
+
+So the question is concrete: what would have to be true of Oregon's uninsured for that bar to be earned?
+
+    clear
+
+Take two low-income adults in Oregon, outside any lottery: one is on Medicaid, the other is not.
+    draw t2_title p_ins lab_ins p_unins lab_unins
+
+    pause 1
+
+We match them on everything the administrative data records — both forty-two, incomes within dollars of the poverty line, neither smokes, same county, same diagnoses on file.
+    draw x_head x1 x2 x3 x4
+
+    pause 1
+
+Then ask the only question that matters: why is one of them covered and the other not?
+    draw sep q_text
+
+Three honest answers — one happened to hear about the program at a clinic, one has felt something wrong for months and never been coded for it, and one is bracing for an expensive year.
+    draw r1 r2 r3 parallel true
+
+    pause 1
+
+Conditional independence asserts that the last two simply never happen: inside this cell, coverage turns only on reasons of the first kind, reasons with no bearing on how sick you would be either way.
+    draw cross2 cross3 delivery grave
+
+Oregon is the standing warning: of roughly thirty thousand names drawn, only about a quarter actually enrolled, and who enrolled was anything but random — exactly the sorting this assumption declares away.
+    point at.ref r3 gesture underline
+
+    pause 1
+
+    clear
+
+In its favour: the assumption is stated entirely in variables you can name and show, and it grows more defensible the richer X_i is — years of prior claims, prior utilisation, prior diagnoses all narrow the room left for sorting.
+    text t3_title "The leap of faith, weighed" x 500 y 690 font_size 30
+    path div dashed #8f887c points [[500,640],[500,410]]
+    text s_head "What it does well" #2f6b8f x 265 y 610 font_size 25
+    text s1 "Written in variables you can name" x 265 y 557 font_size 20
+    text s2 "More defensible as X_i gets richer" x 265 y 513 font_size 20
+    text s3 "No instrument, no lottery needed" x 265 y 469 font_size 20
+
+    pause 1
+
+Against it: nothing in your data can test it, and perfect balance on X_i is manufactured by the method itself, so a beautiful balance table is evidence of arithmetic, not of the assumption.
+    text w_head "Where it breaks" #b5482e x 735 y 610 font_size 25
+    text w1 "Nothing in the data can test it" x 735 y 557 font_size 20
+    text w2 "Balance on X_i is built in, not evidence" x 735 y 513 font_size 20
+    text w3 "One uncoded illness is enough" x 735 y 469 font_size 20
+
+    pause 1
+
+Which is the sentence to leave with: conditional independence is never a claim about the variables in your table — it is a claim about the people your table cannot tell apart.
+    text synth "A claim about the people X_i cannot tell apart" x 500 y 330 font_size 26
+    mark synth_box target synth kind box
+    delivery grave
+
+## Common Support and the Vanishing Estimand
+voice: female
+level: advanced
+domain: {"x":[0,1],"y":[0,4]}
+
+    axes ax x_label "Propensity score P(D=1 | X)" y_label "Density of applicants"
+
+Now that we have seen what conditional independence asserts, here is the second requirement: line up Oregon's ninety thousand applicants by their propensity score — the chance, given their X, of ending up insured — and the uninsured pile up on the left.
+    curve d_control #2f6b8f expr 3.4*exp(-0.5*((x-0.30)/0.15)^2)
+    label lab_control "Uninsured (D=0)" above-left #2f6b8f attach_to d_control
+
+    pause 1
+
+The insured sit to the right: older, sicker, more experienced with the system — the very characteristics that carried them into coverage.
+    curve d_treated #b5482e expr 3.0*exp(-0.5*((x-0.70)/0.16)^2)
+    label lab_treated "Insured (D=1)" above-right #b5482e attach_to d_treated
+
+That single number is Rosenbaum and Rubin's trick from 1983 — with many covariates, matching on the one-dimensional propensity score does the work of matching on all of X.
+    highlight d_control d_treated effect glow
+
+    pause 1
+
+Common support asks only this: that for every value of X the propensity score lies strictly between zero and one, so that both kinds of person actually exist in the data.
+    arrow support_arrow #8f887c from.x 0.24 from.y 3.7 to.x 0.8 to.y 3.7
+    label lab_support "Common support: 0 < P(D=1 | X) < 1" above #8f887c attach_to support_arrow
+
+    pause 1
+
+Out here are applicants whose X makes insurance so unlikely that not one insured person resembles them.
+    region reg_left x_from 0.02 x_to 0.2 between ["d_control","d_treated"] style.fill #c96567
+    label lab_left "No insured match" below-left #c96567 attach_to reg_left
+
+And over here, people so nearly certain to be covered that no uninsured comparison exists at all.
+    region reg_right x_from 0.84 x_to 0.99 between ["d_treated","d_control"] style.fill #c96567
+    label lab_right "No uninsured match" below-right #c96567 attach_to reg_right
+
+    pause 1
+
+For these people the missing potential outcome is not merely unobserved — inside this dataset, it is empty.
+    focus reg_left reg_right delivery grave
+
+Matching admits that and refuses to pair them; regression does not, and quietly fills the hole by extending a straight line into a region where no data lives.
+    point at.ref reg_right gesture circle
+
+    pause 1
+
+So suppose we do the honest thing and drop them.
+    clear
+
+We began wanting the average effect for all ninety thousand people who applied in Oregon — the same population the lottery speaks about.
+    box n_all "All 90,000 applicants"
+    label lab_ate "Target: ATE for the applicant population" above attach_to n_all
+
+    pause 1
+
+Say twenty thousand of them, roughly one in five, have no one on the other side to be compared with.
+    arrow a_drop n_all -> n_dropped #c96567
+    box n_dropped "20,000 off support" #c96567
+    label lab_drop "Silently discarded" below #c96567 attach_to n_dropped
+
+They go — in a line of code that reports no error and no warning.
+    mark mark_drop target n_dropped kind cross
+
+    pause 1
+
+What remains is seventy thousand matchable applicants, and for them the estimate really is clean.
+    arrow a_keep n_all -> n_kept
+    box n_kept "70,000 with a match" #2f6b8f
+    label lab_keep "Estimand: effect for the matchable" below #2f6b8f attach_to n_kept
+
+But the estimand has moved: no longer the effect for the policy's population, but the effect for whoever happened to have a twin.
+    mark mark_keep target lab_keep kind box
+    delivery grave
+
+    pause 1
+
+Trimming is the honest half of matching — it will not invent a counterfactual it cannot see.
+    highlight n_dropped effect pulse
+
+The dishonest half is that this drift never enters the standard error: the confidence interval tightens beautifully around the answer to a question nobody asked.
+
+    pause 1
+
+The lottery never faces this, because randomization manufactures overlap: every name drawn had comparable names left undrawn — which is exactly why we hold observational estimates up against it.
+    highlight lab_ate effect glow
+
+Common support is a fact about your data, not an assumption about the world — and every unit you drop to satisfy it silently rewrites the question you are answering.
+    delivery grave
+
+## Where They Differ, Where They Fail Together
+voice: female
+level: advanced
+domain: {"x":[0,100],"y":[0,10]}
+
+Now that we have watched the estimand shrink as unmatched units quietly leave, one practical question remains — matching or regression? — and the answer will matter less than you expect.
+    axes ax x_label "Propensity to be insured, index X" y_label "Annual medical spending ($1000s)"
+
+The horizontal axis is one index of everything we observe — age, income, prior diagnoses — and this red curve is average annual spending among the uninsured at each value of it.
+    curve ctrl #b5482e expr "1.2 + 0.02*x + 0.0003*x^2" x_from 0 x_to 60
+    label label_ctrl "Uninsured: E[Y | X, D=0]" below #b5482e attach_to ctrl
+
+    pause 1
+
+In blue, average spending among the insured. Look where each curve begins and ends: no uninsured person in these data sits above sixty, and hardly any insured person below twenty-five.
+    curve treat #2f6b8f expr "2.1 + 0.02*x + 0.0003*x^2" x_from 25 x_to 100
+    label label_treat "Insured: E[Y | X, D=1]" above #2f6b8f attach_to treat
+
+    pause 1
+
+Between twenty-five and sixty both kinds of people exist — that band is the common support, the only stretch where a comparison is made rather than assumed.
+    region support x_from 25 x_to 60 between ["ctrl","treat"] style.fill #87a878 style.opacity 0.35
+    label label_support "Common support" below attach_to support
+
+    pause 1
+
+Matching lives inside it: at an index of forty, an insured person spending about three thousand four hundred dollars is set beside an uninsured twin at two thousand five hundred — a difference of roughly nine hundred.
+    dot p_c #b5482e at.x 40 at.y 2.48
+    dot p_t #2f6b8f at.x 40 at.y 3.38
+    arrow match_arrow from.x 40 from.y 2.48 to.x 40 to.y 3.38
+    label label_match "Matched comparison ≈ $900" right attach_to match_arrow
+
+    pause 1
+
+Regression does something else: it fits one shape through everything at once — here a straight line — and then trusts that shape.
+    curve reg_fit #8a5fa8 expr "0.755 + 0.0454*x" x_from 25 x_to 60
+    label label_reg "Regression's fitted line" below #8a5fa8 attach_to reg_fit
+
+Including out here, where the data contain no uninsured people at all; the line simply continues, and every point on it is a counterfactual invented rather than measured.
+    curve reg_extrap dashed #8a5fa8 expr "0.755 + 0.0454*x" x_from 60 x_to 100
+    region extrap_region x_from 60 x_to 100 between ["reg_extrap","treat"] style.fill #c96567 style.opacity 0.3
+    label label_extrap "No uninsured here — extrapolation" below attach_to extrap_region
+
+That is the honest difference: matching refuses the comparison it cannot make, while regression makes it anyway, quietly, through functional form.
+    highlight reg_extrap extrap_region effect glow
+
+Matching's strength is that it imposes no functional form and cannot extrapolate past the data — its cost is discarded observations, and the need for enough people to find close neighbours at every value of X.
+    focus support p_c p_t match_arrow
+
+Regression's strength is that it uses every observation and delivers standard errors cheaply — its cost is that it weights comparisons by variance and extrapolates without ever telling you it did.
+    focus reg_fit reg_extrap extrap_region
+
+Now take away everything that separates them, and look at what they both stand on.
+    clear keep ["ax","ctrl","label_ctrl","treat","label_treat","p_c","p_t"]
+
+    pause 1
+
+Here is the quantity neither method can draw: what our insured person would have spent uninsured — her own Y of zero. Suppose it is three thousand, because she enrolled the month she began feeling unwell.
+    dot p_true #8f887c at.x 40 at.y 3
+    label label_true "Her own Y(0) — never observed" left #8f887c attach_to p_true
+
+Then the gap splits in two: about four hundred dollars of real effect, and five hundred of pure bias — even though every covariate in X matched perfectly.
+    arrow bias_arrow #c96567 from.x 40 from.y 2.48 to.x 40 to.y 3
+    label label_bias "Bias ≈ $500" right #c96567 attach_to bias_arrow
+    arrow effect_arrow #87a878 from.x 40 from.y 3 to.x 40 to.y 3.38
+    label label_effect "True effect ≈ $400" right #87a878 attach_to effect_arrow
+
+    pause 1
+
+Both methods need exactly this line — conditional on X, the potential outcomes are independent of treatment; given what we observe, who gets insured is as good as random.
+    text cia_text "(Y(1), Y(0)) ⊥ D | X" x 330 y 665 font_size 34
+    text cia_note "Given X, who ends up insured is as good as random" #8f887c x 330 y 620 font_size 20
+
+And nothing in the data can test it: the twins agree on everything we measured, which is precisely why their disagreement on what we did not measure stays invisible.
+    mark cia_box target cia_text kind box
+    delivery grave
+
+Oregon bought that assumption rather than assuming it — about ninety thousand people signed up, thirty thousand names came out of the drum, and the draw, not the covariates, made the groups comparable.
+    highlight cia_text effect glow
+
+So choosing between matching and regression is a choice of weighting and functional form — real, but second order; both stand or fall on the same unverifiable leap, and no richer set of controls can check it from the inside.
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Arrows or potential outcomes? Bad controls and colliders
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:8 title "Bad instruments, weak instruments" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:10 title "Arrows or potential outcomes? Bad controls and colliders" size 320 x 735 y 395
+
+    link end_again href lecture:9 title "Watch again" form text open here x 500 y 160
+    text end_count "9 of 18" x 500 y 95 font_size 22 style.opacity 0.6

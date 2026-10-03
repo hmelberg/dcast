@@ -1,0 +1,378 @@
+# Instrumental variables and the LATE theorem
+next: {"title":"Bad instruments, weak instruments","href":"https://drawcast.app/#gh=hmelberg/dcast/causal-inference-in-economics-evidence-from-health-and-health-care/bad-instruments-weak-instruments.cast"}
+
+## The Lottery as an Instrument
+voice: female
+level: advanced
+use: causal_dag
+with:
+    nodes:
+      - {name: Lottery Z, role: exposure}
+      - {name: Coverage D, role: mediator}
+      - {name: Outcome Y, role: outcome}
+      - {name: Unobserved U, role: confounder}
+    edges: Lottery Z -> Coverage D; Coverage D -> Outcome Y; Unobserved U -> Coverage D; Unobserved U -> Outcome Y
+    highlight_backdoor: true
+    title: 'Oregon 2008: a lottery as an instrument'
+
+Across these five parts we turn one lottery into an estimate of what health insurance does — and find out whose effect we actually end up holding.
+    draw title node_lottery_z
+
+Oregon, 2008: money to cover about ten thousand adults, ninety thousand applicants, and about thirty thousand names drawn at random — the only randomized trial of Medicaid coverage the United States has ever run.
+    text n_applied "≈ 90,000 applied" x 200 y 175 font_size 24
+    text n_drawn "≈ 30,000 names drawn" x 200 y 135 font_size 24
+
+    pause 0.3
+
+Winning the draw, Z_i, only bought the right to apply — it moves coverage D_i, it does not decide it.
+    draw node_coverage_d edge_0
+
+Only about one in four of the people whose names came up ended up enrolled.
+    text n_enrolled "only ≈ 1 in 4 winners enrolled" #b5482e x 210 y 95 font_size 24
+
+So the first stage — the jump in coverage caused by winning — is roughly a quarter, not one.
+    text fs "First stage ≈ 0.25" #2f6b8f x 740 y 175 font_size 24
+
+    pause 0.4
+
+Coverage then acts on Y_i: emergency-department use, out-of-pocket spending, blood pressure, depression.
+    draw node_outcome_y edge_1
+
+    wait
+
+But D_i itself was never randomized — the people who finished the paperwork differ in health, in organisation, in everything we never observe.
+    draw node_unobserved_u edge_2 edge_3
+
+These two arrows are the back door: regress Y on D and you blend the effect of coverage with the character of whoever took it up.
+    focus node_unobserved_u edge_2 edge_3
+
+    ask "Click the node whose arrows make a naive regression of Y on D biased." widget click answer node_unobserved_u
+        intro: A quick check on the diagram.
+        right: The unobserved traits U feed both coverage and outcomes — exactly the selection bias we decomposed in lecture two.
+        wrong: Look for the variable with an arrow into D and an arrow into Y.
+
+The lottery number is different in kind: a random-number machine assigned it, so nothing flows into Z.
+    highlight node_lottery_z effect glow
+
+    wait
+
+    erase n_applied n_drawn
+
+Comparing everyone drawn with everyone not drawn gives the intention-to-treat — the causal effect of winning a lottery.
+    text itt "ITT = E[Y | Z=1] − E[Y | Z=0]" x 740 y 135 font_size 22
+
+Honest, but it answers a question nobody asked: it averages the enrolled quarter together with three quarters whose coverage never budged.
+    highlight itt effect pulse
+
+    pause 0.3
+
+If the lottery only moved a quarter of people, then scale the ITT by that quarter — divide by 0.25.
+    text ask "ITT ÷ 0.25 = effect of coverage — for whom?" x 500 y 45 font_size 26
+    mark mark target ask kind box
+    delivery grave
+
+    quiz "Winning cut out-of-pocket spending by $100 per person drawn, and raised coverage by 25 points. Rescaled, what is the effect per person whose coverage changed?" intro "Try the arithmetic."
+        right: Dividing the $100 ITT by the 0.25 first stage gives $400 — the effect per person the lottery actually moved into coverage.
+        wrong: Divide the reduced form by the first stage, don't multiply.
+        * $25
+        * $100
+        + $400
+
+That ratio is the Wald estimator — and the diagram already tells you its price: the number belongs to the quarter the lottery could move, not to the ninety thousand who applied.
+
+## Four Assumptions on One Diagram
+voice: female
+level: advanced
+use: causal_dag
+with:
+    nodes:
+      - {name: Lottery Z, role: exposure}
+      - {name: Coverage D, role: mediator}
+      - {name: Outcome Y, role: outcome}
+      - {name: Health U, role: confounder}
+    edges: Lottery Z -> Coverage D; Coverage D -> Outcome Y; Health U -> Coverage D; Health U -> Outcome Y
+    highlight_backdoor: true
+    title: What the lottery must satisfy
+
+Now that we have seen Oregon's lottery act as an instrument, the question is what could break it — because three of the four things it needs are not testable.
+    draw title node_lottery_z node_label_lottery_z node_coverage_d node_label_coverage_d node_outcome_y node_label_outcome_y parallel true
+
+The drawn name Z moves Medicaid coverage D, and coverage moves the outcome Y — that chain is the entire design.
+    draw edge_0 edge_1
+
+    pause 0.3
+
+And here is why we needed an instrument at all: unobserved health drives both who enrolls and what they spend.
+    draw node_health_u node_label_health_u edge_2 edge_3
+
+    ask "Click the arrow that must be non-zero for the design to work at all." answer edge_0 widget click
+        intro: Before we name the assumptions, one check.
+        right: The lottery-to-coverage arrow — that is the first stage, and everything else divides by it.
+        wrong: It is the first link, from the lottery to coverage; without it there is nothing to scale by.
+
+    wait
+
+Relevance first: the instrument has to actually move treatment, and in Oregon it did — of the thirty thousand names drawn, roughly a quarter ended up enrolled, a first stage of about twenty-five percentage points.
+    label lab_relevance "Relevance: Cov(Z, D) ≠ 0" above #2f6b8f attach_to edge_0
+
+What it rules out is a dead first stage: if the letters had shifted nobody's coverage, this arrow is zero and the design has nothing to divide by.
+    highlight edge_0 effect glow
+
+    pause 0.3
+
+Independence: the draw is as good as random, so who wins is statistically unrelated to potential outcomes and potential treatment status.
+    label lab_independence "Independence: Z ⊥ potential outcomes" below #2f6b8f attach_to node_lottery_z
+
+It rules out a rigged draw — the sickest applicants quietly moved up the list would pour unobserved health straight back into Z.
+    focus node_lottery_z edge_2 edge_3
+
+    pause 0.3
+
+Exclusion is the claim that this red arrow does not exist: the letter may change coverage, but it must not reach the outcome any other way.
+    arrow excl_arrow node_lottery_z -> node_outcome_y curved dashed #b5482e
+
+In Oregon that rules out the winning letter working on its own — a nudge that sends someone to a clinic, or relief from financial worry, in a person who never actually enrolled.
+    mark excl_cross #b5482e target excl_arrow kind cross
+    label lab_exclusion "Exclusion: no direct path Z → Y" below #2f6b8f attach_to excl_arrow
+
+    quiz "Winning letters make people call a clinic, including those who never enroll. Which assumption fails?"
+        intro: A quick test of that one.
+        right: Exclusion fails — the instrument reaches Y through a channel that is not coverage.
+        wrong: The lottery still moves coverage and is still random; the trouble is a second path to the outcome.
+        * Relevance
+        * Independence
+        + Exclusion
+        * Monotonicity
+
+    wait
+
+Monotonicity: the instrument pushes everyone in the same direction, so winning can only weakly increase your chance of being covered.
+    label lab_monotonicity "Monotonicity: D_i(1) ≥ D_i(0) for all i" below #2f6b8f attach_to node_coverage_d
+
+It rules out defiers — people who would enroll only if they lost; their responses enter the ratio with the opposite sign and can cancel compliers out entirely.
+    highlight node_coverage_d effect glow delivery grave
+
+    quiz "Someone who takes up Medicaid only when they lose the lottery is called a…"
+        right: A defier — monotonicity assumes such people do not exist, because their negative responses net out against the compliers.
+        wrong: Compliers follow the instrument and always-takers ignore it; this person moves against it.
+        * Complier
+        * Always-taker
+        + Defier
+
+These four conditions were assembled into a theorem by Guido Imbens and Joshua Angrist in 1994 — work that took both of them to Stockholm in 2021.
+    portrait imbens of "Guido Imbens" cameo true
+
+Relevance and independence make the ratio well-defined and unconfounded; exclusion and monotonicity are what turn it into a causal effect.
+    erase imbens
+
+Only the first is visible in the data — the other three are assumptions you defend, and they buy you an effect for the compliers alone.
+    point at.ref node_coverage_d gesture circle
+
+## Compliers: Countable, Never Nameable
+voice: female
+level: advanced
+use: two_by_two_table
+with:
+    row_label: 'Enrolls if drawn:  D_i(1)'
+    col_label: 'Enrolls if not drawn:  D_i(0)'
+    row_values:
+      - D_i(1) = 1
+      - D_i(1) = 0
+    col_values:
+      - D_i(0) = 1
+      - D_i(0) = 0
+    cells:
+      - [Always-taker, Complier]
+      - [Defier, Never-taker]
+    cell_notes:
+      - [≈ 1 in 100, ≈ 24 in 100]
+      - [ruled out, ≈ 75 in 100]
+    highlight:
+      - [0, 1]
+    title: Four compliance types
+
+    mark defier_x target cell_1_0 kind cross hidden true
+    text first_stage_eq "P(D=1 | Z=1) − P(D=1 | Z=0)  =  0.25 − 0.01  =  0.24" #b5482e x 500 y 92 font_size 24 hidden true
+    text head_obs "What the data shows you" x 280 y 650 font_size 28 hidden true
+    text head_type "Which type is it?" x 740 y 650 font_size 28 hidden true
+    text r1a "Z=1, D=1   drawn, enrolled" x 280 y 560 font_size 23 hidden true
+    text r1b "Complier or Always-taker" #b5482e x 740 y 560 font_size 23 hidden true
+    text r2a "Z=1, D=0   drawn, stayed out" x 280 y 480 font_size 23 hidden true
+    text r2b "Never-taker" #2f6b8f x 740 y 480 font_size 23 hidden true
+    text r3a "Z=0, D=1   not drawn, enrolled" x 280 y 400 font_size 23 hidden true
+    text r3b "Always-taker" #2f6b8f x 740 y 400 font_size 23 hidden true
+    text r4a "Z=0, D=0   not drawn, stayed out" x 280 y 320 font_size 23 hidden true
+    text r4b "Complier or Never-taker" #b5482e x 740 y 320 font_size 23 hidden true
+
+Now that we have the four assumptions on one diagram, the awkward question: the Oregon estimate belongs to a subgroup we can size to the percentage point and never identify by name.
+    draw title grid row_title col_title
+
+Every applicant carries two potential treatment states: D_i(1), would she enroll if her name were drawn, and D_i(0), would she enroll if it were not.
+    draw row_header_0 row_header_1 col_header_0 col_header_1 parallel true
+
+    pause 0.3
+
+The diagonal holds the people the letter cannot move: always-takers, who find their way onto Medicaid regardless, and never-takers, who stay out either way — paperwork, stigma, or simply feeling healthy.
+    draw cell_0_0 cell_1_1
+
+Off the diagonal sit the compliers: D_i(1) equals one, D_i(0) equals zero — enrolled only because the envelope arrived.
+    draw cell_0_1 hl_0_1
+
+    pause 0.4
+
+And here would be the defiers — perverse types who would enroll only if the lottery passed them over.
+    draw cell_1_0
+
+Monotonicity is exactly the assumption that empties this cell: winning can push you toward coverage, never away from it.
+    draw defier_x delivery grave
+
+    wait
+
+Read the top row: everyone in it enrolls when drawn, so the 25 percent enrollment rate among winners counts compliers and always-takers together.
+    focus cell_0_0 cell_0_1
+
+Read the left column: these enroll with no letter at all — the roughly 1 percent among the not-drawn, and with defiers gone, that column is pure always-takers.
+    focus cell_0_0 cell_1_0
+
+Subtract one from the other and the always-takers cancel: the first stage, about 0.24, is nothing but the complier share.
+    draw first_stage_eq
+
+    quiz "Oregon's first stage is about 0.24. What is that number measuring?" intro "A quick check." required true
+        right: E[D|Z=1] − E[D|Z=0] differences out the always-takers, so under monotonicity it is exactly the complier share.
+        wrong: It is a difference in enrollment rates, not a level and not an outcome effect.
+        * The effect of coverage on health
+        + The share of applicants who are compliers
+        * The share of applicants who enrolled
+
+    wait
+
+This partition into four types is Imbens and Angrist's 1994 move — the step that turned instrumental variables from an algebraic trick into a statement about people.
+    clear
+
+So take the four things the data can actually show you about one applicant.
+    draw head_obs head_type parallel true
+
+Two of them pin a type down exactly: a winner who stayed out must be a never-taker, a non-winner who enrolled must be an always-taker.
+    draw r2a r2b r3a r3b parallel true
+
+    pause 0.3
+
+The other two are mixtures — and both of them are where the compliers hide.
+    draw r1a r1b r4a r4b parallel true
+
+Compliance type is itself a pair of potential outcomes, so the fundamental problem of causal inference bites at the first stage too: we see D_i only at the Z_i that person happened to draw.
+    highlight r1b r4b effect glow
+
+    wait
+
+So no subsample you can construct is the complier subsample — and any regression run on "the enrollees" is running on a mixture.
+    text synth "No observed cell is ever pure compliers." #b5482e x 500 y 190 font_size 28
+    mark synth_box target synth kind box
+    delivery grave
+
+    quiz "Why can't we identify individual compliers?" required true
+        right: Type is defined by both potential treatments, and each person reveals only one of them.
+        wrong: Randomization holds fine, and 24 in 100 is plenty — the obstacle is that each person reveals only one potential treatment.
+        * The lottery wasn't truly random
+        + We would need both D_i(1) and D_i(0) for the same person
+        * Compliers are too few to detect
+
+Compliers are a population we can weigh and describe on average, but never enumerate — which is why the next step recovers their effect by arithmetic rather than by sorting people.
+
+## What LATE buys you, and what it costs
+voice: female
+level: advanced
+use: icon_array
+with:
+    total: 100
+    groups:
+      - {label: Compliers, count: 25, color: supply}
+    rest_label: Always- & never-takers
+    title: Whom does LATE speak for?
+
+Now that we have seen the Wald ratio return a complier average causal effect, the question that decides how you may cite it: whom do these hundred Oregon applicants let you speak about?
+    draw title rest legend_rest
+
+    pause 0.3
+
+Relevance first: the lottery has to move coverage, and it does — being drawn raised enrolment by about twenty-five percentage points, these twenty-five in a hundred.
+    draw group_0 legend_0
+
+Independence: the draw was random, so drawn and not-drawn hold the same mixture of types — it rules out Oregon quietly steering slots toward the sickest applicants.
+    highlight group_0 rest effect glow
+
+Exclusion: the letter may touch health only through coverage — for these seventy-five, whose D_i the letter never moved, Y_i must be untouched; no relief at winning, no outreach riding along with the envelope.
+    highlight rest effect glow
+
+Monotonicity is why there is no fourth colour on this page: no defiers, nobody who would have enrolled only if they had lost.
+    point at.ref legend_rest gesture underline
+
+    quiz "Which assumption rules out the letter improving health through anything other than coverage?"
+        intro: A quick check on the four.
+        right: Exclusion: the instrument may enter the outcome only through D_i.
+        wrong: Independence buys you comparable groups; it is exclusion that forbids any other channel.
+        * Relevance
+        * Independence
+        + Exclusion
+        * Monotonicity
+
+    wait
+
+The compliers are the twenty-five with D_i(1) = 1 and D_i(0) = 0 — enrolled because the letter came, and only because it came.
+    focus group_0 legend_0
+
+We can count them exactly: enrolment among the drawn minus enrolment among the not-drawn — the always-takers, who enrol either way, cancel out of that difference.
+    highlight legend_0 effect glow
+
+Yet point at any one enrolled applicant and you cannot tell a complier from an always-taker: we see one of D_i(1), D_i(0), never both, so the colour here is bookkeeping, not a badge anyone in Oregon wears.
+    point at.ref group_0 gesture circle
+
+    ask "Click on the group whose average effect the Wald ratio identifies." intro "Your turn." answer group_0 widget click
+        right: The compliers — the only people whose treatment status the instrument actually moved.
+
+    quiz "Why can we never name an individual complier?"
+        right: Compliance is defined by a pair, D_i(1) and D_i(0), and only one of the two is ever observed.
+        wrong: It is not a data problem: complier status is defined by two potential treatments, and only one is ever realized.
+        * Their survey data were lost
+        + We only ever see one potential treatment status
+        * The lottery records are sealed
+
+    wait
+
+Now the division. The reduced form is the letter's effect on Y_i across all hundred — diluted, because for these seventy-five the letter changed no coverage at all.
+    highlight rest effect glow
+
+By exclusion they add zero to the numerator and by definition zero to the denominator, so dividing by the first stage of 0.25 rescales a whole-sample effect onto the only people who could have produced it.
+    highlight group_0 effect glow
+
+    quiz "Holding the reduced form fixed, doubling the first stage to 0.5 would make LATE…"
+        right: Half as large: the same intention-to-treat effect is now spread over twice as many compliers.
+        wrong: The ratio divides by the first stage, so a larger denominator shrinks the estimate — the same ITT carried by twice as many people.
+        * Twice as large
+        + Half as large
+        * Unchanged
+
+That is Imbens and Angrist's local average treatment effect: not the effect on the insured, not on Oregon's uninsured, on these twenty-five.
+    mark mark_late target legend_0 kind box
+    delivery grave
+
+    pause 0.5
+
+And the locality is the price — change the instrument and you change the subgroup: a mandate speaks for people near the always-takers, an outreach campaign for the most reluctant, and both may report different numbers with neither being wrong.
+
+It is also how to read Oregon itself — sharply lower depression and catastrophic expenses, a precise near-zero for blood sugar — as statements about lottery compliers, not about coverage in general.
+    highlight group_0 legend_0 effect pulse
+
+Across these five parts: four assumptions turn a lottery into an instrument, they carve out a subgroup we can count but never name, and the Wald ratio hands us their average effect — credibility bought by knowing exactly whom you have measured.
+
+## Where next
+end_page: true
+
+Next: Bad instruments, weak instruments
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:6 title "Nobody complies: intention-to-treat versus the effect of treatment" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:8 title "Bad instruments, weak instruments" size 320 x 735 y 395
+
+    link end_again href lecture:7 title "Watch again" form text open here x 500 y 160
+    text end_count "7 of 18" x 500 y 95 font_size 22 style.opacity 0.6
