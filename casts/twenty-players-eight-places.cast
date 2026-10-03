@@ -1,120 +1,86 @@
-title: Twenty players. Eight places.
-template: bar_race
-params:
-  labels:
-    - Ada
-    - Bo
-    - Cato
-    - Dina
-    - Edda
-    - Finn
-    - Gro
-    - Hakon
-    - Iver
-    - Jo
-    - Kari
-    - Leif
-    - Mira
-    - Nils
-    - Oda
-    - Pia
-    - Rune
-    - Siri
-    - Tor
-    - Vera
-  values: '{sim.rows}'
-  ticker:
-    - Round 1
-    - Round 2
-    - Round 3
-    - Round 4
-    - Round 5
-    - Round 6
-    - Round 7
-    - Round 8
-    - Round 9
-    - Round 10
-    - Round 11
-    - Round 12
-    - Round 13
-    - Round 14
-    - Round 15
-    - Round 16
-  stage: 0
-  top_n: 8
-  decimals: 0
-  x_label: Points
-  title: Twenty players. Eight places.
-elements:
-  - id: sim
-    type: code
-    language: python
-    show: none
-    code: |-
-      import random
-      rng = random.Random(2026)
-      skill = [rng.randrange(2, 9) for _ in range(20)]
-      total, rows = [0] * 20, []
-      for r in range(16):
-          for i in range(20):
-              total[i] += rng.randrange(1, skill[i] + 4)
-          rows.append(list(total))
-commands:
-  - draw:
-      - axes
-      - ticker
-    parallel: true
-    speak: Twenty players in a simulated tournament. A seeded script draws each one a scoring range once, then adds points round by round.
-  - draw:
-      - race_1
-      - race_2
-      - race_3
-      - race_4
-      - race_5
-      - race_6
-      - race_7
-      - race_8
-      - race_9
-      - race_10
-      - race_11
-      - race_12
-      - race_13
-      - race_14
-      - race_15
-      - race_16
-      - race_17
-      - race_18
-      - race_19
-      - race_20
-    parallel: true
-    speak: Round one. Mira leads on eleven — and twelve of the twenty are already off the board.
-  - draw:
-      - title
-    speak: The board holds eight. The other twelve wait in the strip below it, sliding in as they climb.
-  - animate:
-      stage: 3
-    easing: linear
-    duration: 3.5
-    speak: By round four Jo is ahead on thirty-four, and Cato — nowhere in round one — has slid in at the bottom.
-  - animate:
-      stage: 7
-    easing: linear
-    duration: 3.5
-    speak: 'Round eight: Mira again, on sixty-nine, with Tor arriving from below and Vera falling out.'
-  - animate:
-      stage: 11
-    easing: linear
-    duration: 3.5
-    speak: Round twelve, and the swap is Oda in, Siri out — one more of the nineteen entries this board makes in sixteen rounds.
-  - animate:
-      stage: 15
-    easing: linear
-    duration: 3.5
-    speak: 'The finish is a dead heat: Mira and Pia both on a hundred and nineteen.'
-  - highlight:
-      target:
-        - axes
-    speak: Fourteen of the twenty stood here at some point. Six never did — and you never saw them. A bounded field is a decision about attention, not a fact about the data.
+# Twenty players. Eight places.
+
+use: bar_race
+with:
+    labels:
+      - Ada
+      - Bo
+      - Cato
+      - Dina
+      - Edda
+      - Finn
+      - Gro
+      - Hakon
+      - Iver
+      - Jo
+      - Kari
+      - Leif
+      - Mira
+      - Nils
+      - Oda
+      - Pia
+      - Rune
+      - Siri
+      - Tor
+      - Vera
+    values: '{sim.rows}'
+    ticker:
+      - Round 1
+      - Round 2
+      - Round 3
+      - Round 4
+      - Round 5
+      - Round 6
+      - Round 7
+      - Round 8
+      - Round 9
+      - Round 10
+      - Round 11
+      - Round 12
+      - Round 13
+      - Round 14
+      - Round 15
+      - Round 16
+    stage: 0
+    top_n: 8
+    decimals: 0
+    x_label: Points
+    title: Twenty players. Eight places.
+
+    ```python sim show none hidden true
+    import random
+    rng = random.Random(2026)
+    skill = [rng.randrange(2, 9) for _ in range(20)]
+    total, rows = [0] * 20, []
+    for r in range(16):
+        for i in range(20):
+            total[i] += rng.randrange(1, skill[i] + 4)
+        rows.append(list(total))
+    ```
+
+Twenty players in a simulated tournament. A seeded script draws each one a scoring range once, then adds points round by round.
+    draw axes ticker parallel true
+
+Round one. Mira leads on eleven — and twelve of the twenty are already off the board.
+    draw race_1 race_2 race_3 race_4 race_5 race_6 race_7 race_8 race_9 race_10 race_11 race_12 race_13 race_14 race_15 race_16 race_17 race_18 race_19 race_20 parallel true
+
+The board holds eight. The other twelve wait in the strip below it, sliding in as they climb.
+    draw title
+
+By round four Jo is ahead on thirty-four, and Cato — nowhere in round one — has slid in at the bottom.
+    animate stage 3 duration 3.5 easing linear
+
+Round eight: Mira again, on sixty-nine, with Tor arriving from below and Vera falling out.
+    animate stage 7 duration 3.5 easing linear
+
+Round twelve, and the swap is Oda in, Siri out — one more of the nineteen entries this board makes in sixteen rounds.
+    animate stage 11 duration 3.5 easing linear
+
+The finish is a dead heat: Mira and Pia both on a hundred and nineteen.
+    animate stage 15 duration 3.5 easing linear
+
+Fourteen of the twenty stood here at some point. Six never did — and you never saw them. A bounded field is a decision about attention, not a fact about the data.
+    highlight axes
 ---
 audio:
   lang: en
