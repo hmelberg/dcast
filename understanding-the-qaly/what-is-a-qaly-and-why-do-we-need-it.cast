@@ -1,803 +1,198 @@
-playlist:
-  title: What is a QALY, and why do we need it?
-  prompt: Why isn't 'extra years of life' enough to compare two treatments? How does the QALY combine quantity and quality of life into one number? What does it mean for a health state to be valued at 0.6 rather than 1.0?
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  next:
-    title: How is a QALY actually calculated?
-    href: https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/how-is-a-qaly-actually-calculated.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Not All Years Are Equal
-domain:
-  x: [58, 71]
-  'y': [0, 9]
-  box: full
-elements:
-  - id: timeline
-    type: arrow
-    from:
-      data: [60, 7.5]
-    to:
-      data: [69, 7.5]
-    style:
-      color: '#8f887c'
-  - id: label_age60
-    type: label
-    text: Age 60
-    attach_to: timeline
-    side: above-left
-  - id: patient_icon
-    type: icon
-    of: user
-    size: 150
-    at:
-      data: [60, 8.4]
-  - id: bar_hip
-    type: path
-    data: true
-    closed: true
-    points:
-      - [60, 4.5]
-      - [65, 4.5]
-      - [65, 5.3]
-      - [60, 5.3]
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-      opacity: 0.55
-      fill_style: hatch
-  - id: label_hip_name
-    type: label
-    text: Hip
-    attach_to: bar_hip
-    side: left
-  - id: label_hip_years
-    type: label
-    text: 5 years
-    attach_to: bar_hip
-    side: right
-  - id: label_hip_quality
-    type: label
-    text: Daily pain
-    attach_to: bar_hip
-    side: below
-  - id: bar_drug
-    type: path
-    data: true
-    closed: true
-    points:
-      - [60, 1.4]
-      - [67, 1.4]
-      - [67, 2.2]
-      - [60, 2.2]
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-      opacity: 0.7
-      fill_style: wash
-  - id: tick_1
-    type: path
-    data: true
-    points:
-      - [61, 1.35]
-      - [61, 2.25]
-    style:
-      color: '#173f57'
-      stroke_width: 3
-  - id: tick_2
-    type: path
-    data: true
-    points:
-      - [62, 1.35]
-      - [62, 2.25]
-    style:
-      color: '#173f57'
-      stroke_width: 3
-  - id: tick_3
-    type: path
-    data: true
-    points:
-      - [63, 1.35]
-      - [63, 2.25]
-    style:
-      color: '#173f57'
-      stroke_width: 3
-  - id: tick_4
-    type: path
-    data: true
-    points:
-      - [64, 1.35]
-      - [64, 2.25]
-    style:
-      color: '#173f57'
-      stroke_width: 3
-  - id: tick_5
-    type: path
-    data: true
-    points:
-      - [65, 1.35]
-      - [65, 2.25]
-    style:
-      color: '#173f57'
-      stroke_width: 3
-  - id: tick_6
-    type: path
-    data: true
-    points:
-      - [66, 1.35]
-      - [66, 2.25]
-    style:
-      color: '#173f57'
-      stroke_width: 3
-  - id: drug_ticks
-    type: group
-    members:
-      - tick_1
-      - tick_2
-      - tick_3
-      - tick_4
-      - tick_5
-      - tick_6
-  - id: label_drug_name
-    type: label
-    text: Drug therapy
-    attach_to: bar_drug
-    side: left
-  - id: label_drug_years
-    type: label
-    text: 7 years
-    attach_to: bar_drug
-    side: right
-  - id: label_drug_quality
-    type: label
-    text: Side effects
-    attach_to: bar_drug
-    side: below
-  - id: policy_icon
-    type: icon
-    of: clipboard
-    size: 50
-    at:
-      place: top_right
-    style:
-      opacity: 0.5
-  - id: policy_label
-    type: label
-    text: Used in health policy
-    attach_to: policy_icon
-    side: below
-    style:
-      opacity: 0.5
-      color: '#8f887c'
-  - id: bracket_quantity
-    type: arrow
-    from:
-      data: [60, 6.2]
-    to:
-      data: [67, 6.2]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: label_quantity
-    type: label
-    text: Quantity
-    attach_to: bracket_quantity
-    side: above
-  - id: bracket_quality
-    type: arrow
-    from:
-      data: [60, 0.6]
-    to:
-      data: [67, 0.6]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: label_quality
-    type: label
-    text: Quality
-    attach_to: bracket_quality
-    side: below
-  - id: q_anchor
-    type: point
-    at:
-      data: [63.5, 3]
-    style:
-      opacity: 0
-  - id: q_mark
-    type: label
-    text: '?'
-    attach_to: q_anchor
-    side: above
-    font_size: 60
-    style:
-      color: '#8a5fa8'
-commands:
-  - card:
-      title: Not All Years Are Equal
-  - draw:
-      - timeline
-      - label_age60
-      - patient_icon
-    speak: Imagine a 60-year-old choosing between a hip replacement and a drug that fights her disease.
-  - pause: 1
-  - draw:
-      - bar_hip
-      - label_hip_name
-      - label_hip_years
-      - label_hip_quality
-    speak: The hip replacement gives her five more years, but with pain in the joint every day.
-  - pause: 1
-  - draw:
-      - bar_drug
-      - drug_ticks
-      - label_drug_name
-      - label_drug_years
-      - label_drug_quality
-      - policy_icon
-      - policy_label
-    speak: The drug gives her seven more years, but its side effects leave her tired and unwell.
-  - pause: 1
-  - draw:
-      - bracket_quantity
-      - label_quantity
-      - bracket_quality
-      - label_quality
-      - q_anchor
-      - q_mark
-    parallel: true
-    speak: So which treatment is really better — the one with more years, or the one with better years?
-  - highlight:
-      target:
-        - bar_hip
-        - bar_drug
-      effect: glow
+# What is a QALY, and why do we need it?
+prompt: "Why isn't 'extra years of life' enough to compare two treatments? How does the QALY combine quantity and quality of life into one number? What does it mean for a health state to be valued at 0.6 rather than 1.0?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+next: {"title":"How is a QALY actually calculated?","href":"https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/how-is-a-qaly-actually-calculated.cast"}
+enroll: https://drawcast.anvil.app
+
+## Not All Years Are Equal
 level: basic
----
-title: Weighing the Years
+domain: {"x":[58,71],"y":[0,9],"box":"full"}
+
+    arrow timeline #8f887c from.data [60,7.5] to.data [69,7.5] hidden true
+    label label_age60 "Age 60" above-left attach_to timeline hidden true
+    icon patient_icon at.data [60,8.4] size 150 of user hidden true
+    path bar_hip closed #b5482e points [[60,4.5],[65,4.5],[65,5.3],[60,5.3]] data true style.fill #b5482e style.fill_style hatch style.opacity 0.55 hidden true
+    label label_hip_name "Hip" left attach_to bar_hip hidden true
+    label label_hip_years "5 years" right attach_to bar_hip hidden true
+    label label_hip_quality "Daily pain" below attach_to bar_hip hidden true
+    path bar_drug closed #2f6b8f points [[60,1.4],[67,1.4],[67,2.2],[60,2.2]] data true style.fill #2f6b8f style.fill_style wash style.opacity 0.7 hidden true
+    path tick_1 thick #173f57 points [[61,1.35],[61,2.25]] data true hidden true
+    path tick_2 thick #173f57 points [[62,1.35],[62,2.25]] data true hidden true
+    path tick_3 thick #173f57 points [[63,1.35],[63,2.25]] data true hidden true
+    path tick_4 thick #173f57 points [[64,1.35],[64,2.25]] data true hidden true
+    path tick_5 thick #173f57 points [[65,1.35],[65,2.25]] data true hidden true
+    path tick_6 thick #173f57 points [[66,1.35],[66,2.25]] data true hidden true
+    group drug_ticks members ["tick_1","tick_2","tick_3","tick_4","tick_5","tick_6"] hidden true
+    label label_drug_name "Drug therapy" left attach_to bar_drug hidden true
+    label label_drug_years "7 years" right attach_to bar_drug hidden true
+    label label_drug_quality "Side effects" below attach_to bar_drug hidden true
+    icon policy_icon top-right size 50 of clipboard style.opacity 0.5 hidden true
+    label policy_label "Used in health policy" below #8f887c attach_to policy_icon style.opacity 0.5 hidden true
+
+    card title "Not All Years Are Equal"
+
+Imagine a 60-year-old choosing between a hip replacement and a drug that fights her disease.
+    draw timeline label_age60 patient_icon
+
+    pause 1
+
+The hip replacement gives her five more years, but with pain in the joint every day.
+    draw bar_hip label_hip_name label_hip_years label_hip_quality
+
+    pause 1
+
+The drug gives her seven more years, but its side effects leave her tired and unwell.
+    draw bar_drug drug_ticks label_drug_name label_drug_years label_drug_quality policy_icon policy_label
+
+    pause 1
+
+So which treatment is really better — the one with more years, or the one with better years?
+    arrow bracket_quantity dashed #8f887c from.data [60,6.2] to.data [67,6.2]
+    label label_quantity "Quantity" above attach_to bracket_quantity
+    arrow bracket_quality dashed #8f887c from.data [60,0.6] to.data [67,0.6]
+    label label_quality "Quality" below attach_to bracket_quality
+    dot q_anchor at.data [63.5,3] style.opacity 0
+    label q_mark "?" above #8a5fa8 attach_to q_anchor font_size 60
+    parallel true
+
+    highlight bar_hip bar_drug effect glow
+
+## Weighing the Years
 level: basic
-elements:
-  - id: bar_hip
-    type: pieces
-    of: strips
-    x: 230
-    'y': 400
-    width: 380
-    height: 220
-    'n': 5
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: bar_drug
-    type: pieces
-    of: strips
-    x: 700
-    'y': 400
-    width: 500
-    height: 220
-    'n': 7
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-  - id: label_hip
-    type: label
-    text: Hip replacement
-    attach_to: bar_hip
-    side: below
-  - id: label_drug
-    type: label
-    text: Drug therapy
-    attach_to: bar_drug
-    side: below
-  - id: eq
-    type: math
-    tex: QALY = \sum_t u_t \times t
-    size: 34
-    x: 500
-    'y': 660
-    colors:
-      u_t: '#8a5fa8'
-  - id: w_hip
-    type: label
-    text: '0.7'
-    attach_to: bar_hip
-    side: above
-    style:
-      color: '#b5482e'
-  - id: w_drug
-    type: label
-    text: '0.5'
-    attach_to: bar_drug
-    side: above
-    style:
-      color: '#2f6b8f'
-commands:
-  - card:
-      title: Weighing the Years
-  - draw:
-      - bar_hip
-      - label_hip
-      - bar_drug
-      - label_drug
-    speak: Now that we've seen why counting years alone misses something, we can fix it by weighing each year by how good it feels.
-  - pause: 1
-  - draw:
-      - w_hip
-      - w_drug
-    parallel: true
-    speak: Economists call this weight u_t — a number between 0 and 1 that scores the quality of a year.
-  - pause: 1
-  - draw:
-      - eq
-    speak: 'Multiply the years by their quality weight, and add them up: QALY equals the sum of u_t times time in that state.'
-  - pause: 1
-  - morph:
-      target:
-        - eq
-      tex: QALY = 0.7\times5 + 0.5\times7 = 3.5 + 3.5
-    speak: Suddenly, five painful years and seven tiring years become numbers we can actually compare.
-  - highlight:
-      target:
-        - eq
-      effect: pulse
----
-title: What 0.6 Feels Like
+
+    pieces bar_hip #b5482e x 230 y 400 width 380 height 220 n 5 of strips style.fill #b5482e hidden true
+    pieces bar_drug #2f6b8f x 700 y 400 width 500 height 220 n 7 of strips style.fill #2f6b8f hidden true
+    label label_hip "Hip replacement" below attach_to bar_hip hidden true
+    label label_drug "Drug therapy" below attach_to bar_drug hidden true
+    math eq tex "QALY = \\sum_t u_t \\times t" size 34 colors.u_t #8a5fa8 x 500 y 660 hidden true
+
+    card title "Weighing the Years"
+
+Now that we've seen why counting years alone misses something, we can fix it by weighing each year by how good it feels.
+    draw bar_hip label_hip bar_drug label_drug
+
+    pause 1
+
+Economists call this weight u_t — a number between 0 and 1 that scores the quality of a year.
+    label w_hip "0.7" above #b5482e attach_to bar_hip
+    label w_drug "0.5" above #2f6b8f attach_to bar_drug
+    parallel true
+
+    pause 1
+
+Multiply the years by their quality weight, and add them up: QALY equals the sum of u_t times time in that state.
+    draw eq
+
+    pause 1
+
+Suddenly, five painful years and seven tiring years become numbers we can actually compare.
+    morph eq tex "QALY = 0.7\\times5 + 0.5\\times7 = 3.5 + 3.5"
+
+    highlight eq effect pulse
+
+## What 0.6 Feels Like
 level: basic
-elements:
-  - id: axis
-    type: path
-    points:
-      - [380, 100]
-      - [380, 660]
-    style:
-      color: '#3d3833'
-      stroke_width: 3
-    details: Agencies like NICE in the UK use a scale exactly like this one to decide which treatments the health service should pay for — without a common yardstick, a year of pain relief and a year of extra life simply cannot be weighed against each other.
-  - id: tick_bottom
-    type: path
-    points:
-      - [345, 100]
-      - [415, 100]
-    style:
-      color: '#3d3833'
-      stroke_width: 3
-  - id: tick_top
-    type: path
-    points:
-      - [345, 660]
-      - [415, 660]
-    style:
-      color: '#3d3833'
-      stroke_width: 3
-  - id: label_bottom
-    type: label
-    text: 0 = dead
-    attach_to: tick_bottom
-    side: left
-    font_size: 32
-  - id: label_top
-    type: label
-    text: 1 = full health
-    attach_to: tick_top
-    side: left
-    font_size: 32
-  - id: marker_06
-    type: point
-    at:
-      x: 380
-      'y': 480
-    style:
-      color: '#2f6b8f'
-  - id: tick_06
-    type: path
-    points:
-      - [360, 480]
-      - [400, 480]
-    style:
-      color: '#2f6b8f'
-  - id: value_06
-    type: label
-    text: '0.6'
-    attach_to: marker_06
-    side: left
-    style:
-      color: '#2f6b8f'
-    font_size: 30
-  - id: hip_head
-    type: shape
-    shape: circle
-    radius: 14
-    x: 650
-    'y': 548
-    style:
-      color: '#2f6b8f'
-  - id: hip_body
-    type: path
-    points:
-      - [650, 534]
-      - [650, 485]
-    style:
-      color: '#2f6b8f'
-      stroke_width: 3
-  - id: hip_arms
-    type: path
-    points:
-      - [625, 505]
-      - [675, 505]
-    style:
-      color: '#2f6b8f'
-      stroke_width: 3
-  - id: hip_leg1
-    type: path
-    points:
-      - [650, 485]
-      - [630, 450]
-    style:
-      color: '#2f6b8f'
-      stroke_width: 3
-  - id: hip_leg2
-    type: path
-    points:
-      - [650, 485]
-      - [670, 460]
-      - [660, 445]
-    smooth: true
-    style:
-      color: '#2f6b8f'
-      stroke_width: 3
-  - id: icon_hip
-    type: group
-    members:
-      - hip_head
-      - hip_body
-      - hip_arms
-      - hip_leg1
-      - hip_leg2
-  - id: label_hip
-    type: label
-    text: Hip replacement — limp
-    attach_to: icon_hip
-    side: below
-    style:
-      color: '#2f6b8f'
-    font_size: 28
-  - id: marker_05
-    type: point
-    at:
-      x: 380
-      'y': 230
-    style:
-      color: '#b5482e'
-  - id: tick_05
-    type: path
-    points:
-      - [360, 230]
-      - [400, 230]
-    style:
-      color: '#b5482e'
-  - id: value_05
-    type: label
-    text: '0.5'
-    attach_to: marker_05
-    side: left
-    style:
-      color: '#b5482e'
-    font_size: 30
-  - id: drug_head
-    type: shape
-    shape: circle
-    radius: 14
-    x: 650
-    'y': 298
-    style:
-      color: '#b5482e'
-  - id: drug_body
-    type: path
-    points:
-      - [650, 284]
-      - [638, 245]
-    smooth: true
-    style:
-      color: '#b5482e'
-      stroke_width: 3
-  - id: drug_arm1
-    type: path
-    points:
-      - [638, 260]
-      - [615, 255]
-    style:
-      color: '#b5482e'
-      stroke_width: 3
-  - id: drug_arm2
-    type: path
-    points:
-      - [638, 260]
-      - [650, 235]
-    style:
-      color: '#b5482e'
-      stroke_width: 3
-  - id: drug_leg1
-    type: path
-    points:
-      - [638, 245]
-      - [620, 210]
-    style:
-      color: '#b5482e'
-      stroke_width: 3
-  - id: drug_leg2
-    type: path
-    points:
-      - [638, 245]
-      - [645, 210]
-    style:
-      color: '#b5482e'
-      stroke_width: 3
-  - id: icon_drug
-    type: group
-    members:
-      - drug_head
-      - drug_body
-      - drug_arm1
-      - drug_arm2
-      - drug_leg1
-      - drug_leg2
-  - id: label_drug
-    type: label
-    text: Drug — fatigue
-    attach_to: icon_drug
-    side: below
-    style:
-      color: '#b5482e'
-    font_size: 28
-  - id: scale_fig
-    type: group
-    members:
-      - axis
-      - tick_bottom
-      - tick_top
-      - label_bottom
-      - label_top
-      - marker_06
-      - tick_06
-      - value_06
-      - icon_hip
-      - label_hip
-      - marker_05
-      - tick_05
-      - value_05
-      - icon_drug
-      - label_drug
-    fit: full
-commands:
-  - card:
-      title: What 0.6 Feels Like
-  - draw:
-      - axis
-      - tick_bottom
-      - tick_top
-    speak: Now that we have the formula, what does a weight like 0.6 actually mean?
-  - pause: 1
-  - draw:
-      - label_bottom
-      - label_top
-    speak: The scale runs from 0, meaning dead, to 1, meaning full health, with everything else in between.
-  - pause: 1
-  - draw:
-      - marker_06
-      - tick_06
-      - value_06
-      - icon_hip
-      - label_hip
-    speak: A year at 0.6 is worth six-tenths of a year in full health — moderate pain, but still very much a life worth living.
-  - pause: 1
-  - draw:
-      - marker_05
-      - tick_05
-      - value_05
-      - icon_drug
-      - label_drug
-    speak: That single number lets us say exactly how much a year of hip pain costs, compared to a year of full health.
-  - pause: 1
-  - highlight:
-      target:
-        - marker_06
-        - marker_05
-      effect: circle
----
-title: One Number, One Comparison
+
+    path axis thick #3d3833 details "Agencies like NICE in the UK use a scale exactly like this one to decide which treatments the health service should pay for — without a common yardstick, a year of pain relief and a year of extra life simply cannot be weighed against each other." points [[380,100],[380,660]] hidden true
+    path tick_bottom thick #3d3833 points [[345,100],[415,100]] hidden true
+    path tick_top thick #3d3833 points [[345,660],[415,660]] hidden true
+    label label_bottom "0 = dead" left attach_to tick_bottom font_size 32 hidden true
+    label label_top "1 = full health" left attach_to tick_top font_size 32 hidden true
+    dot marker_06 #2f6b8f at.x 380 at.y 480 hidden true
+    path tick_06 #2f6b8f points [[360,480],[400,480]] hidden true
+    label value_06 "0.6" left #2f6b8f attach_to marker_06 font_size 30 hidden true
+    shape hip_head #2f6b8f shape circle x 650 y 548 radius 14 hidden true
+    path hip_body thick #2f6b8f points [[650,534],[650,485]] hidden true
+    path hip_arms thick #2f6b8f points [[625,505],[675,505]] hidden true
+    path hip_leg1 thick #2f6b8f points [[650,485],[630,450]] hidden true
+    path hip_leg2 smooth thick #2f6b8f points [[650,485],[670,460],[660,445]] hidden true
+    group icon_hip members ["hip_head","hip_body","hip_arms","hip_leg1","hip_leg2"] hidden true
+    label label_hip "Hip replacement — limp" below #2f6b8f attach_to icon_hip font_size 28 hidden true
+    dot marker_05 #b5482e at.x 380 at.y 230 hidden true
+    path tick_05 #b5482e points [[360,230],[400,230]] hidden true
+    label value_05 "0.5" left #b5482e attach_to marker_05 font_size 30 hidden true
+    shape drug_head #b5482e shape circle x 650 y 298 radius 14 hidden true
+    path drug_body smooth thick #b5482e points [[650,284],[638,245]] hidden true
+    path drug_arm1 thick #b5482e points [[638,260],[615,255]] hidden true
+    path drug_arm2 thick #b5482e points [[638,260],[650,235]] hidden true
+    path drug_leg1 thick #b5482e points [[638,245],[620,210]] hidden true
+    path drug_leg2 thick #b5482e points [[638,245],[645,210]] hidden true
+    group icon_drug members ["drug_head","drug_body","drug_arm1","drug_arm2","drug_leg1","drug_leg2"] hidden true
+    label label_drug "Drug — fatigue" below #b5482e attach_to icon_drug font_size 28 hidden true
+    group scale_fig members ["axis","tick_bottom","tick_top","label_bottom","label_top","marker_06","tick_06","value_06","icon_hip","label_hip","marker_05","tick_05","value_05","icon_drug","label_drug"] fit full hidden true
+
+    card title "What 0.6 Feels Like"
+
+Now that we have the formula, what does a weight like 0.6 actually mean?
+    draw axis tick_bottom tick_top
+
+    pause 1
+
+The scale runs from 0, meaning dead, to 1, meaning full health, with everything else in between.
+    draw label_bottom label_top
+
+    pause 1
+
+A year at 0.6 is worth six-tenths of a year in full health — moderate pain, but still very much a life worth living.
+    draw marker_06 tick_06 value_06 icon_hip label_hip
+
+    pause 1
+
+That single number lets us say exactly how much a year of hip pain costs, compared to a year of full health.
+    draw marker_05 tick_05 value_05 icon_drug label_drug
+
+    pause 1
+
+    highlight marker_06 marker_05 effect circle
+
+## One Number, One Comparison
 level: basic
-elements:
-  - id: hip_bar
-    type: shape
-    shape: rect
-    width: 240
-    height: 140
-    x: 280
-    'y': 600
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-      opacity: 0.7
-  - id: drug_bar
-    type: shape
-    shape: rect
-    width: 320
-    height: 140
-    x: 620
-    'y': 600
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-      opacity: 0.5
-  - id: hip_seg_label
-    type: label
-    text: 5 yrs, u = 0.7
-    attach_to: hip_bar
-    side: above
-  - id: drug_seg_label
-    type: label
-    text: 7 yrs, u = 0.5
-    attach_to: drug_bar
-    side: above
-  - id: formula
-    type: math
-    tex: QALY = \sum_t u_t \times t
-    x: 450
-    'y': 430
-  - id: hip_total_box
-    type: shape
-    shape: rect
-    width: 10
-    height: 10
-    x: 280
-    'y': 260
-    style:
-      opacity: 0
-  - id: drug_total_box
-    type: shape
-    shape: rect
-    width: 10
-    height: 10
-    x: 620
-    'y': 260
-    style:
-      opacity: 0
-  - id: hip_total
-    type: label
-    text: 'Hip: 3.5 QALYs'
-    attach_to: hip_total_box
-    side: below
-    style:
-      color: '#b5482e'
-  - id: drug_total
-    type: label
-    text: 'Drug: 3.75 QALYs'
-    attach_to: drug_total_box
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: clipboard
-    type: icon
-    of: clipboard-check
-    size: 100
-    x: 450
-    'y': 140
-    set: lucide
-  - id: clipboard_label
-    type: label
-    text: Health agency
-    attach_to: clipboard
-    side: below
-  - id: arrow_hip_total
-    type: arrow
-    from:
-      ref: hip_bar
-      anchor: bottom
-    to:
-      ref: hip_total_box
-      anchor: top
-    style:
-      color: '#b5482e'
-  - id: arrow_drug_total
-    type: arrow
-    from:
-      ref: drug_bar
-      anchor: bottom
-    to:
-      ref: drug_total_box
-      anchor: top
-    style:
-      color: '#2f6b8f'
-  - id: insight_mark
-    type: annotation
-    target:
-      - hip_total
-      - drug_total
-    kind: box
-  - id: equals_sign
-    type: text
-    text: '='
-    x: 430
-    'y': 600
-    font_size: 40
-    style:
-      color: '#8f887c'
-commands:
-  - card:
-      title: One Number, One Comparison
-  - draw:
-      - hip_bar
-      - drug_bar
-      - hip_seg_label
-      - drug_seg_label
-      - equals_sign
-    parallel: true
-    speak: Now that we can see what each weight means, the two treatments finally speak the same language.
-  - pause: 1
-  - draw:
-      - arrow_hip_total
-      - arrow_drug_total
-      - formula
-      - hip_total
-      - drug_total
-    speak: Five years at 0.7 and seven years at 0.5 turn into 3.5 and 3.75 QALYs — comparable numbers, not just guesses.
-  - pause: 1
-  - draw:
-      - clipboard
-      - clipboard_label
-    parallel: true
-    speak: Health agencies use exactly this kind of number to decide which treatments are worth funding.
-  - pause: 1
-  - draw:
-      - insight_mark
-    speak: 'So the answer to our first question is simple: it''s not more years or better years alone — it''s both, multiplied together, that the QALY lets us see.'
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: How is a QALY actually calculated?
-    x: 500
-    'y': 390
-    font_size: 48
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 2 of 5
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: How is a QALY actually calculated?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+
+    shape hip_bar #b5482e shape rect x 280 y 600 width 240 height 140 style.fill #b5482e style.opacity 0.7 hidden true
+    shape drug_bar #2f6b8f shape rect x 620 y 600 width 320 height 140 style.fill #2f6b8f style.opacity 0.5 hidden true
+    label hip_seg_label "5 yrs, u = 0.7" above attach_to hip_bar hidden true
+    label drug_seg_label "7 yrs, u = 0.5" above attach_to drug_bar hidden true
+    math formula tex "QALY = \\sum_t u_t \\times t" x 450 y 430 hidden true
+    shape hip_total_box shape rect x 280 y 260 width 10 height 10 style.opacity 0 hidden true
+    shape drug_total_box shape rect x 620 y 260 width 10 height 10 style.opacity 0 hidden true
+    label hip_total "Hip: 3.5 QALYs" below #b5482e attach_to hip_total_box hidden true
+    label drug_total "Drug: 3.75 QALYs" below #2f6b8f attach_to drug_total_box hidden true
+    icon clipboard size 100 set lucide x 450 y 140 of clipboard-check hidden true
+    label clipboard_label "Health agency" below attach_to clipboard hidden true
+    arrow arrow_hip_total #b5482e from.anchor bottom from.ref hip_bar to.anchor top to.ref hip_total_box hidden true
+    arrow arrow_drug_total #2f6b8f from.anchor bottom from.ref drug_bar to.anchor top to.ref drug_total_box hidden true
+    mark insight_mark around hip_total drug_total kind box hidden true
+    text equals_sign "=" #8f887c x 430 y 600 font_size 40 hidden true
+
+    card title "One Number, One Comparison"
+
+Now that we can see what each weight means, the two treatments finally speak the same language.
+    draw hip_bar drug_bar hip_seg_label drug_seg_label equals_sign parallel true
+
+    pause 1
+
+Five years at 0.7 and seven years at 0.5 turn into 3.5 and 3.75 QALYs — comparable numbers, not just guesses.
+    draw arrow_hip_total arrow_drug_total formula hip_total drug_total
+
+    pause 1
+
+Health agencies use exactly this kind of number to decide which treatments are worth funding.
+    draw clipboard clipboard_label parallel true
+
+    pause 1
+
+So the answer to our first question is simple: it's not more years or better years alone — it's both, multiplied together, that the QALY lets us see.
+    draw insight_mark
+
+## Where next
+end_page: true
+
+Next: How is a QALY actually calculated?
+    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:2 title "How is a QALY actually calculated?" size 320 x 500 y 395
+
+    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
+    text end_count "1 of 5" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
