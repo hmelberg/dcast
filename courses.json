@@ -1,19 +1,6 @@
 {
   "courses": [
     {
-      "slug": "taylor-series-and-the-economics-of",
-      "title": "Taylor Series and the Economics of Approximation",
-      "files": [
-        "taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.cast",
-        "taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.cast",
-        "taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.cast",
-        "taylor-series-and-the-economics-of/course.md",
-        "taylor-series-and-the-economics-of/index.html",
-        "taylor-series-and-the-economics-of/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "understanding-the-qaly",
       "title": "Understanding the QALY: Definition, Calculation, and Debates",
       "files": [
@@ -121,6 +108,19 @@
         "causal-inference-in-economics-evidence-from-health-and-health-care/course.md",
         "causal-inference-in-economics-evidence-from-health-and-health-care/index.html",
         "causal-inference-in-economics-evidence-from-health-and-health-care/README.md"
+      ],
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "taylor-series-and-the-economics-of",
+      "title": "Taylor Series and the Economics of Approximation",
+      "files": [
+        "taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.cast",
+        "taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.cast",
+        "taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.cast",
+        "taylor-series-and-the-economics-of/course.md",
+        "taylor-series-and-the-economics-of/index.html",
+        "taylor-series-and-the-economics-of/README.md"
       ],
       "updated": "2026-10-03"
     }
