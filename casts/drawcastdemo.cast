@@ -1,300 +1,146 @@
-playlist:
-  prompt: 'Exaplain and demonstrate some of the features in drawcast (see drawcast.app) #long #podcast'
----
-title: A drawcast, drawing itself
-template: cell_diagram
-params:
-  organelles:
-    - nucleus
-    - mitochondria
-    - er
-    - golgi
-    - ribosomes
-  labels: true
-elements:
-  - id: heading
-    type: text
-    text: A drawcast, drawing itself
-    x: 500
-    'y': 715
-    font_size: 34
-commands:
-  - draw:
-      - heading
-    speak: If you've ever tried to animate a teaching figure, you know the pain. Drawcast makes it easy.
-    voice: a
-  - ask:
-      intro: Before anything gets drawn.
-      question: What should I call you?
-      store: name
-      default: friend
-  - speak: Hi, {name} — good to have you. You can answer, click, and poke at every figure here; this is not a video pretending to be a lesson.
-    voice: b
-  - draw:
-      - cytoplasm
-      - membrane
-      - membrane_inner
-    speak: 'So let''s explain something that isn''t maths at all: how a cell works. The double line is the membrane, the gatekeeper that decides what gets in.'
-    voice: a
-  - draw:
+prompt: "Exaplain and demonstrate some of the features in drawcast (see drawcast.app) #long #podcast"
+
+## A drawcast, drawing itself
+use: cell_diagram
+with:
+    organelles:
       - nucleus
-      - nucleus_fill
-      - nucleolus
-      - label_nucleus
-    speak: The nucleus holds the DNA — the recipe library. Nothing leaves it whole; only copies of single recipes go out.
-    voice: b
-  - draw:
-      - ribosomes
-      - label_ribo
-    speak: These dots are ribosomes, and they read a copy and build the protein it describes, one amino acid at a time.
-    voice: a
-  - draw:
+      - mitochondria
       - er
-      - label_er
       - golgi
-      - label_golgi
-    speak: The folded ribbons are the endoplasmic reticulum, where new proteins are shaped, and the stack is the Golgi, where they get packed and addressed.
-    voice: b
-  - draw:
-      - mito
-      - cristae
-      - label_mito
-    speak: And this one burns sugar with oxygen to pay for all of it — the mitochondrion, its inner folds cramming more working surface into the same space.
-    voice: a
-  - focus:
-      target:
-        - mito
-        - cristae
-    speak: It also carries its own small ring of DNA, inherited only from your mother — a leftover from the day a bacterium was swallowed and never digested.
-    voice: b
-    delivery: soft
-  - highlight:
-      target:
-        - nucleus
-        - mito
-      effect: glow
-    speak: 'Two sets of genes in one cell, then — and notice what the drawing did while we talked: each part arrived on the sentence that explained it.'
-    voice: a
-  - quiz:
-      intro: Quick check.
-      question: Which organelle carries its own DNA?
-      choices:
-        - The Golgi apparatus
-        - The mitochondrion
-        - The ribosome
-      correct: 2
-      right: The mitochondrion — its own ring of DNA, passed down the maternal line.
-      wrong: Not that one — think of the part descended from a swallowed bacterium.
----
-title: When the numbers change
-template: bar_chart
-params:
-  labels:
-    - Ash
-    - Brook
-    - Cole
-    - Dana
-  values:
-    - - 12
-      - 31
-      - 22
-      - 8
-    - - 44
-      - 35
-      - 51
-      - 19
-  stage: 0
-  ylim: [0, 60]
-  y_label: Votes (thousands)
-  value_labels: true
-  title: Election night (invented numbers)
-commands:
-  - draw:
-      - title
-    speak: Watch this one, {name}. Four candidates, one invented election night — the numbers are made up, the mechanism is not.
-    voice: a
-  - draw:
-      - axes
-  - draw:
-      - bar_1
-      - bar_2
-      - bar_3
-      - bar_4
-    parallel: true
-    speak: At nine in the evening, the early boxes are counted and Brook is comfortably ahead.
-    voice: b
-  - point:
-      at:
-        ref: bar_2
-      gesture: circle
-    speak: Thirty-one thousand against Cole's twenty-two — the kind of lead a newsroom calls decisive.
-    voice: a
-  - animate:
-      stage: 1
-    duration: 3
-    speak: Then the city boxes arrive, and the bars simply follow the new numbers — no keyframes, no redrawing.
-    voice: b
-  - highlight:
-      target:
-        - bar_3
-      effect: glow
-    speak: Cole ends the night in front. You hand over the numbers for each stage, and this is the same machinery behind a bar-chart race — the bars even reorder as they overtake.
-    voice: a
-  - pause: 0.4
-  - speak: 'Which means a chart here is not a picture of data: it is the data, drawn.'
-    voice: b
----
-title: Numbers that move, shapes that argue
-vars:
-  f: 1
-elements:
-  - id: title
-    type: text
-    text: Numbers that move, shapes that argue
-    x: 500
-    'y': 715
-    font_size: 34
-  - id: dot_center
-    type: point
-    at:
-      x: 500
-      'y': 280
-    style:
-      color: '#b5482e'
-  - id: label_center
-    type: label
-    text: The middle
-    attach_to: dot_center
-    side: left
-    style:
-      color: '#b5482e'
-  - id: ax
-    type: axes
-    x_label: x
-    y_label: 'y'
-  - id: wave
-    type: curve
-    expr: 50 + 30*sin(f*0.0628*x)
-    style:
-      color: '#2f6b8f'
-  - id: readout
-    type: text
-    text: f = {f:1}
-    x: 800
-    'y': 650
-    font_size: 28
-    style:
-      color: '#8a5fa8'
-  - id: dot_wave
-    type: point
-    at:
-      x: 25
-      'on': wave
-    style:
-      color: '#b5482e'
-  - id: label_dot
-    type: label
-    text: x = 25
-    attach_to: dot_wave
-    side: above
-    style:
-      color: '#b5482e'
-  - id: kake
-    type: pieces
-    of: sectors
-    x: 300
-    'y': 350
-    radius: 140
-    'n': 14
-    style:
-      fill: '#f2c14e'
-      color: '#b5482e'
-  - id: eq
-    type: math
-    tex: A = \pi r \cdot r = \pi r^2
-    x: 680
-    'y': 150
-commands:
-  - draw:
-      - title
-    speak: 'Now the part that earns the bet: what happens when one number changes.'
-    voice: a
-  - draw:
-      - dot_center
-      - label_center
-    speak: The paper is a thousand units across and seven hundred and fifty up, with zero-zero bottom left — a maths plot, not screen pixels.
-    voice: b
-  - erase:
-      - dot_center
-      - label_center
-    speak: And that is nearly the last coordinate you'll hear, because almost everything hangs off something else instead.
-    voice: a
-  - draw:
-      - ax
-  - draw:
-      - wave
-      - readout
-    speak: This curve is a formula — sine of f times x — and f is one number the whole page shares, printed there as f equals one.
-    voice: b
-  - draw:
-      - dot_wave
-      - label_dot
-    speak: 'And this point is defined, not placed: x is twenty-five, its height read off the wave wherever the wave happens to be.'
-    voice: a
-  - animate:
-      f: 4
-    duration: 6
-    easing: linear
-    speak: Push f from one to four and the curve, the printed number and the point all recompute together — nobody keyframed a single position.
-    voice: b
-  - camera:
-      center:
-        ref: dot_wave
-      zoom: 2
-    speak: The camera can lean into a detail too, then step back out.
-    voice: a
-  - camera:
-      reset: true
-  - clear:
-      keep:
-        - title
-    speak: 'Which lets you do something older than any of this: an argument made of moving pieces, the way Archimedes'' heirs did it with paper.'
-    voice: b
-  - draw:
-      - kake
-    speak: Fourteen equal slices of a circle of radius r — and each slice is its own element, not a stroke in a picture.
-    voice: a
-  - keep:
-      target:
-        - kake
-  - arrange:
-      target:
-        - kake
-      layout: zipper
-      at: [680, 360]
-      duration: 3
-    speak: Keep a ghost of the circle where it stood, and zip the slices alternately up and down — every position and every turn computed.
-    voice: b
-  - draw:
-      - eq
-    speak: 'The bumpy rectangle is r high and half the circumference long: pi r times r.'
-    voice: a
-  - highlight:
-      target:
-        - eq
-      effect: glow
-    speak: 'Nothing was added or thrown away, only rearranged — and that''s the whole idea: you describe the things and the story, and the drawing does the arguing.'
-    voice: b
-  - quiz:
-      intro: Quick check.
-      question: On drawcast's canvas, where is the point (0, 0)?
-      choices:
-        - Top-left corner
-        - Bottom-left corner
-        - The centre
-      correct: 2
-      right: Bottom-left — y increases upward, like a maths plot.
-      wrong: Not quite — it reads like a graph, not like screen pixels.
+      - ribosomes
+    labels: true
+
+A: If you've ever tried to animate a teaching figure, you know the pain. Drawcast makes it easy.
+    text heading "A drawcast, drawing itself" x 500 y 715 font_size 34
+
+    ask "What should I call you?" store name default friend
+        intro: Before anything gets drawn.
+
+B: Hi, {name} — good to have you. You can answer, click, and poke at every figure here; this is not a video pretending to be a lesson.
+
+A: So let's explain something that isn't maths at all: how a cell works. The double line is the membrane, the gatekeeper that decides what gets in.
+    draw cytoplasm membrane membrane_inner
+
+B: The nucleus holds the DNA — the recipe library. Nothing leaves it whole; only copies of single recipes go out.
+    draw nucleus nucleus_fill nucleolus label_nucleus
+
+A: These dots are ribosomes, and they read a copy and build the protein it describes, one amino acid at a time.
+    draw ribosomes label_ribo
+
+B: The folded ribbons are the endoplasmic reticulum, where new proteins are shaped, and the stack is the Golgi, where they get packed and addressed.
+    draw er label_er golgi label_golgi
+
+A: And this one burns sugar with oxygen to pay for all of it — the mitochondrion, its inner folds cramming more working surface into the same space.
+    draw mito cristae label_mito
+
+B: It also carries its own small ring of DNA, inherited only from your mother — a leftover from the day a bacterium was swallowed and never digested.
+    focus mito cristae delivery soft
+
+A: Two sets of genes in one cell, then — and notice what the drawing did while we talked: each part arrived on the sentence that explained it.
+    highlight nucleus mito effect glow
+
+    quiz "Which organelle carries its own DNA?" intro "Quick check."
+        right: The mitochondrion — its own ring of DNA, passed down the maternal line.
+        wrong: Not that one — think of the part descended from a swallowed bacterium.
+        * The Golgi apparatus
+        + The mitochondrion
+        * The ribosome
+
+## When the numbers change
+use: bar_chart
+with:
+    labels:
+      - Ash
+      - Brook
+      - Cole
+      - Dana
+    values:
+      - [12, 31, 22, 8]
+      - [44, 35, 51, 19]
+    stage: 0
+    ylim:
+      - 0
+      - 60
+    y_label: Votes (thousands)
+    value_labels: true
+    title: Election night (invented numbers)
+
+A: Watch this one, {name}. Four candidates, one invented election night — the numbers are made up, the mechanism is not.
+    draw title
+
+    draw axes
+
+B: At nine in the evening, the early boxes are counted and Brook is comfortably ahead.
+    draw bar_1 bar_2 bar_3 bar_4 parallel true
+
+A: Thirty-one thousand against Cole's twenty-two — the kind of lead a newsroom calls decisive.
+    point at.ref bar_2 gesture circle
+
+B: Then the city boxes arrive, and the bars simply follow the new numbers — no keyframes, no redrawing.
+    animate stage 1 duration 3
+
+A: Cole ends the night in front. You hand over the numbers for each stage, and this is the same machinery behind a bar-chart race — the bars even reorder as they overtake.
+    highlight bar_3 effect glow
+
+    pause 0.4
+
+B: Which means a chart here is not a picture of data: it is the data, drawn.
+
+## Numbers that move, shapes that argue
+vars: {"f":1}
+
+A: Now the part that earns the bet: what happens when one number changes.
+    text title "Numbers that move, shapes that argue" x 500 y 715 font_size 34
+
+B: The paper is a thousand units across and seven hundred and fifty up, with zero-zero bottom left — a maths plot, not screen pixels.
+    dot dot_center #b5482e at.x 500 at.y 280
+    label label_center "The middle" left #b5482e attach_to dot_center
+
+A: And that is nearly the last coordinate you'll hear, because almost everything hangs off something else instead.
+    erase dot_center label_center
+
+    axes ax x_label x y_label y
+
+B: This curve is a formula — sine of f times x — and f is one number the whole page shares, printed there as f equals one.
+    curve wave #2f6b8f expr "50 + 30*sin(f*0.0628*x)"
+    text readout "f = {f:1}" #8a5fa8 x 800 y 650 font_size 28
+
+A: And this point is defined, not placed: x is twenty-five, its height read off the wave wherever the wave happens to be.
+    dot dot_wave #b5482e at.on wave at.x 25
+    label label_dot "x = 25" above #b5482e attach_to dot_wave
+
+B: Push f from one to four and the curve, the printed number and the point all recompute together — nobody keyframed a single position.
+    animate f 4 duration 6 easing linear
+
+A: The camera can lean into a detail too, then step back out.
+    camera center.ref dot_wave zoom 2
+
+    camera reset true
+
+B: Which lets you do something older than any of this: an argument made of moving pieces, the way Archimedes' heirs did it with paper.
+    clear keep ["title"]
+
+A: Fourteen equal slices of a circle of radius r — and each slice is its own element, not a stroke in a picture.
+    pieces kake #b5482e x 300 y 350 radius 140 n 14 of sectors style.fill #f2c14e
+
+    keep kake
+
+B: Keep a ghost of the circle where it stood, and zip the slices alternately up and down — every position and every turn computed.
+    arrange kake layout zipper at [680,360] duration 3
+
+A: The bumpy rectangle is r high and half the circumference long: pi r times r.
+    math eq tex "A = \\pi r \\cdot r = \\pi r^2" x 680 y 150
+
+B: Nothing was added or thrown away, only rearranged — and that's the whole idea: you describe the things and the story, and the drawing does the arguing.
+    highlight eq effect glow
+
+    quiz "On drawcast's canvas, where is the point (0, 0)?" intro "Quick check."
+        right: Bottom-left — y increases upward, like a maths plot.
+        wrong: Not quite — it reads like a graph, not like screen pixels.
+        * Top-left corner
+        + Bottom-left corner
+        * The centre
 ---
 audio:
   lang: en
