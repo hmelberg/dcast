@@ -1,592 +1,219 @@
-playlist:
-  title: Does it work in practice? Evidence, limits, and alternatives
-  prompt: How well do QALY estimates agree across different elicitation methods and countries? What real-world numbers do agencies like NICE use as cost-per-QALY thresholds? What alternatives (DALYs, capability approach, healthy years equivalents) have been proposed, and why haven't they replaced QALYs?
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  enroll: https://drawcast.anvil.app
----
-title: Cross-Method Agreement
+# Does it work in practice? Evidence, limits, and alternatives
+prompt: "How well do QALY estimates agree across different elicitation methods and countries? What real-world numbers do agencies like NICE use as cost-per-QALY thresholds? What alternatives (DALYs, capability approach, healthy years equivalents) have been proposed, and why haven't they replaced QALYs?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+enroll: https://drawcast.anvil.app
+
+## Cross-Method Agreement
 level: advanced
-template: bar_chart
-params:
-  labels:
-    - TTO
-    - SG
-    - VAS
-    - EQ-5D-5L
-    - DCE
-    - UK
-    - US
-    - Dutch
-  values:
-    - 0.72
-    - 0.81
-    - 0.65
-    - 0.7
-    - 0.75
-    - 0.7
-    - 0.78
-    - 0.68
-  value_labels: false
-  ylim: [0, 1]
-  y_label: Utility weight (u_t)
-elements:
-  - id: range_arrow
-    style:
-      color: '#b5482e'
-      stroke_width: 4
-    from:
-      anchor: top_left
-      ref: methods_cluster
-    to:
-      anchor: top_right
-      ref: methods_cluster
-    type: arrow
-  - id: range_label
-    text: 0.65–0.81 range
-    side: above
-    attach_to: range_arrow
-    type: label
-  - id: divider
-    style:
-      dash: true
-      color: '#8f887c'
-    through:
-      - ref: methods_cluster
-        anchor: right
-    angle: 90
-    type: line
-  - id: label_uk
-    text: '0.70'
-    side: above
-    attach_to: bar_6
-    type: label
-  - id: label_us
-    text: '0.78'
-    side: above
-    attach_to: bar_7
-    type: label
-  - id: label_dutch
-    text: '0.68'
-    side: above
-    attach_to: bar_8
-    type: label
-  - id: methods_cluster
-    members:
-      - bar_1
-      - bar_2
-      - bar_3
-      - bar_4
-      - bar_5
-    type: group
-  - id: tariff_cluster
-    members:
-      - bar_6
-      - bar_7
-      - bar_8
-    type: group
-  - id: label_tto
-    text: '0.72'
-    side: above
-    attach_to: bar_1
-    type: label
-  - id: label_sg
-    text: '0.81'
-    side: above
-    attach_to: bar_2
-    type: label
-  - id: label_vas
-    text: '0.65'
-    side: above
-    attach_to: bar_3
-    type: label
-  - id: label_methods
-    text: Methods
-    side: above
-    attach_to: methods_cluster
-    type: label
-  - id: label_tariffs
-    text: Tariffs
-    side: above
-    attach_to: tariff_cluster
-    type: label
-commands:
-  - card:
-      title: Cross-Method Agreement
-  - camera:
-      'on':
-        - bar_1
-        - bar_2
-        - bar_3
-        - bar_4
-        - bar_5
-      zoom: fit
-  - draw:
-      - axes
-      - bar_1
-      - bar_2
-      - bar_3
-      - bar_4
-      - bar_5
-      - label_methods
-    speak: Take that hip-replacement patient's moderate pain state and ask five elicitation methods for its utility weight — you get five different numbers.
-  - blocking: false
-    speak: Time trade-off gives about 0.72, standard gamble about 0.81, a visual analogue scale about 0.65 — same health state, same profile, different instrument.
-  - show:
-      - label_tto
-  - point:
-      at:
-        ref: bar_1
-      gesture: tap
-  - show:
-      - label_sg
-  - point:
-      at:
-        ref: bar_2
-      gesture: tap
-  - show:
-      - label_vas
-  - point:
-      at:
-        ref: bar_3
-      gesture: tap
-  - camera:
-      reset: true
-  - draw:
-      - bar_6
-      - bar_7
-      - bar_8
-      - divider
-      - label_tariffs
-      - label_uk
-      - label_us
-      - label_dutch
-    speak: Swap country tariffs — UK, US, Dutch value sets — and the same EQ-5D-5L descriptor shifts again, sometimes by ten points on the 0-to-1 scale.
-  - draw:
-      - range_arrow
-      - range_label
-    speak: The QALY formula stays fixed; the u_t going into it does not — which is the empirical problem this lecture takes on.
----
-title: What Agencies Actually Pay
-text:
-  font_size: 34
-template: number_line
-params:
-  min: 0
-  max: 200000
-  step: 50000
-  intervals:
-    - from: 20000
-      to: 30000
-    - from: 100000
-      to: 150000
-    - from: 60000
-      to: 90000
-  arrow_ops:
-    - from: 30000
-      to: 50000
-      label: end-of-life exception
-elements:
-  - id: axis_title
-    text: Cost/QALY
-    side: above
-    attach_to: line
-    type: label
-  - target:
-      - interval_2
-    id: cross_who
-    kind: cross
-    type: annotation
-  - id: date_who
-    text: 2016 — withdrawn
-    side: below
-    attach_to: interval_2
-    type: label
-  - id: label_nice
-    text: NICE
-    side: above
-    attach_to: interval_0
-    type: label
-  - id: label_icer
-    text: ICER
-    side: above
-    attach_to: interval_1
-    type: label
-  - id: label_who
-    text: WHO-CHOICE (dropped)
-    side: above
-    attach_to: interval_2
-    type: label
-  - id: label_eol
-    text: end-of-life exception
-    side: above
-    attach_to: hop_0
-    type: label
-commands:
-  - card:
-      title: What Agencies Actually Pay
-  - draw:
-      - line
-      - tick_0
-      - tick_50000
-      - tick_100000
-      - tick_150000
-      - tick_200000
-      - axis_title
-    parallel: true
-    speak: Now that u_t itself is unstable, the next question is what number policy actually multiplies it by.
-  - draw:
-      - interval_0
-      - label_nice
-    parallel: true
-    speak: NICE has used a £20,000-to-£30,000 threshold band since the early 2000s — spend more per QALY gained and a treatment usually gets rejected.
-  - draw:
-      - hop_0
-      - label_eol
-    parallel: true
-    speak: End-of-life drugs get a documented exception, pushed toward £50,000, which is less a rule than an acknowledged fudge factor.
-  - draw:
-      - interval_1
-      - label_icer
-    parallel: true
-    speak: The US never adopted a formal number — ICER's reviews informally cite $100,000 to $150,000 per QALY —
-  - fade:
-      target:
-        - hop_0
-        - label_eol
-      to: 0.4
-  - draw:
-      - interval_2
-      - date_who
-      - label_who
-    parallel: true
-    speak: and the WHO's old rule of one to three times GDP per capita was dropped in 2016 for being too crude to defend.
-  - fade:
-      target:
-        - interval_2
-      to: 0.35
-  - draw:
-      - cross_who
----
-title: Alternatives on Offer
-template: data_table
-params:
-  columns:
-    - Method
-    - Origin
-    - Core difference
-    - Status
-  rows:
-    - - DALY
-      - Murray & Lopez, 1996
-      - Years lost, not gained
-      - Burden, not choice
-    - - ICECAP
-      - Sen
-      - Broader wellbeing
-      - Hard vs. health budget
-    - - HYE
-      - Mehrez & Gafni, 1989
-      - Whole-profile trade-off
-      - Rarely elicited
-  font_size: 32
-  box:
-    x: 40
-    'y': 50
-    w: 920
-    h: 620
-elements:
-  - id: bridge_note
-    text: Why a different currency?
-    style:
-      color: '#8a5fa8'
-    x: 500
-    'y': 420
-    font_size: 36
-    type: text
-commands:
-  - card:
-      title: Alternatives on Offer
-  - draw:
-      - header
-      - bridge_note
-    parallel: true
-    speak: Now that the thresholds are on the table, the natural question is why anyone would want a different currency altogether.
-  - erase:
-      - bridge_note
-  - draw:
-      - row_1
-    speak: The DALY, built for the Global Burden of Disease study by Murray and Lopez in 1996, counts years lost to disability instead of years gained in health — same arithmetic, opposite direction.
-  - draw:
-      - row_2
-    speak: Sen's capability approach asks what a person can actually do and be, not just their health state; the ICECAP instruments try to capture that, but broad wellbeing is hard to weigh against a health budget.
-  - draw:
-      - row_3
-    speak: The Healthy Years Equivalent, proposed by Mehrez and Gafni in 1989, is theoretically the most defensible — it trades off entire health profiles — and it is rarely used, because eliciting it takes two nested gambles most respondents cannot sit through.
-  - highlight:
-      target:
-        - row_1__c3
-        - row_2__c3
-        - row_3__c3
-      effect: underline
-      color: '#b5482e'
-      duration: 3
----
-title: Why the QALY Persists
-level: advanced
-elements:
-  - id: ledger_box
-    style:
-      color: '#3d3833'
-    shape: rect
-    x: 500
-    'y': 430
-    width: 700
-    height: 300
-    type: shape
-  - id: title_qaly
-    text: QALY
-    x: 500
-    'y': 600
+use: bar_chart
+with:
+    labels:
+      - TTO
+      - SG
+      - VAS
+      - EQ-5D-5L
+      - DCE
+      - UK
+      - US
+      - Dutch
+    values:
+      - 0.72
+      - 0.81
+      - 0.65
+      - 0.7
+      - 0.75
+      - 0.7
+      - 0.78
+      - 0.68
+    value_labels: false
+    ylim:
+      - 0
+      - 1
+    y_label: Utility weight (u_t)
+
+    arrow range_arrow #b5482e from.anchor top_left from.ref methods_cluster to.anchor top_right to.ref methods_cluster style.stroke_width 4 hidden true
+    label range_label "0.65–0.81 range" above attach_to range_arrow hidden true
+    line divider dashed #8f887c through [{"ref":"methods_cluster","anchor":"right"}] angle 90 hidden true
+    label label_uk "0.70" above attach_to bar_6 hidden true
+    label label_us "0.78" above attach_to bar_7 hidden true
+    label label_dutch "0.68" above attach_to bar_8 hidden true
+    group methods_cluster members ["bar_1","bar_2","bar_3","bar_4","bar_5"] hidden true
+    group tariff_cluster members ["bar_6","bar_7","bar_8"] hidden true
+    label label_tto "0.72" above attach_to bar_1 hidden true
+    label label_sg "0.81" above attach_to bar_2 hidden true
+    label label_vas "0.65" above attach_to bar_3 hidden true
+    label label_methods "Methods" above attach_to methods_cluster hidden true
+    label label_tariffs "Tariffs" above attach_to tariff_cluster hidden true
+
+    card title "Cross-Method Agreement"
+
+    camera on ["bar_1","bar_2","bar_3","bar_4","bar_5"] zoom fit
+
+Take that hip-replacement patient's moderate pain state and ask five elicitation methods for its utility weight — you get five different numbers.
+    draw axes bar_1 bar_2 bar_3 bar_4 bar_5 label_methods
+
+Time trade-off gives about 0.72, standard gamble about 0.81, a visual analogue scale about 0.65 — same health state, same profile, different instrument.
+    blocking false
+
+    show label_tto
+
+    point at.ref bar_1 gesture tap
+
+    show label_sg
+
+    point at.ref bar_2 gesture tap
+
+    show label_vas
+
+    point at.ref bar_3 gesture tap
+
+    camera reset true
+
+Swap country tariffs — UK, US, Dutch value sets — and the same EQ-5D-5L descriptor shifts again, sometimes by ten points on the 0-to-1 scale.
+    draw bar_6 bar_7 bar_8 divider label_tariffs label_uk label_us label_dutch
+
+The QALY formula stays fixed; the u_t going into it does not — which is the empirical problem this lecture takes on.
+    draw range_arrow range_label
+
+## What Agencies Actually Pay
+text: {"font_size":34}
+use: number_line
+with:
+    min: 0
+    max: 200000
+    step: 50000
+    intervals:
+      - {from: 20000, to: 30000}
+      - {from: 100000, to: 150000}
+      - {from: 60000, to: 90000}
+    arrow_ops:
+      - {from: 30000, to: 50000, label: end-of-life exception}
+
+    label axis_title "Cost/QALY" above attach_to line hidden true
+    mark cross_who around interval_2 kind cross hidden true
+    label date_who "2016 — withdrawn" below attach_to interval_2 hidden true
+    label label_nice "NICE" above attach_to interval_0 hidden true
+    label label_icer "ICER" above attach_to interval_1 hidden true
+    label label_who "WHO-CHOICE (dropped)" above attach_to interval_2 hidden true
+    label label_eol "end-of-life exception" above attach_to hop_0 hidden true
+
+    card title "What Agencies Actually Pay"
+
+Now that u_t itself is unstable, the next question is what number policy actually multiplies it by.
+    draw line tick_0 tick_50000 tick_100000 tick_150000 tick_200000 axis_title parallel true
+
+NICE has used a £20,000-to-£30,000 threshold band since the early 2000s — spend more per QALY gained and a treatment usually gets rejected.
+    draw interval_0 label_nice parallel true
+
+End-of-life drugs get a documented exception, pushed toward £50,000, which is less a rule than an acknowledged fudge factor.
+    draw hop_0 label_eol parallel true
+
+The US never adopted a formal number — ICER's reviews informally cite $100,000 to $150,000 per QALY —
+    draw interval_1 label_icer parallel true
+
+    fade hop_0 label_eol to 0.4
+
+and the WHO's old rule of one to three times GDP per capita was dropped in 2016 for being too crude to defend.
+    draw interval_2 date_who label_who parallel true
+
+    fade interval_2 to 0.35
+
+    draw cross_who
+
+## Alternatives on Offer
+use: data_table
+with:
+    columns:
+      - Method
+      - Origin
+      - Core difference
+      - Status
+    rows:
+      - [DALY, 'Murray & Lopez, 1996', 'Years lost, not gained', 'Burden, not choice']
+      - [ICECAP, Sen, Broader wellbeing, Hard vs. health budget]
+      - [HYE, 'Mehrez & Gafni, 1989', Whole-profile trade-off, Rarely elicited]
     font_size: 32
-    type: text
-  - id: divider
-    style:
-      dash: true
-      color: '#8f887c'
-    through:
-      - [500, 365]
-      - [500, 485]
-    type: line
-  - id: icon_disagreement
-    style:
-      color: '#8f887c'
-      opacity: 0.55
-    size: 44
-    x: 500
-    'y': 230
-    of: bar-chart
-    type: icon
-  - id: label_disagreement
-    text: Method agreement
-    style:
-      color: '#6b655c'
-      opacity: 0.75
-    x: 500
-    'y': 185
-    font_size: 20
-    type: text
-  - id: icon_threshold
-    style:
-      color: '#8f887c'
-      opacity: 0.55
-    size: 44
-    x: 280
-    'y': 230
-    of: trending-up
-    type: icon
-  - id: label_threshold
-    text: Cost-per-QALY threshold
-    style:
-      color: '#6b655c'
-      opacity: 0.75
-    x: 280
-    'y': 185
-    font_size: 20
-    type: text
-  - id: arrow_threshold
-    style:
-      dash: true
-      color: '#8f887c'
-      opacity: 0.3
-    from:
-      anchor: top
-      ref: icon_threshold
-    to:
-      anchor: bottom_left
-      ref: ledger_box
-    type: arrow
-  - id: icon_alternatives
-    style:
-      color: '#8f887c'
-      opacity: 0.55
-    size: 44
-    x: 720
-    'y': 230
-    of: table
-    type: icon
-  - id: label_alternatives
-    text: DALYs, HYE, capability
-    style:
-      color: '#6b655c'
-      opacity: 0.75
-    x: 720
-    'y': 185
-    font_size: 20
-    type: text
-  - id: arrow_alternatives
-    style:
-      dash: true
-      color: '#8f887c'
-      opacity: 0.3
-    from:
-      anchor: top
-      ref: icon_alternatives
-    to:
-      anchor: bottom_right
-      ref: ledger_box
-    type: arrow
-  - id: strength_header
-    text: Strength
-    style:
-      color: '#2f6b8f'
-    x: 260
-    'y': 530
-    font_size: 26
-    type: text
-  - id: strength_check
-    at:
-      side: above-right
-      ref: strength_barchart
-      gap: 4
-    style:
-      color: '#2f6b8f'
-    size: 30
-    of: check
-    type: icon
-  - id: strength_barchart
-    style:
-      color: '#2f6b8f'
-    size: 44
-    x: 260
-    'y': 430
-    of: bar-chart
-    type: icon
-  - id: strength_label
-    text: one number, all diseases
-    at:
-      side: right
-      ref: strength_barchart
-      gap: 18
-    style:
-      color: '#3d3833'
-    font_size: 20
-    type: text
-  - id: weakness_header
-    text: Weakness
-    style:
-      color: '#b5482e'
-    x: 680
-    'y': 530
-    font_size: 26
-    type: text
-  - id: weakness_asterisk
-    text: '*'
-    at:
-      side: above-right
-      ref: weakness_barchart
-      gap: 4
-    style:
-      color: '#b5482e'
-    font_size: 34
-    type: text
-  - id: weakness_barchart
-    style:
-      color: '#b5482e'
-    size: 44
-    x: 680
-    'y': 430
-    of: bar-chart
-    type: icon
-  - id: weakness_label
-    text: false precision
-    at:
-      side: right
-      ref: weakness_barchart
-      gap: 18
-    style:
-      color: '#3d3833'
-    font_size: 20
-    type: text
-  - id: persistence_icon
-    style:
-      color: '#8a5fa8'
-    size: 42
-    x: 500
-    'y': 555
-    of: layers
-    type: icon
-  - id: persistence_label
-    text: regulatory precedent
-    style:
-      color: '#8a5fa8'
-    x: 500
-    'y': 515
-    font_size: 20
-    type: text
-  - target:
-      - ledger_box
-      - title_qaly
-    id: seal_mark
-    kind: box
-    type: annotation
-  - id: adopted_tag
-    text: ADOPTED
-    style:
-      color: '#3d3833'
-    x: 500
-    'y': 320
-    font_size: 18
-    type: text
-commands:
-  - card:
-      title: Why the QALY Persists
-  - draw:
-      - ledger_box
-      - title_qaly
-      - icon_disagreement
-      - label_disagreement
-      - icon_threshold
-      - label_threshold
-      - icon_alternatives
-      - label_alternatives
-      - arrow_threshold
-      - arrow_alternatives
-    speak: Now that we've seen the disagreement, the price tags, and the rivals, the question is what to make of all three together.
-  - pause: 0.3
-  - draw:
-      - divider
-      - strength_header
-      - strength_check
-      - strength_barchart
-      - strength_label
-      - weakness_header
-      - weakness_asterisk
-      - weakness_barchart
-      - weakness_label
-    speak: The QALY's numbers wobble across methods and countries, its thresholds are administratively set rather than derived, and its rivals each solve a different problem — and it is still what gets computed before that hip replacement or that drug gets funded.
-  - pause: 0.3
-  - draw:
-      - persistence_icon
-      - persistence_label
-    speak: What holds it in place is not philosophical superiority — it is thirty years of accumulated data, trained analysts, and regulatory precedent no alternative has matched.
-  - fade:
-      target:
-        - arrow_threshold
-        - arrow_alternatives
-      to: 1
-      duration: 0.6
-  - draw:
-      - seal_mark
-      - adopted_tag
-    speak: What you can now see is a tool imperfect in exactly the ways this course has traced, and adopted anyway because the alternative to an imperfect common measure is no common measure at all.
-  - highlight:
-      target:
-        - ledger_box
-        - title_qaly
-      effect: glow
+    box:
+      x: 40
+      'y': 50
+      w: 920
+      h: 620
+
+    text bridge_note "Why a different currency?" #8a5fa8 x 500 y 420 font_size 36 hidden true
+
+    card title "Alternatives on Offer"
+
+Now that the thresholds are on the table, the natural question is why anyone would want a different currency altogether.
+    draw header bridge_note parallel true
+
+    erase bridge_note
+
+The DALY, built for the Global Burden of Disease study by Murray and Lopez in 1996, counts years lost to disability instead of years gained in health — same arithmetic, opposite direction.
+    draw row_1
+
+Sen's capability approach asks what a person can actually do and be, not just their health state; the ICECAP instruments try to capture that, but broad wellbeing is hard to weigh against a health budget.
+    draw row_2
+
+The Healthy Years Equivalent, proposed by Mehrez and Gafni in 1989, is theoretically the most defensible — it trades off entire health profiles — and it is rarely used, because eliciting it takes two nested gambles most respondents cannot sit through.
+    draw row_3
+
+    highlight row_1__c3 row_2__c3 row_3__c3 effect underline color #b5482e duration 3
+
+## Why the QALY Persists
+level: advanced
+
+    shape ledger_box #3d3833 shape rect x 500 y 430 width 700 height 300 hidden true
+    text title_qaly "QALY" x 500 y 600 font_size 32 hidden true
+    line divider dashed #8f887c through [[500,365],[500,485]] hidden true
+    icon icon_disagreement #8f887c size 44 x 500 y 230 of bar-chart style.opacity 0.55 hidden true
+    text label_disagreement "Method agreement" #6b655c x 500 y 185 font_size 20 style.opacity 0.75 hidden true
+    icon icon_threshold #8f887c size 44 x 280 y 230 of trending-up style.opacity 0.55 hidden true
+    text label_threshold "Cost-per-QALY threshold" #6b655c x 280 y 185 font_size 20 style.opacity 0.75 hidden true
+    arrow arrow_threshold dashed #8f887c from.anchor top from.ref icon_threshold to.anchor bottom_left to.ref ledger_box style.opacity 0.3 hidden true
+    icon icon_alternatives #8f887c size 44 x 720 y 230 of table style.opacity 0.55 hidden true
+    text label_alternatives "DALYs, HYE, capability" #6b655c x 720 y 185 font_size 20 style.opacity 0.75 hidden true
+    arrow arrow_alternatives dashed #8f887c from.anchor top from.ref icon_alternatives to.anchor bottom_right to.ref ledger_box style.opacity 0.3 hidden true
+    text strength_header "Strength" #2f6b8f x 260 y 530 font_size 26 hidden true
+    icon strength_check above-right strength_barchart gap 4 #2f6b8f size 30 of check hidden true
+    icon strength_barchart #2f6b8f size 44 x 260 y 430 of bar-chart hidden true
+    text strength_label "one number, all diseases" right strength_barchart gap 18 #3d3833 font_size 20 hidden true
+    text weakness_header "Weakness" #b5482e x 680 y 530 font_size 26 hidden true
+    text weakness_asterisk "*" above-right weakness_barchart gap 4 #b5482e font_size 34 hidden true
+    icon weakness_barchart #b5482e size 44 x 680 y 430 of bar-chart hidden true
+    text weakness_label "false precision" right weakness_barchart gap 18 #3d3833 font_size 20 hidden true
+
+    card title "Why the QALY Persists"
+
+Now that we've seen the disagreement, the price tags, and the rivals, the question is what to make of all three together.
+    draw ledger_box title_qaly icon_disagreement label_disagreement icon_threshold label_threshold icon_alternatives label_alternatives arrow_threshold arrow_alternatives
+
+    pause 0.3
+
+The QALY's numbers wobble across methods and countries, its thresholds are administratively set rather than derived, and its rivals each solve a different problem — and it is still what gets computed before that hip replacement or that drug gets funded.
+    draw divider strength_header strength_check strength_barchart strength_label weakness_header weakness_asterisk weakness_barchart weakness_label
+
+    pause 0.3
+
+What holds it in place is not philosophical superiority — it is thirty years of accumulated data, trained analysts, and regulatory precedent no alternative has matched.
+    icon persistence_icon #8a5fa8 size 42 x 500 y 555 of layers
+    text persistence_label "regulatory precedent" #8a5fa8 x 500 y 515 font_size 20
+
+    fade arrow_threshold arrow_alternatives to 1 duration 0.6
+
+What you can now see is a tool imperfect in exactly the ways this course has traced, and adopted anyway because the alternative to an imperfect common measure is no common measure at all.
+    mark seal_mark around ledger_box title_qaly kind box
+    text adopted_tag "ADOPTED" #3d3833 x 500 y 320 font_size 18
+
+    highlight ledger_box title_qaly effect glow
+
+## Where next
+end_page: true
+
+    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:4 title "The ethical debate: whose life counts, and how much?" size 320 x 500 y 395
+
+    link end_again href lecture:5 title "Watch again" form text open here x 500 y 160
+    text end_count "5 of 5" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

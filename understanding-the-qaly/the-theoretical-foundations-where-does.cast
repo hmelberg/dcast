@@ -1,950 +1,390 @@
-playlist:
-  title: 'The theoretical foundations: where does the QALY model come from?'
-  prompt: What assumptions from expected utility theory justify treating QALYs as additive? Why does the model assume 'constant proportional trade-off' between quality and quantity? What historical developments led health economists to adopt this framework?
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  next:
-    title: 'The ethical debate: whose life counts, and how much?'
-    href: https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/the-ethical-debate-whose-life-counts-and.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Why Addition Is Allowed
+# The theoretical foundations: where does the QALY model come from?
+prompt: "What assumptions from expected utility theory justify treating QALYs as additive? Why does the model assume 'constant proportional trade-off' between quality and quantity? What historical developments led health economists to adopt this framework?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+next: {"title":"The ethical debate: whose life counts, and how much?","href":"https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/the-ethical-debate-whose-life-counts-and.cast"}
+enroll: https://drawcast.anvil.app
+
+## Why Addition Is Allowed
 level: advanced
 sources:
-  - id: vnm1944
-    title: Theory of Games and Economic Behavior
-    authors: von Neumann and Morgenstern
-    year: 1944
-    finding: Axiomatized expected utility under risk
-elements:
-  - id: formula
-    type: math
-    tex: \text{QALY} = \sum_{t} u_t \times t
-    x: 500
-    'y': 650
-    size: 34
-    details: Summing $u_t \times t$ over a lifetime requires each year's utility contribution to be additively separable from every other year's — the independence axiom of expected utility theory guarantees exactly this.
-  - id: scale_note
-    type: math
-    tex: u_t \in [0,1]:\ 0=\text{dead},\ 1=\text{full health}
-    at:
-      ref: formula
-      side: below
-  - id: patient
-    type: node
-    shape: person
-    x: 330
-    'y': 460
-  - id: label_patient
-    type: label
-    text: 60-year-old patient
-    attach_to: patient
-    side: above
-  - id: optionA_grp
-    type: group
-    members:
-      - optA_line
-    layout: column
-    gap: 8
-  - id: optionB_grp
-    type: group
-    members:
-      - optB_line
-    layout: column
-    gap: 8
-  - id: boxes_row
-    type: group
-    members:
-      - optionA_grp
-      - optionB_grp
-    layout: row
-    gap: 70
-    at:
-      ref: patient
-      side: below
-      gap: 70
-  - id: arrow_a
-    type: arrow
-    from:
-      ref: patient
-      anchor: bottom
-    to:
-      ref: optionA_grp
-      anchor: top
-    style:
-      color: '#2f6b8f'
-  - id: arrow_b
-    type: arrow
-    from:
-      ref: patient
-      anchor: bottom
-    to:
-      ref: optionB_grp
-      anchor: top
-    style:
-      color: '#b5482e'
-  - id: scene_left
-    type: group
-    members:
-      - patient
-      - label_patient
-      - boxes_row
-      - arrow_a
-      - arrow_b
-    fit:
-      x: 10
-      'y': 10
-      w: 680
-      h: 660
-  - id: axioms_title
-    type: text
-    text: vN-M axioms (1944)
-    x: 810
-    'y': 580
-    font_size: 22
-    cites:
-      - vnm1944
-  - id: axiom1
-    type: text
-    text: 1. Completeness
-    x: 810
-    'y': 530
-    font_size: 22
-  - id: axiom2
-    type: text
-    text: 2. Transitivity
-    x: 810
-    'y': 480
-    font_size: 22
-  - id: axiom3
-    type: text
-    text: 3. Continuity
-    x: 810
-    'y': 430
-    font_size: 22
-  - id: axiom4
-    type: text
-    text: 4. Independence
-    x: 810
-    'y': 380
-    details: 'Formally: for lotteries $A,B,C$ and probability $p\in(0,1)$, $A \succ B \iff pA+(1-p)C \succ pB+(1-p)C$ — the ranking of two options is unaffected by mixing both with the same third outcome.'
-    font_size: 22
-  - id: axioms_list
-    type: group
-    members:
-      - axioms_title
-      - axiom1
-      - axiom2
-      - axiom3
-      - axiom4
-    layout: column
-    gap: 14
-    fit:
-      x: 710
-      'y': 280
-      w: 250
-      h: 260
-  - id: circle_independence
-    type: annotation
-    target:
-      - axiom4
-    kind: circle
-  - id: portrait_vn
-    type: portrait
-    of: John von Neumann
-    at:
-      place: top_right
-    width: 140
-    strokes: img1:KM:data:image/jpeg;base64,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
-  - id: arrow_a_label
-    type: label
-    text: 'Option A: Hip replacement'
-    attach_to: optionA_grp
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: arrow_b_label
-    type: label
-    text: 'Option B: Drug'
-    attach_to: optionB_grp
-    side: above
-    style:
-      color: '#b5482e'
-  - id: optA_line
-    type: text
-    text: 10y, u=0.8 → 8 QALYs
-    x: 180
-    'y': 245
-    font_size: 26
-    style:
-      color: '#2f6b8f'
-  - id: optB_line
-    type: text
-    text: 15y, u=0.6 → 9 QALYs
-    x: 480
-    'y': 245
-    font_size: 26
-    style:
-      color: '#b5482e'
-  - id: portrait_caption
-    type: label
-    text: '& Morgenstern'
-    attach_to: portrait_vn
-    side: below
-commands:
-  - card:
-      title: Why Addition Is Allowed
-  - draw:
-      - formula
-      - patient
-      - label_patient
-    speak: 'This lecture asks a different question than the last two: not how a QALY is calculated, but why the arithmetic behind it is allowed at all.'
-  - pause: 1
-  - draw:
-      - arrow_a
-      - arrow_b
-      - arrow_a_label
-      - arrow_b_label
-    speak: Without an answer, comparing a hip replacement against a life-extending drug is just a judgment call — the QALY turns it into a number a regulator can defend, or challenge.
-  - pause: 1
-  - draw:
-      - optionA_grp
-      - scale_note
-    speak: 'Take our patient again: Option A, a hip replacement, gives 10 years lived at a utility of 0.8, moderate pain but functional — that''s 8 QALYs.'
-  - pause: 1
-  - draw:
-      - optionB_grp
-    speak: Option B, the drug, extends life to 15 years but at a utility of 0.6 because of side effects — that's 9 QALYs.
-  - pause: 1
-  - highlight:
-      target:
-        - optA_line
-        - optB_line
-      effect: glow
-    speak: Saying 9 beats 8 assumes you can add years of very different quality as if they were interchangeable units of the same currency.
-  - pause: 1
-  - draw:
-      - portrait_vn
-      - portrait_caption
-    speak: That license comes from expected utility theory, formalized by von Neumann and Morgenstern in 1944 for choices under risk, later borrowed wholesale by health economists.
-  - erase:
-      - portrait_vn
-      - portrait_caption
-  - pause: 0.5
-  - draw:
-      - axioms_title
-      - axiom1
-      - axiom2
-    speak: Completeness and transitivity just require the patient to rank every health state consistently, no contradictions in preference.
-  - pause: 1
-  - draw:
-      - axiom3
-    speak: Continuity is what lets a health state be pinned to a single number between 0 and 1 in the first place — some probability mix makes a sure outcome equally preferable, giving a real-valued scale anchored at dead and full health.
-  - pause: 1
-  - draw:
-      - axiom4
-    speak: 'Independence is the one doing the real work: preferences between two options don''t change when both are mixed with a third outcome in the same way.'
-  - pause: 1
-  - draw:
-      - circle_independence
-    speak: That is exactly what allows a year in a given health state to be treated as substitutable for another year in that state, regardless of what surrounds it — which is what makes summing u_t × t across an entire lifetime meaningful rather than arbitrary.
----
-title: One Exchange Rate for Life
+    - id: vnm1944
+      title: Theory of Games and Economic Behavior
+      authors: von Neumann and Morgenstern
+      year: 1944
+      finding: Axiomatized expected utility under risk
+
+    math formula details "Summing $u_t \\times t$ over a lifetime requires each year's utility contribution to be additively separable from every other year's — the independence axiom of expected utility theory guarantees exactly this." tex "\\text{QALY} = \\sum_{t} u_t \\times t" size 34 x 500 y 650 hidden true
+    math scale_note below formula tex "u_t \\in [0,1]:\\ 0=\\text{dead},\\ 1=\\text{full health}" hidden true
+    person patient x 330 y 460 hidden true
+    label label_patient "60-year-old patient" above attach_to patient hidden true
+    column optionA_grp gap 8 in boxes_row hidden true
+    column optionB_grp gap 8 in boxes_row hidden true
+    row boxes_row at.gap 70 at.ref patient at.side below gap 70 hidden true
+    arrow arrow_a #2f6b8f from.anchor bottom from.ref patient to.anchor top to.ref optionA_grp hidden true
+    arrow arrow_b #b5482e from.anchor bottom from.ref patient to.anchor top to.ref optionB_grp hidden true
+    group scene_left members ["patient","label_patient","boxes_row","arrow_a","arrow_b"] fit.h 660 fit.w 680 fit.x 10 fit.y 10 hidden true
+    text axioms_title "vN-M axioms (1944)" cites ["vnm1944"] x 810 y 580 font_size 22 in axioms_list hidden true
+    text axiom1 "1. Completeness" x 810 y 530 font_size 22 in axioms_list hidden true
+    text axiom2 "2. Transitivity" x 810 y 480 font_size 22 in axioms_list hidden true
+    text axiom3 "3. Continuity" x 810 y 430 font_size 22 in axioms_list hidden true
+    text axiom4 "4. Independence" details "Formally: for lotteries $A,B,C$ and probability $p\\in(0,1)$, $A \\succ B \\iff pA+(1-p)C \\succ pB+(1-p)C$ — the ranking of two options is unaffected by mixing both with the same third outcome." x 810 y 380 font_size 22 in axioms_list hidden true
+    column axioms_list gap 14 fit.h 260 fit.w 250 fit.x 710 fit.y 280 hidden true
+    mark circle_independence around axiom4 kind circle hidden true
+    portrait portrait_vn top-right width 140 of "John von Neumann" strokes img1:KM:data:image/jpeg;base64,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 hidden true
+    label arrow_a_label "Option A: Hip replacement" above #2f6b8f attach_to optionA_grp hidden true
+    label arrow_b_label "Option B: Drug" above #b5482e attach_to optionB_grp hidden true
+    text optA_line "10y, u=0.8 → 8 QALYs" #2f6b8f x 180 y 245 font_size 26 in optionA_grp hidden true
+    text optB_line "15y, u=0.6 → 9 QALYs" #b5482e x 480 y 245 font_size 26 in optionB_grp hidden true
+    label portrait_caption "& Morgenstern" below attach_to portrait_vn hidden true
+
+    card title "Why Addition Is Allowed"
+
+This lecture asks a different question than the last two: not how a QALY is calculated, but why the arithmetic behind it is allowed at all.
+    draw formula patient label_patient
+
+    pause 1
+
+Without an answer, comparing a hip replacement against a life-extending drug is just a judgment call — the QALY turns it into a number a regulator can defend, or challenge.
+    draw arrow_a arrow_b arrow_a_label arrow_b_label
+
+    pause 1
+
+Take our patient again: Option A, a hip replacement, gives 10 years lived at a utility of 0.8, moderate pain but functional — that's 8 QALYs.
+    draw optionA_grp scale_note
+
+    pause 1
+
+Option B, the drug, extends life to 15 years but at a utility of 0.6 because of side effects — that's 9 QALYs.
+    draw optionB_grp
+
+    pause 1
+
+Saying 9 beats 8 assumes you can add years of very different quality as if they were interchangeable units of the same currency.
+    highlight optA_line optB_line effect glow
+
+    pause 1
+
+That license comes from expected utility theory, formalized by von Neumann and Morgenstern in 1944 for choices under risk, later borrowed wholesale by health economists.
+    draw portrait_vn portrait_caption
+
+    erase portrait_vn portrait_caption
+
+    pause 0.5
+
+Completeness and transitivity just require the patient to rank every health state consistently, no contradictions in preference.
+    draw axioms_title axiom1 axiom2
+
+    pause 1
+
+Continuity is what lets a health state be pinned to a single number between 0 and 1 in the first place — some probability mix makes a sure outcome equally preferable, giving a real-valued scale anchored at dead and full health.
+    draw axiom3
+
+    pause 1
+
+Independence is the one doing the real work: preferences between two options don't change when both are mixed with a third outcome in the same way.
+    draw axiom4
+
+    pause 1
+
+That is exactly what allows a year in a given health state to be treated as substitutable for another year in that state, regardless of what surrounds it — which is what makes summing u_t × t across an entire lifetime meaningful rather than arbitrary.
+    draw circle_independence
+
+## One Exchange Rate for Life
 level: advanced
-domain:
-  x: [0, 22]
-  'y': [0, 18]
-elements:
-  - id: axes
-    type: axes
-    x_label: Years remaining
-    y_label: Years traded for full health
-  - id: tto
-    type: scratch
-    work:
-      - 'Time trade-off question:'
-      - 10 years at u = 0.8 = X years in full health
-    at:
-      place: top_left
-    font_size: 20
-  - id: point1
-    type: point
-    at:
-      x: 10
-      'y': 8
-    guides: true
-    style:
-      color: '#2f6b8f'
-  - id: label_point1
-    type: label
-    text: (10, 8)
-    attach_to: point1
-    side: above-right
-  - id: point2
-    type: point
-    at:
-      x: 20
-      'y': 16
-    guides: true
-    style:
-      color: '#2f6b8f'
-  - id: label_point2
-    type: label
-    text: (20, 16)
-    attach_to: point2
-    side: right
-  - id: trade_line
-    type: line
-    through:
-      - x: 0
-        'y': 0
-    slope: 0.8
-    style:
-      color: '#b5482e'
-  - id: label_trade_line
-    type: label
-    text: Constant proportional trade-off, slope = u_t = 0.8
-    attach_to: trade_line
-    side: above-left
-  - id: curve_nonlinear
-    type: curve
-    expr: 1.3*x - 0.04*x*x
-    x_from: 0
-    x_to: 22
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: label_curve_nonlinear
-    type: label
-    text: If trade-off were not constant
-    attach_to: curve_nonlinear
-    side: above
-    gap: 45
-  - id: weinstein
-    type: portrait
-    of: Milton Weinstein
-    cameo: true
-  - id: citation
-    type: label
-    text: Pliskin, Shepard, Weinstein (1980)
-    attach_to: trade_line
-    side: below
-    style:
-      color: '#8a5fa8'
-commands:
-  - card:
-      title: One Exchange Rate for Life
-  - draw:
-      - axes
-    speak: 'Now that we have seen why quality-adjusted years can be summed at all, one more assumption has to hold before the arithmetic works across an entire lifetime: the exchange rate between quality and quantity must never change.'
-  - pause: 1
-  - draw:
-      - tto
-    parallel: true
-    speak: 'The utility weight 0.8 for our patient''s post-surgery state was elicited by a time trade-off question: how many years in full health equal 10 years in that state.'
-  - pause: 1
-  - draw:
-      - point1
-      - label_point1
-    speak: 'Plot that: 10 years remaining at 0.8 gives 8 years of full-health equivalent.'
-  - pause: 1
-  - draw:
-      - point2
-      - label_point2
-    speak: Now ask the same question of someone with 20 years remaining in that state — the model predicts 16 years equivalent, the same ratio.
-  - erase:
-      - tto
-  - pause: 1
-  - draw:
-      - trade_line
-    speak: Both points sit on one straight line through the origin.
-  - pause: 1
-  - draw:
-      - label_trade_line
-    speak: 'The model calls this constant proportional trade-off: the fraction of remaining life someone would give up for better quality stays fixed whether they have 5 years left or 50.'
-  - erase:
-      - label_point1
-      - label_point2
-  - pause: 1
-  - highlight:
-      target:
-        - trade_line
-        - label_trade_line
-      effect: glow
-    speak: Why insist on this? Because it is what lets a single number, u_t, multiply any duration at all, without re-eliciting a new weight for every possible life expectancy a patient might have.
-  - pause: 1
-  - draw:
-      - weinstein
-      - citation
-    speak: Pliskin, Shepard, and Weinstein formalized this in 1980, deriving the exact conditions — including mutual utility independence between quality and quantity — under which time trade-off scores collapse into this simple linear form.
-  - pause: 1
-  - erase:
-      - weinstein
-  - draw:
-      - curve_nonlinear
-      - label_curve_nonlinear
-    speak: If the trade-off weren't constant, the curve would bend, as sketched here — patients near the end of life might value each remaining year of quality differently than someone with decades ahead, and one weight could no longer describe every year in that state.
-  - pause: 1
-  - highlight:
-      target:
-        - trade_line
-        - curve_nonlinear
-      effect: glow
-    speak: The straight line, then, is not a law of nature — it is the empirical bet the QALY makes about preference, the bet that makes summation across a lifetime possible.
----
-title: How the Idea Arrived
+domain: {"x":[0,22],"y":[0,18]}
+
+    axes axes x_label "Years remaining" y_label "Years traded for full health" hidden true
+    scratch tto top-left work ["Time trade-off question:","10 years at u = 0.8 = X years in full health"] font_size 20 hidden true
+    dot point1 #2f6b8f at.x 10 at.y 8 guides true hidden true
+    label label_point1 "(10, 8)" above-right attach_to point1 hidden true
+    dot point2 #2f6b8f at.x 20 at.y 16 guides true hidden true
+    label label_point2 "(20, 16)" right attach_to point2 hidden true
+    line trade_line #b5482e through [{"x":0,"y":0}] slope 0.8 hidden true
+    label label_trade_line "Constant proportional trade-off, slope = u_t = 0.8" above-left attach_to trade_line hidden true
+    curve curve_nonlinear dashed #8f887c expr "1.3*x - 0.04*x*x" x_from 0 x_to 22 hidden true
+    label label_curve_nonlinear "If trade-off were not constant" above attach_to curve_nonlinear gap 45 hidden true
+
+    card title "One Exchange Rate for Life"
+
+Now that we have seen why quality-adjusted years can be summed at all, one more assumption has to hold before the arithmetic works across an entire lifetime: the exchange rate between quality and quantity must never change.
+    draw axes
+
+    pause 1
+
+The utility weight 0.8 for our patient's post-surgery state was elicited by a time trade-off question: how many years in full health equal 10 years in that state.
+    draw tto parallel true
+
+    pause 1
+
+Plot that: 10 years remaining at 0.8 gives 8 years of full-health equivalent.
+    draw point1 label_point1
+
+    pause 1
+
+Now ask the same question of someone with 20 years remaining in that state — the model predicts 16 years equivalent, the same ratio.
+    draw point2 label_point2
+
+    erase tto
+
+    pause 1
+
+Both points sit on one straight line through the origin.
+    draw trade_line
+
+    pause 1
+
+The model calls this constant proportional trade-off: the fraction of remaining life someone would give up for better quality stays fixed whether they have 5 years left or 50.
+    draw label_trade_line
+
+    erase label_point1 label_point2
+
+    pause 1
+
+Why insist on this? Because it is what lets a single number, u_t, multiply any duration at all, without re-eliciting a new weight for every possible life expectancy a patient might have.
+    highlight trade_line label_trade_line effect glow
+
+    pause 1
+
+Pliskin, Shepard, and Weinstein formalized this in 1980, deriving the exact conditions — including mutual utility independence between quality and quantity — under which time trade-off scores collapse into this simple linear form.
+    portrait weinstein of "Milton Weinstein" cameo true
+    label citation "Pliskin, Shepard, Weinstein (1980)" below #8a5fa8 attach_to trade_line
+
+    pause 1
+
+    erase weinstein
+
+If the trade-off weren't constant, the curve would bend, as sketched here — patients near the end of life might value each remaining year of quality differently than someone with decades ahead, and one weight could no longer describe every year in that state.
+    draw curve_nonlinear label_curve_nonlinear
+
+    pause 1
+
+The straight line, then, is not a law of nature — it is the empirical bet the QALY makes about preference, the bet that makes summation across a lifetime possible.
+    highlight trade_line curve_nonlinear effect glow
+
+## How the Idea Arrived
 level: advanced
-template: timeline
-params:
-  start_label: '1968'
-  end_label: Today
-  milestones:
-    - label: Fanshel & Bush
-      sublabel: 1968–1970
-    - label: Torrance
-      sublabel: 1972–1976
-    - label: Zeckhauser & Shepard
-      sublabel: '1976'
-    - label: Weinstein & Stason
-      sublabel: '1977'
-    - label: Pliskin et al.
-      sublabel: '1980'
-    - label: NICE
-      sublabel: 1999–present
-      emphasize: true
-sources:
-  - id: fanshelbush
-    title: A Health-Status Index and Its Application to Health-Services Outcomes
-    authors: Fanshel & Bush
-    year: 1970
-  - id: zeckhausershepard
-    title: Where Now for Saving Lives?
-    authors: Zeckhauser & Shepard
-    year: 1976
-  - id: weinsteinstason
-    title: Foundations of Cost-Effectiveness Analysis for Health and Medical Practices
-    authors: Weinstein & Stason
-    year: 1977
-  - id: pliskin
-    title: Utility Functions for Life Years and Health Status
-    authors: Pliskin, Shepard & Weinstein
-    year: 1980
-  - id: nice_src
-    title: Guide to the Methods of Technology Appraisal
-    authors: National Institute for Health and Care Excellence
-    year: 1999
-elements:
-  - id: nice_threshold
-    type: label
-    text: £20–30k/QALY
-    attach_to: label_5
-    side: below
-    cites:
-      - nice_src
-    gap: 6
-  - id: patient_hip
-    type: text
-    text: 'Hip replacement: 8 QALYs, $12,000 (~$1,500/QALY)'
-    font_size: 30
-    x: 500
-    'y': 400
-    style:
-      color: '#2f6b8f'
-  - id: patient_drug
-    type: text
-    text: 'Drug: 9 QALYs, $36,000 (~$4,000/QALY)'
-    font_size: 30
-    x: 500
-    'y': 350
-    style:
-      color: '#b5482e'
-  - id: axioms_note
-    type: label
-    text: (axioms, Part 2)
-    attach_to: dot_4
-    side: above
-    style:
-      color: '#8f887c'
-  - id: patient_callout
-    type: group
-    members:
-      - patient_hip
-      - patient_drug
-    layout: column
-    gap: 16
-    align: center
-    at:
-      place: top_right
-  - id: patient_box
-    type: annotation
-    target:
-      - patient_callout
-    kind: box
-  - id: conv_point
-    type: point
-    at:
-      x: 820
-      'y': 520
-    radius: 6
-    style:
-      color: '#8a5fa8'
-  - id: conv_arrow_1
-    type: arrow
-    from:
-      ref: dot_0
-    to:
-      ref: conv_point
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: conv_label_1
-    type: label
-    text: Health status indices
-    attach_to: conv_arrow_1
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: conv_arrow_2
-    type: arrow
-    from:
-      ref: dot_1
-    to:
-      ref: conv_point
-    curved: true
-    style:
-      color: '#b5482e'
-  - id: conv_label_2
-    type: label
-    text: Preference elicitation
-    attach_to: conv_arrow_2
-    side: above
-    style:
-      color: '#b5482e'
-  - id: conv_arrow_3
-    type: arrow
-    from:
-      ref: dot_4
-    to:
-      ref: conv_point
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: conv_label_3
-    type: label
-    text: Expected-utility axioms
-    attach_to: conv_arrow_3
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: nice_leader
-    type: arrow
-    from:
-      ref: dot_5
-    to:
-      ref: label_5
-    style:
-      color: '#8f887c'
-      dash: true
-commands:
-  - card:
-      title: How the Idea Arrived
-  - pause: 0.5
-  - draw:
-      - line
-    speak: Now that we have seen the two assumptions the formula rests on, where did health economists actually get the idea to apply expected utility this way to health?
-  - pause: 1
-  - draw:
-      - dot_0
-      - label_0
-    speak: In 1968 to 1970, Fanshel and Bush published a health status index combining function and survival into a single score — the first real attempt to weight life-years by a health state.
-  - pause: 1
-  - draw:
-      - dot_1
-      - label_1
-    speak: Through the 1970s, George Torrance formalized elicitation methods, including the time trade-off used in Part 2, to derive u_t weights directly from patients and the public rather than from theory alone.
-  - pause: 1
-  - draw:
-      - dot_2
-      - label_2
-    speak: In 1976, Zeckhauser and Shepard, writing on the value of life-saving programs, proposed quality-adjusted life years as a single unit for comparing health gains across very different interventions.
-  - pause: 1
-  - draw:
-      - dot_3
-      - label_3
-    speak: 'In 1977, Weinstein and Stason''s paper on cost-effectiveness analysis in medicine turned the QALY into the standard denominator of a cost-effectiveness ratio: cost per QALY gained.'
-  - pause: 1
-  - draw:
-      - dot_4
-      - label_4
-      - axioms_note
-    speak: In 1980, Pliskin, Shepard, and Weinstein supplied the axiomatic backbone from Part 2, showing exactly when the simple summation is theoretically justified rather than merely convenient.
-  - pause: 1
-  - draw:
-      - dot_5
-      - label_5
-      - nice_leader
-      - nice_threshold
-    speak: From 1999 onward, the UK's National Institute for Health and Care Excellence institutionalized the metric, using an approximate threshold of twenty to thirty thousand pounds per QALY to decide whether the health service should fund a treatment.
-  - pause: 1
-  - draw:
-      - patient_callout
-      - patient_box
-    parallel: true
-    speak: 'This is the decision our patient''s clinician actually faces: if the hip replacement costs less per QALY than the drug, it is exactly the axioms we covered that let a single number represent that comparison at all.'
-  - pause: 1
-  - fade:
-      target:
-        - dot_0
-        - dot_1
-        - dot_2
-        - dot_3
-      to: 0.3
-      duration: 1
-  - erase:
-      - label_0
-      - label_1
-      - label_2
-      - label_3
-      - axioms_note
-      - patient_callout
-      - patient_box
-  - pause: 0.5
-  - draw:
-      - conv_arrow_1
-      - conv_label_1
-      - conv_arrow_2
-      - conv_label_2
-      - conv_arrow_3
-      - conv_label_3
-      - conv_point
-    parallel: true
-  - pause: 0.5
-  - highlight:
-      target:
-        - conv_point
-        - conv_label_1
-        - conv_label_2
-        - conv_label_3
-      effect: glow
-    speak: 'The QALY, then, was not a single invention — it is a convergence: health status indices, preference elicitation, and expected utility axioms meeting inside cost-effectiveness analysis over roughly a decade.'
+text: {"font_size":30}
+use: timeline
+with:
+    start_label: '1968'
+    end_label: Today
+    milestones:
+      - {label: Fanshel & Bush, sublabel: 1968–1970}
+      - {label: Torrance, sublabel: 1972–1976}
+      - {label: Zeckhauser & Shepard, sublabel: '1976'}
+      - {label: Weinstein & Stason, sublabel: '1977'}
+      - {label: Pliskin et al., sublabel: '1980'}
+      - {label: NICE, sublabel: 1999–present, emphasize: true}
 adjust:
-  label_0:
-    move: [4, -4]
-    scale: 0.95
-  label_1:
-    move: [0, -4]
-  label_2:
-    move: [0, -14]
-  label_3:
-    move: [0, -10]
-  label_4:
-    move: [0, -6]
-  label_5:
-    move: [8, -20]
-  dot_0:
-    scale: 1.3
-  dot_1:
-    scale: 1.3
-  dot_2:
-    scale: 1.3
-  dot_3:
-    scale: 1.3
-  dot_4:
-    scale: 1.3
-  dot_5:
-    scale: 1.4
-  line:
-    move: [0, 15]
-    scale: 1.15
-text:
-  font_size: 30
----
-title: What Holds the Formula Up
+    label_0:
+      move: [4, -4]
+      scale: 0.95
+    label_1:
+      move: [0, -4]
+    label_2:
+      move: [0, -14]
+    label_3:
+      move: [0, -10]
+    label_4:
+      move: [0, -6]
+    label_5:
+      move: [8, -20]
+    dot_0:
+      scale: 1.3
+    dot_1:
+      scale: 1.3
+    dot_2:
+      scale: 1.3
+    dot_3:
+      scale: 1.3
+    dot_4:
+      scale: 1.3
+    dot_5:
+      scale: 1.4
+    line:
+      move: [0, 15]
+      scale: 1.15
+sources:
+    - id: fanshelbush
+      title: A Health-Status Index and Its Application to Health-Services Outcomes
+      authors: Fanshel & Bush
+      year: 1970
+    - id: zeckhausershepard
+      title: Where Now for Saving Lives?
+      authors: Zeckhauser & Shepard
+      year: 1976
+    - id: weinsteinstason
+      title: Foundations of Cost-Effectiveness Analysis for Health and Medical Practices
+      authors: Weinstein & Stason
+      year: 1977
+    - id: pliskin
+      title: Utility Functions for Life Years and Health Status
+      authors: Pliskin, Shepard & Weinstein
+      year: 1980
+    - id: nice_src
+      title: Guide to the Methods of Technology Appraisal
+      authors: National Institute for Health and Care Excellence
+      year: 1999
+
+    label nice_threshold "£20–30k/QALY" below attach_to label_5 cites ["nice_src"] gap 6 hidden true
+    text patient_hip "Hip replacement: 8 QALYs, $12,000 (~$1,500/QALY)" #2f6b8f x 500 y 400 font_size 30 in patient_callout hidden true
+    text patient_drug "Drug: 9 QALYs, $36,000 (~$4,000/QALY)" #b5482e x 500 y 350 font_size 30 in patient_callout hidden true
+    label axioms_note "(axioms, Part 2)" above #8f887c attach_to dot_4 hidden true
+    column patient_callout at.place top_right gap 16 align center hidden true
+    mark patient_box around patient_callout kind box hidden true
+    dot conv_point #8a5fa8 at.x 820 at.y 520 radius 6 hidden true
+    arrow conv_arrow_1 dot_0 -> conv_point curved #2f6b8f hidden true
+    label conv_label_1 "Health status indices" above #2f6b8f attach_to conv_arrow_1 hidden true
+    arrow conv_arrow_2 dot_1 -> conv_point curved #b5482e hidden true
+    label conv_label_2 "Preference elicitation" above #b5482e attach_to conv_arrow_2 hidden true
+    arrow conv_arrow_3 dot_4 -> conv_point curved #8a5fa8 hidden true
+    label conv_label_3 "Expected-utility axioms" above #8a5fa8 attach_to conv_arrow_3 hidden true
+    arrow nice_leader dot_5 -> label_5 dashed #8f887c hidden true
+
+    card title "How the Idea Arrived"
+
+    pause 0.5
+
+Now that we have seen the two assumptions the formula rests on, where did health economists actually get the idea to apply expected utility this way to health?
+    draw line
+
+    pause 1
+
+In 1968 to 1970, Fanshel and Bush published a health status index combining function and survival into a single score — the first real attempt to weight life-years by a health state.
+    draw dot_0 label_0
+
+    pause 1
+
+Through the 1970s, George Torrance formalized elicitation methods, including the time trade-off used in Part 2, to derive u_t weights directly from patients and the public rather than from theory alone.
+    draw dot_1 label_1
+
+    pause 1
+
+In 1976, Zeckhauser and Shepard, writing on the value of life-saving programs, proposed quality-adjusted life years as a single unit for comparing health gains across very different interventions.
+    draw dot_2 label_2
+
+    pause 1
+
+In 1977, Weinstein and Stason's paper on cost-effectiveness analysis in medicine turned the QALY into the standard denominator of a cost-effectiveness ratio: cost per QALY gained.
+    draw dot_3 label_3
+
+    pause 1
+
+In 1980, Pliskin, Shepard, and Weinstein supplied the axiomatic backbone from Part 2, showing exactly when the simple summation is theoretically justified rather than merely convenient.
+    draw dot_4 label_4 axioms_note
+
+    pause 1
+
+From 1999 onward, the UK's National Institute for Health and Care Excellence institutionalized the metric, using an approximate threshold of twenty to thirty thousand pounds per QALY to decide whether the health service should fund a treatment.
+    draw dot_5 label_5 nice_leader nice_threshold
+
+    pause 1
+
+This is the decision our patient's clinician actually faces: if the hip replacement costs less per QALY than the drug, it is exactly the axioms we covered that let a single number represent that comparison at all.
+    draw patient_callout patient_box parallel true
+
+    pause 1
+
+    fade dot_0 dot_1 dot_2 dot_3 to 0.3 duration 1
+
+    erase label_0 label_1 label_2 label_3 axioms_note patient_callout patient_box
+
+    pause 0.5
+
+    draw conv_arrow_1 conv_label_1 conv_arrow_2 conv_label_2 conv_arrow_3 conv_label_3 conv_point parallel true
+
+    pause 0.5
+
+The QALY, then, was not a single invention — it is a convergence: health status indices, preference elicitation, and expected utility axioms meeting inside cost-effectiveness analysis over roughly a decade.
+    highlight conv_point conv_label_1 conv_label_2 conv_label_3 effect glow
+
+## What Holds the Formula Up
 level: advanced
-elements:
-  - id: ground
-    type: path
-    points:
-      - [150, 140]
-      - [850, 140]
-    style:
-      color: '#3d3833'
-  - id: platform
-    type: shape
-    shape: rect
-    x: 500
-    'y': 492
-    width: 220
-    height: 34
-    style:
-      color: '#3d3833'
-  - id: leg_left
-    type: path
-    points:
-      - [460, 480]
-      - [300, 140]
-    style:
-      color: '#3d3833'
-  - id: leg_right
-    type: path
-    points:
-      - [540, 480]
-      - [700, 140]
-    style:
-      color: '#3d3833'
-  - id: leg_back
-    type: path
-    points:
-      - [500, 480]
-      - [500, 150]
-    style:
-      color: '#8f887c'
-  - id: label_leg_left
-    type: label
-    text: Expected utility axioms
-    attach_to: leg_left
-    side: left
-  - id: label_leg_right
-    type: label
-    text: Constant proportional trade-off
-    attach_to: leg_right
-    side: right
-  - id: label_leg_back
-    type: label
-    text: Historical convergence
-    attach_to: leg_back_anchor
-    side: right
-    gap: 20
-  - id: formula
-    type: math
-    tex: QALY = \sum_t u_t \times t
-    size: 34
-    at:
-      ref: platform
-      side: above
-      gap: 30
-    details: Additive separability of the QALY across time periods requires preferences over health-year lotteries to satisfy completeness, transitivity, continuity and independence — the von Neumann–Morgenstern (1944) axioms of expected utility theory.
-  - id: optionA_label
-    type: label
-    text: 'Option A: 8 QALYs'
-    attach_to: formula
-    side: below-left
-    style:
-      color: '#3d3833'
-    gap: 24
-  - id: optionB_label
-    type: label
-    text: 'Option B: 9 QALYs'
-    attach_to: formula
-    side: below-right
-    style:
-      color: '#3d3833'
-    gap: 24
-  - id: wobble_label
-    type: label
-    text: relax independence or CPTO
-    attach_to: leg_right
-    side: right
-    style:
-      color: '#8f887c'
-  - id: tripod
-    type: group
-    members:
-      - ground
-      - platform
-      - leg_left
-      - leg_right
-      - leg_back
-      - label_leg_left
-      - label_leg_right
-      - label_leg_back
-      - formula
-      - optionA_label
-      - optionB_label
-  - id: leg_back_anchor
-    type: point
-    at:
-      x: 500
-      'y': 320
-    style:
-      opacity: 0
-  - id: check_left
-    type: icon
-    of: check
-    size: 28
-    at:
-      ref: leg_left
-      anchor: mid
-      offset: [-15, 0]
-  - id: check_right
-    type: icon
-    of: check
-    size: 28
-    at:
-      ref: leg_right
-      anchor: mid
-      offset: [15, 0]
-  - id: check_back
-    type: icon
-    of: check
-    size: 28
-    at:
-      ref: leg_back
-      anchor: mid
-      offset: [20, 0]
-  - id: wobble_lines
-    type: path
-    points:
-      - [-30, 8]
-      - [-15, 18]
-      - [0, 6]
-      - [15, 18]
-      - [30, 8]
-    smooth: true
-    at:
-      ref: leg_right
-      anchor: end
-      offset: [35, 15]
-    style:
-      color: '#8a5fa8'
-      stroke_width: 2
-commands:
-  - card:
-      title: What Holds the Formula Up
-  - draw:
-      - ground
-      - platform
-    speak: Now that we have traced both the mathematical license for the QALY and the history that put it into practice, we can look at what is actually holding the formula up.
-  - pause: 1
-  - draw:
-      - leg_left
-      - label_leg_left
-    speak: The first leg is expected utility theory — completeness, transitivity, continuity, and independence — which permits cardinal utility and additive summation across time.
-  - pause: 1
-  - draw:
-      - leg_right
-      - label_leg_right
-    speak: The second leg is constant proportional trade-off, which lets one utility weight per health state multiply any duration, regardless of how many years remain.
-  - pause: 1
-  - draw:
-      - leg_back
-      - label_leg_back
-    speak: The third leg is historical convergence — health status indices, elicitation methods, and cost-effectiveness analysis merging into one operational metric economists and agencies could actually use.
-  - pause: 1
-  - draw:
-      - formula
-      - optionA_label
-      - optionB_label
-    speak: 'On top sits the number that decides the case: 8 QALYs for the hip replacement, 9 for the drug.'
-  - pause: 1
-  - draw:
-      - check_left
-      - check_right
-      - check_back
-    parallel: true
-  - highlight:
-      target:
-        - optionA_label
-        - optionB_label
-      effect: circle
-    speak: Every assumption in this lecture has to hold for that '9 greater than 8' to mean what it seems to mean — a consistent, utility-maximizing preference, comparable across two entirely different treatments.
-  - pause: 1
-  - speak: Relax independence, or let the trade-off shift with age or remaining life expectancy, and the ranking can flip even though the lived years themselves haven't changed — a fragility we will return to when we ask whose life counts and how much.
-    blocking: false
-  - move:
-      target:
-        - leg_right
-      rotate: 18
-      pivot:
-        ref: leg_right
-        anchor: start
-      duration: 0.4
-  - move:
-      target:
-        - leg_right
-      rotate: -6
-      pivot:
-        ref: leg_right
-        anchor: start
-      duration: 0.4
-  - draw:
-      - wobble_label
-      - wobble_lines
-    parallel: true
-  - pause: 1
-  - move:
-      target:
-        - leg_right
-      rotate: -12
-      pivot:
-        ref: leg_right
-        anchor: start
-      duration: 0.5
-  - erase:
-      - wobble_label
-      - wobble_lines
-  - fade:
-      target:
-        - label_leg_left
-        - label_leg_right
-        - label_leg_back
-        - check_left
-        - check_right
-        - check_back
-      to: 0.3
-      duration: 1
-  - highlight:
-      target:
-        - tripod
-      effect: circle
-    speak: What you can now see is that the QALY is not a natural unit like a meter or a gram — it is a modeling choice, built on expected utility axioms, a constant proportional trade-off, and a history of economists needing one number to allocate scarce health care resources.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'The ethical debate: whose life counts, and how much?'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 4 of 5
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: The ethical debate: whose life counts, and how much?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+
+    path ground #3d3833 points [[150,140],[850,140]] hidden true
+    shape platform #3d3833 shape rect x 500 y 492 width 220 height 34 hidden true
+    path leg_left #3d3833 points [[460,480],[300,140]] hidden true
+    path leg_right #3d3833 points [[540,480],[700,140]] hidden true
+    path leg_back #8f887c points [[500,480],[500,150]] hidden true
+    label label_leg_left "Expected utility axioms" left attach_to leg_left hidden true
+    label label_leg_right "Constant proportional trade-off" right attach_to leg_right hidden true
+    label label_leg_back "Historical convergence" right attach_to leg_back_anchor gap 20 hidden true
+    math formula above platform gap 30 details "Additive separability of the QALY across time periods requires preferences over health-year lotteries to satisfy completeness, transitivity, continuity and independence — the von Neumann–Morgenstern (1944) axioms of expected utility theory." tex "QALY = \\sum_t u_t \\times t" size 34 hidden true
+    label optionA_label "Option A: 8 QALYs" below-left #3d3833 attach_to formula gap 24 hidden true
+    label optionB_label "Option B: 9 QALYs" below-right #3d3833 attach_to formula gap 24 hidden true
+    label wobble_label "relax independence or CPTO" right #8f887c attach_to leg_right hidden true
+    group tripod members ["ground","platform","leg_left","leg_right","leg_back","label_leg_left","label_leg_right","label_leg_back","formula","optionA_label","optionB_label"] hidden true
+    dot leg_back_anchor at.x 500 at.y 320 style.opacity 0 hidden true
+    icon check_left at.anchor mid at.offset [-15,0] at.ref leg_left size 28 of check hidden true
+    icon check_right at.anchor mid at.offset [15,0] at.ref leg_right size 28 of check hidden true
+    icon check_back at.anchor mid at.offset [20,0] at.ref leg_back size 28 of check hidden true
+    path wobble_lines smooth #8a5fa8 at.anchor end at.offset [35,15] at.ref leg_right points [[-30,8],[-15,18],[0,6],[15,18],[30,8]] style.stroke_width 2 hidden true
+
+    card title "What Holds the Formula Up"
+
+Now that we have traced both the mathematical license for the QALY and the history that put it into practice, we can look at what is actually holding the formula up.
+    draw ground platform
+
+    pause 1
+
+The first leg is expected utility theory — completeness, transitivity, continuity, and independence — which permits cardinal utility and additive summation across time.
+    draw leg_left label_leg_left
+
+    pause 1
+
+The second leg is constant proportional trade-off, which lets one utility weight per health state multiply any duration, regardless of how many years remain.
+    draw leg_right label_leg_right
+
+    pause 1
+
+The third leg is historical convergence — health status indices, elicitation methods, and cost-effectiveness analysis merging into one operational metric economists and agencies could actually use.
+    draw leg_back label_leg_back
+
+    pause 1
+
+On top sits the number that decides the case: 8 QALYs for the hip replacement, 9 for the drug.
+    draw formula optionA_label optionB_label
+
+    pause 1
+
+    draw check_left check_right check_back parallel true
+
+Every assumption in this lecture has to hold for that '9 greater than 8' to mean what it seems to mean — a consistent, utility-maximizing preference, comparable across two entirely different treatments.
+    highlight optionA_label optionB_label effect circle
+
+    pause 1
+
+Relax independence, or let the trade-off shift with age or remaining life expectancy, and the ranking can flip even though the lived years themselves haven't changed — a fragility we will return to when we ask whose life counts and how much.
+    blocking false
+
+    move leg_right rotate 18 pivot.ref leg_right pivot.anchor start duration 0.4
+
+    move leg_right rotate -6 pivot.ref leg_right pivot.anchor start duration 0.4
+
+    draw wobble_label wobble_lines parallel true
+
+    pause 1
+
+    move leg_right rotate -12 pivot.ref leg_right pivot.anchor start duration 0.5
+
+    erase wobble_label wobble_lines
+
+    fade label_leg_left label_leg_right label_leg_back check_left check_right check_back to 0.3 duration 1
+
+What you can now see is that the QALY is not a natural unit like a meter or a gram — it is a modeling choice, built on expected utility axioms, a constant proportional trade-off, and a history of economists needing one number to allocate scarce health care resources.
+    highlight tripod effect circle
+
+## Where next
+end_page: true
+
+Next: The ethical debate: whose life counts, and how much?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:2 title "How is a QALY actually calculated?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:4 title "The ethical debate: whose life counts, and how much?" size 320 x 735 y 395
+
+    link end_again href lecture:3 title "Watch again" form text open here x 500 y 160
+    text end_count "3 of 5" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

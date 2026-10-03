@@ -113,16 +113,16 @@
       "slug": "understanding-the-qaly",
       "title": "Understanding the QALY: Definition, Calculation, and Debates",
       "files": [
-        "understanding-the-qaly/what-is-a-qaly-and-why-do-we-need-it.yaml",
-        "understanding-the-qaly/how-is-a-qaly-actually-calculated.yaml",
-        "understanding-the-qaly/the-theoretical-foundations-where-does.yaml",
-        "understanding-the-qaly/the-ethical-debate-whose-life-counts-and.yaml",
-        "understanding-the-qaly/does-it-work-in-practice-evidence-limits.yaml",
+        "understanding-the-qaly/what-is-a-qaly-and-why-do-we-need-it.cast",
+        "understanding-the-qaly/how-is-a-qaly-actually-calculated.cast",
+        "understanding-the-qaly/the-theoretical-foundations-where-does.cast",
+        "understanding-the-qaly/the-ethical-debate-whose-life-counts-and.cast",
+        "understanding-the-qaly/does-it-work-in-practice-evidence-limits.cast",
         "understanding-the-qaly/course.md",
         "understanding-the-qaly/index.html",
         "understanding-the-qaly/README.md"
       ],
-      "updated": "2026-09-28"
+      "updated": "2026-10-03"
     }
   ]
 }
