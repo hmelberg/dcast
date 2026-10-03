@@ -1,625 +1,243 @@
-playlist:
-  title: Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn
-  prompt: Hvorfor betyr flere registrerte diagnoser og takster ikke nødvendigvis mer sykdom? Hva er prikking, og hvorfor må celler med få pasienter undertrykkes før du publiserer figuren? Hvem bestemmer hvem som får koble disse registrene — og hva skjedde egentlig med Helseanalyseplattformen? Hvorfor er notebooken din en del av metoden, ikke et vedlegg til den?
-  enroll: https://drawcast.anvil.app
----
-chapter: Hva registrene faktisk måler
----
-title: Kurven som stiger
+# Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn
+prompt: "Hvorfor betyr flere registrerte diagnoser og takster ikke nødvendigvis mer sykdom? Hva er prikking, og hvorfor må celler med få pasienter undertrykkes før du publiserer figuren? Hvem bestemmer hvem som får koble disse registrene — og hva skjedde egentlig med Helseanalyseplattformen? Hvorfor er notebooken din en del av metoden, ikke et vedlegg til den?"
+enroll: https://drawcast.anvil.app
+
+chapter: "Hva registrene faktisk måler"
+
+## Kurven som stiger
 voice: female
-template: line_chart
-params:
-  x:
-    - 2016
-    - 2017
-    - 2018
-    - 2019
-    - 2020
-    - 2021
-    - 2022
-    - 2023
-  series:
-    - name: E11-kontakter (npr)
-      values:
-        - 100
-        - 106
-        - 113
-        - 121
-        - 128
-        - 139
-        - 148
-        - 158
-    - name: Fastlegetakster (kuhr)
-      values:
-        - 100
-        - 105
-        - 111
-        - 118
-        - 124
-        - 133
-        - 141
-        - 149
-    - name: Pasienter med E11-kode
-      values:
-        - 100
-        - 102
-        - 104
-        - 106
-        - 108
-        - 109
-        - 111
-        - 112
-    - name: Nye metforminbrukere (lmr)
-      values:
-        - 100
-        - 101
-        - 99
-        - 102
-        - 100
-        - 103
-        - 101
-        - 102
-  ylim:
-    - 90
-    - 170
-  x_label: År
-  y_label: Indeks (2016 = 100)
-  title: 'Åtte år i kohorten: alt stiger'
-elements:
-  - id: naiv
-    type: text
-    x: 300
-    'y': 610
-    text: «Norge er blitt sykere»
-    style:
-      color: '#b5482e'
-  - id: naiv_strike
-    type: annotation
-    target: naiv
-    kind: strike
-  - id: act3_title
-    type: text
-    x: 500
-    'y': 700
-    text: Hva ligger bak én rad i npr?
-    font_size: 30
-  - id: target
-    type: node
-    shape: rect
-    x: 750
-    'y': 440
-    text: Flere rader i registeret
-  - id: c1
-    type: node
-    shape: rect
-    x: 230
-    'y': 640
-    text: Bedre kodepraksis
-  - id: c2
-    type: node
-    shape: rect
-    x: 230
-    'y': 510
-    text: Penger følger koder
-  - id: c3
-    type: node
-    shape: rect
-    x: 230
-    'y': 380
-    text: Nye rapporteringskrav
-  - id: c4
-    type: node
-    shape: rect
-    x: 230
-    'y': 240
-    text: Mer sykdom?
-    style:
-      color: '#b5482e'
-  - id: a1
-    type: arrow
-    from:
-      ref: c1
-    to:
-      ref: target
-  - id: a2
-    type: arrow
-    from:
-      ref: c2
-    to:
-      ref: target
-  - id: a3
-    type: arrow
-    from:
-      ref: c3
-    to:
-      ref: target
-  - id: a4
-    type: arrow
-    from:
-      ref: c4
-    to:
-      ref: target
-    style:
-      color: '#b5482e'
-commands:
-  - draw:
-      - title
-    speak: 'Denne serien handler om en feil du kan publisere uten å merke det: å lese en registerkurve som om den målte sykdom.'
-  - draw:
-      - axes
-  - draw:
-      - line_1
-    speak: I kohorten vår med voksne type 2-diabetikere stiger antall E11-kontakter i npr fra indeks 100 i 2016 til 158 i 2023.
-  - pause: 0.3
-  - draw:
-      - naiv
-    speak: 58 prosent flere kontakter på åtte år — og setningen skriver nesten seg selv.
-  - draw:
-      - line_2
-    speak: 'kuhr peker samme vei: fastlegetakstene for diabeteskontroll stiger til 149.'
-  - highlight:
-      target:
-        - line_1
-        - line_2
-      effect: glow
-    speak: To registre, samlet inn av helt ulike aktører, med nesten samme stigning — det er nettopp dét som gjør fellen troverdig.
-  - pause: 0.5
-  - draw:
-      - line_3
-    speak: 'Så teller vi pasienter i stedet for kontakter: personer med minst én E11-kode stiger bare til 112.'
-  - draw:
-      - line_4
-    speak: Og nye metforminbrukere i lmr — de uten A10 i washout-vinduet — ligger flatt rundt 100.
-  - focus:
-      target:
-        - line_4
-    speak: Insidensen står stille. Det kommer ikke flere nye diabetikere inn i kohorten.
-  - point:
-      at:
-        ref: line_1
-      gesture: tap
-    speak: 58 prosent flere rader, 12 prosent flere pasienter, null flere nye brukere — de samme menneskene, registrert oftere.
-  - draw:
-      - naiv_strike
-    speak: Kurven som stiger, er en kurve over registreringer.
-    delivery: grave
-  - pause: 0.5
-  - clear: {}
-  - draw:
-      - act3_title
-      - target
-    speak: En rad i npr er ikke en sykdom — den er en registrering, og registreringer har flere fedre.
-  - draw:
-      - c1
-      - a1
-    speak: 'Kodepraksis: legen som før skrev «kontroll», skriver nå E11.9. Samme pasient, ny rad.'
-  - draw:
-      - c2
-      - a2
-    speak: 'Økonomi: innsatsstyrt finansiering, innført i 1997, betaler sykehusene etter registrerte diagnoser og prosedyrer.'
-  - draw:
-      - c3
-      - a3
-    speak: Og rapporteringen endrer seg — nye krav og nye takster gir brudd i tidsserien som ser ut som helseutvikling.
-  - draw:
-      - c4
-      - a4
-    speak: Ekte sykdom kan selvsagt ligge bak også. Men alle fire pilene ender i samme kolonne.
-  - focus:
-      target:
-        - c4
-        - a4
-    speak: Registeret forteller deg ikke hvilken pil som drev tallet opp.
-  - highlight:
-      target:
-        - c2
-      effect: glow
-    speak: 'Her går en reell strid: kritikerne mener innsatsstyrt finansiering gir insentiv til å kode mer og tyngre, forsvarerne at bedre koding bare gjør sykdom som alltid var der, synlig.'
-  - speak: Den kan ikke avgjøres inne i registeret — vi mangler et uavhengig mål på sykdom å holde kodene opp mot.
-  - clear: {}
-  - show:
-      - title
-      - axes
-      - line_1
-      - line_2
-      - line_3
-      - line_4
-    speak: Tilbake til figuren, og til det du faktisk kan skrive under på.
-  - highlight:
-      target:
-        - line_4
-      effect: glow
-    speak: 'Den flate linjen er holdepunktet ditt: ingen økning i nye brukere, mens registreringene vokser med 58 prosent.'
-  - speak: 'De fire neste delene tar konsekvensen: registrering framfor sykdom, prikking av celler med få pasienter, hvem som gir deg nøkkelen til å koble — og hvorfor notebooken er metoden.'
-  - speak: 'Du kan nå se hva kurven faktisk måler: ikke hvor mange som ble syke, men hvor mange ganger noen skrev det ned.'
-    delivery: grave
 level: basic
----
-chapter: Personvern, prikking og reproduserbarhet
----
-title: Hvem gir deg nøkkelen
+use: line_chart
+with:
+    x:
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      - 2020
+      - 2021
+      - 2022
+      - 2023
+    series:
+      - {name: E11-kontakter (npr), values: [100, 106, 113, 121, 128, 139, 148, 158]}
+      - {name: Fastlegetakster (kuhr), values: [100, 105, 111, 118, 124, 133, 141, 149]}
+      - {name: Pasienter med E11-kode, values: [100, 102, 104, 106, 108, 109, 111, 112]}
+      - {name: Nye metforminbrukere (lmr), values: [100, 101, 99, 102, 100, 103, 101, 102]}
+    ylim:
+      - 90
+      - 170
+    x_label: År
+    y_label: Indeks (2016 = 100)
+    title: 'Åtte år i kohorten: alt stiger'
+
+    text naiv "«Norge er blitt sykere»" #b5482e x 300 y 610 hidden true
+    mark naiv_strike target naiv kind strike hidden true
+    text act3_title "Hva ligger bak én rad i npr?" x 500 y 700 font_size 30 hidden true
+    box target "Flere rader i registeret" x 750 y 440 hidden true
+    box c1 "Bedre kodepraksis" x 230 y 640 hidden true
+    box c2 "Penger følger koder" x 230 y 510 hidden true
+    box c3 "Nye rapporteringskrav" x 230 y 380 hidden true
+    box c4 "Mer sykdom?" #b5482e x 230 y 240 hidden true
+    arrow a1 c1 -> target hidden true
+    arrow a2 c2 -> target hidden true
+    arrow a3 c3 -> target hidden true
+    arrow a4 c4 -> target #b5482e hidden true
+
+Denne serien handler om en feil du kan publisere uten å merke det: å lese en registerkurve som om den målte sykdom.
+    draw title
+
+    draw axes
+
+I kohorten vår med voksne type 2-diabetikere stiger antall E11-kontakter i npr fra indeks 100 i 2016 til 158 i 2023.
+    draw line_1
+
+    pause 0.3
+
+58 prosent flere kontakter på åtte år — og setningen skriver nesten seg selv.
+    draw naiv
+
+kuhr peker samme vei: fastlegetakstene for diabeteskontroll stiger til 149.
+    draw line_2
+
+To registre, samlet inn av helt ulike aktører, med nesten samme stigning — det er nettopp dét som gjør fellen troverdig.
+    highlight line_1 line_2 effect glow
+
+    pause 0.5
+
+Så teller vi pasienter i stedet for kontakter: personer med minst én E11-kode stiger bare til 112.
+    draw line_3
+
+Og nye metforminbrukere i lmr — de uten A10 i washout-vinduet — ligger flatt rundt 100.
+    draw line_4
+
+Insidensen står stille. Det kommer ikke flere nye diabetikere inn i kohorten.
+    focus line_4
+
+58 prosent flere rader, 12 prosent flere pasienter, null flere nye brukere — de samme menneskene, registrert oftere.
+    point at.ref line_1 gesture tap
+
+Kurven som stiger, er en kurve over registreringer.
+    draw naiv_strike delivery grave
+
+    pause 0.5
+
+    clear
+
+En rad i npr er ikke en sykdom — den er en registrering, og registreringer har flere fedre.
+    draw act3_title target
+
+Kodepraksis: legen som før skrev «kontroll», skriver nå E11.9. Samme pasient, ny rad.
+    draw c1 a1
+
+Økonomi: innsatsstyrt finansiering, innført i 1997, betaler sykehusene etter registrerte diagnoser og prosedyrer.
+    draw c2 a2
+
+Og rapporteringen endrer seg — nye krav og nye takster gir brudd i tidsserien som ser ut som helseutvikling.
+    draw c3 a3
+
+Ekte sykdom kan selvsagt ligge bak også. Men alle fire pilene ender i samme kolonne.
+    draw c4 a4
+
+Registeret forteller deg ikke hvilken pil som drev tallet opp.
+    focus c4 a4
+
+Her går en reell strid: kritikerne mener innsatsstyrt finansiering gir insentiv til å kode mer og tyngre, forsvarerne at bedre koding bare gjør sykdom som alltid var der, synlig.
+    highlight c2 effect glow
+
+Den kan ikke avgjøres inne i registeret — vi mangler et uavhengig mål på sykdom å holde kodene opp mot.
+
+    clear
+
+Tilbake til figuren, og til det du faktisk kan skrive under på.
+    show title axes line_1 line_2 line_3 line_4
+
+Den flate linjen er holdepunktet ditt: ingen økning i nye brukere, mens registreringene vokser med 58 prosent.
+    highlight line_4 effect glow
+
+De fire neste delene tar konsekvensen: registrering framfor sykdom, prikking av celler med få pasienter, hvem som gir deg nøkkelen til å koble — og hvorfor notebooken er metoden.
+
+Du kan nå se hva kurven faktisk måler: ikke hvor mange som ble syke, men hvor mange ganger noen skrev det ned.
+    delivery grave
+
+chapter: "Personvern, prikking og reproduserbarhet"
+
+## Hvem gir deg nøkkelen
 voice: female
 level: advanced
-elements:
-  - id: title
-    type: text
-    text: Hvem gir deg nøkkelen?
-    x: 500
-    'y': 705
-    font_size: 38
-  - id: n_rek0
-    type: node
-    shape: rect
-    text: REK sa ja
-    x: 240
-    'y': 430
-    style:
-      color: '#8a5fa8'
-  - id: n_file0
-    type: node
-    shape: rect
-    text: Koblet fil på pid
-    x: 740
-    'y': 430
-    style:
-      color: '#2f6b8f'
-  - id: a_naive
-    type: arrow
-    from:
-      ref: n_rek0
-    to:
-      ref: n_file0
-    style:
-      color: '#b5482e'
-  - id: lbl_naive
-    type: label
-    text: «…så er dataene mine»
-    attach_to: a_naive
-    side: above
-    style:
-      color: '#b5482e'
-  - id: ann_strike
-    type: annotation
-    target: a_naive
-    kind: strike
-  - id: n_npr
-    type: node
-    shape: rect
-    text: npr (Helsedir.)
-    x: 195
-    'y': 590
-    style:
-      color: '#2f6b8f'
-  - id: n_lmr
-    type: node
-    shape: rect
-    text: lmr (FHI)
-    x: 195
-    'y': 450
-    style:
-      color: '#2f6b8f'
-  - id: n_kuhr
-    type: node
-    shape: rect
-    text: kuhr (HELFO)
-    x: 195
-    'y': 310
-    style:
-      color: '#2f6b8f'
-  - id: n_hds
-    type: node
-    shape: rect
-    text: Helsedataservice
-    x: 500
-    'y': 450
-    style:
-      color: '#8a5fa8'
-  - id: lbl_hds
-    type: label
-    text: én dør siden 2022
-    attach_to: n_hds
-    side: below
-    style:
-      color: '#8a5fa8'
-  - id: a_npr
-    type: arrow
-    from:
-      ref: n_npr
-    to:
-      ref: n_hds
-  - id: a_lmr
-    type: arrow
-    from:
-      ref: n_lmr
-    to:
-      ref: n_hds
-  - id: a_kuhr
-    type: arrow
-    from:
-      ref: n_kuhr
-    to:
-      ref: n_hds
-  - id: n_rek
-    type: node
-    shape: rect
-    text: 'REK: etikk'
-    x: 500
-    'y': 645
-    style:
-      color: '#8a5fa8'
-  - id: a_rek
-    type: arrow
-    from:
-      ref: n_rek
-    to:
-      ref: n_hds
-  - id: n_disp
-    type: node
-    shape: rect
-    text: Dispensasjon
-    x: 800
-    'y': 600
-    style:
-      color: '#8a5fa8'
-  - id: lbl_disp
-    type: label
-    text: fra taushetsplikten
-    attach_to: n_disp
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: a_hds
-    type: arrow
-    from:
-      ref: n_hds
-    to:
-      ref: n_disp
-  - id: n_pid
-    type: node
-    shape: rect
-    text: pid-fil
-    x: 800
-    'y': 380
-    style:
-      color: '#2f6b8f'
-  - id: lbl_pid
-    type: label
-    text: aldri fødselsnummer
-    attach_to: n_pid
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: a_disp
-    type: arrow
-    from:
-      ref: n_disp
-    to:
-      ref: n_pid
-  - id: n_kode
-    type: node
-    shape: rect
-    text: kohort.py
-    x: 490
-    'y': 190
-  - id: a_pid
-    type: arrow
-    from:
-      ref: n_pid
-    to:
-      ref: n_kode
-  - id: t_line
-    type: arrow
-    from:
-      x: 110
-      'y': 340
-    to:
-      x: 910
-      'y': 340
-    style:
-      color: '#8f887c'
-  - id: m1
-    type: node
-    shape: circle
-    text: '2018'
-    x: 230
-    'y': 340
-    style:
-      color: '#8f887c'
-  - id: l1
-    type: label
-    text: Helseanalyseplattformen planlegges
-    attach_to: m1
-    side: above
-  - id: m2
-    type: node
-    shape: circle
-    text: '2022'
-    x: 520
-    'y': 340
-    style:
-      color: '#8a5fa8'
-  - id: l2
-    type: label
-    text: Helsedataservice åpner
-    attach_to: m2
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: m3
-    type: node
-    shape: circle
-    text: '2023'
-    x: 810
-    'y': 340
-    style:
-      color: '#b5482e'
-  - id: l3
-    type: label
-    text: plattformen nedskaleres
-    attach_to: m3
-    side: above
-    style:
-      color: '#b5482e'
-  - id: d1
-    type: node
-    shape: rect
-    text: «Tilgangen er for treg»
-    x: 270
-    'y': 150
-    style:
-      color: '#2f6b8f'
-  - id: d2
-    type: node
-    shape: rect
-    text: «For mye på ett sted»
-    x: 740
-    'y': 150
-    style:
-      color: '#b5482e'
-  - id: c_kohort
-    type: node
-    shape: rect
-    text: 'kohort: E11 + A10'
-    x: 280
-    'y': 470
-    style:
-      color: '#2f6b8f'
-  - id: c_new
-    type: node
-    shape: rect
-    text: Kreftregisteret
-    x: 740
-    'y': 470
-    style:
-      color: '#8a5fa8'
-  - id: c_arrow
-    type: arrow
-    from:
-      ref: c_kohort
-    to:
-      ref: c_new
-    style:
-      color: '#b5482e'
-  - id: c_cross
-    type: annotation
-    target: c_arrow
-    kind: cross
-  - id: c_lbl
-    type: label
-    text: ny søknad, nytt vedtak
-    attach_to: c_arrow
-    side: below
-    style:
-      color: '#b5482e'
-  - id: c_note
-    type: text
-    text: Variabellisten skrives før søknaden
-    x: 500
-    'y': 250
-    font_size: 26
-commands:
-  - draw:
-      - title
-    speak: Nå som vi har sett hvilke celler du ikke får lov til å vise, blir spørsmålet hvem som i det hele tatt ga deg cellene.
-  - draw:
-      - n_rek0
-      - n_file0
-      - a_naive
-      - lbl_naive
-    speak: 'Forestillingen de fleste har med seg ser slik ut: REK sier ja, og så kommer den koblede filen.'
-  - pause: 0.4
-  - draw:
-      - ann_strike
-    speak: Men REK godkjenner forskningen din, ikke utleveringen av data — ingen av de tre registrene sender en eneste rad fordi en etikkomité sa ja.
-  - clear:
-      keep:
-        - title
-    speak: La oss tegne kjeden som faktisk gjelder.
-  - draw:
-      - n_npr
-      - n_lmr
-      - n_kuhr
-    parallel: true
-    speak: 'De tre radtypene våre eies av tre ulike forvaltninger: npr hos Helsedirektoratet, Legemiddelregisteret hos Folkehelseinstituttet, kuhr hos HELFO.'
-  - draw:
-      - n_hds
-      - a_npr
-      - a_lmr
-      - a_kuhr
-      - lbl_hds
-    speak: Siden 2022 søker du ikke hver av dem hver for seg — Helsedataservice er én dør inn, med myndighet til å fatte vedtak om utlevering.
-  - draw:
-      - n_rek
-      - a_rek
-    speak: 'REK-vedtaket blir et vedlegg til den søknaden: etikken avgjøres først, tilgangen etterpå.'
-  - draw:
-      - n_disp
-      - a_hds
-      - lbl_disp
-    speak: Og det avgjørende ordet er dispensasjon fra taushetsplikten — pasientene i kohorten din har aldri samtykket til å være med i studien.
-  - highlight:
-      target:
-        - n_disp
-      effect: glow
-    speak: Uten den dispensasjonen finnes det ingen lovlig vei fra en journalrad til DataFrame-en din.
-    delivery: grave
-  - draw:
-      - n_pid
-      - a_disp
-      - lbl_pid
-    speak: 'Selve koblingen skjer hos utleverer, ikke hos deg: fødselsnummeret byttes i pid før filen i det hele tatt forlater dem.'
-  - draw:
-      - n_kode
-      - a_pid
-    speak: Derfor er pid stabil inne i prosjektet ditt, og fullstendig meningsløs utenfor det.
-  - pause: 0.5
-  - clear:
-      keep:
-        - title
-    speak: Denne ene døren skulle egentlig bare være forværelset til noe mye større.
-  - draw:
-      - t_line
-      - m1
-      - l1
-    speak: 'Fra slutten av 2010-tallet planla Norge Helseanalyseplattformen: helseregistrene tilgjengelige for analyse på ett sted.'
-  - draw:
-      - m2
-      - l2
-    speak: I 2022 kom den delen som faktisk ble levert — Helsedataservice, søknadsdøren du nettopp så.
-  - draw:
-      - m3
-      - l3
-    speak: I 2023 ble selve plattformen kraftig nedskalert, etter år med utvikling og store bevilgninger.
-  - draw:
-      - d1
-    speak: 'Forskersiden mente at treg og oppstykket tilgang er det egentlige problemet: data som ikke blir brukt, redder ingen pasienter.'
-  - draw:
-      - d2
-    speak: 'Personvernsiden mente det motsatte: å samle hele befolkningens helsedata på ett sted, til bruk uten samtykke, er en risiko i seg selv.'
-  - point:
-      at:
-        ref: m3
-      gesture: circle
-    speak: Striden er ikke avgjort — nedskaleringen var først og fremst en dom over kostnad og kompleksitet, ikke over hvem av dem som hadde rett.
-  - clear:
-      keep:
-        - title
-  - draw:
-      - c_kohort
-    speak: 'Tilbake til kohorten: den er utlevert til ett bestemt formål, E11 fra npr og A10 fra lmr, for å beskrive legemiddelbruk.'
-  - draw:
-      - c_new
-      - c_arrow
-    speak: Så får du en god idé midt i analysen — kreftforekomst blant metforminbrukerne.
-  - draw:
-      - c_cross
-      - c_lbl
-    speak: 'Den koblingen kan du ikke bare gjøre: nye variabler er ny utlevering, altså ny søknad, nytt vedtak og ny dispensasjon.'
-  - draw:
-      - c_note
-    speak: Derfor skrives variabellisten før søknaden, ikke etter at du har sett hva dataene kunne ha svart på.
-  - speak: Nøkkelen til registrene er ikke ett ja, men en kjede — etikk, hjemmel, vedtak, dispensasjon — og en pid som bare betyr noe akkurat her.
-    delivery: grave
+
+    text title "Hvem gir deg nøkkelen?" x 500 y 705 font_size 38 hidden true
+    box n_rek0 "REK sa ja" #8a5fa8 x 240 y 430 hidden true
+    box n_file0 "Koblet fil på pid" #2f6b8f x 740 y 430 hidden true
+    arrow a_naive n_rek0 -> n_file0 #b5482e hidden true
+    label lbl_naive "«…så er dataene mine»" above #b5482e attach_to a_naive hidden true
+    mark ann_strike target a_naive kind strike hidden true
+    box n_npr "npr (Helsedir.)" #2f6b8f x 195 y 590 hidden true
+    box n_lmr "lmr (FHI)" #2f6b8f x 195 y 450 hidden true
+    box n_kuhr "kuhr (HELFO)" #2f6b8f x 195 y 310 hidden true
+    box n_hds "Helsedataservice" #8a5fa8 x 500 y 450 hidden true
+    label lbl_hds "én dør siden 2022" below #8a5fa8 attach_to n_hds hidden true
+    arrow a_npr n_npr -> n_hds hidden true
+    arrow a_lmr n_lmr -> n_hds hidden true
+    arrow a_kuhr n_kuhr -> n_hds hidden true
+    box n_rek "REK: etikk" #8a5fa8 x 500 y 645 hidden true
+    arrow a_rek n_rek -> n_hds hidden true
+    box n_disp "Dispensasjon" #8a5fa8 x 800 y 600 hidden true
+    label lbl_disp "fra taushetsplikten" above #8a5fa8 attach_to n_disp hidden true
+    arrow a_hds n_hds -> n_disp hidden true
+    box n_pid "pid-fil" #2f6b8f x 800 y 380 hidden true
+    label lbl_pid "aldri fødselsnummer" below #2f6b8f attach_to n_pid hidden true
+    arrow a_disp n_disp -> n_pid hidden true
+
+Nå som vi har sett hvilke celler du ikke får lov til å vise, blir spørsmålet hvem som i det hele tatt ga deg cellene.
+    draw title
+
+Forestillingen de fleste har med seg ser slik ut: REK sier ja, og så kommer den koblede filen.
+    draw n_rek0 n_file0 a_naive lbl_naive
+
+    pause 0.4
+
+Men REK godkjenner forskningen din, ikke utleveringen av data — ingen av de tre registrene sender en eneste rad fordi en etikkomité sa ja.
+    draw ann_strike
+
+La oss tegne kjeden som faktisk gjelder.
+    clear keep ["title"]
+
+De tre radtypene våre eies av tre ulike forvaltninger: npr hos Helsedirektoratet, Legemiddelregisteret hos Folkehelseinstituttet, kuhr hos HELFO.
+    draw n_npr n_lmr n_kuhr parallel true
+
+Siden 2022 søker du ikke hver av dem hver for seg — Helsedataservice er én dør inn, med myndighet til å fatte vedtak om utlevering.
+    draw n_hds a_npr a_lmr a_kuhr lbl_hds
+
+REK-vedtaket blir et vedlegg til den søknaden: etikken avgjøres først, tilgangen etterpå.
+    draw n_rek a_rek
+
+Og det avgjørende ordet er dispensasjon fra taushetsplikten — pasientene i kohorten din har aldri samtykket til å være med i studien.
+    draw n_disp a_hds lbl_disp
+
+Uten den dispensasjonen finnes det ingen lovlig vei fra en journalrad til DataFrame-en din.
+    highlight n_disp effect glow delivery grave
+
+Selve koblingen skjer hos utleverer, ikke hos deg: fødselsnummeret byttes i pid før filen i det hele tatt forlater dem.
+    draw n_pid a_disp lbl_pid
+
+Derfor er pid stabil inne i prosjektet ditt, og fullstendig meningsløs utenfor det.
+    box n_kode "kohort.py" x 490 y 190
+    arrow a_pid n_pid -> n_kode
+
+    pause 0.5
+
+Denne ene døren skulle egentlig bare være forværelset til noe mye større.
+    clear keep ["title"]
+
+Fra slutten av 2010-tallet planla Norge Helseanalyseplattformen: helseregistrene tilgjengelige for analyse på ett sted.
+    arrow t_line #8f887c from.x 110 from.y 340 to.x 910 to.y 340
+    circle m1 "2018" #8f887c x 230 y 340
+    label l1 "Helseanalyseplattformen planlegges" above attach_to m1
+
+I 2022 kom den delen som faktisk ble levert — Helsedataservice, søknadsdøren du nettopp så.
+    circle m2 "2022" #8a5fa8 x 520 y 340
+    label l2 "Helsedataservice åpner" above #8a5fa8 attach_to m2
+
+I 2023 ble selve plattformen kraftig nedskalert, etter år med utvikling og store bevilgninger.
+    circle m3 "2023" #b5482e x 810 y 340
+    label l3 "plattformen nedskaleres" above #b5482e attach_to m3
+
+Forskersiden mente at treg og oppstykket tilgang er det egentlige problemet: data som ikke blir brukt, redder ingen pasienter.
+    box d1 "«Tilgangen er for treg»" #2f6b8f x 270 y 150
+
+Personvernsiden mente det motsatte: å samle hele befolkningens helsedata på ett sted, til bruk uten samtykke, er en risiko i seg selv.
+    box d2 "«For mye på ett sted»" #b5482e x 740 y 150
+
+Striden er ikke avgjort — nedskaleringen var først og fremst en dom over kostnad og kompleksitet, ikke over hvem av dem som hadde rett.
+    point at.ref m3 gesture circle
+
+    clear keep ["title"]
+
+Tilbake til kohorten: den er utlevert til ett bestemt formål, E11 fra npr og A10 fra lmr, for å beskrive legemiddelbruk.
+    box c_kohort "kohort: E11 + A10" #2f6b8f x 280 y 470
+
+Så får du en god idé midt i analysen — kreftforekomst blant metforminbrukerne.
+    box c_new "Kreftregisteret" #8a5fa8 x 740 y 470
+    arrow c_arrow c_kohort -> c_new #b5482e
+
+Den koblingen kan du ikke bare gjøre: nye variabler er ny utlevering, altså ny søknad, nytt vedtak og ny dispensasjon.
+    mark c_cross target c_arrow kind cross
+    label c_lbl "ny søknad, nytt vedtak" below #b5482e attach_to c_arrow
+
+Derfor skrives variabellisten før søknaden, ikke etter at du har sett hva dataene kunne ha svart på.
+    text c_note "Variabellisten skrives før søknaden" x 500 y 250 font_size 26
+
+Nøkkelen til registrene er ikke ett ja, men en kjede — etikk, hjemmel, vedtak, dispensasjon — og en pid som bare betyr noe akkurat her.
+    delivery grave
+
+## Where next
+end_page: true
+
+    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:7 title "Tallene selv: bruk av diabeteslegemidler og kontakter i Norge" size 320 x 500 y 395
+
+    link end_again href lecture:8 title "Watch again" form text open here x 500 y 160
+    text end_count "8 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

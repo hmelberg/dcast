@@ -1,178 +1,109 @@
-playlist:
-  title: Hvordan leser du en 12 GB registerfil uten at maskinen dør?
-  prompt: Hvorfor sprenger pd.read_csv minnet, og hva gjør dtype, category og usecols med regnskapet? Når lønner det seg å bytte fra CSV til parquet, og hva koster konverteringen? Hvordan leser du filen i chunks uten å miste pasienter som ligger på tvers av to biter?
-  next:
-    title: Hva er det egentlig som binder en sykehuskontakt til en resept?
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Når npr.csv er 12 GB
-level: advanced
+# Hvordan leser du en 12 GB registerfil uten at maskinen dør?
+prompt: "Hvorfor sprenger pd.read_csv minnet, og hva gjør dtype, category og usecols med regnskapet? Når lønner det seg å bytte fra CSV til parquet, og hva koster konverteringen? Hvordan leser du filen i chunks uten å miste pasienter som ligger på tvers av to biter?"
+next: {"title":"Hva er det egentlig som binder en sykehuskontakt til en resept?","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.cast"}
+enroll: https://drawcast.anvil.app
+
+## Når npr.csv er 12 GB
 voice: female
-template: bar_chart
-params:
-  labels:
-    - Fil på disk
-    - DataFrame i RAM
-    - Topp ved innlesing
-    - Maskinens RAM
-  values: '{regnskap.frames}'
-  stage: 0
-  ylim:
-    - 0
-    - 55
-  value_labels: true
-  y_label: Gigabyte
-  title: 'npr.csv: 12 GB, 90 mill. kontaktrader'
-elements:
-  - id: regnskap
-    type: code
-    language: brython
-    show: code
-    font_size: 15
-    code: |-
-      n = 90000000                 # kontaktrader
-      def gb(b): return round(n * b / 1e9, 1)
-      def obj(t): return gb(8 + 49 + t)   # peker + PyObject
-      tekst = obj(10) + obj(10) + obj(5) + obj(12)
-      tall = gb(8) + gb(9 * 8)     # pid + 9 numeriske
-      ram = round(tekst + tall, 1)
-      topp = round(ram * 1.5, 1)   # parserbuffere
-      frames = [[12, 0, 0, 16], [12, ram, topp, 16]]
-  - id: punkt
-    type: annotation
-    target: bar_3
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: Denne serien handler om å lese en tolv gigabyte stor registerfil på en maskin som ikke har plass til den — og denne første delen fører regnskapet som forklarer hvorfor kohorten din dør i en MemoryError før du har skrevet én linje analyse.
-  - draw:
-      - regnskap
-      - regnskap_line_1
-    parallel: true
-    speak: npr-uttrekket vårt er én fil på tolv gigabyte med nitti millioner kontaktrader, én rad per opphold.
-  - draw:
-      - axes
-      - bar_1
-      - bar_4
-    speak: Tolv gigabyte på disk til venstre, seksten gigabyte RAM i maskinen til høyre. På papiret går det opp — og det er nettopp derfor folk prøver.
-  - pause: 0.4
-  - draw:
-      - regnskap_line_2
-      - regnskap_line_3
-    speak: 'Men regnskapet føres i minnet: en int64 koster åtte byte per rad, mens en streng i object-dtype koster åtte byte peker pluss et helt Python-objekt på rundt førtini byte — før vi har telt et eneste tegn.'
-  - draw:
-      - regnskap_line_4
-    speak: 'dato_inn, dato_ut, icd10 og kontakttype blir object når du ikke sier noe annet: fire tekstkolonner, nesten tjuefire gigabyte.'
-  - draw:
-      - regnskap_line_5
-    speak: pid og de ni numeriske kolonnene tar 7,2 gigabyte til sammen — de er ikke problemet her.
-  - draw:
-      - regnskap_line_6
-      - regnskap_line_7
-    speak: Trettién gigabyte for selve DataFrame-en, og parserens buffere ligger oppå under innlesingen, så toppen er rundt halvannen gang det.
-  - draw:
-      - regnskap_line_8
-      - bar_2
-      - bar_3
-    speak: 'To trinn i regnskapet: før read_csv, og etter.'
-  - animate:
-      stage: 1
-    duration: 3
-    speak: Så snart pd.read_csv får filen, vokser den til trettién gigabyte i minnet, med en topp på førtiseks og en halv.
-    delivery: grave
-  - highlight:
-      target:
-        - bar_4
-      effect: glow
-    speak: Maskinen har seksten. Regnskapet tar ikke hensyn til det.
-  - quiz:
-      intro: En rask kontroll.
-      question: Hvorfor koster icd10-kolonnen 5,6 gigabyte når koden bare er fem tegn?
-      choices:
-        - Fem tegn ganger nitti millioner rader
-        - Hver celle er et eget Python-strengobjekt med rundt 57 byte overhead
-        - pandas leser kolonnen som float64
-      correct: 2
-      right: I object-dtype er hver celle et eget PyObject med peker og overhead — tegnene selv utgjør under ti prosent.
-      wrong: Tegnene er småtteri; det er objektoverheaden per celle som koster.
-  - focus:
-      target:
-        - bar_2
-        - bar_3
-    speak: Og E11-kohorten trenger bare pid, dato_inn og icd10 — tre av tretten kolonner. Ti av dem betaler du full pris for og kaster.
-  - point:
-      at:
-        ref: bar_3
-      gesture: tap
-    speak: Prosessen vokser dessuten i minutter før den treffer taket, så du rekker å hente kaffe og tro at det gikk bra.
-  - highlight:
-      target:
-        - bar_1
-        - bar_3
-      effect: pulse
-    speak: Forholdet her er nesten fire ganger filstørrelsen — tommelfingerregelen om tre til fem holder, og du havner høyt i intervallet jo mer tekst kolonnene inneholder.
-  - quiz:
-      question: Hvor mye RAM bør du planlegge for en 12 GB CSV lest naivt med read_csv?
-      choices:
-        - Omtrent 12 GB
-        - 3–5 ganger filstørrelsen
-        - Halvparten — pandas holder den komprimert
-      correct: 2
-      right: Tre til fem ganger filstørrelsen er regelen, og andelen tekstkolonner avgjør hvor i intervallet du havner.
-      wrong: pandas komprimerer ingenting i minnet — representasjonen blir større enn filen, ikke mindre.
-  - draw:
-      - punkt
-    speak: 'Det er ikke filen som er for stor: det er representasjonen pandas velger når du ikke sier noe — og den kan du overstyre.'
-  - speak: Neste del skjærer regnskapet ned med dtype, category og usecols; så veier vi parquet mot CSV, og til slutt leser vi i chunks uten å miste en eneste pasient.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Hva er det egentlig som binder en sykehuskontakt til en resept?
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 3 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Hva er det egentlig som binder en sykehuskontakt til en resept?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+use: bar_chart
+with:
+    labels:
+      - Fil på disk
+      - DataFrame i RAM
+      - Topp ved innlesing
+      - Maskinens RAM
+    values: '{regnskap.frames}'
+    stage: 0
+    ylim:
+      - 0
+      - 55
+    value_labels: true
+    y_label: Gigabyte
+    title: 'npr.csv: 12 GB, 90 mill. kontaktrader'
+
+    ```brython regnskap font_size 15 show code hidden true
+    n = 90000000                 # kontaktrader
+    def gb(b): return round(n * b / 1e9, 1)
+    def obj(t): return gb(8 + 49 + t)   # peker + PyObject
+    tekst = obj(10) + obj(10) + obj(5) + obj(12)
+    tall = gb(8) + gb(9 * 8)     # pid + 9 numeriske
+    ram = round(tekst + tall, 1)
+    topp = round(ram * 1.5, 1)   # parserbuffere
+    frames = [[12, 0, 0, 16], [12, ram, topp, 16]]
+    ```
+
+Denne serien handler om å lese en tolv gigabyte stor registerfil på en maskin som ikke har plass til den — og denne første delen fører regnskapet som forklarer hvorfor kohorten din dør i en MemoryError før du har skrevet én linje analyse.
+    draw title
+
+npr-uttrekket vårt er én fil på tolv gigabyte med nitti millioner kontaktrader, én rad per opphold.
+    draw regnskap regnskap_line_1 parallel true
+
+Tolv gigabyte på disk til venstre, seksten gigabyte RAM i maskinen til høyre. På papiret går det opp — og det er nettopp derfor folk prøver.
+    draw axes bar_1 bar_4
+
+    pause 0.4
+
+Men regnskapet føres i minnet: en int64 koster åtte byte per rad, mens en streng i object-dtype koster åtte byte peker pluss et helt Python-objekt på rundt førtini byte — før vi har telt et eneste tegn.
+    draw regnskap_line_2 regnskap_line_3
+
+dato_inn, dato_ut, icd10 og kontakttype blir object når du ikke sier noe annet: fire tekstkolonner, nesten tjuefire gigabyte.
+    draw regnskap_line_4
+
+pid og de ni numeriske kolonnene tar 7,2 gigabyte til sammen — de er ikke problemet her.
+    draw regnskap_line_5
+
+Trettién gigabyte for selve DataFrame-en, og parserens buffere ligger oppå under innlesingen, så toppen er rundt halvannen gang det.
+    draw regnskap_line_6 regnskap_line_7
+
+To trinn i regnskapet: før read_csv, og etter.
+    draw regnskap_line_8 bar_2 bar_3
+
+Så snart pd.read_csv får filen, vokser den til trettién gigabyte i minnet, med en topp på førtiseks og en halv.
+    animate stage 1 delivery grave duration 3
+
+Maskinen har seksten. Regnskapet tar ikke hensyn til det.
+    highlight bar_4 effect glow
+
+    quiz "Hvorfor koster icd10-kolonnen 5,6 gigabyte når koden bare er fem tegn?" intro "En rask kontroll."
+        right: I object-dtype er hver celle et eget PyObject med peker og overhead — tegnene selv utgjør under ti prosent.
+        wrong: Tegnene er småtteri; det er objektoverheaden per celle som koster.
+        * Fem tegn ganger nitti millioner rader
+        + Hver celle er et eget Python-strengobjekt med rundt 57 byte overhead
+        * pandas leser kolonnen som float64
+
+Og E11-kohorten trenger bare pid, dato_inn og icd10 — tre av tretten kolonner. Ti av dem betaler du full pris for og kaster.
+    focus bar_2 bar_3
+
+Prosessen vokser dessuten i minutter før den treffer taket, så du rekker å hente kaffe og tro at det gikk bra.
+    point at.ref bar_3 gesture tap
+
+Forholdet her er nesten fire ganger filstørrelsen — tommelfingerregelen om tre til fem holder, og du havner høyt i intervallet jo mer tekst kolonnene inneholder.
+    highlight bar_1 bar_3 effect pulse
+
+    quiz "Hvor mye RAM bør du planlegge for en 12 GB CSV lest naivt med read_csv?"
+        right: Tre til fem ganger filstørrelsen er regelen, og andelen tekstkolonner avgjør hvor i intervallet du havner.
+        wrong: pandas komprimerer ingenting i minnet — representasjonen blir større enn filen, ikke mindre.
+        * Omtrent 12 GB
+        + 3–5 ganger filstørrelsen
+        * Halvparten — pandas holder den komprimert
+
+Det er ikke filen som er for stor: det er representasjonen pandas velger når du ikke sier noe — og den kan du overstyre.
+    mark punkt target bar_3 kind box
+
+Neste del skjærer regnskapet ned med dtype, category og usecols; så veier vi parquet mot CSV, og til slutt leser vi i chunks uten å miste en eneste pasient.
+
+## Where next
+end_page: true
+
+Next: Hva er det egentlig som binder en sykehuskontakt til en resept?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:1 title "Tre registre, tre helt ulike rader — hvor kommer dataene fra?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:3 title "Hva er det egentlig som binder en sykehuskontakt til en resept?" size 320 x 735 y 395
+
+    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
+    text end_count "2 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
