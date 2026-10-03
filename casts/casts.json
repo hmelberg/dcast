@@ -1,12 +1,6 @@
 {
   "casts": [
     {
-      "slug": "twenty-players-eight-places",
-      "title": "Twenty players. Eight places.",
-      "file": "twenty-players-eight-places.yaml",
-      "updated": "2026-09-03"
-    },
-    {
       "slug": "drawcastdemo",
       "title": "A drawcast, drawing itself",
       "file": "drawcastdemo.yaml",
@@ -22,6 +16,12 @@
       "slug": "stress-testing-a-discontinuity",
       "title": "Stress-testing a discontinuity",
       "file": "stress-testing-a-discontinuity.cast",
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "twenty-players-eight-places",
+      "title": "Twenty players. Eight places.",
+      "file": "twenty-players-eight-places.cast",
       "updated": "2026-10-03"
     }
   ]
