@@ -1,12 +1,6 @@
 {
   "casts": [
     {
-      "slug": "stress-testing-a-discontinuity",
-      "title": "Stress-testing a discontinuity",
-      "file": "stress-testing-a-discontinuity.yaml",
-      "updated": "2026-09-02"
-    },
-    {
       "slug": "twenty-players-eight-places",
       "title": "Twenty players. Eight places.",
       "file": "twenty-players-eight-places.yaml",
@@ -23,6 +17,12 @@
       "title": "Does it work in practice? Evidence, limits, and alternatives",
       "file": "does-it-work-in-practice-evidence-limits.yaml",
       "updated": "2026-09-28"
+    },
+    {
+      "slug": "stress-testing-a-discontinuity",
+      "title": "Stress-testing a discontinuity",
+      "file": "stress-testing-a-discontinuity.cast",
+      "updated": "2026-10-03"
     }
   ]
 }
