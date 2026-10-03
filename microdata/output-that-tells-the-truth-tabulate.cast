@@ -1,1070 +1,431 @@
-playlist:
-  title: 'Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter'
-  prompt: 'Which command answers which question — when is `tabulate` enough and when do you need `summarize` or a histogram? What does a boxplot of wage income by sex show that a mean difference hides? Strengths and weaknesses: what can microdata''s plotting commands do, and where do you have to export aggregates and plot elsewhere?'
-  next:
-    title: Why your output came back censored
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/why-your-output-came-back-censored.yaml
----
-title: Question First, Command Second
+# Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter
+prompt: "Which command answers which question — when is `tabulate` enough and when do you need `summarize` or a histogram? What does a boxplot of wage income by sex show that a mean difference hides? Strengths and weaknesses: what can microdata's plotting commands do, and where do you have to export aggregates and plot elsewhere?"
+next: {"title":"Why your output came back censored","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/why-your-output-came-back-censored.cast"}
+
+## Question First, Command Second
 voice: female
 level: advanced
-elements:
-  - id: heading
-    type: text
-    text: Question first, command second
-    x: 500
-    'y': 700
-    font_size: 30
-  - id: root
-    type: node
-    shape: rect
-    text: '1985 cohort: sex, wage'
-    x: 170
-    'y': 400
-    width: 250
-    height: 74
-  - id: q1
-    type: node
-    shape: rect
-    text: How many in each group?
-    at:
-      ref: root
-      side: right
-      gap: 110
-      offset: [0, 150]
-    width: 280
-    height: 70
-  - id: q2
-    type: node
-    shape: rect
-    text: How large, on average?
-    at:
-      ref: q1
-      side: below
-      gap: 28
-    width: 280
-    height: 70
-  - id: q3
-    type: node
-    shape: rect
-    text: What shape? Who is at the edges?
-    at:
-      ref: q2
-      side: below
-      gap: 28
-    width: 280
-    height: 70
-  - id: q4
-    type: node
-    shape: rect
-    text: Do two variables move together?
-    at:
-      ref: q3
-      side: below
-      gap: 28
-    width: 280
-    height: 70
-  - id: cmd1
-    type: node
-    shape: rect
-    text: tabulate
-    at:
-      ref: q1
-      side: right
-      gap: 90
-    width: 200
-    height: 62
-    style:
-      color: '#2f6b8f'
-  - id: cmd2
-    type: node
-    shape: rect
-    text: summarize
-    at:
-      ref: q2
-      side: right
-      gap: 90
-    width: 200
-    height: 62
-    style:
-      color: '#2f6b8f'
-  - id: cmd3
-    type: node
-    shape: rect
-    text: histogram / boxplot
-    at:
-      ref: q3
-      side: right
-      gap: 90
-    width: 200
-    height: 62
-    style:
-      color: '#b5482e'
-  - id: cmd4
-    type: node
-    shape: rect
-    text: scatter
-    at:
-      ref: q4
-      side: right
-      gap: 90
-    width: 200
-    height: 62
-    style:
-      color: '#b5482e'
-  - id: e1
-    type: edge
-    from:
-      ref: root
-    to:
-      ref: q1
-    curved: true
-  - id: e2
-    type: edge
-    from:
-      ref: root
-    to:
-      ref: q2
-    curved: true
-  - id: e3
-    type: edge
-    from:
-      ref: root
-    to:
-      ref: q3
-    curved: true
-  - id: e4
-    type: edge
-    from:
-      ref: root
-    to:
-      ref: q4
-    curved: true
-  - id: a1
-    type: arrow
-    from:
-      ref: q1
-    to:
-      ref: cmd1
-  - id: a2
-    type: arrow
-    from:
-      ref: q2
-    to:
-      ref: cmd2
-  - id: a3
-    type: arrow
-    from:
-      ref: q3
-    to:
-      ref: cmd3
-  - id: a4
-    type: arrow
-    from:
-      ref: q4
-    to:
-      ref: cmd4
-  - id: map
-    type: group
-    members:
-      - root
-      - e1
-      - e2
-      - e3
-      - e4
-      - q1
-      - q2
-      - q3
-      - q4
-      - a1
-      - a2
-      - a3
-      - a4
-      - cmd1
-      - cmd2
-      - cmd3
-      - cmd4
+
+    text heading "Question first, command second" x 500 y 700 font_size 30 hidden true
+    box root "1985 cohort: sex, wage" x 170 y 400 width 250 height 74 hidden true
+    box q1 "How many in each group?" at.gap 110 at.offset [0,150] at.ref root at.side right width 280 height 70 hidden true
+    box q2 "How large, on average?" below q1 gap 28 width 280 height 70 hidden true
+    box q3 "What shape? Who is at the edges?" below q2 gap 28 width 280 height 70 hidden true
+    box q4 "Do two variables move together?" below q3 gap 28 width 280 height 70 hidden true
+    box cmd1 "tabulate" right q1 gap 90 #2f6b8f width 200 height 62 hidden true
+    box cmd2 "summarize" right q2 gap 90 #2f6b8f width 200 height 62 hidden true
+    box cmd3 "histogram / boxplot" right q3 gap 90 #b5482e width 200 height 62 hidden true
+    box cmd4 "scatter" right q4 gap 90 #b5482e width 200 height 62 hidden true
+    edge e1 root -> q1 curved hidden true
+    edge e2 root -> q2 curved hidden true
+    edge e3 root -> q3 curved hidden true
+    edge e4 root -> q4 curved hidden true
+    arrow a1 q1 -> cmd1 hidden true
+    arrow a2 q2 -> cmd2 hidden true
+    arrow a3 q3 -> cmd3 hidden true
+    arrow a4 q4 -> cmd4 hidden true
+    group map members ["root","e1","e2","e3","e4","q1","q2","q3","q4","a1","a2","a3","a4","cmd1","cmd2","cmd3","cmd4"] fit.h 560 fit.w 920 fit.x 40 fit.y 80 hidden true
+    mark mark_shape target cmd3 kind box hidden true
+    ```microdata md width 900 font_size 17 show above frame screen hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    generate byear = substr(born, 1, 4)
+    destring byear
+    keep if byear == 1985
+    tabulate sex
+    ```
+
+Four short parts on making microdata's output tell the truth — and it starts by letting the question pick the command, never the other way round.
+    draw heading
+
+Everything hangs on the script we have built over six lectures: one birth cohort, everyone born in 1985, with their sex and their wage income.
+    draw root
+
+First question: how many people are in each group? That is counting, and counting is tabulate's entire job.
+    draw e1 q1 a1 cmd1
+
+Second: how large is the wage? One number per group — mean, median, quartiles — and that is summarize.
+    draw e2 q2 a2 cmd2
+
+Third: what shape is the income distribution, and who sits out at the edges? No single number answers that; you need a picture — a histogram or a boxplot.
+    draw e3 q3 a3 cmd3
+
+And fourth: do two variables move together, wage against education say? That is a scatter — blue answers in numbers, red answers in shapes.
+    draw e4 q4 a4 cmd4
+
+    pause 0.4
+
+    clear
+
+Take the first question to the machine: the datastore as db, an empty dataset called persons, then sex, birth year-month, and wage income as it stood on the first of January 2022.
+    draw md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 parallel true
+
+Then the population step from lecture six — year out of the birth string, make it a number, keep 1985 — and the question of the hour in one word: tabulate sex.
+    draw md_line_6 md_line_7 md_line_8 md_line_9
+
+Two rows, two counts. The figures here come from synthetic data, but the shape of the answer is the real thing: tabulate tells you who is in the room.
+    draw md_out
+
+    pause 0.4
+
+    clear
+
+Back to the map, and to the question everyone asks first: how big is the gap?
+    show heading root e1 q1 a1 cmd1 e2 q2 a2 cmd2 e3 q3 a3 cmd3 e4 q4 a4 cmd4
+
+Summarize answers it — one mean for men, one for women, and a difference you can put in a headline.
+    highlight cmd2 effect glow
+
+But two groups can share a mean and share nothing else, which makes the mean, all on its own, a rather mean summary.
+    draw mark_shape
+
+A boxplot splits each group into quarters, so the median, the middle half, and the high earners out in the tail all show up separately.
+    point at.ref cmd3 gesture tap
+
+These plotting commands are quick and they are safe — the server draws them and no individual ever crosses the wall — but they will not style: no panels side by side, no two series on one axis, no choice of colours.
+    focus cmd3 cmd4
+
+For anything fancier you collapse to a small table of aggregates, export that, and draw it in R or Python — which is where part four ends up.
+    point at.ref cmd4 gesture circle
+
+    quiz "You suspect a handful of very high earners is pulling the men's average up. Which output shows that?"
+        intro: A quick check before we go.
+        right: The boxplot — it shows the median, the quartiles and the outliers that a mean quietly absorbs.
+        wrong: Both of those hand you numbers, and a number cannot show you a tail.
+        * tabulate sex
+        * summarize wage by sex
+        + a boxplot of wage by sex
+
+Ask the question out loud first, and the command picks itself: counts go to tabulate, one number per group to summarize, and anything about shape to a picture.
+
+## Counting Heads, Measuring Tails
+voice: female
+domain: {"x":[0,1200],"y":[0,100]}
+
+    ```microdata tab width 940 font_size 16 show above lines 8 frame screen hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    generate byear = int(born/100)
+    keep if byear == 1985
+    tabulate sex educ
+    ```
+    ```microdata sum width 940 font_size 16 show above lines 8 frame screen hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset income
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    generate byear = int(born/100)
+    keep if byear == 1985
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    summarize wage
+    ```
+    text cmd "histogram wage" x 500 y 715 font_size 28 hidden true
+    axes ax3 x_label "Wage income (1000 kr)" y_label People hidden true
+    curve zero #8f887c expr "0" style.opacity 0.4 hidden true
+    curve dist #2f6b8f expr 0.874*x*exp(-x/280) hidden true
+    region tail x_from 900 x_to 1200 between ["dist","zero"] style.fill #f2c14e hidden true
+
+Now that we have matched each question to its command, let's run them on the 1985 cohort — and see how one wrong choice of command puts a number in your abstract that describes nobody.
+    draw tab tab_line_1 tab_line_2 tab_line_3 tab_line_4 tab_line_5 tab_line_6 tab_line_7
+
+One new line at the bottom: tabulate takes categorical variables and does the only honest thing a category allows — it counts heads.
+    draw tab_line_8
+
+Every cell is a number of people, women and men split by education level, with no model and no average anywhere in between.
+    draw tab_out
+
+    pause 0.5
+
+    clear
+
+Now change the question from how many to how much, and the same skeleton carries a different payload.
+    draw sum sum_line_1 sum_line_2 sum_line_3 sum_line_4 sum_line_5 sum_line_6
+
+Wage income — INNTEKT_WLONN — as it stood on the first of January twenty twenty-two, because a wage figure belongs to a year, not to a person forever.
+    draw sum_line_7
+
+Point tabulate at this and you ask for one row per distinct kroner amount: tens of thousands of rows, no insight. A continuous variable needs summarize.
+    draw sum_line_8
+
+And back comes the whole variable on one line — how many people, what they earn on average, how far the extremes reach.
+    draw sum_out
+
+That mean is the number that travels. And wage income is precisely the variable that makes it misleading.
+    highlight sum_out effect glow
+
+    pause 0.5
+
+    clear
+
+So ask for the shape as well — one more line, histogram wage.
+    draw cmd ax3 zero
+
+Here is what a cohort's wage income really looks like: a crowd bunched up on the left, and a long thin arm reaching right.
+    draw dist
+
+The median stands where the cohort splits in two, around four hundred and seventy thousand kroner.
+    line med dashed #8a5fa8 through [[470,0]] angle 90
+    label l_med "Median ≈ 470" above-left #8a5fa8 attach_to med
+
+The mean stands almost a hundred thousand further right, near five hundred and sixty — and nobody in particular is standing there.
+    line mean_line dashed #b5482e through [[560,0]] angle 90
+    label l_mean "Mean ≈ 560" above-right #b5482e attach_to mean_line
+
+Everything between the two is made of this handful. In a wage distribution, the tail really does wag the mean.
+    draw tail
+
+One person on ten million kroner lifts the mean of a thousand people by ten thousand — and moves the median not at all.
+    point at.ref tail gesture circle
+
+That is the bargain: tabulate and summarize hand you exact numbers you can quote, while the histogram hands you no number at all — only the shape that says whether the mean deserves quoting.
+    focus dist tail med mean_line
+
+    quiz "A histogram of wage income leans left with a long upper tail. Where does the median sit?"
+        right: Below the mean — the long right tail drags the average up past the middle person.
+        wrong: The tail holds only high earners, so think about which of the two numbers it can pull.
+        * Above the mean
+        + Below the mean
+        * Exactly at the mean
+
+Counting heads takes tabulate and measuring takes summarize — but only the shape tells you whether one number is allowed to speak for everyone.
+    mark mark_mean target l_mean kind box
+
+## Nothing But the Mean
+voice: female
+
+    ```microdata md width 900 font_size 16 show code lines 7 frame screen draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    keep if birth >= '198501' & birth <= '198512'
+    boxplot wage by sex
+    ```
+
+Now that we have counted heads with tabulate and measured the tail with summarize, one question remains: the number you report as the gender wage gap depends on which command you ran.
+    draw md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 md_line_6
+
+Tonight's new line is just this — boxplot, the variable we measure, and the variable we split it by.
+    draw md_line_7
+
+Set the script aside; the whole lesson is in what it draws.
+    clear
+
+    path axis #8f887c points [[170,170],[870,170]]
+    text t0 "0" #8f887c x 170 y 140 font_size 20
+    text t400 "400" #8f887c x 403 y 140 font_size 20
+    text t800 "800" #8f887c x 636 y 140 font_size 20
+    text t1200 "1200" #8f887c x 850 y 140 font_size 20
+    text xlab "Wage income 2022 (1000 NOK)" x 520 y 105 font_size 22
+    text row_m "Men" #2f6b8f x 95 y 480 font_size 24
+    text row_w "Women" #b5482e x 85 y 280 font_size 24
+    parallel true
+
+In our 1985 cohort, men's wage income averaged 690 thousand kroner, women's 515.
+    dot mean_m #8a5fa8 at.x 572 at.y 480
+    dot mean_w #8a5fa8 at.x 470 at.y 280
+    parallel true
+
+A gap of 175 thousand — 75 kroner per hundred. Two dots and the distance between them is everything a difference in means can say.
+    path g_w dashed #8f887c points [[470,280],[470,380]]
+    path g_m dashed #8f887c points [[572,480],[572,380]]
+    arrow gap_arrow #8a5fa8 from.x 470 from.y 380 to.x 572 to.y 380
+    label gap_label "mean gap 175" above #8a5fa8 attach_to gap_arrow
+
+    pause 0.4
+
+The boxplot gives five numbers instead of one. This box holds the middle half of the men: a quarter below 470 thousand, a quarter above 800.
+    shape box_m #2f6b8f shape rect x 540 y 480 width 192 height 96
+
+The line inside is the median — 605 thousand — the man standing exactly in the middle of the queue.
+    path med_m #2f6b8f points [[523,432],[523,528]] style.stroke_width 4
+
+The whiskers cover the rest of the bulk, from about 180 thousand up to 1.1 million.
+    path wl_m #2f6b8f points [[275,480],[444,480]]
+    path cl_m #2f6b8f points [[275,456],[275,504]]
+    path wr_m #2f6b8f points [[636,480],[790,480]]
+    path cr_m #2f6b8f points [[790,456],[790,504]]
+    parallel true
+
+And out here, drawn one dot per person, the handful of very high earners — which is where the tail wags the mean.
+    dot out_m1 #2f6b8f at.x 840 at.y 480
+    dot out_m2 #2f6b8f at.x 865 at.y 480
+    label tail_label "very high earners" above #2f6b8f attach_to out_m1
+
+The mean has to balance every krone these men earn, so it sits well to the right of the median; the median cannot feel them at all, because it only counts heads.
+    camera center.x 700 center.y 470 zoom 1.7
+
+    camera reset true
+
+The women: median 500 thousand, and a box only two-thirds as wide, from 350 to 630.
+    shape box_w #b5482e shape rect x 455 y 280 width 163 height 96
+    path med_w #b5482e points [[461,232],[461,328]] style.stroke_width 4
+
+Their lower whisker, though, runs almost to zero — a part-time year and a year of parental leave land in the very same variable as a full salary.
+    path wl_w #b5482e points [[220,280],[374,280]]
+    path cl_w #b5482e points [[220,256],[220,304]]
+    path wr_w #b5482e points [[537,280],[660,280]]
+    path cr_w #b5482e points [[660,256],[660,304]]
+    parallel true
+
+    erase gap_arrow gap_label g_w g_m
+
+Measure median to median and the gap is 105 thousand: 83 kroner per hundred, not 75 — the same data, seventy thousand kroner apart.
+    arrow med_arrow from.x 461 from.y 380 to.x 523 to.y 380
+    label med_label "median gap 105" below attach_to med_arrow
+    mark mark target med_label kind box
+
+That is the strength of a box: five order statistics per group, no assumption about shape, and nobody's pay slip on screen.
+    highlight box_m box_w effect glow
+
+Its weakness is that a box cannot show how many people stand behind it, nor whether that bulk is one hump or two — a split distribution draws the identical rectangle.
+    focus box_w
+
+So: the mean, the whole mean, and nothing but the mean tells you the level of the gap; the box tells you its shape, and the shape is what tells you where the gap comes from.
+    delivery grave
+
+    quiz "The mean gap is 175 thousand, the median gap only 105. Why?"
+        intro: One check before we move on.
+        right: The mean must balance a few very large incomes among the men; the median just counts heads, so it barely moves.
+        wrong: Look again at the two dots out past 1.1 million.
+        * The women's box is narrower
+        + A long right tail among the men pulls their mean up
+        * The two groups have different sample sizes
+
+## Plot Twist: Scatter and Export
+voice: female
+level: advanced
+use: scatter_plot
+with:
+    x:
+      - 812
+      - 758
+      - 690
+      - 655
+      - 641
+      - 652
+      - 640
+      - 596
+    'y':
+      - 596
+      - 540
+      - 520
+      - 515
+      - 528
+      - 478
+      - 492
+      - 478
+    labels:
+      - Oslo
+      - Stavanger
+      - Bergen
+      - Trondheim
+      - Tromsø
+      - Ålesund
+      - Drammen
+      - Lillehammer
     fit:
-      x: 40
-      'y': 80
-      w: 920
-      h: 560
-  - id: mark_shape
-    type: annotation
-    target: cmd3
-    kind: box
-  - id: md
-    type: code
-    language: microdata
-    show: above
-    width: 900
-    font_size: 17
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      generate byear = substr(born, 1, 4)
-      destring byear
-      keep if byear == 1985
-      tabulate sex
-commands:
-  - draw:
-      - heading
-    speak: Four short parts on making microdata's output tell the truth — and it starts by letting the question pick the command, never the other way round.
-  - draw:
-      - root
-    speak: 'Everything hangs on the script we have built over six lectures: one birth cohort, everyone born in 1985, with their sex and their wage income.'
-  - draw:
-      - e1
-      - q1
-      - a1
-      - cmd1
-    speak: 'First question: how many people are in each group? That is counting, and counting is tabulate''s entire job.'
-  - draw:
-      - e2
-      - q2
-      - a2
-      - cmd2
-    speak: 'Second: how large is the wage? One number per group — mean, median, quartiles — and that is summarize.'
-  - draw:
-      - e3
-      - q3
-      - a3
-      - cmd3
-    speak: 'Third: what shape is the income distribution, and who sits out at the edges? No single number answers that; you need a picture — a histogram or a boxplot.'
-  - draw:
-      - e4
-      - q4
-      - a4
-      - cmd4
-    speak: 'And fourth: do two variables move together, wage against education say? That is a scatter — blue answers in numbers, red answers in shapes.'
-  - pause: 0.4
-  - clear: {}
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    parallel: true
-    speak: 'Take the first question to the machine: the datastore as db, an empty dataset called persons, then sex, birth year-month, and wage income as it stood on the first of January 2022.'
-  - draw:
-      - md_line_6
-      - md_line_7
-      - md_line_8
-      - md_line_9
-    speak: 'Then the population step from lecture six — year out of the birth string, make it a number, keep 1985 — and the question of the hour in one word: tabulate sex.'
-  - draw:
-      - md_out
-    speak: 'Two rows, two counts. The figures here come from synthetic data, but the shape of the answer is the real thing: tabulate tells you who is in the room.'
-  - pause: 0.4
-  - clear: {}
-  - show:
-      - heading
-      - root
-      - e1
-      - q1
-      - a1
-      - cmd1
-      - e2
-      - q2
-      - a2
-      - cmd2
-      - e3
-      - q3
-      - a3
-      - cmd3
-      - e4
-      - q4
-      - a4
-      - cmd4
-    speak: 'Back to the map, and to the question everyone asks first: how big is the gap?'
-  - highlight:
-      target:
-        - cmd2
-      effect: glow
-    speak: Summarize answers it — one mean for men, one for women, and a difference you can put in a headline.
-  - draw:
-      - mark_shape
-    speak: But two groups can share a mean and share nothing else, which makes the mean, all on its own, a rather mean summary.
-  - point:
-      at:
-        ref: cmd3
-      gesture: tap
-    speak: A boxplot splits each group into quarters, so the median, the middle half, and the high earners out in the tail all show up separately.
-  - focus:
-      target:
-        - cmd3
-        - cmd4
-    speak: 'These plotting commands are quick and they are safe — the server draws them and no individual ever crosses the wall — but they will not style: no panels side by side, no two series on one axis, no choice of colours.'
-  - point:
-      at:
-        ref: cmd4
-      gesture: circle
-    speak: For anything fancier you collapse to a small table of aggregates, export that, and draw it in R or Python — which is where part four ends up.
-  - quiz:
-      intro: A quick check before we go.
-      question: You suspect a handful of very high earners is pulling the men's average up. Which output shows that?
-      choices:
-        - tabulate sex
-        - summarize wage by sex
-        - a boxplot of wage by sex
-      correct: 3
-      right: The boxplot — it shows the median, the quartiles and the outliers that a mean quietly absorbs.
-      wrong: Both of those hand you numbers, and a number cannot show you a tail.
-  - speak: 'Ask the question out loud first, and the command picks itself: counts go to tabulate, one number per group to summarize, and anything about shape to a picture.'
----
-title: Counting Heads, Measuring Tails
-voice: female
-domain:
-  x: [0, 1200]
-  'y': [0, 100]
-elements:
-  - id: tab
-    type: code
-    language: microdata
-    show: above
-    lines: 8
-    width: 940
-    font_size: 16
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      generate byear = int(born/100)
-      keep if byear == 1985
-      tabulate sex educ
-  - id: sum
-    type: code
-    language: microdata
-    show: above
-    lines: 8
-    width: 940
-    font_size: 16
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset income
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      generate byear = int(born/100)
-      keep if byear == 1985
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      summarize wage
-  - id: cmd
-    type: text
-    text: histogram wage
-    x: 500
-    'y': 715
-    font_size: 28
-  - id: ax3
-    type: axes
-    x_label: Wage income (1000 kr)
-    y_label: People
-  - id: zero
-    type: curve
-    expr: '0'
-    style:
-      color: '#8f887c'
-      opacity: 0.4
-  - id: dist
-    type: curve
-    expr: 0.874*x*exp(-x/280)
-    style:
-      color: '#2f6b8f'
-  - id: tail
-    type: region
-    between:
-      - dist
-      - zero
-    x_from: 900
-    x_to: 1200
-    style:
-      fill: '#f2c14e'
-  - id: med
-    type: line
-    through:
-      - [470, 0]
-    angle: 90
-    style:
-      color: '#8a5fa8'
-      dash: true
-  - id: l_med
-    type: label
-    text: Median ≈ 470
-    attach_to: med
-    side: above-left
-    style:
-      color: '#8a5fa8'
-  - id: mean_line
-    type: line
-    through:
-      - [560, 0]
-    angle: 90
-    style:
-      color: '#b5482e'
-      dash: true
-  - id: l_mean
-    type: label
-    text: Mean ≈ 560
-    attach_to: mean_line
-    side: above-right
-    style:
-      color: '#b5482e'
-  - id: mark_mean
-    type: annotation
-    target: l_mean
-    kind: box
-commands:
-  - draw:
-      - tab
-      - tab_line_1
-      - tab_line_2
-      - tab_line_3
-      - tab_line_4
-      - tab_line_5
-      - tab_line_6
-      - tab_line_7
-    speak: Now that we have matched each question to its command, let's run them on the 1985 cohort — and see how one wrong choice of command puts a number in your abstract that describes nobody.
-  - draw:
-      - tab_line_8
-    speak: 'One new line at the bottom: tabulate takes categorical variables and does the only honest thing a category allows — it counts heads.'
-  - draw:
-      - tab_out
-    speak: Every cell is a number of people, women and men split by education level, with no model and no average anywhere in between.
-  - pause: 0.5
-  - clear: {}
-  - draw:
-      - sum
-      - sum_line_1
-      - sum_line_2
-      - sum_line_3
-      - sum_line_4
-      - sum_line_5
-      - sum_line_6
-    speak: Now change the question from how many to how much, and the same skeleton carries a different payload.
-  - draw:
-      - sum_line_7
-    speak: Wage income — INNTEKT_WLONN — as it stood on the first of January twenty twenty-two, because a wage figure belongs to a year, not to a person forever.
-  - draw:
-      - sum_line_8
-    speak: 'Point tabulate at this and you ask for one row per distinct kroner amount: tens of thousands of rows, no insight. A continuous variable needs summarize.'
-  - draw:
-      - sum_out
-    speak: And back comes the whole variable on one line — how many people, what they earn on average, how far the extremes reach.
-  - highlight:
-      target:
-        - sum_out
-      effect: glow
-    speak: That mean is the number that travels. And wage income is precisely the variable that makes it misleading.
-  - pause: 0.5
-  - clear: {}
-  - draw:
-      - cmd
-      - ax3
-      - zero
-    speak: So ask for the shape as well — one more line, histogram wage.
-  - draw:
-      - dist
-    speak: 'Here is what a cohort''s wage income really looks like: a crowd bunched up on the left, and a long thin arm reaching right.'
-  - draw:
-      - med
-      - l_med
-    speak: The median stands where the cohort splits in two, around four hundred and seventy thousand kroner.
-  - draw:
-      - mean_line
-      - l_mean
-    speak: The mean stands almost a hundred thousand further right, near five hundred and sixty — and nobody in particular is standing there.
-  - draw:
-      - tail
-    speak: Everything between the two is made of this handful. In a wage distribution, the tail really does wag the mean.
-  - point:
-      at:
-        ref: tail
-      gesture: circle
-    speak: One person on ten million kroner lifts the mean of a thousand people by ten thousand — and moves the median not at all.
-  - focus:
-      target:
-        - dist
-        - tail
-        - med
-        - mean_line
-    speak: 'That is the bargain: tabulate and summarize hand you exact numbers you can quote, while the histogram hands you no number at all — only the shape that says whether the mean deserves quoting.'
-  - quiz:
-      question: A histogram of wage income leans left with a long upper tail. Where does the median sit?
-      choices:
-        - Above the mean
-        - Below the mean
-        - Exactly at the mean
-      correct: 2
-      right: Below the mean — the long right tail drags the average up past the middle person.
-      wrong: The tail holds only high earners, so think about which of the two numbers it can pull.
-  - draw:
-      - mark_mean
-    speak: Counting heads takes tabulate and measuring takes summarize — but only the shape tells you whether one number is allowed to speak for everyone.
----
-title: Nothing But the Mean
-voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 7
-    width: 900
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      keep if birth >= '198501' & birth <= '198512'
-      boxplot wage by sex
-  - id: axis
-    type: path
-    points:
-      - [170, 170]
-      - [870, 170]
-    style:
-      color: '#8f887c'
-  - id: t0
-    type: text
-    text: '0'
-    x: 170
-    'y': 140
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: t400
-    type: text
-    text: '400'
-    x: 403
-    'y': 140
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: t800
-    type: text
-    text: '800'
-    x: 636
-    'y': 140
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: t1200
-    type: text
-    text: '1200'
-    x: 850
-    'y': 140
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: xlab
-    type: text
-    text: Wage income 2022 (1000 NOK)
-    x: 520
-    'y': 105
-    font_size: 22
-  - id: row_m
-    type: text
-    text: Men
-    x: 95
-    'y': 480
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: row_w
-    type: text
-    text: Women
-    x: 85
-    'y': 280
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: mean_m
-    type: point
-    at:
-      x: 572
-      'y': 480
-    style:
-      color: '#8a5fa8'
-  - id: mean_w
-    type: point
-    at:
-      x: 470
-      'y': 280
-    style:
-      color: '#8a5fa8'
-  - id: g_w
-    type: path
-    points:
-      - [470, 280]
-      - [470, 380]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: g_m
-    type: path
-    points:
-      - [572, 480]
-      - [572, 380]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: gap_arrow
-    type: arrow
-    from:
-      x: 470
-      'y': 380
-    to:
-      x: 572
-      'y': 380
-    style:
-      color: '#8a5fa8'
-  - id: gap_label
-    type: label
-    text: mean gap 175
-    attach_to: gap_arrow
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: box_m
-    type: shape
-    shape: rect
-    x: 540
-    'y': 480
-    width: 192
-    height: 96
-    style:
-      color: '#2f6b8f'
-  - id: med_m
-    type: path
-    points:
-      - [523, 432]
-      - [523, 528]
-    style:
-      color: '#2f6b8f'
-      stroke_width: 4
-  - id: wl_m
-    type: path
-    points:
-      - [275, 480]
-      - [444, 480]
-    style:
-      color: '#2f6b8f'
-  - id: cl_m
-    type: path
-    points:
-      - [275, 456]
-      - [275, 504]
-    style:
-      color: '#2f6b8f'
-  - id: wr_m
-    type: path
-    points:
-      - [636, 480]
-      - [790, 480]
-    style:
-      color: '#2f6b8f'
-  - id: cr_m
-    type: path
-    points:
-      - [790, 456]
-      - [790, 504]
-    style:
-      color: '#2f6b8f'
-  - id: out_m1
-    type: point
-    at:
-      x: 840
-      'y': 480
-    style:
-      color: '#2f6b8f'
-  - id: out_m2
-    type: point
-    at:
-      x: 865
-      'y': 480
-    style:
-      color: '#2f6b8f'
-  - id: tail_label
-    type: label
-    text: very high earners
-    attach_to: out_m1
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: box_w
-    type: shape
-    shape: rect
-    x: 455
-    'y': 280
-    width: 163
-    height: 96
-    style:
-      color: '#b5482e'
-  - id: med_w
-    type: path
-    points:
-      - [461, 232]
-      - [461, 328]
-    style:
-      color: '#b5482e'
-      stroke_width: 4
-  - id: wl_w
-    type: path
-    points:
-      - [220, 280]
-      - [374, 280]
-    style:
-      color: '#b5482e'
-  - id: cl_w
-    type: path
-    points:
-      - [220, 256]
-      - [220, 304]
-    style:
-      color: '#b5482e'
-  - id: wr_w
-    type: path
-    points:
-      - [537, 280]
-      - [660, 280]
-    style:
-      color: '#b5482e'
-  - id: cr_w
-    type: path
-    points:
-      - [660, 256]
-      - [660, 304]
-    style:
-      color: '#b5482e'
-  - id: med_arrow
-    type: arrow
-    from:
-      x: 461
-      'y': 380
-    to:
-      x: 523
-      'y': 380
-  - id: med_label
-    type: label
-    text: median gap 105
-    attach_to: med_arrow
-    side: below
-  - id: mark
-    type: annotation
-    target: med_label
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-    speak: 'Now that we have counted heads with tabulate and measured the tail with summarize, one question remains: the number you report as the gender wage gap depends on which command you ran.'
-  - draw:
-      - md_line_7
-    speak: Tonight's new line is just this — boxplot, the variable we measure, and the variable we split it by.
-  - clear: {}
-    speak: Set the script aside; the whole lesson is in what it draws.
-  - draw:
-      - axis
-      - t0
-      - t400
-      - t800
-      - t1200
-      - xlab
-      - row_m
-      - row_w
-    parallel: true
-  - draw:
-      - mean_m
-      - mean_w
-    parallel: true
-    speak: In our 1985 cohort, men's wage income averaged 690 thousand kroner, women's 515.
-  - draw:
-      - g_w
-      - g_m
-      - gap_arrow
-      - gap_label
-    speak: A gap of 175 thousand — 75 kroner per hundred. Two dots and the distance between them is everything a difference in means can say.
-  - pause: 0.4
-  - draw:
-      - box_m
-    speak: 'The boxplot gives five numbers instead of one. This box holds the middle half of the men: a quarter below 470 thousand, a quarter above 800.'
-  - draw:
-      - med_m
-    speak: The line inside is the median — 605 thousand — the man standing exactly in the middle of the queue.
-  - draw:
-      - wl_m
-      - cl_m
-      - wr_m
-      - cr_m
-    parallel: true
-    speak: The whiskers cover the rest of the bulk, from about 180 thousand up to 1.1 million.
-  - draw:
-      - out_m1
-      - out_m2
-      - tail_label
-    speak: And out here, drawn one dot per person, the handful of very high earners — which is where the tail wags the mean.
-  - camera:
-      center:
-        x: 700
-        'y': 470
-      zoom: 1.7
-    speak: The mean has to balance every krone these men earn, so it sits well to the right of the median; the median cannot feel them at all, because it only counts heads.
-  - camera:
-      reset: true
-  - draw:
-      - box_w
-      - med_w
-    speak: 'The women: median 500 thousand, and a box only two-thirds as wide, from 350 to 630.'
-  - draw:
-      - wl_w
-      - cl_w
-      - wr_w
-      - cr_w
-    parallel: true
-    speak: Their lower whisker, though, runs almost to zero — a part-time year and a year of parental leave land in the very same variable as a full salary.
-  - erase:
-      - gap_arrow
-      - gap_label
-      - g_w
-      - g_m
-  - draw:
-      - med_arrow
-      - med_label
-      - mark
-    speak: 'Measure median to median and the gap is 105 thousand: 83 kroner per hundred, not 75 — the same data, seventy thousand kroner apart.'
-  - highlight:
-      target:
-        - box_m
-        - box_w
-      effect: glow
-    speak: 'That is the strength of a box: five order statistics per group, no assumption about shape, and nobody''s pay slip on screen.'
-  - focus:
-      target:
-        - box_w
-    speak: Its weakness is that a box cannot show how many people stand behind it, nor whether that bulk is one hump or two — a split distribution draws the identical rectangle.
-  - speak: 'So: the mean, the whole mean, and nothing but the mean tells you the level of the gap; the box tells you its shape, and the shape is what tells you where the gap comes from.'
-    delivery: grave
-  - quiz:
-      intro: One check before we move on.
-      question: The mean gap is 175 thousand, the median gap only 105. Why?
-      choices:
-        - The women's box is narrower
-        - A long right tail among the men pulls their mean up
-        - The two groups have different sample sizes
-      correct: 2
-      right: The mean must balance a few very large incomes among the men; the median just counts heads, so it barely moves.
-      wrong: Look again at the two dots out past 1.1 million.
----
-title: 'Plot Twist: Scatter and Export'
-voice: female
-level: advanced
-template: scatter_plot
-params:
-  x:
-    - 812
-    - 758
-    - 690
-    - 655
-    - 641
-    - 652
-    - 640
-    - 596
-  'y':
-    - 596
-    - 540
-    - 520
-    - 515
-    - 528
-    - 478
-    - 492
-    - 478
-  labels:
-    - Oslo
-    - Stavanger
-    - Bergen
-    - Trondheim
-    - Tromsø
-    - Ålesund
-    - Drammen
-    - Lillehammer
-  fit: [1, 0]
-  xlim: [450, 900]
-  ylim: [450, 900]
-  x_label: Men's mean wage (1000 NOK)
-  y_label: Women's mean wage (1000 NOK)
-  title: One dot per municipality — the 1985 cohort
-  box: right
-elements:
-  - id: s
-    type: code
-    language: microdata
-    show: left
-    lines: 8
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset menn
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      keep if birth >= 198501
-      keep if birth <= 198512
-      keep if sex == '1'
-      collapse (mean) wage, by(kommune)
-      // same lines again, sex == '2', wage imported as wage_k
-      merge wage_k into menn
-      scatter wage wage_k
-    marks:
-      - scatter wage wage_k
-      - collapse (mean) wage, by(kommune)
-commands:
-  - draw:
-      - s
-      - s_line_1
-      - s_line_2
-    parallel: true
-    speak: 'Now that we have seen how a single mean hides the distribution behind it, one question decides whether you report a national gender gap at all: is the gap the same everywhere in Norway?'
-  - draw:
-      - s_line_3
-      - s_line_4
-      - s_line_5
-      - s_line_6
-    speak: Sex, birth month, municipality and wage income — the same four imports, for everyone born in 1985.
-  - draw:
-      - s_line_7
-      - s_line_8
-      - s_line_9
-    speak: Trim to the cohort, then keep only the men.
-  - draw:
-      - s_line_10
-    speak: 'Collapse to the mean by municipality, and the unit of analysis changes under your feet: about three hundred and fifty rows, not one person among them.'
-  - draw:
-      - s_line_11
-      - s_line_12
-    speak: The same again for the women, merged on kommune, so each municipality carries both means side by side.
-  - draw:
-      - s_line_13
-    speak: 'And one command plots it: scatter, men across, women up.'
-  - draw:
-      - axes
-      - title
-    speak: Both axes in the same unit and the same range — without that, the picture below would mean nothing.
-  - draw:
-      - point_1
-      - point_2
-      - point_3
-      - point_4
-      - point_5
-      - point_6
-      - point_7
-      - point_8
-    parallel: true
-    speak: 'Eight municipalities from the emulator''s synthetic data: Oslo up in the corner, men at eight hundred and twelve thousand kroner, women at five hundred and ninety-six.'
-  - pause: 0.4
-  - draw:
-      - fit_line
-    delivery: grave
-    speak: This is where the two means would be equal. Not one municipality is on the level.
-  - highlight:
-      target:
-        - point_1
-        - point_5
-      effect: glow
-    speak: 'And the dots do not scatter randomly around it: Oslo''s gap is two hundred and sixteen thousand, Tromsø''s a hundred and thirteen — the richer the men''s mean, the further the town falls below the line.'
-  - point:
-      at:
-        ref: point_1
-      gesture: tap
-    speak: A single national number would have averaged that slope away, and wage income being hours times pay, part of the distance is weeks not worked rather than kroner per hour.
-  - draw:
-      - s_mark_1
-    speak: All five commands of this series — tabulate, summarize, histogram, boxplot, scatter — ran where the data lives, nothing downloaded, nobody's row ever seen.
-  - focus:
-      target:
-        - s
-    speak: 'But you get the chart the command gives you: no colour by education, no confidence bands, no reference line — the equality line on this figure I drew myself, outside microdata.'
-  - draw:
-      - s_mark_2
-    speak: 'So the collapse is your exit: a few hundred means fit in the output window, and you rebuild the figure in R. The numbers travel; the people stay behind.'
-  - quiz:
-      intro: One last check before we close the series.
-      question: Your journal wants this scatter with a fitted line, labels and error bars. What do you do?
-      choices:
-        - Export the person-level file and plot it at home
-        - Collapse to municipality means, copy the table out, plot it outside
-        - Run scatter again with more options
-      correct: 2
-      right: You take out the aggregates — a few hundred means — and build the figure where you control every stroke; the individual rows never leave the server.
-      wrong: microdata's scatter has no such options, and person-level data never leaves at all.
-  - speak: 'Four parts, one rule: let the question choose the command, and when the picture has to persuade, export the aggregates — never the people.'
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Why your output came back censored
-    x: 500
-    'y': 390
-    font_size: 48
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 8 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Why your output came back censored'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+      - 1
+      - 0
+    xlim:
+      - 450
+      - 900
+    ylim:
+      - 450
+      - 900
+    x_label: Men's mean wage (1000 NOK)
+    y_label: Women's mean wage (1000 NOK)
+    title: One dot per municipality — the 1985 cohort
+    box: right
+
+    ```microdata s font_size 16 show left lines 8 frame screen marks ["scatter wage wage_k","collapse (mean) wage, by(kommune)"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset menn
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    keep if birth >= 198501
+    keep if birth <= 198512
+    keep if sex == '1'
+    collapse (mean) wage, by(kommune)
+    // same lines again, sex == '2', wage imported as wage_k
+    merge wage_k into menn
+    scatter wage wage_k
+    ```
+
+Now that we have seen how a single mean hides the distribution behind it, one question decides whether you report a national gender gap at all: is the gap the same everywhere in Norway?
+    draw s s_line_1 s_line_2 parallel true
+
+Sex, birth month, municipality and wage income — the same four imports, for everyone born in 1985.
+    draw s_line_3 s_line_4 s_line_5 s_line_6
+
+Trim to the cohort, then keep only the men.
+    draw s_line_7 s_line_8 s_line_9
+
+Collapse to the mean by municipality, and the unit of analysis changes under your feet: about three hundred and fifty rows, not one person among them.
+    draw s_line_10
+
+The same again for the women, merged on kommune, so each municipality carries both means side by side.
+    draw s_line_11 s_line_12
+
+And one command plots it: scatter, men across, women up.
+    draw s_line_13
+
+Both axes in the same unit and the same range — without that, the picture below would mean nothing.
+    draw axes title
+
+Eight municipalities from the emulator's synthetic data: Oslo up in the corner, men at eight hundred and twelve thousand kroner, women at five hundred and ninety-six.
+    draw point_1 point_2 point_3 point_4 point_5 point_6 point_7 point_8 parallel true
+
+    pause 0.4
+
+This is where the two means would be equal. Not one municipality is on the level.
+    draw fit_line delivery grave
+
+And the dots do not scatter randomly around it: Oslo's gap is two hundred and sixteen thousand, Tromsø's a hundred and thirteen — the richer the men's mean, the further the town falls below the line.
+    highlight point_1 point_5 effect glow
+
+A single national number would have averaged that slope away, and wage income being hours times pay, part of the distance is weeks not worked rather than kroner per hour.
+    point at.ref point_1 gesture tap
+
+All five commands of this series — tabulate, summarize, histogram, boxplot, scatter — ran where the data lives, nothing downloaded, nobody's row ever seen.
+    draw s_mark_1
+
+But you get the chart the command gives you: no colour by education, no confidence bands, no reference line — the equality line on this figure I drew myself, outside microdata.
+    focus s
+
+So the collapse is your exit: a few hundred means fit in the output window, and you rebuild the figure in R. The numbers travel; the people stay behind.
+    draw s_mark_2
+
+    quiz "Your journal wants this scatter with a fitted line, labels and error bars. What do you do?"
+        intro: One last check before we close the series.
+        right: You take out the aggregates — a few hundred means — and build the figure where you control every stroke; the individual rows never leave the server.
+        wrong: microdata's scatter has no such options, and person-level data never leaves at all.
+        * Export the person-level file and plot it at home
+        + Collapse to municipality means, copy the table out, plot it outside
+        * Run scatter again with more options
+
+Four parts, one rule: let the question choose the command, and when the picture has to persuade, export the aggregates — never the people.
+
+## Where next
+end_page: true
+
+Next: Why your output came back censored
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:6 title "Defining the population: keep, drop, and the people who quietly disappear" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:8 title "Why your output came back censored" size 320 x 735 y 395
+
+    link end_again href lecture:7 title "Watch again" form text open here x 500 y 160
+    text end_count "7 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

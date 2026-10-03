@@ -1,980 +1,451 @@
-playlist:
-  title: 'Defining the population: keep, drop, and the people who quietly disappear'
-  prompt: 'What is the difference between `keep if` on a condition and dropping a variable — and why do beginners confuse them? How do missing values and people who emigrated or died mid-year silently shrink your cohort? Common belief: the register data are complete, so selection is not a problem. Why does the 1985 cohort shrink anyway between import and analysis?'
-  next:
-    title: 'Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter'
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/output-that-tells-the-truth-tabulate.yaml
----
-title: Rows or Columns?
-level: advanced
-voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    width: 880
-    font_size: 17
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KJOENN as sex
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      // the 1985 cohort
-      keep if birth >= '198501'
-      keep if birth <= '198512'
-      drop educ
-    marks:
-      - keep if birth >= '198501'
-      - drop educ
-  - id: tbl
-    type: pieces
-    of: grid
-    x: 560
-    'y': 380
-    width: 420
-    height: 300
-    'n': 4
-    rows: 5
-  - id: l_c1
-    type: label
-    text: birth
-    attach_to: tbl_1
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: l_c2
-    type: label
-    text: sex
-    attach_to: tbl_2
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: l_c3
-    type: label
-    text: educ
-    attach_to: tbl_3
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: l_c4
-    type: label
-    text: wage
-    attach_to: tbl_4
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: l_r1
-    type: label
-    text: born 1983
-    attach_to: tbl_1
-    side: left
-    style:
-      color: '#b5482e'
-  - id: l_r2
-    type: label
-    text: born 1985
-    attach_to: tbl_5
-    side: left
-    style:
-      color: '#b5482e'
-  - id: l_r3
-    type: label
-    text: born 1985
-    attach_to: tbl_9
-    side: left
-    style:
-      color: '#b5482e'
-  - id: l_r4
-    type: label
-    text: born 1991
-    attach_to: tbl_13
-    side: left
-    style:
-      color: '#b5482e'
-  - id: l_r5
-    type: label
-    text: born 1985
-    attach_to: tbl_17
-    side: left
-    style:
-      color: '#b5482e'
-  - id: belief
-    type: text
-    text: keep if = drop = a smaller dataset
-    x: 500
-    'y': 675
-    font_size: 26
-    style:
-      color: '#8f887c'
-  - id: belief_strike
-    type: annotation
-    target: belief
-    kind: strike
-  - id: cap_rows
-    type: text
-    text: keep if  →  rows  →  who you study
-    x: 500
-    'y': 168
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: cap_cols
-    type: text
-    text: drop educ  →  columns  →  what you know
-    x: 500
-    'y': 112
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Across these four parts we build one population — everyone born in 1985 — and watch it quietly lose people before anyone notices; it starts with this script from lecture five.
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-    speak: 'Four imports you already know: birth month, sex, highest completed education, and wage income, all into the dataset persons.'
-  - draw:
-      - md_line_7
-      - md_line_8
-      - md_line_9
-    speak: Now the cohort. Two conditions on birth month keep only 1985 — about fifty-one thousand people, out of a population of more than five million.
-  - draw:
-      - md_line_10
-    speak: 'And then this line: drop educ. Most people arriving from Stata read the two as the same move — two ways of making the dataset smaller.'
-  - draw:
-      - md_mark_1
-    speak: 'But look at what follows each word. keep if takes a condition: something true of some people and false of others.'
-  - draw:
-      - md_mark_2
-    speak: drop takes the name of a variable. No condition, no people, nowhere in the line.
-  - clear: {}
-    speak: So let's stop reading syntax, and look at what a dataset actually is.
-  - draw:
-      - tbl
-      - l_c1
-      - l_c2
-      - l_c3
-      - l_c4
-    speak: 'A table you are never allowed to read: one row per person, one column per thing the register knows about them.'
-  - draw:
-      - l_r1
-      - l_r2
-      - l_r3
-      - l_r4
-      - l_r5
-    parallel: true
-    speak: 'Five rows standing in for the whole population: one born in 1983, one in 1991, and three born in 1985.'
-  - draw:
-      - belief
-    speak: 'And here is the belief, written across the top: keep if and drop both just make this smaller.'
-  - highlight:
-      target:
-        - tbl_5
-        - tbl_6
-        - tbl_7
-        - tbl_8
-        - l_r2
-      effect: glow
-      color: '#b5482e'
-    speak: A row is a person — everything the state knows about one human being, on one line.
-  - highlight:
-      target:
-        - tbl_3
-        - tbl_7
-        - tbl_11
-        - tbl_15
-        - tbl_19
-        - l_c3
-      effect: glow
-      color: '#2f6b8f'
-    speak: 'A column is one question asked of all of them: what is your highest completed education?'
-  - erase:
-      - tbl_1
-      - tbl_2
-      - tbl_3
-      - tbl_4
-      - l_r1
-      - tbl_13
-      - tbl_14
-      - tbl_15
-      - tbl_16
-      - l_r4
-    speak: keep if cuts horizontally. The 1983 and the 1991 person leave the analysis entirely, and every fact about them goes with them.
-  - draw:
-      - cap_rows
-    speak: keep if changes who you study — and those rows never come back; you rebuild the dataset from the import lines up.
-  - camera:
-      center:
-        ref: tbl_11
-      zoom: 1.8
-    speak: Now watch the education column closely.
-  - erase:
-      - tbl_7
-      - tbl_11
-      - tbl_19
-      - l_c3
-    speak: 'drop educ cuts vertically. Count the rows: still three, the same three people — one question poorer.'
-  - camera:
-      reset: true
-  - draw:
-      - cap_cols
-      - belief_strike
-    speak: 'So the belief fails exactly where it matters: one command edits your population, the other only edits what you know about it.'
-  - quiz:
-      intro: A quick check.
-      question: Your next line is drop wage. How many people are left in persons?
-      choices:
-        - Fewer — drop removes rows
-        - Exactly as many as before
-        - None — the dataset is empty
-      correct: 2
-      right: 'Every person stays: drop names a variable, so only that column disappears.'
-      wrong: drop followed by a variable name never touches a single row.
-  - quiz:
-      intro: One last one before part two.
-      question: Which line changes who your results describe?
-      choices:
-        - drop educ
-        - keep if birth >= '198501'
-        - Both, equally
-      correct: 2
-      right: Only keep if tests people and deletes rows; drop just takes a column away.
-      wrong: drop educ leaves every person in place — it is keep if that removes them.
-  - speak: Rows are people, columns are knowledge, and from here every line you write is a decision about one or the other. In part two we put keep if under the lens, and see how its conditions throw away people you never meant to lose.
-    delivery: grave
----
-title: keep if vs drop
+# Defining the population: keep, drop, and the people who quietly disappear
+prompt: "What is the difference between `keep if` on a condition and dropping a variable — and why do beginners confuse them? How do missing values and people who emigrated or died mid-year silently shrink your cohort? Common belief: the register data are complete, so selection is not a problem. Why does the 1985 cohort shrink anyway between import and analysis?"
+next: {"title":"Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/output-that-tells-the-truth-tabulate.cast"}
+
+## Rows or Columns?
 voice: male
 level: advanced
-vars:
-  nr: 6
-  nc: 4
-elements:
-  - id: title
-    type: text
-    text: keep if   vs   drop
-    x: 500
-    'y': 715
-    font_size: 34
-  - id: b_keep
-    type: text
-    text: keep
-    x: 640
-    'y': 620
-    font_size: 28
-    style:
-      color: '#8f887c'
-  - id: b_drop
-    type: text
-    text: drop
-    x: 900
-    'y': 620
-    font_size: 28
-    style:
-      color: '#8f887c'
-  - id: b_arrow
-    type: arrow
-    from:
-      ref: b_keep
-    to:
-      ref: b_drop
-    curved: true
-    style:
-      color: '#8f887c'
-  - id: b_label
-    type: label
-    text: the same thing, backwards?
-    attach_to: b_arrow
-    side: above
-    style:
-      color: '#8f887c'
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    x: 250
-    'y': 380
-    width: 460
-    font_size: 14
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KJOENN as sex
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      destring birth
-      generate birthyear = int(birth/100)
-      keep if birthyear == 1985
-      drop educ
-    marks:
-      - keep if birthyear == 1985
-      - drop educ
-  - id: tbl
-    type: pieces
-    of: grid
-    x: 770
-    'y': 400
-    width: 260
-    height: 270
-    'n': 3
-    rows: 6
-    style:
-      color: '#8f887c'
-  - id: h_by
-    type: text
-    text: birthyear
-    x: 565
-    'y': 557
-    font_size: 20
-  - id: h_sex
-    type: text
-    text: sex
-    x: 683
-    'y': 557
-    font_size: 20
-  - id: h_educ
-    type: text
-    text: educ
-    x: 770
-    'y': 557
-    font_size: 20
-    style:
-      color: '#2f6b8f'
-  - id: h_wage
-    type: text
-    text: wage
-    x: 857
-    'y': 557
-    font_size: 20
-  - id: y1
-    type: text
-    text: '1985'
-    x: 570
-    'y': 512
-    font_size: 20
-  - id: y2
-    type: text
-    text: '1979'
-    x: 570
-    'y': 467
-    font_size: 20
-  - id: y3
-    type: text
-    text: '1985'
-    x: 570
-    'y': 422
-    font_size: 20
-  - id: y4
-    type: text
-    text: '1990'
-    x: 570
-    'y': 377
-    font_size: 20
-  - id: y5
-    type: text
-    text: '1985'
-    x: 570
-    'y': 332
-    font_size: 20
-  - id: y6
-    type: text
-    text: '1962'
-    x: 570
-    'y': 287
-    font_size: 20
-  - id: n_rows
-    type: text
-    text: 'rows: {nr:0}'
-    x: 760
-    'y': 225
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: n_cols
-    type: text
-    text: 'columns: {nc:0}'
-    x: 760
-    'y': 188
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: rule_head
-    type: text
-    text: It is not the verb. It is the if.
-    x: 500
-    'y': 560
-    font_size: 30
-  - id: rule1
-    type: text
-    text: keep educ  /  drop educ   ->   columns   (N unchanged)
-    x: 500
-    'y': 440
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: rule2
-    type: text
-    text: keep if ...  /  drop if ...   ->   rows   (N changes)
-    x: 500
-    'y': 350
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: mark_rule
-    type: annotation
-    target: rule2
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: Now that we have seen that a dataset is rows of people and columns of variables, here is the confusion that quietly ruins more register scripts than any other — and it decides what your N actually means.
-  - draw:
-      - b_keep
-      - b_drop
-      - b_arrow
-      - b_label
-    speak: 'Almost everyone arrives believing these two are mirror images: keep what you want, drop what you don''t, and either way the table just gets smaller.'
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-      - md_line_7
-      - md_line_8
-    parallel: true
-    speak: 'Here is our running script: the whole population, with sex, education and wage income, and the birth year we carved out of the year-month string last lecture.'
-  - draw:
-      - tbl
-      - h_by
-      - h_sex
-      - h_educ
-      - h_wage
-    parallel: true
-  - draw:
-      - y1
-      - y2
-      - y3
-      - y4
-      - y5
-      - y6
-      - n_rows
-      - n_cols
-    parallel: true
-    speak: 'Six of those people, drawn out: three born in 1985, the others in 1979, 1990 and 1962. Six rows, four columns.'
-  - erase:
-      - b_label
-      - b_arrow
-      - b_keep
-      - b_drop
-    speak: Now watch that belief come apart, because these two commands do not cut in the same direction at all.
-  - draw:
-      - md_line_9
-      - md_mark_1
-    speak: keep if birthyear equals 1985. The if is the whole story — it turns the command into a question put to each person, one at a time.
-  - focus:
-      target:
-        - y1
-        - y3
-        - y5
-    speak: Three of our six answer yes.
-  - erase:
-      - tbl_4
-      - tbl_5
-      - tbl_6
-      - tbl_10
-      - tbl_11
-      - tbl_12
-      - tbl_16
-      - tbl_17
-      - tbl_18
-      - y2
-      - y4
-      - y6
-    speak: The other three leave the dataset entirely — the cut runs horizontally, straight through the rows.
-  - animate:
-      nr: 3
-    duration: 1.5
-    speak: Six becomes three. In the real datastore that is around fifty thousand people, the size of a Norwegian birth cohort in the mid-eighties, carved out of millions.
-  - draw:
-      - md_line_10
-      - md_mark_2
-    speak: 'Now its supposed mirror image: drop educ. No if, no condition — just a name, and that name belongs to a column.'
-  - highlight:
-      target:
-        - h_educ
-        - tbl_2
-        - tbl_8
-        - tbl_14
-      effect: glow
-      color: '#2f6b8f'
-    speak: Everybody's education, all of it, in one stroke.
-  - erase:
-      - tbl_2
-      - tbl_8
-      - tbl_14
-      - h_educ
-    speak: It goes vertically. The variable is gone from every row that remains.
-  - animate:
-      nc: 3
-    duration: 1.2
-    speak: Four columns become three.
-  - camera:
-      center:
-        ref: n_rows
-      zoom: 2.2
-    speak: And the count of people has not budged. Nobody left the room — we only stopped asking them one of the questions.
-    delivery: grave
-  - camera:
-      reset: true
-  - quiz:
-      intro: Quick check.
-      question: Which of the two lines changed N, the number of people in the dataset?
-      choices:
-        - keep if birthyear == 1985
-        - drop educ
-        - Both — each one shrinks the data
-      correct: 1
-      right: 'Only the line with the if: drop educ removed a variable and left all three people in place.'
-      wrong: Watch the row count — it moved exactly once, for the line that carried a condition.
-  - clear:
-      keep:
-        - title
-    speak: So the rule worth writing on your wall is not about the two verbs at all.
-  - draw:
-      - rule1
-      - rule2
-    speak: Bare, they name variables and cut columns. With an if, they test people and cut rows.
-  - draw:
-      - rule_head
-      - mark_rule
-    speak: The if decides the direction — and only the if can move your N.
-  - quiz:
-      question: You write drop educ, and on the next line keep if educ == 5. What happens?
-      choices:
-        - A cohort with education level 5
-        - An error — educ no longer exists
-        - N is unchanged
-      correct: 2
-      right: 'The column is gone, so the condition has nothing to test: order matters, and a variable you drop can never be selected on afterwards.'
-      wrong: Once the column is dropped, no later line can mention it.
-  - speak: 'You can now read any line of your script and say which way it cuts — and every cut through the rows is a decision about who counts. Next: the people who leave your cohort without you writing anything at all.'
----
-title: Who quietly disappears
-level: advanced
+
+    ```microdata md width 880 font_size 17 show code frame screen marks ["keep if birth >= '198501'","drop educ"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KJOENN as sex
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    // the 1985 cohort
+    keep if birth >= '198501'
+    keep if birth <= '198512'
+    drop educ
+    ```
+    pieces tbl x 560 y 380 width 420 height 300 n 4 rows 5 of grid hidden true
+    label l_c1 "birth" above #2f6b8f attach_to tbl_1 hidden true
+    label l_c2 "sex" above #2f6b8f attach_to tbl_2 hidden true
+    label l_c3 "educ" above #2f6b8f attach_to tbl_3 hidden true
+    label l_c4 "wage" above #2f6b8f attach_to tbl_4 hidden true
+    label l_r1 "born 1983" left #b5482e attach_to tbl_1 hidden true
+    label l_r2 "born 1985" left #b5482e attach_to tbl_5 hidden true
+    label l_r3 "born 1985" left #b5482e attach_to tbl_9 hidden true
+    label l_r4 "born 1991" left #b5482e attach_to tbl_13 hidden true
+    label l_r5 "born 1985" left #b5482e attach_to tbl_17 hidden true
+    text belief "keep if = drop = a smaller dataset" #8f887c x 500 y 675 font_size 26 hidden true
+    mark belief_strike target belief kind strike hidden true
+    text cap_rows "keep if  →  rows  →  who you study" #b5482e x 500 y 168 font_size 24 hidden true
+    text cap_cols "drop educ  →  columns  →  what you know" #2f6b8f x 500 y 112 font_size 24 hidden true
+
+Across these four parts we build one population — everyone born in 1985 — and watch it quietly lose people before anyone notices; it starts with this script from lecture five.
+    draw md md_line_1 md_line_2 parallel true
+
+Four imports you already know: birth month, sex, highest completed education, and wage income, all into the dataset persons.
+    draw md_line_3 md_line_4 md_line_5 md_line_6
+
+Now the cohort. Two conditions on birth month keep only 1985 — about fifty-one thousand people, out of a population of more than five million.
+    draw md_line_7 md_line_8 md_line_9
+
+And then this line: drop educ. Most people arriving from Stata read the two as the same move — two ways of making the dataset smaller.
+    draw md_line_10
+
+But look at what follows each word. keep if takes a condition: something true of some people and false of others.
+    draw md_mark_1
+
+drop takes the name of a variable. No condition, no people, nowhere in the line.
+    draw md_mark_2
+
+So let's stop reading syntax, and look at what a dataset actually is.
+    clear
+
+A table you are never allowed to read: one row per person, one column per thing the register knows about them.
+    draw tbl l_c1 l_c2 l_c3 l_c4
+
+Five rows standing in for the whole population: one born in 1983, one in 1991, and three born in 1985.
+    draw l_r1 l_r2 l_r3 l_r4 l_r5 parallel true
+
+And here is the belief, written across the top: keep if and drop both just make this smaller.
+    draw belief
+
+A row is a person — everything the state knows about one human being, on one line.
+    highlight tbl_5 tbl_6 tbl_7 tbl_8 l_r2 effect glow color #b5482e
+
+A column is one question asked of all of them: what is your highest completed education?
+    highlight tbl_3 tbl_7 tbl_11 tbl_15 tbl_19 l_c3 effect glow color #2f6b8f
+
+keep if cuts horizontally. The 1983 and the 1991 person leave the analysis entirely, and every fact about them goes with them.
+    erase tbl_1 tbl_2 tbl_3 tbl_4 l_r1 tbl_13 tbl_14 tbl_15 tbl_16 l_r4
+
+keep if changes who you study — and those rows never come back; you rebuild the dataset from the import lines up.
+    draw cap_rows
+
+Now watch the education column closely.
+    camera center.ref tbl_11 zoom 1.8
+
+drop educ cuts vertically. Count the rows: still three, the same three people — one question poorer.
+    erase tbl_7 tbl_11 tbl_19 l_c3
+
+    camera reset true
+
+So the belief fails exactly where it matters: one command edits your population, the other only edits what you know about it.
+    draw cap_cols belief_strike
+
+    quiz "Your next line is drop wage. How many people are left in persons?" intro "A quick check."
+        right: Every person stays: drop names a variable, so only that column disappears.
+        wrong: drop followed by a variable name never touches a single row.
+        * Fewer — drop removes rows
+        + Exactly as many as before
+        * None — the dataset is empty
+
+    quiz "Which line changes who your results describe?"
+        intro: One last one before part two.
+        right: Only keep if tests people and deletes rows; drop just takes a column away.
+        wrong: drop educ leaves every person in place — it is keep if that removes them.
+        * drop educ
+        + keep if birth >= '198501'
+        * Both, equally
+
+Rows are people, columns are knowledge, and from here every line you write is a decision about one or the other. In part two we put keep if under the lens, and see how its conditions throw away people you never meant to lose.
+    delivery grave
+
+## keep if vs drop
 voice: male
-template: bar_chart
-params:
-  labels:
-    - 1985 cohort
-    - Still resident
-    - Education known
-    - Wage observed
-  values:
-    - - 51000
-      - 51000
-      - 51000
-      - 51000
-    - - 51000
-      - 47400
-      - 45200
-      - 39800
-  stage: 0
-  ylim: [0, 56000]
-  value_labels: true
-  y_label: Rows in the dataset
-  title: The 1985 cohort, step by step
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 12
-    font_size: 16
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      keep if birth >= '198501'
-      keep if birth <= '198512'
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/NUDB_BU 2022-09-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      // three lines, and the cohort shrinks
-      drop if sysmiss(kommune)
-      drop if sysmiss(educ)
-      keep if wage > 0
-    marks:
-      - drop if sysmiss(kommune)
-      - keep if wage > 0
-commands:
-  - draw:
-      - title
-      - axes
-    speak: 'Now that we have seen keep if take rows and drop take columns, here is the harder question: who leaves your dataset without either command ever naming them — and quietly biases the gender gap you are about to estimate?'
-  - draw:
-      - bar_1
-      - bar_2
-      - bar_3
-      - bar_4
-    parallel: true
-    speak: 'Most people arriving from survey work believe the registers are complete: fifty-one thousand people born in 1985 go in, and since I filter on nothing, fifty-one thousand come out.'
-  - highlight:
-      target:
-        - bar_2
-        - bar_3
-        - bar_4
-      effect: glow
-    speak: That flat picture is what everyone draws in their head — and it is wrong at every step after the first.
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: 'Here is the script we have been growing all course: the datastore as db, and an empty dataset for our cohort.'
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    speak: Birth year and month, then two keeps that fence in everyone born in 1985 — the only rows we deliberately remove, and we can count them.
-  - draw:
-      - md_line_6
-    speak: Now municipality, as it stood on the first of January 2022 — and the date is the trap, because a dated variable answers only for people the register still holds on that day.
-  - quiz:
-      intro: A quick check before we go on.
-      question: A person born in 1985 emigrated in 2019. What does the 2022 municipality import give you?
-      choices:
-        - Their last known municipality
-        - A missing value
-        - Zero
-      correct: 2
-      right: A dated variable answers for that date alone — after emigration there is nothing to return, so the cell comes back missing.
-      wrong: The register does not carry the old value forward for you; it simply has nothing on that date.
-  - draw:
-      - md_line_7
-    speak: Education from NUDB — and someone who took their degree abroad has no Norwegian code, so that cell is empty too.
-  - draw:
-      - md_line_8
-    speak: 'Wage income: zero for people with no employer, missing for someone who died in March and never reached the tax file.'
-  - draw:
-      - md_line_9
-      - md_line_10
-      - md_mark_1
-    speak: Here the quiet part begins — though this line is at least honest, because we wrote it and we can count what it took.
-  - draw:
-      - md_line_11
-    speak: 'The same for education: an unknown code is not a category, it is an absence, and out it goes.'
-  - draw:
-      - md_line_12
-      - md_mark_2
-    speak: And this last line names nobody at all — it looks like it removes only the true zeros.
-  - focus:
-      target:
-        - md_line_12
-        - md_mark_2
-    speak: But a missing value is not greater than zero, and not less than zero either; it fails the comparison, and departs with them.
-    delivery: grave
-  - clear:
-      keep:
-        - title
-        - axes
-        - bar_1
-        - bar_2
-        - bar_3
-        - bar_4
-    speak: So let us count what actually survived those three lines.
-  - animate:
-      stage: 1
-    duration: 4
-    easing: linear
-    speak: Fifty-one thousand at import; forty-seven thousand still resident; forty-five thousand with an education code; under forty thousand with a usable wage.
-  - camera:
-      center:
-        ref: bar_4
-      zoom: 2
-    speak: One row in five gone, none of them named in the script — these counts come from the course's synthetic copy, so the arithmetic is illustrative, but the shape is what your own run will do.
-  - camera:
-      reset: true
-    speak: 'And it cuts both ways: build the cohort from the 2022 population register and it also holds people born in 1985 abroad who arrived at twenty-five — the register adds strangers as quietly as it subtracts neighbours.'
-  - quiz:
-      question: So what does keep if wage > 0 actually remove?
-      choices:
-        - Only people who earned nothing
-        - People who earned nothing, plus everyone whose wage is missing
-        - Nothing — it removes a column
-      correct: 2
-      right: Missing fails every comparison, so the dead, the emigrated and the never-registered leave through the same line that was only meant to drop the zeros.
-      wrong: Missing is not greater than zero, so it fails the test and departs together with the genuine zeros.
-  - highlight:
-      target:
-        - bar_1
-        - bar_4
-      effect: pulse
-    speak: Your population is never the lines you wrote — it is those lines plus every missing value they silently touched, so count your rows after every single filter.
----
-title: The complete-register myth
 level: advanced
+vars: {"nr":6,"nc":4}
+
+    text title "keep if   vs   drop" x 500 y 715 font_size 34 hidden true
+    text b_keep "keep" #8f887c x 640 y 620 font_size 28 hidden true
+    text b_drop "drop" #8f887c x 900 y 620 font_size 28 hidden true
+    arrow b_arrow b_keep -> b_drop curved #8f887c hidden true
+    label b_label "the same thing, backwards?" above #8f887c attach_to b_arrow hidden true
+    ```microdata md x 250 y 380 width 460 font_size 14 show code frame screen marks ["keep if birthyear == 1985","drop educ"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KJOENN as sex
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    destring birth
+    generate birthyear = int(birth/100)
+    keep if birthyear == 1985
+    drop educ
+    ```
+    pieces tbl #8f887c x 770 y 400 width 260 height 270 n 3 rows 6 of grid hidden true
+    text h_by "birthyear" x 565 y 557 font_size 20 hidden true
+    text h_sex "sex" x 683 y 557 font_size 20 hidden true
+    text h_educ "educ" #2f6b8f x 770 y 557 font_size 20 hidden true
+    text h_wage "wage" x 857 y 557 font_size 20 hidden true
+    text y1 "1985" x 570 y 512 font_size 20 hidden true
+    text y2 "1979" x 570 y 467 font_size 20 hidden true
+    text y3 "1985" x 570 y 422 font_size 20 hidden true
+    text y4 "1990" x 570 y 377 font_size 20 hidden true
+    text y5 "1985" x 570 y 332 font_size 20 hidden true
+    text y6 "1962" x 570 y 287 font_size 20 hidden true
+    text n_rows "rows: {nr:0}" #b5482e x 760 y 225 font_size 22 hidden true
+    text n_cols "columns: {nc:0}" #2f6b8f x 760 y 188 font_size 22 hidden true
+    text rule_head "It is not the verb. It is the if." x 500 y 560 font_size 30 hidden true
+    text rule1 "keep educ  /  drop educ   ->   columns   (N unchanged)" #2f6b8f x 500 y 440 font_size 24 hidden true
+    text rule2 "keep if ...  /  drop if ...   ->   rows   (N changes)" #b5482e x 500 y 350 font_size 24 hidden true
+    mark mark_rule target rule2 kind box hidden true
+
+Now that we have seen that a dataset is rows of people and columns of variables, here is the confusion that quietly ruins more register scripts than any other — and it decides what your N actually means.
+    draw title
+
+Almost everyone arrives believing these two are mirror images: keep what you want, drop what you don't, and either way the table just gets smaller.
+    draw b_keep b_drop b_arrow b_label
+
+Here is our running script: the whole population, with sex, education and wage income, and the birth year we carved out of the year-month string last lecture.
+    draw md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 md_line_6 md_line_7 md_line_8 parallel true
+
+    draw tbl h_by h_sex h_educ h_wage parallel true
+
+Six of those people, drawn out: three born in 1985, the others in 1979, 1990 and 1962. Six rows, four columns.
+    draw y1 y2 y3 y4 y5 y6 n_rows n_cols parallel true
+
+Now watch that belief come apart, because these two commands do not cut in the same direction at all.
+    erase b_label b_arrow b_keep b_drop
+
+keep if birthyear equals 1985. The if is the whole story — it turns the command into a question put to each person, one at a time.
+    draw md_line_9 md_mark_1
+
+Three of our six answer yes.
+    focus y1 y3 y5
+
+The other three leave the dataset entirely — the cut runs horizontally, straight through the rows.
+    erase tbl_4 tbl_5 tbl_6 tbl_10 tbl_11 tbl_12 tbl_16 tbl_17 tbl_18 y2 y4 y6
+
+Six becomes three. In the real datastore that is around fifty thousand people, the size of a Norwegian birth cohort in the mid-eighties, carved out of millions.
+    animate nr 3 duration 1.5
+
+Now its supposed mirror image: drop educ. No if, no condition — just a name, and that name belongs to a column.
+    draw md_line_10 md_mark_2
+
+Everybody's education, all of it, in one stroke.
+    highlight h_educ tbl_2 tbl_8 tbl_14 effect glow color #2f6b8f
+
+It goes vertically. The variable is gone from every row that remains.
+    erase tbl_2 tbl_8 tbl_14 h_educ
+
+Four columns become three.
+    animate nc 3 duration 1.2
+
+And the count of people has not budged. Nobody left the room — we only stopped asking them one of the questions.
+    camera center.ref n_rows zoom 2.2 delivery grave
+
+    camera reset true
+
+    quiz "Which of the two lines changed N, the number of people in the dataset?" intro "Quick check."
+        right: Only the line with the if: drop educ removed a variable and left all three people in place.
+        wrong: Watch the row count — it moved exactly once, for the line that carried a condition.
+        + keep if birthyear == 1985
+        * drop educ
+        * Both — each one shrinks the data
+
+So the rule worth writing on your wall is not about the two verbs at all.
+    clear keep ["title"]
+
+Bare, they name variables and cut columns. With an if, they test people and cut rows.
+    draw rule1 rule2
+
+The if decides the direction — and only the if can move your N.
+    draw rule_head mark_rule
+
+    quiz "You write drop educ, and on the next line keep if educ == 5. What happens?"
+        right: The column is gone, so the condition has nothing to test: order matters, and a variable you drop can never be selected on afterwards.
+        wrong: Once the column is dropped, no later line can mention it.
+        * A cohort with education level 5
+        + An error — educ no longer exists
+        * N is unchanged
+
+You can now read any line of your script and say which way it cuts — and every cut through the rows is a decision about who counts. Next: the people who leave your cohort without you writing anything at all.
+
+## Who quietly disappears
 voice: male
-template: line_chart
-params:
-  x:
-    - imported
-    - still here
-    - wage known
-    - educ known
-  series:
-    - name: if nothing were lost
-      values:
-        - - 62300
-          - 62300
-          - 62300
-          - 62300
-        - - 62300
-          - 62300
-          - 62300
-          - 62300
-        - - 62300
-          - 62300
-          - 62300
-          - 62300
-        - - 62300
-          - 62300
-          - 62300
-          - 62300
-    - name: actually in your data
-      values:
-        - - 62300
-        - [62300, 61100]
-        - - 62300
-          - 61100
-          - 55400
-        - - 62300
-          - 61100
-          - 55400
-          - 52800
-  stage: 0
-  points: true
-  ylim: [48000, 64000]
-  y_label: N in dataset
-  title: The 1985 cohort, step by step
-elements:
-  - id: pop
-    type: code
-    language: microdata
-    show: code
-    font_size: 14
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-12-31 as kom
-      import db/INNTEKT_WLONN 2022-12-31 as wage
-      import db/NUDB_BU 2022-10-01 as educ
-      // population: born 1985, present and observed
-      generate byear = substr(birth, 1, 4)
-      destring byear
-      keep if byear == 1985
-      drop if sysmiss(kom)
-      drop if sysmiss(wage)
-      drop if sysmiss(educ)
-      summarize wage
-    marks:
-      - '// population: born 1985, present and observed'
-      - keep if byear == 1985
-      - drop if sysmiss(kom)
-      - summarize wage
-commands:
-  - draw:
-      - title
-      - axes
-  - draw:
-      - line_1
-    speak: 'Now that we have seen who quietly disappears, here is the belief that keeps it invisible: the registers are complete, so once you have picked the 1985 cohort, this flat line is your population, right through to the table.'
-  - draw:
-      - pop
-      - pop_line_1
-      - pop_line_2
-      - pop_line_3
-      - pop_line_4
-      - pop_line_5
-      - pop_line_6
-    parallel: true
-    speak: 'Here is our script again — the alias, the dataset, and four imports: birth month, municipality at year end, wage income, education.'
-  - draw:
-      - pop_line_7
-      - pop_line_8
-      - pop_line_9
-      - pop_line_10
-    speak: 'Then the population definition: pull the year out of the birth string, make it a number, and keep the people born in 1985.'
-  - draw:
-      - line_2
-    speak: Summarize anything now, and the Obs column is your population — in this run, sixty-two thousand three hundred people; your own run will differ.
-  - quiz:
-      intro: A quick check before we go on.
-      question: Norway recorded about fifty-one thousand births in 1985. Why does the import hand you more than sixty thousand people born that year?
-      choices:
-        - The register double-counts movers
-        - People born in 1985 who immigrated later are residents too
-        - Twins are counted twice
-      correct: 2
-      right: The population register is complete about residents, not about births — everyone born in 1985 who later moved to Norway is in there.
-      wrong: The register counts residents, not births — so later immigrants born in 1985 are counted as well.
-  - draw:
-      - pop_line_11
-    speak: 'Now the first filter: municipality on the thirty-first of December. Anyone who emigrated or died during the year has no value on that date.'
-  - animate:
-      stage: 1
-    duration: 2
-    speak: Twelve hundred people leave the dataset — no error, no warning, nothing in the log to notice.
-  - draw:
-      - pop_line_12
-    speak: Wage income next — and a missing wage is not a zero wage; it is a person with no wage record at all.
-  - animate:
-      stage: 2
-    duration: 2
-    speak: 'Five thousand seven hundred gone: students, the self-employed, people living on benefits, anyone whose money is not a wage.'
-  - draw:
-      - pop_line_13
-    speak: And education, where schooling taken abroad often never reached the Norwegian education register.
-  - animate:
-      stage: 3
-    duration: 2
-    speak: Another two thousand six hundred — and they are not a random two thousand six hundred; they are disproportionately immigrants.
-  - focus:
-      target:
-        - pop_line_11
-        - pop_line_12
-        - pop_line_13
-    speak: Three lines of code, three filters, and not one of them tells you what it took.
-  - camera:
-      center:
-        ref: line_2
-      zoom: 1.7
-    speak: 'Fifteen percent of the cohort is gone, and no line of this script ever said: drop the immigrants.'
-  - erase:
-      - line_1
-    delivery: grave
-    speak: So the flat line was never wrong about the register. It was wrong about your dataset.
-  - quiz:
-      question: Your final table shows the wage gap for "the 1985 cohort". Who is it actually about?
-      choices:
-        - Everyone born in 1985
-        - Residents born in 1985 with a wage record and registered education
-        - A random sample of the cohort
-      correct: 2
-      right: It is about the survivors of four filters — and that is the population you have to describe in the paper.
-      wrong: 'It is not everyone born in 1985: three filters removed nine and a half thousand of them.'
-  - clear:
-      keep:
-        - pop
-        - pop_line_1
-        - pop_line_2
-        - pop_line_3
-        - pop_line_4
-        - pop_line_5
-        - pop_line_6
-        - pop_line_7
-        - pop_line_8
-        - pop_line_9
-        - pop_line_10
-        - pop_line_11
-        - pop_line_12
-        - pop_line_13
-        - pop_line_14
-    speak: Two habits fix this, and both of them live in the script.
-  - camera:
-      center:
-        ref: pop
-      zoom: 1.4
-  - draw:
-      - pop_line_14
-      - pop_mark_4
-    speak: 'Habit one: count at every step. Microdata has no count command, so summarize is your counter — run it after every keep and every drop and read the Obs column.'
-  - draw:
-      - pop_mark_1
-    speak: 'Habit two: write the population definition down, in the script, in words — born 1985, still resident in December, wage and education observed.'
-  - draw:
-      - pop_mark_2
-      - pop_mark_3
-    speak: This line is the population you chose; this one is the population the data chose for you — and both belong in your methods section.
-  - quiz:
-      question: Which of these changes the number of PEOPLE in your dataset?
-      choices:
-        - drop wage
-        - drop if sysmiss(wage)
-        - Both of them
-      correct: 2
-      right: drop wage removes a column; drop if removes people — one word apart, and only one of them redefines your population.
-      wrong: drop wage only throws away a variable; it is drop if that throws away people.
-  - highlight:
-      target:
-        - pop_mark_1
-      effect: glow
-    delivery: grave
-    speak: 'Rows or columns, keep or drop, missing or emigrated — it is one question underneath: the register is complete, your population is a choice, and if you do not write that choice down, the missing values will make it for you.'
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 7 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+use: bar_chart
+with:
+    labels:
+      - 1985 cohort
+      - Still resident
+      - Education known
+      - Wage observed
+    values:
+      - [51000, 51000, 51000, 51000]
+      - [51000, 47400, 45200, 39800]
+    stage: 0
+    ylim:
+      - 0
+      - 56000
+    value_labels: true
+    y_label: Rows in the dataset
+    title: The 1985 cohort, step by step
+
+    ```microdata md font_size 16 show code lines 12 frame screen marks ["drop if sysmiss(kommune)","keep if wage > 0"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    keep if birth >= '198501'
+    keep if birth <= '198512'
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/NUDB_BU 2022-09-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    // three lines, and the cohort shrinks
+    drop if sysmiss(kommune)
+    drop if sysmiss(educ)
+    keep if wage > 0
+    ```
+
+Now that we have seen keep if take rows and drop take columns, here is the harder question: who leaves your dataset without either command ever naming them — and quietly biases the gender gap you are about to estimate?
+    draw title axes
+
+Most people arriving from survey work believe the registers are complete: fifty-one thousand people born in 1985 go in, and since I filter on nothing, fifty-one thousand come out.
+    draw bar_1 bar_2 bar_3 bar_4 parallel true
+
+That flat picture is what everyone draws in their head — and it is wrong at every step after the first.
+    highlight bar_2 bar_3 bar_4 effect glow
+
+Here is the script we have been growing all course: the datastore as db, and an empty dataset for our cohort.
+    draw md md_line_1 md_line_2 parallel true
+
+Birth year and month, then two keeps that fence in everyone born in 1985 — the only rows we deliberately remove, and we can count them.
+    draw md_line_3 md_line_4 md_line_5
+
+Now municipality, as it stood on the first of January 2022 — and the date is the trap, because a dated variable answers only for people the register still holds on that day.
+    draw md_line_6
+
+    quiz "A person born in 1985 emigrated in 2019. What does the 2022 municipality import give you?"
+        intro: A quick check before we go on.
+        right: A dated variable answers for that date alone — after emigration there is nothing to return, so the cell comes back missing.
+        wrong: The register does not carry the old value forward for you; it simply has nothing on that date.
+        * Their last known municipality
+        + A missing value
+        * Zero
+
+Education from NUDB — and someone who took their degree abroad has no Norwegian code, so that cell is empty too.
+    draw md_line_7
+
+Wage income: zero for people with no employer, missing for someone who died in March and never reached the tax file.
+    draw md_line_8
+
+Here the quiet part begins — though this line is at least honest, because we wrote it and we can count what it took.
+    draw md_line_9 md_line_10 md_mark_1
+
+The same for education: an unknown code is not a category, it is an absence, and out it goes.
+    draw md_line_11
+
+And this last line names nobody at all — it looks like it removes only the true zeros.
+    draw md_line_12 md_mark_2
+
+But a missing value is not greater than zero, and not less than zero either; it fails the comparison, and departs with them.
+    focus md_line_12 md_mark_2 delivery grave
+
+So let us count what actually survived those three lines.
+    clear keep ["title","axes","bar_1","bar_2","bar_3","bar_4"]
+
+Fifty-one thousand at import; forty-seven thousand still resident; forty-five thousand with an education code; under forty thousand with a usable wage.
+    animate stage 1 duration 4 easing linear
+
+One row in five gone, none of them named in the script — these counts come from the course's synthetic copy, so the arithmetic is illustrative, but the shape is what your own run will do.
+    camera center.ref bar_4 zoom 2
+
+And it cuts both ways: build the cohort from the 2022 population register and it also holds people born in 1985 abroad who arrived at twenty-five — the register adds strangers as quietly as it subtracts neighbours.
+    camera reset true
+
+    quiz "So what does keep if wage > 0 actually remove?"
+        right: Missing fails every comparison, so the dead, the emigrated and the never-registered leave through the same line that was only meant to drop the zeros.
+        wrong: Missing is not greater than zero, so it fails the test and departs together with the genuine zeros.
+        * Only people who earned nothing
+        + People who earned nothing, plus everyone whose wage is missing
+        * Nothing — it removes a column
+
+Your population is never the lines you wrote — it is those lines plus every missing value they silently touched, so count your rows after every single filter.
+    highlight bar_1 bar_4 effect pulse
+
+## The complete-register myth
+voice: male
+level: advanced
+use: line_chart
+with:
+    x:
+      - imported
+      - still here
+      - wage known
+      - educ known
+    series:
+      - {name: if nothing were lost, values: [[62300, 62300, 62300, 62300], [62300, 62300, 62300, 62300], [62300, 62300, 62300, 62300], [62300, 62300, 62300, 62300]]}
+      - {name: actually in your data, values: [[62300], [62300, 61100], [62300, 61100, 55400], [62300, 61100, 55400, 52800]]}
+    stage: 0
+    points: true
+    ylim:
+      - 48000
+      - 64000
+    y_label: N in dataset
+    title: The 1985 cohort, step by step
+
+    ```microdata pop font_size 14 show code frame screen marks ["// population: born 1985, present and observed","keep if byear == 1985","drop if sysmiss(kom)","summarize wage"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-12-31 as kom
+    import db/INNTEKT_WLONN 2022-12-31 as wage
+    import db/NUDB_BU 2022-10-01 as educ
+    // population: born 1985, present and observed
+    generate byear = substr(birth, 1, 4)
+    destring byear
+    keep if byear == 1985
+    drop if sysmiss(kom)
+    drop if sysmiss(wage)
+    drop if sysmiss(educ)
+    summarize wage
+    ```
+
+    draw title axes
+
+Now that we have seen who quietly disappears, here is the belief that keeps it invisible: the registers are complete, so once you have picked the 1985 cohort, this flat line is your population, right through to the table.
+    draw line_1
+
+Here is our script again — the alias, the dataset, and four imports: birth month, municipality at year end, wage income, education.
+    draw pop pop_line_1 pop_line_2 pop_line_3 pop_line_4 pop_line_5 pop_line_6 parallel true
+
+Then the population definition: pull the year out of the birth string, make it a number, and keep the people born in 1985.
+    draw pop_line_7 pop_line_8 pop_line_9 pop_line_10
+
+Summarize anything now, and the Obs column is your population — in this run, sixty-two thousand three hundred people; your own run will differ.
+    draw line_2
+
+    quiz "Norway recorded about fifty-one thousand births in 1985. Why does the import hand you more than sixty thousand people born that year?"
+        intro: A quick check before we go on.
+        right: The population register is complete about residents, not about births — everyone born in 1985 who later moved to Norway is in there.
+        wrong: The register counts residents, not births — so later immigrants born in 1985 are counted as well.
+        * The register double-counts movers
+        + People born in 1985 who immigrated later are residents too
+        * Twins are counted twice
+
+Now the first filter: municipality on the thirty-first of December. Anyone who emigrated or died during the year has no value on that date.
+    draw pop_line_11
+
+Twelve hundred people leave the dataset — no error, no warning, nothing in the log to notice.
+    animate stage 1 duration 2
+
+Wage income next — and a missing wage is not a zero wage; it is a person with no wage record at all.
+    draw pop_line_12
+
+Five thousand seven hundred gone: students, the self-employed, people living on benefits, anyone whose money is not a wage.
+    animate stage 2 duration 2
+
+And education, where schooling taken abroad often never reached the Norwegian education register.
+    draw pop_line_13
+
+Another two thousand six hundred — and they are not a random two thousand six hundred; they are disproportionately immigrants.
+    animate stage 3 duration 2
+
+Three lines of code, three filters, and not one of them tells you what it took.
+    focus pop_line_11 pop_line_12 pop_line_13
+
+Fifteen percent of the cohort is gone, and no line of this script ever said: drop the immigrants.
+    camera center.ref line_2 zoom 1.7
+
+So the flat line was never wrong about the register. It was wrong about your dataset.
+    erase line_1 delivery grave
+
+    quiz "Your final table shows the wage gap for \"the 1985 cohort\". Who is it actually about?"
+        right: It is about the survivors of four filters — and that is the population you have to describe in the paper.
+        wrong: It is not everyone born in 1985: three filters removed nine and a half thousand of them.
+        * Everyone born in 1985
+        + Residents born in 1985 with a wage record and registered education
+        * A random sample of the cohort
+
+Two habits fix this, and both of them live in the script.
+    clear keep ["pop","pop_line_1","pop_line_2","pop_line_3","pop_line_4","pop_line_5","pop_line_6","pop_line_7","pop_line_8","pop_line_9","pop_line_10","pop_line_11","pop_line_12","pop_line_13","pop_line_14"]
+
+    camera center.ref pop zoom 1.4
+
+Habit one: count at every step. Microdata has no count command, so summarize is your counter — run it after every keep and every drop and read the Obs column.
+    draw pop_line_14 pop_mark_4
+
+Habit two: write the population definition down, in the script, in words — born 1985, still resident in December, wage and education observed.
+    draw pop_mark_1
+
+This line is the population you chose; this one is the population the data chose for you — and both belong in your methods section.
+    draw pop_mark_2 pop_mark_3
+
+    quiz "Which of these changes the number of PEOPLE in your dataset?"
+        right: drop wage removes a column; drop if removes people — one word apart, and only one of them redefines your population.
+        wrong: drop wage only throws away a variable; it is drop if that throws away people.
+        * drop wage
+        + drop if sysmiss(wage)
+        * Both of them
+
+Rows or columns, keep or drop, missing or emigrated — it is one question underneath: the register is complete, your population is a choice, and if you do not write that choice down, the missing values will make it for you.
+    highlight pop_mark_1 effect glow delivery grave
+
+## Where next
+end_page: true
+
+Next: Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:5 title "Making new variables: generate, replace, recode and labels" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:7 title "Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter" size 320 x 735 y 395
+
+    link end_again href lecture:6 title "Watch again" form text open here x 500 y 160
+    text end_count "6 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

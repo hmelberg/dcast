@@ -1,627 +1,355 @@
-playlist:
-  title: Five lines to your first plot
-  prompt: 'What is the shortest script that produces a real result: a mean, a table and a histogram of wage income by sex? Why does every script have to begin with `require no.ssb.fdb:... as db` and `create-dataset`? Where does the result appear if you never get to see a single individual''s data?'
-  next:
-    title: What is actually inside the datastore
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/what-is-actually-inside-the-datastore.yaml
----
-title: Five lines to your first plot — the whole script
-level: basic
+# Five lines to your first plot
+prompt: "What is the shortest script that produces a real result: a mean, a table and a histogram of wage income by sex? Why does every script have to begin with `require no.ssb.fdb:... as db` and `create-dataset`? Where does the result appear if you never get to see a single individual's data?"
+next: {"title":"What is actually inside the datastore","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/what-is-actually-inside-the-datastore.cast"}
+
+## Five lines to your first plot — the whole script
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 6
-    width: 960
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      histogram wage
-    marks:
-      - no.ssb.fdb:54
-      - as db
-      - create-dataset persons
-      - histogram wage
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: Over these four short parts we will write one complete microdata script — five lines that turn Norway's register data into a real result. This is line one.
-  - pause: 1
-  - draw:
-      - md_line_2
-    speak: 'The second line opens an empty dataset called persons: a blank spreadsheet with one row for every person, and no columns yet.'
-  - pause: 1
-  - draw:
-      - md_line_3
-    speak: The third line fills the first column — sex, for everyone in the population register.
-  - draw:
-      - md_line_4
-    speak: The fourth adds wage income as it stood on the first of January twenty twenty-two, because income belongs to a date, so you always give one.
-  - point:
-      at:
-        ref: md_line_4
-      gesture: underline
-    speak: 'Our question for the whole course lives in that column: the roughly fifty thousand people born in Norway in 1985 turned thirty-seven that year, and we want to know what the men among them earned and what the women earned.'
-  - pause: 1
-  - draw:
-      - md_line_5
-    speak: 'And the fifth line asks for a picture: a histogram of those wages. That is the entire program.'
-  - highlight:
-      target:
-        - md
-      effect: glow
-    speak: Notice what is missing — no file to download, no path, no cleaning. The data never comes to you; Statistics Norway keeps it behind a wall, and your script travels there instead.
-  - wait: click
-  - draw:
-      - md_mark_1
-    speak: 'Line one is the handshake: it names the datastore you are asking, and pins its version — fifty-four here.'
-  - pause: 1
-  - draw:
-      - md_mark_2
-    speak: Pinning the version is not bureaucracy — variables get revised — and db is simply the nickname every later line uses when it reaches for one.
-  - draw:
-      - md_mark_3
-    speak: Line two makes the table those variables land in; leave it out and the import has nowhere to go, so microdata stops before it starts.
-  - speak: Those two lines are the commonest reason a beginner's script refuses to run, which is why part two is about nothing else.
-  - wait: click
-  - erase:
-      - md_mark_1
-      - md_mark_2
-      - md_mark_3
-    parallel: true
-  - draw:
-      - md_out
-    speak: Now run it. Back comes the distribution of wage income, every person in the dataset counted into a bar.
-  - point:
-      at:
-        ref: md_out
-      gesture: circle
-    speak: So where is the data? You never see it. What returns is counted and grouped — a chart, a table, a mean — and never anyone's row.
-    delivery: grave
-  - pause: 1
-  - draw:
-      - md_mark_4
-    speak: 'And only this last line changes: summarize for the mean, tabulate for a table by sex, while the four lines above stay exactly as they are.'
-  - pause: 1
-  - highlight:
-      target:
-        - md
-      effect: glow
-    speak: Five lines — name the database, make a dataset, import two columns, ask a question — and the register answers you without ever showing you a single person.
-  - explore:
-      code: md
-    speak: 'Have a go: swap that last line and run it yourself.'
----
-title: Why the first two lines
 level: basic
+
+    ```microdata md width 960 show below lines 6 frame screen marks ["no.ssb.fdb:54","as db","create-dataset persons","histogram wage"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    histogram wage
+    ```
+
+Over these four short parts we will write one complete microdata script — five lines that turn Norway's register data into a real result. This is line one.
+    draw md md_line_1 parallel true
+
+    pause 1
+
+The second line opens an empty dataset called persons: a blank spreadsheet with one row for every person, and no columns yet.
+    draw md_line_2
+
+    pause 1
+
+The third line fills the first column — sex, for everyone in the population register.
+    draw md_line_3
+
+The fourth adds wage income as it stood on the first of January twenty twenty-two, because income belongs to a date, so you always give one.
+    draw md_line_4
+
+Our question for the whole course lives in that column: the roughly fifty thousand people born in Norway in 1985 turned thirty-seven that year, and we want to know what the men among them earned and what the women earned.
+    point at.ref md_line_4 gesture underline
+
+    pause 1
+
+And the fifth line asks for a picture: a histogram of those wages. That is the entire program.
+    draw md_line_5
+
+Notice what is missing — no file to download, no path, no cleaning. The data never comes to you; Statistics Norway keeps it behind a wall, and your script travels there instead.
+    highlight md effect glow
+
+    wait
+
+Line one is the handshake: it names the datastore you are asking, and pins its version — fifty-four here.
+    draw md_mark_1
+
+    pause 1
+
+Pinning the version is not bureaucracy — variables get revised — and db is simply the nickname every later line uses when it reaches for one.
+    draw md_mark_2
+
+Line two makes the table those variables land in; leave it out and the import has nowhere to go, so microdata stops before it starts.
+    draw md_mark_3
+
+Those two lines are the commonest reason a beginner's script refuses to run, which is why part two is about nothing else.
+
+    wait
+
+    erase md_mark_1 md_mark_2 md_mark_3 parallel true
+
+Now run it. Back comes the distribution of wage income, every person in the dataset counted into a bar.
+    draw md_out
+
+So where is the data? You never see it. What returns is counted and grouped — a chart, a table, a mean — and never anyone's row.
+    point at.ref md_out gesture circle delivery grave
+
+    pause 1
+
+And only this last line changes: summarize for the mean, tabulate for a table by sex, while the four lines above stay exactly as they are.
+    draw md_mark_4
+
+    pause 1
+
+Five lines — name the database, make a dataset, import two columns, ask a question — and the register answers you without ever showing you a single person.
+    highlight md effect glow
+
+Have a go: swap that last line and run it yourself.
+    explore code md
+
+## Why the first two lines
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    width: 700
-    x: 500
-    'y': 608
-    font_size: 18
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-    marks:
-      - no.ssb.fdb:54
-      - as db
-      - create-dataset persons
-  - id: vault
-    type: shape
-    shape: rect
-    x: 250
-    'y': 250
-    width: 320
-    height: 250
-    style:
-      color: '#2f6b8f'
-  - id: t1
-    type: text
-    text: BEFOLKNING_KJOENN
-    font_size: 20
-    x: 250
-    'y': 310
-  - id: t2
-    type: text
-    text: INNTEKT_WLONN
-    font_size: 20
-    x: 250
-    'y': 250
-  - id: t3
-    type: text
-    text: NUDB_BU
-    font_size: 20
-    x: 250
-    'y': 190
-  - id: l_vault
-    type: label
-    text: no.ssb.fdb — the datastore
-    attach_to: vault
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: l_ver
-    type: label
-    text: version 54
-    attach_to: vault
-    side: below
-    style:
-      color: '#8a5fa8'
-  - id: tbl
-    type: shape
-    shape: rect
-    x: 760
-    'y': 250
-    width: 300
-    height: 180
-    style:
-      color: '#b5482e'
-      dash: true
-  - id: empty_txt
-    type: text
-    text: no rows, no columns
-    font_size: 20
-    x: 760
-    'y': 250
-    style:
-      color: '#8f887c'
-  - id: l_tbl
-    type: label
-    text: persons
-    attach_to: tbl
-    side: above
-    style:
-      color: '#b5482e'
-  - id: arrow_import
-    type: arrow
-    from:
-      ref: vault
-      anchor: right
-    to:
-      ref: tbl
-      anchor: left
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: l_arrow
-    type: label
-    text: 'lines 3–5: import'
-    attach_to: arrow_import
-    side: above
-    style:
-      color: '#8f887c'
-  - id: desk
-    type: group
-    members:
-      - vault
-      - t1
-      - t2
-      - t3
-      - tbl
-      - empty_txt
-      - arrow_import
-    fit:
-      x: 60
-      'y': 60
-      w: 880
-      h: 330
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: Now that we have seen the whole five-line script, let us slow down on the two lines that print nothing — and that decide whether anyone can ever reproduce your result.
-  - draw:
-      - md_line_2
-    speak: The first says which register archive we are talking to; the second makes an empty table to put things in.
-  - pause: 1
-  - draw:
-      - vault
-      - l_vault
-    speak: Think of the datastore as a locked archive of Statistics Norway's registers — everyone in the country, and you are never let inside.
-  - draw:
-      - t1
-      - t2
-      - t3
-    parallel: true
-    speak: 'On its shelves sit the variables under their real, rather shouty names: sex, wage income, highest completed education.'
-  - pause: 1
-  - draw:
-      - md_mark_1
-    speak: So the first line is an address — the population and income database — and the number after the colon is its version.
-  - draw:
-      - md_mark_2
-    speak: And this gives that address a nickname, db, so every later line can simply say db slash the variable it wants.
-  - wait: click
-  - draw:
-      - tbl
-      - l_tbl
-    speak: The second line puts an empty table on your own desk and names it persons.
-  - draw:
-      - empty_txt
-    speak: It really is empty — no rows, no columns, not one number in it yet.
-  - draw:
-      - md_mark_3
-    speak: You have to say this out loud, because everything that follows — import, keep, summarize — quietly works on the table you made last.
-  - highlight:
-      target:
-        - tbl
-      effect: glow
-    speak: Leave it out, and the script stops at line three with nowhere to pour the data.
-  - pause: 1
-  - wait: click
-  - draw:
-      - l_ver
-    speak: 'Now the detail beginners skip: the version number, here fifty-four.'
-  - highlight:
-      target:
-        - l_ver
-      effect: pulse
-    speak: Registers get revised — an income year is corrected, a variable redefined — and a new version of the datastore is published.
-  - point:
-      at:
-        ref: md_line_1
-      gesture: underline
-    speak: Pin the version, and the same script returns the same mean wage for the 1985 cohort to the last krone, today or three years from now.
-  - speak: 'Which is why a journal or a co-author asks for your script rather than your data: with the version pinned, a register analysis can be checked by someone who will never see a single person in it.'
-    delivery: grave
-  - ask:
-      intro: One quick check.
-      question: Click the part of the figure that holds the raw register data.
-      widget: click
-      answer: vault
-      right: The archive — your own table starts out empty and stays empty until line three pours something into it.
-      wrong: That is the table you created; the registers themselves sit in the archive on the left.
-  - draw:
-      - arrow_import
-      - l_arrow
-    speak: Only then do the next three lines carry a copy of a couple of columns across, from the archive into your table.
-  - pause: 1
-  - speak: 'So the two silent lines decide everything: which archive, which version — and which table the rest of the script is quietly filling.'
----
-title: Three lines that produce results
 level: basic
+
+    ```microdata md x 500 y 608 width 700 font_size 18 show code frame screen marks ["no.ssb.fdb:54","as db","create-dataset persons"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    ```
+    shape vault #2f6b8f shape rect x 250 y 250 width 320 height 250 hidden true
+    text t1 "BEFOLKNING_KJOENN" x 250 y 310 font_size 20 hidden true
+    text t2 "INNTEKT_WLONN" x 250 y 250 font_size 20 hidden true
+    text t3 "NUDB_BU" x 250 y 190 font_size 20 hidden true
+    label l_vault "no.ssb.fdb — the datastore" above #2f6b8f attach_to vault hidden true
+    label l_ver "version 54" below #8a5fa8 attach_to vault hidden true
+    shape tbl dashed #b5482e shape rect x 760 y 250 width 300 height 180 hidden true
+    text empty_txt "no rows, no columns" #8f887c x 760 y 250 font_size 20 hidden true
+    label l_tbl "persons" above #b5482e attach_to tbl hidden true
+    arrow arrow_import dashed #8f887c from.anchor right from.ref vault to.anchor left to.ref tbl hidden true
+    label l_arrow "lines 3–5: import" above #8f887c attach_to arrow_import hidden true
+    group desk members ["vault","t1","t2","t3","tbl","empty_txt","arrow_import"] fit.h 330 fit.w 880 fit.x 60 fit.y 60 hidden true
+
+Now that we have seen the whole five-line script, let us slow down on the two lines that print nothing — and that decide whether anyone can ever reproduce your result.
+    draw md md_line_1 parallel true
+
+The first says which register archive we are talking to; the second makes an empty table to put things in.
+    draw md_line_2
+
+    pause 1
+
+Think of the datastore as a locked archive of Statistics Norway's registers — everyone in the country, and you are never let inside.
+    draw vault l_vault
+
+On its shelves sit the variables under their real, rather shouty names: sex, wage income, highest completed education.
+    draw t1 t2 t3 parallel true
+
+    pause 1
+
+So the first line is an address — the population and income database — and the number after the colon is its version.
+    draw md_mark_1
+
+And this gives that address a nickname, db, so every later line can simply say db slash the variable it wants.
+    draw md_mark_2
+
+    wait
+
+The second line puts an empty table on your own desk and names it persons.
+    draw tbl l_tbl
+
+It really is empty — no rows, no columns, not one number in it yet.
+    draw empty_txt
+
+You have to say this out loud, because everything that follows — import, keep, summarize — quietly works on the table you made last.
+    draw md_mark_3
+
+Leave it out, and the script stops at line three with nowhere to pour the data.
+    highlight tbl effect glow
+
+    pause 1
+
+    wait
+
+Now the detail beginners skip: the version number, here fifty-four.
+    draw l_ver
+
+Registers get revised — an income year is corrected, a variable redefined — and a new version of the datastore is published.
+    highlight l_ver effect pulse
+
+Pin the version, and the same script returns the same mean wage for the 1985 cohort to the last krone, today or three years from now.
+    point at.ref md_line_1 gesture underline
+
+Which is why a journal or a co-author asks for your script rather than your data: with the version pinned, a register analysis can be checked by someone who will never see a single person in it.
+    delivery grave
+
+    ask "Click the part of the figure that holds the raw register data." intro "One quick check." widget click answer vault
+        right: The archive — your own table starts out empty and stays empty until line three pours something into it.
+        wrong: That is the table you created; the registers themselves sit in the archive on the left.
+
+Only then do the next three lines carry a copy of a couple of columns across, from the archive into your table.
+    draw arrow_import l_arrow
+
+    pause 1
+
+So the two silent lines decide everything: which archive, which version — and which table the rest of the script is quietly filling.
+
+## Three lines that produce results
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 6
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      summarize wage
-    marks:
-      - BEFOLKNING_KJOENN
-      - '2022-01-01'
-      - summarize wage
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that we have seen why every script begins by naming the datastore and creating an empty dataset, let us add the lines that actually produce something.
-  - pause: 1
-  - draw:
-      - md_line_3
-    speak: 'The third line reaches into the datastore and pulls out one variable: sex, for every person in the population.'
-  - draw:
-      - md_mark_1
-    speak: The capitals are the variable's real name in the register — and the little word after it, as sex, is the short nickname you will type for the rest of the script.
-  - pause: 1
-  - draw:
-      - md_line_4
-    speak: 'The fourth line does the same for money: wage income, the pay reported to the tax authorities, imported here under the nickname wage.'
-  - draw:
-      - md_mark_2
-    speak: This date is not decoration — income is a fact about a particular year, so the script has to say which year you are asking about.
-  - highlight:
-      target:
-        - md_line_4
-      effect: glow
-    speak: 'That is the classic register mistake, by the way: reading a 2022 income onto a population counted in 2015, and never noticing the mismatch.'
-  - pause: 1
-  - wait: click
-  - draw:
-      - md_line_5
-    speak: 'And now the fifth line, which is the entire analysis: summarize wage.'
-  - pause: 1
-  - draw:
-      - md_out
-    speak: Back comes a table — how many people, the average, the spread — all of it counted on the server, over everyone in the dataset.
-  - pause: 1
-  - focus:
-      target:
-        - md_out
-    speak: 'And notice what did not come back: no rows, no names, no single person''s pay. You asked for a summary, and a summary is what you were handed.'
-  - ask:
-      intro: A quick check before we go on.
-      question: Click the line that brought wage income into the dataset.
-      widget: click
-      answer: md_line_4
-      right: The fourth line — the one importing INNTEKT_WLONN under the nickname wage, for the first of January 2022.
-      wrong: Not that one — look for the line that names an income variable and a date.
-  - wait: click
-  - draw:
-      - md_mark_3
-    speak: 'Here is the rhythm worth remembering: everything above stays, and this last line is the only one you change.'
-  - pause: 1
-  - speak: Write tabulate sex instead, and you get a table of how many women and men there are. Write histogram wage, and you get your first plot. One line, one output.
-  - explore:
-      code: md
-    speak: Try it yourself — swap that last line and run the script again.
-  - pause: 1
-  - speak: 'Two lines to fetch, one line to ask: in microdata your analysis is built one verb at a time, and every verb hands back a summary — never a person.'
-    delivery: grave
----
-title: Where the result appears
 level: basic
+
+    ```microdata md width 960 font_size 16 show below lines 6 frame screen marks ["BEFOLKNING_KJOENN","2022-01-01","summarize wage"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    summarize wage
+    ```
+
+Now that we have seen why every script begins by naming the datastore and creating an empty dataset, let us add the lines that actually produce something.
+    draw md md_line_1 md_line_2 parallel true
+
+    pause 1
+
+The third line reaches into the datastore and pulls out one variable: sex, for every person in the population.
+    draw md_line_3
+
+The capitals are the variable's real name in the register — and the little word after it, as sex, is the short nickname you will type for the rest of the script.
+    draw md_mark_1
+
+    pause 1
+
+The fourth line does the same for money: wage income, the pay reported to the tax authorities, imported here under the nickname wage.
+    draw md_line_4
+
+This date is not decoration — income is a fact about a particular year, so the script has to say which year you are asking about.
+    draw md_mark_2
+
+That is the classic register mistake, by the way: reading a 2022 income onto a population counted in 2015, and never noticing the mismatch.
+    highlight md_line_4 effect glow
+
+    pause 1
+
+    wait
+
+And now the fifth line, which is the entire analysis: summarize wage.
+    draw md_line_5
+
+    pause 1
+
+Back comes a table — how many people, the average, the spread — all of it counted on the server, over everyone in the dataset.
+    draw md_out
+
+    pause 1
+
+And notice what did not come back: no rows, no names, no single person's pay. You asked for a summary, and a summary is what you were handed.
+    focus md_out
+
+    ask "Click the line that brought wage income into the dataset." widget click answer md_line_4
+        intro: A quick check before we go on.
+        right: The fourth line — the one importing INNTEKT_WLONN under the nickname wage, for the first of January 2022.
+        wrong: Not that one — look for the line that names an income variable and a date.
+
+    wait
+
+Here is the rhythm worth remembering: everything above stays, and this last line is the only one you change.
+    draw md_mark_3
+
+    pause 1
+
+Write tabulate sex instead, and you get a table of how many women and men there are. Write histogram wage, and you get your first plot. One line, one output.
+
+Try it yourself — swap that last line and run the script again.
+    explore code md
+
+    pause 1
+
+Two lines to fetch, one line to ask: in microdata your analysis is built one verb at a time, and every verb hands back a summary — never a person.
+    delivery grave
+
+## Where the result appears
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 5
-    width: 900
-    font_size: 16
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      histogram wage
-  - id: laptop
-    type: shape
-    shape: rect
-    x: 220
-    'y': 400
-    width: 200
-    height: 140
-  - id: server
-    type: shape
-    shape: rect
-    x: 700
-    'y': 400
-    width: 280
-    height: 330
-  - id: rows
-    type: pieces
-    of: grid
-    x: 700
-    'y': 390
-    width: 210
-    height: 230
-    'n': 2
-    rows: 5
-    style:
-      color: '#8f887c'
-  - id: lock
-    type: icon
-    of: lock
-    size: 56
-    x: 700
-    'y': 580
-  - id: arrow_out
-    type: arrow
-    from:
-      ref: laptop
-    to:
-      ref: server
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: arrow_back
-    type: arrow
-    from:
-      ref: server
-    to:
-      ref: laptop
-    curved: true
-    style:
-      color: '#b5482e'
-  - id: flyt
-    type: group
-    members:
-      - laptop
-      - server
-      - rows
-      - lock
-      - arrow_out
-      - arrow_back
-    fit:
-      x: 90
-      'y': 170
-      w: 820
-      h: 420
-  - id: l_laptop
-    type: label
-    text: Your browser
-    attach_to: laptop
-    side: below
-  - id: l_server
-    type: label
-    text: The datastore, on a server
-    attach_to: server
-    side: right
-  - id: l_out
-    type: label
-    text: your five lines
-    attach_to: arrow_out
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: l_back
-    type: label
-    text: counts, means, bar heights
-    attach_to: arrow_back
-    side: below
-    style:
-      color: '#b5482e'
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that we have seen the three lines that produce a result, the last question is where that result appears — because if you look for a data window here, you will never find one.
-  - pause: 1
-  - draw:
-      - md_line_3
-      - md_line_4
-    speak: 'These two lines fetch what we need: each person''s sex, and their wage income as it stood on the first of January, twenty twenty-two.'
-  - pause: 1
-  - draw:
-      - md_line_5
-    speak: And the fifth line asks for a histogram of those wages. Click when you are ready to run it.
-  - wait: click
-  - draw:
-      - md_out
-    speak: 'There it is: your first plot, drawn from the wages of about two and a half million employed Norwegians.'
-  - pause: 1
-  - point:
-      at:
-        ref: md_out
-      gesture: circle
-    speak: Each bar is a count of people — how many earned between this much and that much. Not one of those people is on your screen.
-  - wait: click
-  - clear: {}
-    speak: Which is strange, if you think about it. So let us follow where the script actually went.
-  - draw:
-      - laptop
-      - l_laptop
-    speak: 'Here is your machine: a browser tab with an editor in it. No files, no data folder, nothing to save.'
-  - pause: 1
-  - draw:
-      - server
-      - lock
-      - l_server
-    speak: The data sits somewhere else — a server at Statistics Norway, behind a door you will never walk through.
-  - pause: 1
-  - draw:
-      - rows
-    speak: 'Inside are the rows: one line per person, every resident of Norway, with their sex, their income, their municipality.'
-  - focus:
-      target:
-        - rows
-    speak: You cannot open a row, scroll it, print it or download it — and that is precisely why anyone is allowed near this data without an application taking months.
-  - pause: 1
-  - draw:
-      - arrow_out
-      - l_out
-    speak: 'What leaves your browser is not data. It is instructions: five lines of text, sent off to be run over there.'
-  - pause: 1
-  - draw:
-      - arrow_back
-      - l_back
-    speak: And what comes back is not data either — a mean, a table of counts, the heights of ten bars.
-  - flow:
-      along:
-        - arrow_out
-        - arrow_back
-    speak: Script out, aggregates back — that round trip happens every single time you press run.
-  - wait: click
-  - clear: {}
-  - show:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_out
-    speak: So the output panel is not a window onto your data. It is the only form your data will ever take for you.
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: 'Which flips the usual habit: in Stata or R you inspect rows first and trust them; here you must ask the output the questions you would have answered by eye.'
-  - pause: 1
-  - quiz:
-      intro: One quick check before we close the series.
-      question: Where does your microdata script actually run?
-      choices:
-        - In your browser, on data you downloaded
-        - On the server — only aggregates come back
-        - On a local copy you keep on your laptop
-      correct: 2
-      right: 'It runs on the server: your five lines travel out, and only aggregated results travel back.'
-      wrong: Nothing is ever downloaded — the individual rows never leave the server.
-  - pause: 1
-  - speak: 'Five lines gave you a population-wide plot without ever seeing a person — and every lecture from here just adds one more line to this same script, with the answer always arriving the same way: computed there, returned as an aggregate, read in that panel.'
-    delivery: grave
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: What is actually inside the datastore
-    x: 500
-    'y': 390
-    font_size: 44
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 2 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: What is actually inside the datastore'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: basic
+
+    ```microdata md width 900 font_size 16 show below lines 5 frame screen hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    histogram wage
+    ```
+    shape laptop shape rect x 220 y 400 width 200 height 140 hidden true
+    shape server shape rect x 700 y 400 width 280 height 330 hidden true
+    pieces rows #8f887c x 700 y 390 width 210 height 230 n 2 rows 5 of grid hidden true
+    icon lock size 56 x 700 y 580 of lock hidden true
+    arrow arrow_out laptop -> server curved #2f6b8f hidden true
+    arrow arrow_back server -> laptop curved #b5482e hidden true
+    group flyt members ["laptop","server","rows","lock","arrow_out","arrow_back"] fit.h 420 fit.w 820 fit.x 90 fit.y 170 hidden true
+    label l_laptop "Your browser" below attach_to laptop hidden true
+    label l_server "The datastore, on a server" right attach_to server hidden true
+    label l_out "your five lines" above #2f6b8f attach_to arrow_out hidden true
+    label l_back "counts, means, bar heights" below #b5482e attach_to arrow_back hidden true
+
+Now that we have seen the three lines that produce a result, the last question is where that result appears — because if you look for a data window here, you will never find one.
+    draw md md_line_1 md_line_2 parallel true
+
+    pause 1
+
+These two lines fetch what we need: each person's sex, and their wage income as it stood on the first of January, twenty twenty-two.
+    draw md_line_3 md_line_4
+
+    pause 1
+
+And the fifth line asks for a histogram of those wages. Click when you are ready to run it.
+    draw md_line_5
+
+    wait
+
+There it is: your first plot, drawn from the wages of about two and a half million employed Norwegians.
+    draw md_out
+
+    pause 1
+
+Each bar is a count of people — how many earned between this much and that much. Not one of those people is on your screen.
+    point at.ref md_out gesture circle
+
+    wait
+
+Which is strange, if you think about it. So let us follow where the script actually went.
+    clear
+
+Here is your machine: a browser tab with an editor in it. No files, no data folder, nothing to save.
+    draw laptop l_laptop
+
+    pause 1
+
+The data sits somewhere else — a server at Statistics Norway, behind a door you will never walk through.
+    draw server lock l_server
+
+    pause 1
+
+Inside are the rows: one line per person, every resident of Norway, with their sex, their income, their municipality.
+    draw rows
+
+You cannot open a row, scroll it, print it or download it — and that is precisely why anyone is allowed near this data without an application taking months.
+    focus rows
+
+    pause 1
+
+What leaves your browser is not data. It is instructions: five lines of text, sent off to be run over there.
+    draw arrow_out l_out
+
+    pause 1
+
+And what comes back is not data either — a mean, a table of counts, the heights of ten bars.
+    draw arrow_back l_back
+
+Script out, aggregates back — that round trip happens every single time you press run.
+    flow arrow_out arrow_back
+
+    wait
+
+    clear
+
+So the output panel is not a window onto your data. It is the only form your data will ever take for you.
+    show md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 md_out
+
+Which flips the usual habit: in Stata or R you inspect rows first and trust them; here you must ask the output the questions you would have answered by eye.
+    highlight md_out effect glow
+
+    pause 1
+
+    quiz "Where does your microdata script actually run?"
+        intro: One quick check before we close the series.
+        right: It runs on the server: your five lines travel out, and only aggregated results travel back.
+        wrong: Nothing is ever downloaded — the individual rows never leave the server.
+        * In your browser, on data you downloaded
+        + On the server — only aggregates come back
+        * On a local copy you keep on your laptop
+
+    pause 1
+
+Five lines gave you a population-wide plot without ever seeing a person — and every lecture from here just adds one more line to this same script, with the answer always arriving the same way: computed there, returned as an aggregate, read in that panel.
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: What is actually inside the datastore
+    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:2 title "What is actually inside the datastore" size 320 x 500 y 395
+
+    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
+    text end_count "1 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
