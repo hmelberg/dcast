@@ -4,8 +4,8 @@
 - [Health Technology Assessment: Deciding What a Health System Should Buy](health-technology-assessment-deciding/) — updated 2026-09-02
 - [Registerdata i praksis: Python og pandas på NPR, Legemiddelregisteret og HELFO](registerdata-i-praksis-python-og-pandas/) — updated 2026-09-05
 - [Doing Data Analysis in microdata.no: A Scripting Course](microdata/) — updated 2026-09-18
-- [Understanding the QALY: Definition, Calculation, and Debates](understanding-the-qaly/) — updated 2026-09-28
 - [Taylor Series and the Economics of Approximation](taylor-series-and-the-economics-of/) — updated 2026-10-03
+- [Understanding the QALY: Definition, Calculation, and Debates](understanding-the-qaly/) — updated 2026-10-03
 
 ---
 

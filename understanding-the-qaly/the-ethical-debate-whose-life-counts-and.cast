@@ -1,1411 +1,434 @@
-playlist:
-  title: 'The ethical debate: whose life counts, and how much?'
-  prompt: Does maximizing total QALYs discriminate against the elderly or disabled? Is it fair that a treatment extending a disabled person's life is valued less than the same treatment for a non-disabled person? What do critics like the disability rights movement argue against QALY-based rationing?
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  next:
-    title: Does it work in practice? Evidence, limits, and alternatives
-    href: https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/does-it-work-in-practice-evidence-limits.yaml
-  enroll: https://drawcast.anvil.app
----
-chapter: The efficiency case for QALYs
----
-title: The Efficiency Case
+# The ethical debate: whose life counts, and how much?
+prompt: "Does maximizing total QALYs discriminate against the elderly or disabled? Is it fair that a treatment extending a disabled person's life is valued less than the same treatment for a non-disabled person? What do critics like the disability rights movement argue against QALY-based rationing?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+next: {"title":"Does it work in practice? Evidence, limits, and alternatives","href":"https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/does-it-work-in-practice-evidence-limits.cast"}
+enroll: https://drawcast.anvil.app
+
+chapter: "The efficiency case for QALYs"
+
+## The Efficiency Case
 level: advanced
-elements:
-  - id: patient_label
-    type: label
-    text: 60-year-old patient
-    attach_to: patient_icon
-    side: below
-  - id: hip_label
-    type: label
-    text: Hip replacement
-    attach_to: hip_icon
-    side: below
-  - id: pill_label
-    type: label
-    text: Drug
-    attach_to: pill_icon
-    side: below
-  - id: claimA
-    type: node
-    shape: rect
-    text: “Neutral yardstick”
-    width: 240
-    height: 70
-    style:
-      color: '#2f6b8f'
-  - id: claimA_label
-    type: label
-    text: Claim A
-    attach_to: claimA
-    side: above
-  - id: claimB
-    type: node
-    shape: rect
-    text: “Structurally discounts”
-    width: 240
-    height: 70
-    style:
-      color: '#b5482e'
-  - id: claimB_label
-    type: label
-    text: Claim B
-    attach_to: claimB
-    side: above
-  - id: claims_row
-    type: group
-    members:
-      - claimA
-      - claimB
-    layout: row
-    gap: 100
-    fit:
-      x: 150
-      'y': 300
-      w: 700
-      h: 90
-  - id: eq
-    type: math
-    tex: QALY = \sum u_t \times t
-    x: 500
-    'y': 430
-    step_gap: 70
-    steps:
-      - tex: QALY_{hip}=0.7\times5=3.5\;\Rightarrow\;\$5{,}700/\text{QALY}
-      - tex: QALY_{drug}=0.5\times2=1\;\Rightarrow\;\$50{,}000/\text{QALY}
-    size: 32
-  - id: table_header_col1
-    type: text
-    text: Treatment
-    x: 140
-    'y': 235
-    font_size: 28
-  - id: table_header_col2
-    type: text
-    text: Cost/QALY
-    x: 560
-    'y': 235
-    font_size: 28
-  - id: row_hip_col1
-    type: text
-    text: Hip replacement
-    x: 140
-    'y': 200
-    font_size: 28
-  - id: row_hip_col2
-    type: text
-    text: $5,700
-    x: 560
-    'y': 200
-    font_size: 28
-  - id: threshold_line
-    type: path
-    points:
-      - [100, 170]
-      - [820, 170]
-    style:
-      dash: true
-      color: '#8f887c'
-  - id: threshold_label
-    type: text
-    text: 'NICE: £20k–30k/QALY'
-    x: 140
-    'y': 145
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: row_drug_col1
-    type: text
-    text: Drug
-    x: 140
-    'y': 105
-    font_size: 28
-  - id: row_drug_col2
-    type: text
-    text: $50,000
-    x: 560
-    'y': 105
-    font_size: 28
-  - id: strike_neutral
-    type: annotation
-    target:
-      - claimA
-    kind: strike
-  - id: resolution_note
-    type: label
-    text: weighted by capacity
-    attach_to: claimA
-    side: right
-  - id: patient_icon
-    type: shape
-    shape: person
-    width: 70
-    height: 150
-    at:
-      place: top
-  - id: hip_ball
-    type: shape
-    shape: circle
-    radius: 20
-    at:
-      ref: patient_icon
-      side: below-left
-      gap: 60
-  - id: hip_socket
-    type: arc
-    radius: 30
-    start: 200
-    end: 340
-    at:
-      ref: hip_ball
-      anchor: center
-  - id: hip_icon
-    type: group
-    members:
-      - hip_ball
-      - hip_socket
-  - id: pill_body
-    type: shape
-    shape: rect
-    width: 36
-    height: 56
-    at:
-      ref: patient_icon
-      side: below-right
-      gap: 60
-  - id: pill_cap
-    type: shape
-    shape: rect
-    width: 40
-    height: 16
-    at:
-      ref: pill_body
-      anchor: top
-    anchor: bottom
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: pill_icon
-    type: group
-    members:
-      - pill_body
-      - pill_cap
-  - id: table_rule
-    type: path
-    points:
-      - [150, 265]
-      - [850, 265]
-    style:
-      color: '#8f887c'
-      stroke_width: 2
-  - id: fulcrum
-    type: shape
-    shape: triangle
-    width: 36
-    height: 26
-    at:
-      ref: patient_icon
-      side: below
-      gap: 8
-  - id: beam
-    type: path
-    points:
-      - [-190, 0]
-      - [190, 0]
-    at:
-      ref: fulcrum
-      anchor: top
-    anchor: center
-    style:
-      stroke_width: 4
-      color: '#3d3833'
-commands:
-  - card:
-      title: The Efficiency Case
-  - draw:
-      - patient_icon
-      - hip_icon
-      - pill_icon
-      - fulcrum
-      - beam
-      - patient_label
-      - hip_label
-      - pill_label
-    speak: This lecture asks whether maximizing total QALYs treats every patient's life as equally worth saving — and the sixty-year-old choosing between a hip replacement and a life-extending drug makes that question concrete.
-    parallel: true
-  - draw:
-      - claimA
-      - claimA_label
-    speak: 'Some economists call the QALY a neutral yardstick: the same arithmetic, applied to every patient, without regard to who they are.'
-  - draw:
-      - claimB
-      - claimB_label
-    speak: Disability rights critics say that arithmetic is never neutral — it structurally discounts patients who cannot gain as many QALYs to begin with.
-  - point:
-      at:
-        ref: claims_row
-      gesture: circle
-    speak: Which claim survives contact with the numbers?
-  - clear:
-      keep:
-        - patient_icon
-        - hip_icon
-        - pill_icon
-        - claimA
-        - claimA_label
-        - claimB
-        - claimB_label
-        - fulcrum
-        - beam
-  - draw:
-      - eq
-  - step: eq
-    speak: The hip replacement costs $20,000, adds five years at a utility of 0.7 — that's 3.5 QALYs, or roughly $5,700 per QALY.
-  - step: eq
-    speak: The drug costs $50,000, extends life by two years but at a utility of only 0.5 because of side effects — one QALY, at $50,000 per QALY.
-  - erase:
-      - eq
-  - draw:
-      - table_rule
-      - table_header_col1
-      - table_header_col2
-      - row_hip_col1
-      - row_hip_col2
-      - threshold_line
-      - threshold_label
-      - row_drug_col1
-      - row_drug_col2
-    speak: Ranked against a threshold like the one health systems such as NICE use, around £20,000 to £30,000 per QALY, the hip replacement clears the bar easily; the drug barely does.
-  - move:
-      target:
-        - beam
-      rotate: -15
-      pivot:
-        ref: fulcrum
-        anchor: top
-      duration: 1
-  - quiz:
-      question: Which treatment has the lower cost per QALY in this example?
-      choices:
-        - Hip replacement
-        - Drug
-      correct: 1
-      right: 'The hip replacement: 3.5 QALYs for $20,000 is about $5,700 per QALY, far cheaper than the drug''s $50,000.'
-      wrong: Compare cost divided by QALYs gained for each option.
-  - draw:
-      - strike_neutral
-      - resolution_note
-    speak: So the claim that this arithmetic is neutral gets crossed out right here — it isn't neutral, it is a rule that rewards whoever can gain the most health, however that capacity is distributed.
-  - highlight:
-      target:
-        - row_hip_col2
-      effect: glow
-    speak: 'That is the efficiency case''s real strength: one transparent ruler across completely unrelated treatments.'
-  - highlight:
-      target:
-        - claimA
-      effect: glow
-      color: '#b5482e'
-    speak: Its weakness is the sentence we just crossed out — most health per pound is not automatically the same question as whose health.
-  - speak: What is efficient here is unambiguous; whether efficient is fair is the question the next parts take apart.
----
-chapter: The disability critique
----
-title: The Disability Critique
+
+    label patient_label "60-year-old patient" below attach_to patient_icon hidden true
+    label hip_label "Hip replacement" below attach_to hip_icon hidden true
+    label pill_label "Drug" below attach_to pill_icon hidden true
+    box claimA "“Neutral yardstick”" #2f6b8f width 240 height 70 in claims_row hidden true
+    label claimA_label "Claim A" above attach_to claimA hidden true
+    box claimB "“Structurally discounts”" #b5482e width 240 height 70 in claims_row hidden true
+    label claimB_label "Claim B" above attach_to claimB hidden true
+    row claims_row gap 100 fit.h 90 fit.w 700 fit.x 150 fit.y 300 hidden true
+    math eq tex "QALY = \\sum u_t \\times t" size 32 steps [{"tex":"QALY_{hip}=0.7\\times5=3.5\\;\\Rightarrow\\;\\$5{,}700/\\text{QALY}"},{"tex":"QALY_{drug}=0.5\\times2=1\\;\\Rightarrow\\;\\$50{,}000/\\text{QALY}"}] step_gap 70 x 500 y 430 hidden true
+    text table_header_col1 "Treatment" x 140 y 235 font_size 28 hidden true
+    text table_header_col2 "Cost/QALY" x 560 y 235 font_size 28 hidden true
+    text row_hip_col1 "Hip replacement" x 140 y 200 font_size 28 hidden true
+    text row_hip_col2 "$5,700" x 560 y 200 font_size 28 hidden true
+    path threshold_line dashed #8f887c points [[100,170],[820,170]] hidden true
+    text threshold_label "NICE: £20k–30k/QALY" #8f887c x 140 y 145 font_size 22 hidden true
+    text row_drug_col1 "Drug" x 140 y 105 font_size 28 hidden true
+    text row_drug_col2 "$50,000" x 560 y 105 font_size 28 hidden true
+    mark strike_neutral around claimA kind strike hidden true
+    label resolution_note "weighted by capacity" right attach_to claimA hidden true
+    shape patient_icon top shape person width 70 height 150 hidden true
+    shape hip_ball below-left patient_icon gap 60 shape circle radius 20 hidden true
+    arc hip_socket at.anchor center at.ref hip_ball radius 30 start 200 end 340 hidden true
+    group hip_icon members ["hip_ball","hip_socket"] hidden true
+    shape pill_body below-right patient_icon gap 60 shape rect width 36 height 56 hidden true
+    shape pill_cap #b5482e at.anchor top at.ref pill_body anchor bottom shape rect width 40 height 16 style.fill #b5482e hidden true
+    group pill_icon members ["pill_body","pill_cap"] hidden true
+    path table_rule #8f887c points [[150,265],[850,265]] style.stroke_width 2 hidden true
+    shape fulcrum below patient_icon gap 8 shape triangle width 36 height 26 hidden true
+    path beam #3d3833 at.anchor top at.ref fulcrum anchor center points [[-190,0],[190,0]] style.stroke_width 4 hidden true
+
+    card title "The Efficiency Case"
+
+This lecture asks whether maximizing total QALYs treats every patient's life as equally worth saving — and the sixty-year-old choosing between a hip replacement and a life-extending drug makes that question concrete.
+    draw patient_icon hip_icon pill_icon fulcrum beam patient_label hip_label pill_label parallel true
+
+Some economists call the QALY a neutral yardstick: the same arithmetic, applied to every patient, without regard to who they are.
+    draw claimA claimA_label
+
+Disability rights critics say that arithmetic is never neutral — it structurally discounts patients who cannot gain as many QALYs to begin with.
+    draw claimB claimB_label
+
+Which claim survives contact with the numbers?
+    point at.ref claims_row gesture circle
+
+    clear keep ["patient_icon","hip_icon","pill_icon","claimA","claimA_label","claimB","claimB_label","fulcrum","beam"]
+
+    draw eq
+
+The hip replacement costs $20,000, adds five years at a utility of 0.7 — that's 3.5 QALYs, or roughly $5,700 per QALY.
+    step "eq"
+
+The drug costs $50,000, extends life by two years but at a utility of only 0.5 because of side effects — one QALY, at $50,000 per QALY.
+    step "eq"
+
+    erase eq
+
+Ranked against a threshold like the one health systems such as NICE use, around £20,000 to £30,000 per QALY, the hip replacement clears the bar easily; the drug barely does.
+    draw table_rule table_header_col1 table_header_col2 row_hip_col1 row_hip_col2 threshold_line threshold_label row_drug_col1 row_drug_col2
+
+    move beam rotate -15 pivot.ref fulcrum pivot.anchor top duration 1
+
+    quiz "Which treatment has the lower cost per QALY in this example?"
+        right: The hip replacement: 3.5 QALYs for $20,000 is about $5,700 per QALY, far cheaper than the drug's $50,000.
+        wrong: Compare cost divided by QALYs gained for each option.
+        + Hip replacement
+        * Drug
+
+So the claim that this arithmetic is neutral gets crossed out right here — it isn't neutral, it is a rule that rewards whoever can gain the most health, however that capacity is distributed.
+    draw strike_neutral resolution_note
+
+That is the efficiency case's real strength: one transparent ruler across completely unrelated treatments.
+    highlight row_hip_col2 effect glow
+
+Its weakness is the sentence we just crossed out — most health per pound is not automatically the same question as whose health.
+    highlight claimA effect glow color #b5482e
+
+What is efficient here is unambiguous; whether efficient is fair is the question the next parts take apart.
+
+chapter: "The disability critique"
+
+## The Disability Critique
 level: advanced
 sources:
-  - id: harris1987
-    title: QALYfying the value of life
-    authors: J. Harris
-    year: 1987
-    finding: the double jeopardy argument against QALY maximization
-elements:
-  - id: drug_a
-    type: icon
-    of: pill
-    size: 90
-  - id: patient_a
-    type: shape
-    shape: person
-    width: 180
-    height: 340
-    style:
-      color: '#2f6b8f'
-  - id: title_a
-    type: text
-    text: Non-disabled patient
-    x: 0
-    'y': 0
-    font_size: 24
-  - id: label_ua
-    type: text
-    text: Baseline u = 0.8
-    x: 0
-    'y': 0
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: col_a
-    type: group
-    members:
-      - title_a
-      - drug_a
-      - patient_a
-      - label_ua
-    layout: column
-    gap: 18
-  - id: drug_b
-    type: icon
-    of: pill
-    size: 90
-  - id: patient_b
-    type: shape
-    style:
-      color: '#b5482e'
-    shape: rect
-    width: 180
-    height: 340
-  - id: title_b
-    type: text
-    text: Wheelchair user
-    x: 0
-    'y': 0
-    font_size: 24
-  - id: label_ub
-    type: text
-    text: Baseline u = 0.5
-    x: 0
-    'y': 0
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: col_b
-    type: group
-    members:
-      - title_b
-      - drug_b
-      - patient_b
-      - label_ub
-    layout: column
-    gap: 18
-  - id: cols
-    type: group
-    members:
-      - col_a
-      - col_b
-    layout: row
-    gap: 150
-    fit:
-      x: 60
-      'y': 270
-      w: 880
-      h: 420
-  - id: timeline
-    type: arrow
-    from:
-      ref: cols
-      anchor: bottom_left
-    to:
-      ref: cols
-      anchor: bottom_right
-    style:
-      color: '#8f887c'
-  - id: label_0
-    type: label
-    text: '0'
-    attach_to: timeline
-    side: below
-  - id: label_2
-    type: label
-    text: 2 years
-    attach_to: timeline
-    side: below
-  - id: calc_a
-    type: math
-    tex: 2 \times 0.8 = 1.6
-    at:
-      ref: col_a
-      side: below
-      gap: 60
-    style:
-      color: '#2f6b8f'
-  - id: label_unit_a
-    type: label
-    text: QALYs
-    attach_to: calc_a
-    side: below
-  - id: calc_b
-    type: math
-    tex: 2 \times 0.5 = 1.0
-    at:
-      ref: col_b
-      side: below
-      gap: 60
-    style:
-      color: '#b5482e'
-  - id: label_unit_b
-    type: label
-    text: QALY
-    attach_to: calc_b
-    side: below
-  - id: gap_arrow
-    type: arrow
-    from:
-      ref: calc_a
-      anchor: right
-    to:
-      ref: calc_b
-      anchor: left
-    style:
-      color: '#8a5fa8'
-  - id: label_gap
-    type: label
-    text: double jeopardy — J. Harris, 1987
-    attach_to: gap_arrow
-    side: below
-    cites:
-      - harris1987
-  - id: portrait_john_harris
-    type: portrait
-    of: John Harris (bioethicist)
-    width: 150
-    x: 880
-    'y': 150
-    strokes: img1:LP:data:image/jpeg;base64,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
-  - id: claim_measure
-    type: text
-    text: Measurement, or built into the concept?
-    font_size: 26
-    at:
-      ref: label_gap
-      side: below
-      gap: 40
-  - id: answer_mark
-    type: annotation
-    target:
-      - claim_measure
-    kind: box
-commands:
-  - card:
-      title: The Disability Critique
-  - draw:
-      - drug_a
-      - patient_a
-      - drug_b
-      - patient_b
-    parallel: true
-    speak: Now that we have seen the rule reward whoever gains the most health, ask what happens when two patients get the identical treatment but start from different baseline states.
-  - draw:
-      - title_a
-      - label_ua
-      - title_b
-      - label_ub
-    parallel: true
-    speak: 'Give the same life-extending drug to two sixty-year-olds: one with no disability, baseline utility 0.8; one using a wheelchair, baseline utility capped at 0.5 by the health-state valuation itself.'
-  - draw:
-      - timeline
-      - label_0
-      - label_2
-    speak: Both gain the same two years of life.
-  - draw:
-      - calc_a
-      - label_unit_a
-    speak: 'The non-disabled patient''s QALYs: 2 years times 0.8 equals 1.6 QALYs.'
-  - draw:
-      - calc_b
-      - label_unit_b
-    speak: 'The disabled patient''s QALYs: 2 years times 0.5 equals 1.0 QALY — three-fifths as much, for an identical clinical benefit.'
-  - draw:
-      - gap_arrow
-      - label_gap
-      - portrait_john_harris
-    parallel: true
-    speak: 'Philosopher John Harris named this the double jeopardy argument back in 1987: disabled patients are penalized once by their condition, and a second time by a metric that scores their extended life as worth less.'
-  - draw:
-      - claim_measure
-    speak: Is that a flaw in how utility weights happen to be measured, or a flaw built into the concept of health-state utility itself?
-  - draw:
-      - answer_mark
-    speak: It survives either way you measure it — any instrument that scores quality of life will score a lower baseline lower, so the gap is not a measurement artifact fixable with a better questionnaire.
-  - quiz:
-      question: Is the double jeopardy gap a flaw in measurement, or built into the QALY concept itself?
-      choices:
-        - A measurement artifact
-        - Built into the concept
-      correct: 2
-      right: Built into the concept — any utility-based metric will score a lower baseline lower, so a better questionnaire can't remove the gap.
-      wrong: A better questionnaire wouldn't fix this — the gap persists under any instrument, so it's not just measurement.
-  - erase:
-      - portrait_john_harris
-      - label_gap
-      - claim_measure
-      - answer_mark
-  - highlight:
-      target:
-        - calc_a
-        - calc_b
-    speak: That is why the criticism lands on QALYs specifically and not just on one particular utility survey.
-  - highlight:
-      target:
-        - calc_a
-        - calc_b
-        - gap_arrow
-    speak: If a disabled patient's baseline utility is capped lower, an identical life-extending treatment given to them registers fewer QALYs than the same treatment given to a non-disabled patient — that's the double jeopardy in numbers, not rhetoric.
-  - focus:
-      target:
-        - calc_a
-        - calc_b
-        - gap_arrow
-    speak: The same procedure, the same years of life, valued differently — because the metric multiplies duration by a quality weight that disability itself depresses.
-  - quiz:
-      question: In the double jeopardy argument, why does an identical treatment yield fewer QALYs for the disabled patient?
-      choices:
-        - Measurement bias in the utility survey
-        - Built into the concept of health-state utility
-      correct: 2
-      right: It's not a measurement artifact — any utility metric scores a lower baseline lower, so the treatment nets fewer QALYs regardless of instrument.
-      wrong: Measurement bias would be fixable with a better questionnaire; the gap persists regardless of the instrument used.
----
-chapter: Distributive justice objections
----
-title: Distributive Justice Objections
+    - id: harris1987
+      title: QALYfying the value of life
+      authors: J. Harris
+      year: 1987
+      finding: the double jeopardy argument against QALY maximization
+
+    icon drug_a size 90 of pill in col_a hidden true
+    shape patient_a #2f6b8f shape person width 180 height 340 in col_a hidden true
+    text title_a "Non-disabled patient" x 0 y 0 font_size 24 in col_a hidden true
+    text label_ua "Baseline u = 0.8" #2f6b8f x 0 y 0 font_size 24 in col_a hidden true
+    column col_a members ["title_a","drug_a","patient_a","label_ua"] gap 18 in cols hidden true
+    icon drug_b size 90 of pill in col_b hidden true
+    shape patient_b #b5482e shape rect width 180 height 340 in col_b hidden true
+    text title_b "Wheelchair user" x 0 y 0 font_size 24 in col_b hidden true
+    text label_ub "Baseline u = 0.5" #b5482e x 0 y 0 font_size 24 in col_b hidden true
+    column col_b members ["title_b","drug_b","patient_b","label_ub"] gap 18 in cols hidden true
+    row cols gap 150 fit.h 420 fit.w 880 fit.x 60 fit.y 270 hidden true
+
+    card title "The Disability Critique"
+
+Now that we have seen the rule reward whoever gains the most health, ask what happens when two patients get the identical treatment but start from different baseline states.
+    draw drug_a patient_a drug_b patient_b parallel true
+
+Give the same life-extending drug to two sixty-year-olds: one with no disability, baseline utility 0.8; one using a wheelchair, baseline utility capped at 0.5 by the health-state valuation itself.
+    draw title_a label_ua title_b label_ub parallel true
+
+Both gain the same two years of life.
+    arrow timeline #8f887c from.anchor bottom_left from.ref cols to.anchor bottom_right to.ref cols
+    label label_0 "0" below attach_to timeline
+    label label_2 "2 years" below attach_to timeline
+
+The non-disabled patient's QALYs: 2 years times 0.8 equals 1.6 QALYs.
+    math calc_a below col_a gap 60 #2f6b8f tex "2 \\times 0.8 = 1.6"
+    label label_unit_a "QALYs" below attach_to calc_a
+
+The disabled patient's QALYs: 2 years times 0.5 equals 1.0 QALY — three-fifths as much, for an identical clinical benefit.
+    math calc_b below col_b gap 60 #b5482e tex "2 \\times 0.5 = 1.0"
+    label label_unit_b "QALY" below attach_to calc_b
+
+Philosopher John Harris named this the double jeopardy argument back in 1987: disabled patients are penalized once by their condition, and a second time by a metric that scores their extended life as worth less.
+    arrow gap_arrow #8a5fa8 from.anchor right from.ref calc_a to.anchor left to.ref calc_b
+    label label_gap "double jeopardy — J. Harris, 1987" below attach_to gap_arrow cites ["harris1987"]
+    portrait portrait_john_harris x 880 y 150 width 150 of "John Harris (bioethicist)" strokes img1:LP:data:image/jpeg;base64,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
+    parallel true
+
+Is that a flaw in how utility weights happen to be measured, or a flaw built into the concept of health-state utility itself?
+    text claim_measure "Measurement, or built into the concept?" below label_gap gap 40 font_size 26
+
+It survives either way you measure it — any instrument that scores quality of life will score a lower baseline lower, so the gap is not a measurement artifact fixable with a better questionnaire.
+    mark answer_mark around claim_measure kind box
+
+    quiz "Is the double jeopardy gap a flaw in measurement, or built into the QALY concept itself?"
+        right: Built into the concept — any utility-based metric will score a lower baseline lower, so a better questionnaire can't remove the gap.
+        wrong: A better questionnaire wouldn't fix this — the gap persists under any instrument, so it's not just measurement.
+        * A measurement artifact
+        + Built into the concept
+
+    erase portrait_john_harris label_gap claim_measure answer_mark
+
+That is why the criticism lands on QALYs specifically and not just on one particular utility survey.
+    highlight calc_a calc_b
+
+If a disabled patient's baseline utility is capped lower, an identical life-extending treatment given to them registers fewer QALYs than the same treatment given to a non-disabled patient — that's the double jeopardy in numbers, not rhetoric.
+    highlight calc_a calc_b gap_arrow
+
+The same procedure, the same years of life, valued differently — because the metric multiplies duration by a quality weight that disability itself depresses.
+    focus calc_a calc_b gap_arrow
+
+    quiz "In the double jeopardy argument, why does an identical treatment yield fewer QALYs for the disabled patient?"
+        right: It's not a measurement artifact — any utility metric scores a lower baseline lower, so the treatment nets fewer QALYs regardless of instrument.
+        wrong: Measurement bias would be fixable with a better questionnaire; the gap persists regardless of the instrument used.
+        * Measurement bias in the utility survey
+        + Built into the concept of health-state utility
+
+chapter: "Distributive justice objections"
+
+## Distributive Justice Objections
 level: advanced
 sources:
-  - id: oregon
-    title: Oregon Health Plan Medicaid prioritization list
-    year: 1990
-    finding: An explicit QALY-based league table was abandoned after objections it disadvantaged disabled applicants.
-elements:
-  - id: bar_young
-    type: shape
-    shape: rect
-    x: 280
-    'y': 560
-    width: 480
-    height: 150
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-  - id: bar_old
-    type: shape
-    shape: rect
-    x: 800
-    'y': 560
-    width: 170
-    height: 150
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: icon_young
-    type: icon
-    of: bone
-    size: 55
-    at:
-      ref: bar_young
-      side: above
-      gap: 20
-  - id: icon_old
-    type: icon
-    of: bone
-    size: 55
-    at:
-      ref: bar_old
-      side: above
-      gap: 20
-  - id: label_age_young
-    type: label
-    text: Age 25 — $20,000 hip replacement
-    attach_to: icon_young
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: label_age_old
-    type: label
-    text: Age 60 — $20,000 hip replacement
-    attach_to: icon_old
-    side: above
-    style:
-      color: '#b5482e'
-  - id: label_years_young
-    type: label
-    text: 55 yrs remaining
-    attach_to: bar_young
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: label_years_old
-    type: label
-    text: 20 yrs remaining
-    attach_to: bar_old
-    side: below
-    style:
-      color: '#b5482e'
-  - id: table_title
-    type: text
-    text: 'League table: cost per QALY'
-    x: 500
-    'y': 280
-    font_size: 28
-  - id: table_rule
-    type: path
-    points:
-      - [280, 262]
-      - [720, 262]
-  - id: table_row1
-    type: text
-    text: 1.  Younger patient — $1,818/QALY
-    x: 500
-    'y': 238
-    style:
-      color: '#2f6b8f'
-  - id: table_row2
-    type: text
-    text: 2.  Older patient — $5,000/QALY
-    x: 500
-    'y': 210
-    style:
-      color: '#b5482e'
-  - id: oregon_note
-    type: text
-    text: Oregon Medicaid, 1992
-    x: 500
-    'y': 150
-    font_size: 30
-    style:
-      color: '#8f887c'
-    cites:
-      - oregon
-  - id: oregon_cross
-    type: annotation
-    target:
-      - oregon_note
-    kind: cross
-  - id: node_fair
-    type: node
-    shape: rect
-    text: Fair innings (A. Williams)
-    x: 230
-    'y': 60
-    width: 280
-    height: 90
-    details: 'Alan Williams''s 1997 paper in Health Economics, ''Intergenerational equity: an exploration of the fair innings argument'', argues resource priority should go to those who have not yet lived a normal span of health.'
-  - id: node_rescue
-    type: node
-    shape: rect
-    text: Rule of rescue
-    x: 770
-    'y': 60
-    width: 280
-    height: 90
-  - id: label_tension
-    type: text
-    text: unresolved tension
-    x: 500
-    'y': 60
-    style:
-      color: '#8a5fa8'
-  - id: portrait_williams
-    type: portrait
-    of: Alan Williams (economist)
-    cameo: true
-  - id: label_qalys_young
-    type: label
-    text: 11 QALYs
-    attach_to: label_years_young
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: label_cost_young
-    type: label
-    text: $1,818/QALY
-    attach_to: label_qalys_young
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: label_qalys_old
-    type: label
-    text: 4 QALYs
-    attach_to: label_years_old
-    side: below
-    style:
-      color: '#b5482e'
-  - id: label_cost_old
-    type: label
-    text: $5,000/QALY
-    attach_to: label_qalys_old
-    side: below
-    style:
-      color: '#b5482e'
-commands:
-  - card:
-      title: Distributive Justice Objections
-  - draw:
-      - bar_young
-      - bar_old
-    speak: Now that we have seen disability compress the utility weight u_t, distributive justice objections ask what happens when it's the time term, t, that gets compressed instead — as with age.
-  - draw:
-      - icon_young
-      - icon_old
-      - label_age_young
-      - label_age_old
-      - label_years_young
-      - label_years_old
-    parallel: true
-    speak: Same hip replacement, same $20,000, given to a 25-year-old with 55 remaining life-years versus our 60-year-old with perhaps 20.
-  - draw:
-      - label_qalys_young
-      - label_cost_young
-      - label_qalys_old
-      - label_cost_old
-    parallel: true
-    speak: More remaining years at the same quality of life mechanically produces more QALYs for the younger patient, and therefore a lower cost per QALY.
-  - draw:
-      - table_title
-      - table_rule
-      - table_row1
-      - table_row2
-    speak: Under strict maximization, the younger patient's treatment simply outranks the older patient's — not because the treatment works better, but because there is more calendar time left to multiply by.
-  - erase:
-      - label_cost_young
-      - label_cost_old
-      - label_years_young
-      - label_years_old
-  - highlight:
-      target:
-        - bar_young
-        - bar_old
-      effect: glow
-  - quiz:
-      question: 'Quick check: under that ranking, whose treatment counts as less cost-effective, all else equal?'
-      choices:
-        - The younger patient's treatment
-        - The older patient's treatment
-      correct: 2
-      right: The older patient's — fewer remaining life-years buy fewer QALYs for the same money, by construction.
-      wrong: 'Look again at the league table: whose bar bought fewer QALYs for the same $20,000?'
-  - highlight:
-      target:
-        - table_row2
-      effect: circle
-      duration: 2
-  - draw:
-      - node_fair
-      - portrait_williams
-    speak: 'Economist Alan Williams defended this outcome with what he called the ''fair innings'' argument: everyone is entitled to a normal span of health, and resources should favor those who haven''t yet had theirs.'
-  - erase:
-      - portrait_williams
-  - draw:
-      - node_rescue
-    speak: Critics reply that fairness by lottery of birth year is still a lottery — the rule of rescue says an identifiable patient in front of you deserves treatment regardless of how the aggregate numbers fall.
-  - draw:
-      - label_tension
-  - highlight:
-      target:
-        - node_fair
-        - node_rescue
-        - label_tension
-    speak: That tension between aggregate benefit and the individual's claim to rescue has stayed unresolved for decades; better data does not settle a disagreement about what fairness means.
-  - draw:
-      - oregon_note
-    speak: The clearest real-world test came in 1992, when Oregon tried to rank Medicaid treatments in an explicit QALY-based league table; the plan was abandoned after objections that some low-ranked conditions disproportionately affected disabled applicants.
-  - pause: 1
-  - draw:
-      - oregon_cross
-  - highlight:
-      target:
-        - table_row2
-    speak: So the same maximizing logic that looked efficient in part one now looks, from the bottom of the ranking, like a determination that certain remaining years count for less.
----
-chapter: 'Attempts at fixes: equity weights'
----
-title: 'Equity Weights: A Fix?'
+    - id: oregon
+      title: Oregon Health Plan Medicaid prioritization list
+      year: 1990
+      finding: An explicit QALY-based league table was abandoned after objections it disadvantaged disabled applicants.
+
+    shape bar_young #2f6b8f shape rect x 280 y 560 width 480 height 150 style.fill #2f6b8f hidden true
+    shape bar_old #b5482e shape rect x 800 y 560 width 170 height 150 style.fill #b5482e hidden true
+    icon icon_young above bar_young gap 20 size 55 of bone hidden true
+    icon icon_old above bar_old gap 20 size 55 of bone hidden true
+    label label_age_young "Age 25 — $20,000 hip replacement" above #2f6b8f attach_to icon_young hidden true
+    label label_age_old "Age 60 — $20,000 hip replacement" above #b5482e attach_to icon_old hidden true
+    label label_years_young "55 yrs remaining" below #2f6b8f attach_to bar_young hidden true
+    label label_years_old "20 yrs remaining" below #b5482e attach_to bar_old hidden true
+    text table_title "League table: cost per QALY" x 500 y 280 font_size 28 hidden true
+    path table_rule points [[280,262],[720,262]] hidden true
+    text table_row1 "1.  Younger patient — $1,818/QALY" #2f6b8f x 500 y 238 hidden true
+    text table_row2 "2.  Older patient — $5,000/QALY" #b5482e x 500 y 210 hidden true
+    text oregon_note "Oregon Medicaid, 1992" #8f887c cites ["oregon"] x 500 y 150 font_size 30 hidden true
+    mark oregon_cross around oregon_note kind cross hidden true
+    box node_fair "Fair innings (A. Williams)" details "Alan Williams's 1997 paper in Health Economics, 'Intergenerational equity: an exploration of the fair innings argument', argues resource priority should go to those who have not yet lived a normal span of health." x 230 y 60 width 280 height 90 hidden true
+    box node_rescue "Rule of rescue" x 770 y 60 width 280 height 90 hidden true
+    text label_tension "unresolved tension" #8a5fa8 x 500 y 60 hidden true
+    portrait portrait_williams of "Alan Williams (economist)" cameo true hidden true
+
+    card title "Distributive Justice Objections"
+
+Now that we have seen disability compress the utility weight u_t, distributive justice objections ask what happens when it's the time term, t, that gets compressed instead — as with age.
+    draw bar_young bar_old
+
+Same hip replacement, same $20,000, given to a 25-year-old with 55 remaining life-years versus our 60-year-old with perhaps 20.
+    draw icon_young icon_old label_age_young label_age_old label_years_young label_years_old parallel true
+
+More remaining years at the same quality of life mechanically produces more QALYs for the younger patient, and therefore a lower cost per QALY.
+    label label_qalys_young "11 QALYs" below #2f6b8f attach_to label_years_young
+    label label_cost_young "$1,818/QALY" below #2f6b8f attach_to label_qalys_young
+    label label_qalys_old "4 QALYs" below #b5482e attach_to label_years_old
+    label label_cost_old "$5,000/QALY" below #b5482e attach_to label_qalys_old
+    parallel true
+
+Under strict maximization, the younger patient's treatment simply outranks the older patient's — not because the treatment works better, but because there is more calendar time left to multiply by.
+    draw table_title table_rule table_row1 table_row2
+
+    erase label_cost_young label_cost_old label_years_young label_years_old
+
+    highlight bar_young bar_old effect glow
+
+    quiz "Quick check: under that ranking, whose treatment counts as less cost-effective, all else equal?"
+        right: The older patient's — fewer remaining life-years buy fewer QALYs for the same money, by construction.
+        wrong: Look again at the league table: whose bar bought fewer QALYs for the same $20,000?
+        * The younger patient's treatment
+        + The older patient's treatment
+
+    highlight table_row2 effect circle duration 2
+
+Economist Alan Williams defended this outcome with what he called the 'fair innings' argument: everyone is entitled to a normal span of health, and resources should favor those who haven't yet had theirs.
+    draw node_fair portrait_williams
+
+    erase portrait_williams
+
+Critics reply that fairness by lottery of birth year is still a lottery — the rule of rescue says an identifiable patient in front of you deserves treatment regardless of how the aggregate numbers fall.
+    draw node_rescue
+
+    draw label_tension
+
+That tension between aggregate benefit and the individual's claim to rescue has stayed unresolved for decades; better data does not settle a disagreement about what fairness means.
+    highlight node_fair node_rescue label_tension
+
+The clearest real-world test came in 1992, when Oregon tried to rank Medicaid treatments in an explicit QALY-based league table; the plan was abandoned after objections that some low-ranked conditions disproportionately affected disabled applicants.
+    draw oregon_note
+
+    pause 1
+
+    draw oregon_cross
+
+So the same maximizing logic that looked efficient in part one now looks, from the bottom of the ranking, like a determination that certain remaining years count for less.
+    highlight table_row2
+
+chapter: "Attempts at fixes: equity weights"
+
+## Equity Weights: A Fix?
 level: advanced
-vars:
-  wq: 1
-elements:
-  - id: eq
-    type: math
-    tex: QALY = \sum u_t \times t
-    x: 500
-    'y': 650
-    size: 30
-    steps:
-      - \text{Weighted QALY} = w_i \times \sum u_t \times t
-    colors:
-      w_i: '#8a5fa8'
-    step_gap: 70
-  - id: ground
-    type: path
-    points:
-      - [300, 220]
-      - [700, 220]
-    style:
-      color: '#8f887c'
-  - id: target_line
-    type: path
-    points:
-      - [210, 460]
-      - [790, 460]
-    style:
-      color: '#2f6b8f'
-      dash: true
-  - id: bar_disabled
-    type: shape
-    shape: rect
-    width: 140
-    height: 100
-    x: 280
-    'y': 270
-    bind:
-      height: 150*wq
-      'y': 220+75*wq
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: bar_nondisabled
-    type: shape
-    shape: rect
-    width: 140
-    height: 240
-    x: 720
-    'y': 340
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-  - id: label_disabled_id
-    type: label
-    text: Disabled
-    attach_to: bar_disabled
-    side: below
-    style:
-      color: '#b5482e'
-  - id: label_nondisabled_id
-    type: label
-    text: Non-disabled
-    attach_to: bar_nondisabled
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: label_disabled_val
-    type: label
-    text: '{wq:1} QALY'
-    attach_to: bar_disabled
-    side: above
-    style:
-      color: '#b5482e'
-  - id: label_nondisabled_val
-    type: label
-    text: 1.6 QALY
-    attach_to: bar_nondisabled
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: gap_arrow
-    type: arrow
-    from:
-      ref: bar_disabled
-      anchor: top
-    to:
-      x: 280
-      'y': 460
-    style:
-      color: '#8a5fa8'
-  - id: label_gap
-    type: label
-    text: gap
-    attach_to: gap_arrow
-    side: left
-    style:
-      color: '#8a5fa8'
-  - id: qmark
-    type: label
-    tex: '?'
-    attach_to: eq
-    side: right
-    size: 30
-    style:
-      color: '#8a5fa8'
-  - id: icon_committee
-    type: icon
-    of: gavel
-    size: 70
-    at:
-      ref: qmark
-      side: right
-      gap: 20
-  - id: label_committee
-    type: label
-    text: Who chooses w?
-    attach_to: icon_committee
-    side: below
-  - id: note_nice
-    type: label
-    text: e.g. NICE severity modifier
-    attach_to: bar_disabled
-    side: right
-    font_size: 20
-    gap: 20
-  - id: candidate_reloc
-    type: text
-    text: Relocate
-    font_size: 24
-    at:
-      ref: label_committee
-      side: below
-      gap: 30
-  - id: candidate_elim
-    type: text
-    text: Eliminate
-    font_size: 24
-    at:
-      ref: candidate_reloc
-      side: below
-      gap: 16
-  - id: mark_elim
-    type: annotation
-    target:
-      - candidate_elim
-    kind: strike
-  - id: mark_reloc
-    type: annotation
-    target:
-      - candidate_reloc
-    kind: box
-  - id: strength_header
-    type: text
-    text: Strength
-    font_size: 28
-    x: 280
-    'y': 160
-    style:
-      color: '#87a878'
-  - id: strength_line
-    type: text
-    text: Moves the ranking, same units
-    font_size: 22
-    x: 280
-    'y': 125
-  - id: weakness_header
-    type: text
-    text: Weakness
-    font_size: 28
-    x: 720
-    'y': 160
-    style:
-      color: '#c96567'
-  - id: weakness_line
-    type: text
-    text: Someone must choose w_i
-    font_size: 22
-    x: 720
-    'y': 125
-  - id: authority_note
-    type: label
-    text: No neutral number
-    attach_to: label_committee
-    side: below
-    gap: 30
-    style:
-      color: '#8a5fa8'
-commands:
-  - card:
-      title: 'Equity Weights: A Fix?'
-  - draw:
-      - eq
-  - step: eq
-    speak: 'Faced with objections like these, health economists did not abandon the formula — they patched it, adding an equity weight, w_i, in front of it: weighted QALY = w_i times Σu_t×t.'
-  - draw:
-      - ground
-  - draw:
-      - bar_disabled
-      - label_disabled_id
-      - label_disabled_val
-    speak: 'Take the disabled patient from before: 1.0 QALY from the life-extending drug.'
-  - draw:
-      - bar_nondisabled
-      - label_nondisabled_id
-      - label_nondisabled_val
-      - target_line
-      - gap_arrow
-      - label_gap
-  - animate:
-      wq: 1.5
-    duration: 2.5
-    speak: Apply an equity weight of 1.5, meant to compensate for the double jeopardy, and the weighted score rises to 1.5 QALYs — much closer to the non-disabled patient's 1.6.
-  - highlight:
-      target:
-        - gap_arrow
-    speak: That closes most of the gap without pretending the underlying health states are equal.
-  - draw:
-      - qmark
-      - icon_committee
-    speak: But where does 1.5 come from?
-  - draw:
-      - label_committee
-    speak: Someone — a committee, an agency, survey respondents asked to trade off years for other people's conditions — has to choose that number, and different bodies choose different numbers for the same condition.
-  - draw:
-      - note_nice
-    speak: The severity-based weighting NICE has piloted, for instance, adjusts differently depending on how underlying illness burden is scored, and those adjustments have never been applied consistently or made fully transparent.
-  - erase:
-      - note_nice
-  - erase:
-      - gap_arrow
-      - label_gap
-      - label_disabled_val
-      - label_nondisabled_val
-  - draw:
-      - strength_header
-      - strength_line
-    speak: 'So the strength of equity weighting is real: it can move the ranking toward what critics were asking for, in the same currency the model already uses.'
-  - draw:
-      - weakness_header
-      - weakness_line
-    speak: The weakness is that it replaces one hidden value judgment — a QALY is a QALY, no matter whose — with an openly chosen one, and now the argument is about who gets to choose w_i.
-  - draw:
-      - candidate_elim
-      - candidate_reloc
-  - quiz:
-      question: Does adding an equity weight eliminate the ethical debate, or just relocate it?
-      choices:
-        - Eliminate
-        - Relocate
-      correct: 2
-      right: It relocates it — from whether to weight, to who decides the weight and how large it should be.
-      wrong: Think about who still has to pick that number.
-      intro: 'Quick check:'
-  - draw:
-      - mark_elim
-      - mark_reloc
-    speak: It relocates it — from whether to weight, to who decides the weight and how large it should be.
-  - erase:
-      - candidate_elim
-      - candidate_reloc
-      - mark_elim
-      - mark_reloc
-  - draw:
-      - authority_note
-  - highlight:
-      target:
-        - bar_disabled
-        - bar_nondisabled
-        - icon_committee
-    speak: Weighting can narrow the gap between the two patients on the page; it cannot, by itself, settle who has the authority to draw that number.
----
-chapter: Where the debate stands today
----
-title: Where the Debate Stands
+vars: {"wq":1}
+
+    math eq tex "QALY = \\sum u_t \\times t" size 30 steps ["\\text{Weighted QALY} = w_i \\times \\sum u_t \\times t"] step_gap 70 colors.w_i #8a5fa8 x 500 y 650 hidden true
+    path ground #8f887c points [[300,220],[700,220]] hidden true
+    path target_line dashed #2f6b8f points [[210,460],[790,460]] hidden true
+    shape bar_disabled #b5482e shape rect x 280 y 270 width 140 height 100 bind.height 150*wq bind.y 220+75*wq style.fill #b5482e hidden true
+    shape bar_nondisabled #2f6b8f shape rect x 720 y 340 width 140 height 240 style.fill #2f6b8f hidden true
+    label label_disabled_id "Disabled" below #b5482e attach_to bar_disabled hidden true
+    label label_nondisabled_id "Non-disabled" below #2f6b8f attach_to bar_nondisabled hidden true
+    label label_disabled_val "{wq:1} QALY" above #b5482e attach_to bar_disabled hidden true
+    label label_nondisabled_val "1.6 QALY" above #2f6b8f attach_to bar_nondisabled hidden true
+    arrow gap_arrow #8a5fa8 from.anchor top from.ref bar_disabled to.x 280 to.y 460 hidden true
+    label label_gap "gap" left #8a5fa8 attach_to gap_arrow hidden true
+    label qmark right #8a5fa8 attach_to eq tex ? size 30 hidden true
+    icon icon_committee right qmark gap 20 size 70 of gavel hidden true
+    label label_committee "Who chooses w?" below attach_to icon_committee hidden true
+    label note_nice "e.g. NICE severity modifier" right attach_to bar_disabled gap 20 font_size 20 hidden true
+    text candidate_reloc "Relocate" below label_committee gap 30 font_size 24 hidden true
+    text candidate_elim "Eliminate" below candidate_reloc gap 16 font_size 24 hidden true
+    mark mark_elim around candidate_elim kind strike hidden true
+    mark mark_reloc around candidate_reloc kind box hidden true
+
+    card title "Equity Weights: A Fix?"
+
+    draw eq
+
+Faced with objections like these, health economists did not abandon the formula — they patched it, adding an equity weight, w_i, in front of it: weighted QALY = w_i times Σu_t×t.
+    step "eq"
+
+    draw ground
+
+Take the disabled patient from before: 1.0 QALY from the life-extending drug.
+    draw bar_disabled label_disabled_id label_disabled_val
+
+    draw bar_nondisabled label_nondisabled_id label_nondisabled_val target_line gap_arrow label_gap
+
+Apply an equity weight of 1.5, meant to compensate for the double jeopardy, and the weighted score rises to 1.5 QALYs — much closer to the non-disabled patient's 1.6.
+    animate wq 1.5 duration 2.5
+
+That closes most of the gap without pretending the underlying health states are equal.
+    highlight gap_arrow
+
+But where does 1.5 come from?
+    draw qmark icon_committee
+
+Someone — a committee, an agency, survey respondents asked to trade off years for other people's conditions — has to choose that number, and different bodies choose different numbers for the same condition.
+    draw label_committee
+
+The severity-based weighting NICE has piloted, for instance, adjusts differently depending on how underlying illness burden is scored, and those adjustments have never been applied consistently or made fully transparent.
+    draw note_nice
+
+    erase note_nice
+
+    erase gap_arrow label_gap label_disabled_val label_nondisabled_val
+
+So the strength of equity weighting is real: it can move the ranking toward what critics were asking for, in the same currency the model already uses.
+    text strength_header "Strength" #87a878 x 280 y 160 font_size 28
+    text strength_line "Moves the ranking, same units" x 280 y 125 font_size 22
+
+The weakness is that it replaces one hidden value judgment — a QALY is a QALY, no matter whose — with an openly chosen one, and now the argument is about who gets to choose w_i.
+    text weakness_header "Weakness" #c96567 x 720 y 160 font_size 28
+    text weakness_line "Someone must choose w_i" x 720 y 125 font_size 22
+
+    draw candidate_elim candidate_reloc
+
+    quiz "Does adding an equity weight eliminate the ethical debate, or just relocate it?" intro "Quick check:"
+        right: It relocates it — from whether to weight, to who decides the weight and how large it should be.
+        wrong: Think about who still has to pick that number.
+        * Eliminate
+        + Relocate
+
+It relocates it — from whether to weight, to who decides the weight and how large it should be.
+    draw mark_elim mark_reloc
+
+    erase candidate_elim candidate_reloc mark_elim mark_reloc
+
+    label authority_note "No neutral number" below #8a5fa8 attach_to label_committee gap 30
+
+Weighting can narrow the gap between the two patients on the page; it cannot, by itself, settle who has the authority to draw that number.
+    highlight bar_disabled bar_nondisabled icon_committee
+
+chapter: "Where the debate stands today"
+
+## Where the Debate Stands
 level: advanced
 sources:
-  - id: aca1553
-    title: Patient Protection and Affordable Care Act — Section 1553
-    authors: United States Congress
-    year: 2010
-    finding: Bars Medicare from using QALY-based cost thresholds in coverage decisions
-  - id: nice_manual
-    title: 'NICE health technology evaluations: the manual'
-    authors: National Institute for Health and Care Excellence
-    year: 2022
-    finding: Adds severity and end-of-life modifiers to the standard QALY threshold
-elements:
-  - id: us_box
-    type: shape
-    shape: rect
-    width: 320
-    height: 150
-  - id: us_label
-    type: label
-    text: United States — ACA §1553
-    attach_to: us_box
-    side: above
-  - id: us_formula
-    type: math
-    tex: \text{QALY} = \sum_t u_t\,t
-    at:
-      ref: us_box
-      anchor: center
-  - id: us_cross
-    type: annotation
-    target:
-      - us_formula
-    kind: cross
-    cites:
-      - aca1553
-    style:
-      color: '#b5482e'
-  - id: us_territory
-    type: group
-    members:
-      - us_box
-      - us_label
-      - us_formula
-      - us_cross
-  - id: uk_box
-    type: shape
-    shape: rect
-    width: 320
-    height: 150
-  - id: uk_label
-    type: label
-    text: United Kingdom — NICE
-    attach_to: uk_box
-    side: above
-  - id: uk_formula
-    type: math
-    tex: \text{QALY} = \sum_t u_t\,t
-    at:
-      ref: uk_box
-      anchor: center
-  - id: tag_modifiers
-    type: label
-    text: severity + end-of-life modifiers
-    attach_to: uk_formula
-    side: below
-    cites:
-      - nice_manual
-    style:
-      color: '#8a5fa8'
-  - id: uk_territory
-    type: group
-    members:
-      - uk_box
-      - uk_label
-      - uk_formula
-      - tag_modifiers
-  - id: top_row
-    type: group
-    members:
-      - us_territory
-      - uk_territory
-    layout: row
-    gap: 100
-    fit:
-      x: 50
-      'y': 450
-      w: 900
-      h: 180
-  - id: hip_box
-    type: shape
-    shape: rect
-    width: 260
-    height: 100
-    style:
-      color: '#2f6b8f'
-  - id: hip_label
-    type: label
-    text: Hip replacement — $5,700/QALY
-    attach_to: hip_box
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: hip_group
-    type: group
-    members:
-      - hip_box
-      - hip_label
-  - id: drug_box
-    type: shape
-    shape: rect
-    width: 260
-    height: 100
-    style:
-      color: '#b5482e'
-  - id: drug_label
-    type: label
-    text: Drug therapy — $50,000/QALY
-    attach_to: drug_box
-    side: above
-    style:
-      color: '#b5482e'
-  - id: drug_group
-    type: group
-    members:
-      - drug_box
-      - drug_label
-  - id: example_row
-    type: group
-    members:
-      - hip_group
-      - drug_group
-    layout: row
-    gap: 140
-    fit:
-      x: 60
-      'y': 230
-      w: 880
-      h: 150
-  - id: note_utility
-    type: label
-    text: Utility weight ↓ for disability
-    attach_to: hip_box
-    side: left
-    style:
-      color: '#8f887c'
-  - id: note_horizon
-    type: label
-    text: Longer horizon ↓ for age
-    attach_to: drug_box
-    side: right
-    style:
-      color: '#8f887c'
-  - id: note_equity
-    type: label
-    text: Equity weights shift, not remove, the question
-    attach_to: example_row
-    side: below
-    style:
-      color: '#8f887c'
-  - id: final_caption
-    type: text
-    text: A lens, not just a number.
-    x: 500
-    'y': 90
-    font_size: 32
-  - id: arrow_utility_final
-    type: arrow
-    from:
-      ref: note_utility
-      anchor: bottom
-    to:
-      ref: final_caption
-      anchor: top
-    curved: true
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: arrow_horizon_final
-    type: arrow
-    from:
-      ref: note_horizon
-      anchor: bottom
-    to:
-      ref: final_caption
-      anchor: top
-    curved: true
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: arrow_equity_final
-    type: arrow
-    from:
-      ref: note_equity
-      anchor: bottom
-    to:
-      ref: final_caption
-      anchor: top
-    curved: true
-    style:
-      color: '#8f887c'
-      dash: true
-commands:
-  - card:
-      title: Where the Debate Stands
-  - draw:
-      - us_box
-      - uk_box
-    parallel: true
-    speak: Now that we have seen equity weights relocate the argument rather than end it, here is where that argument actually stands.
-  - pause: 0.3
-  - draw:
-      - us_label
-      - us_formula
-      - us_cross
-    speak: In the United States, the disability rights objections traced through this lecture were influential enough that Section 1553 of the Affordable Care Act explicitly bars Medicare from using QALY-based thresholds to determine coverage.
-  - pause: 0.3
-  - draw:
-      - uk_label
-      - uk_formula
-      - tag_modifiers
-    speak: In the United Kingdom and elsewhere, agencies like NICE keep using QALY thresholds but layer on severity modifiers and end-of-life premiums — patches, not replacements.
-  - pause: 0.3
-  - highlight:
-      target:
-        - us_territory
-        - uk_territory
-      effect: glow
-    speak: So one system legislated the metric away for certain decisions, and others kept the metric and adjusted around its edges — that is two different answers operating side by side, not a settled question.
-  - pause: 0.4
-  - draw:
-      - hip_box
-      - hip_label
-      - drug_box
-      - drug_label
-    speak: Go back to our sixty-year-old one last time. The hip replacement still comes in around $5,700 per QALY, the drug around $50,000 — that comparison is exactly as useful for a budget-setter today as it was in part one.
-  - pause: 0.3
-  - draw:
-      - note_utility
-      - note_horizon
-      - note_equity
-    speak: 'What has changed is what we now see standing behind that comparison: a utility weight that can penalize disability, a time horizon that can penalize age, and a weighting scheme that only shifts, never removes, the question of whose years count for how much.'
-  - pause: 0.4
-  - draw:
-      - final_caption
-      - arrow_utility_final
-      - arrow_horizon_final
-      - arrow_equity_final
-    speak: The QALY was never just an arithmetic trick — it is a lens, and this lecture has been about learning to see through it rather than just read the number it produces.
-  - highlight:
-      target:
-        - final_caption
-      effect: underline
-    speak: 'That is the throughline across everything covered here: efficient allocation and equitable allocation are both real goals, they are not automatically the same goal, and the formula alone cannot tell you which one you are choosing when you use it.'
-  - quiz:
-      question: What did ACA Section 1553 actually do regarding QALYs?
-      choices:
-        - Set a national cost-per-QALY threshold for all payers
-        - Barred Medicare from using QALY-based thresholds in coverage decisions
-        - Required hospitals to publish their own QALY calculations
-      correct: 2
-      right: It legislated the metric away for Medicare coverage decisions, a direct response to the disability-rights objections raised earlier in this lecture.
-      wrong: That is not what the statute does — it neither sets a threshold nor requires publication; it removes QALY thresholds from Medicare's coverage decisions.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Does it work in practice? Evidence, limits, and alternatives
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 5 of 5
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Does it work in practice? Evidence, limits, and alternatives'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+    - id: aca1553
+      title: Patient Protection and Affordable Care Act — Section 1553
+      authors: United States Congress
+      year: 2010
+      finding: Bars Medicare from using QALY-based cost thresholds in coverage decisions
+    - id: nice_manual
+      title: 'NICE health technology evaluations: the manual'
+      authors: National Institute for Health and Care Excellence
+      year: 2022
+      finding: Adds severity and end-of-life modifiers to the standard QALY threshold
+
+    shape us_box shape rect width 320 height 150 hidden true
+    label us_label "United States — ACA §1553" above attach_to us_box hidden true
+    math us_formula at.anchor center at.ref us_box tex "\\text{QALY} = \\sum_t u_t\\,t" hidden true
+    mark us_cross around us_formula #b5482e cites ["aca1553"] kind cross hidden true
+    group us_territory members ["us_box","us_label","us_formula","us_cross"] in top_row hidden true
+    shape uk_box shape rect width 320 height 150 hidden true
+    label uk_label "United Kingdom — NICE" above attach_to uk_box hidden true
+    math uk_formula at.anchor center at.ref uk_box tex "\\text{QALY} = \\sum_t u_t\\,t" hidden true
+    label tag_modifiers "severity + end-of-life modifiers" below #8a5fa8 attach_to uk_formula cites ["nice_manual"] hidden true
+    group uk_territory members ["uk_box","uk_label","uk_formula","tag_modifiers"] in top_row hidden true
+    row top_row gap 100 fit.h 180 fit.w 900 fit.x 50 fit.y 450 hidden true
+    shape hip_box #2f6b8f shape rect width 260 height 100 hidden true
+    label hip_label "Hip replacement — $5,700/QALY" above #2f6b8f attach_to hip_box hidden true
+    group hip_group members ["hip_box","hip_label"] in example_row hidden true
+    shape drug_box #b5482e shape rect width 260 height 100 hidden true
+    label drug_label "Drug therapy — $50,000/QALY" above #b5482e attach_to drug_box hidden true
+    group drug_group members ["drug_box","drug_label"] in example_row hidden true
+    row example_row gap 140 fit.h 150 fit.w 880 fit.x 60 fit.y 230 hidden true
+
+    card title "Where the Debate Stands"
+
+Now that we have seen equity weights relocate the argument rather than end it, here is where that argument actually stands.
+    draw us_box uk_box parallel true
+
+    pause 0.3
+
+In the United States, the disability rights objections traced through this lecture were influential enough that Section 1553 of the Affordable Care Act explicitly bars Medicare from using QALY-based thresholds to determine coverage.
+    draw us_label us_formula us_cross
+
+    pause 0.3
+
+In the United Kingdom and elsewhere, agencies like NICE keep using QALY thresholds but layer on severity modifiers and end-of-life premiums — patches, not replacements.
+    draw uk_label uk_formula tag_modifiers
+
+    pause 0.3
+
+So one system legislated the metric away for certain decisions, and others kept the metric and adjusted around its edges — that is two different answers operating side by side, not a settled question.
+    highlight us_territory uk_territory effect glow
+
+    pause 0.4
+
+Go back to our sixty-year-old one last time. The hip replacement still comes in around $5,700 per QALY, the drug around $50,000 — that comparison is exactly as useful for a budget-setter today as it was in part one.
+    draw hip_box hip_label drug_box drug_label
+
+    pause 0.3
+
+What has changed is what we now see standing behind that comparison: a utility weight that can penalize disability, a time horizon that can penalize age, and a weighting scheme that only shifts, never removes, the question of whose years count for how much.
+    label note_utility "Utility weight ↓ for disability" left #8f887c attach_to hip_box
+    label note_horizon "Longer horizon ↓ for age" right #8f887c attach_to drug_box
+    label note_equity "Equity weights shift, not remove, the question" below #8f887c attach_to example_row
+
+    pause 0.4
+
+The QALY was never just an arithmetic trick — it is a lens, and this lecture has been about learning to see through it rather than just read the number it produces.
+    text final_caption "A lens, not just a number." x 500 y 90 font_size 32
+    arrow arrow_utility_final curved dashed #8f887c from.anchor bottom from.ref note_utility to.anchor top to.ref final_caption
+    arrow arrow_horizon_final curved dashed #8f887c from.anchor bottom from.ref note_horizon to.anchor top to.ref final_caption
+    arrow arrow_equity_final curved dashed #8f887c from.anchor bottom from.ref note_equity to.anchor top to.ref final_caption
+
+That is the throughline across everything covered here: efficient allocation and equitable allocation are both real goals, they are not automatically the same goal, and the formula alone cannot tell you which one you are choosing when you use it.
+    highlight final_caption effect underline
+
+    quiz "What did ACA Section 1553 actually do regarding QALYs?"
+        right: It legislated the metric away for Medicare coverage decisions, a direct response to the disability-rights objections raised earlier in this lecture.
+        wrong: That is not what the statute does — it neither sets a threshold nor requires publication; it removes QALY thresholds from Medicare's coverage decisions.
+        * Set a national cost-per-QALY threshold for all payers
+        + Barred Medicare from using QALY-based thresholds in coverage decisions
+        * Required hospitals to publish their own QALY calculations
+
+## Where next
+end_page: true
+
+Next: Does it work in practice? Evidence, limits, and alternatives
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:3 title "The theoretical foundations: where does the QALY model come from?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:5 title "Does it work in practice? Evidence, limits, and alternatives" size 320 x 735 y 395
+
+    link end_again href lecture:4 title "Watch again" form text open here x 500 y 160
+    text end_count "4 of 5" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

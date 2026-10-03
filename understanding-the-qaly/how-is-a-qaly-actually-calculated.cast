@@ -1,1285 +1,429 @@
-playlist:
-  title: How is a QALY actually calculated?
-  prompt: 'Where do the utility weights (u_t) come from — who decides that a state is worth 0.7? What are the main elicitation methods: time trade-off, standard gamble, EQ-5D? How do we turn a health profile over many years into a single QALY number?'
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  next:
-    title: 'The theoretical foundations: where does the QALY model come from?'
-    href: https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/the-theoretical-foundations-where-does.yaml
-  enroll: https://drawcast.anvil.app
----
-chapter: Eliciting the Weights
----
-title: Whose Judgment, Whose Weight?
+# How is a QALY actually calculated?
+prompt: "Where do the utility weights (u_t) come from — who decides that a state is worth 0.7? What are the main elicitation methods: time trade-off, standard gamble, EQ-5D? How do we turn a health profile over many years into a single QALY number?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+next: {"title":"The theoretical foundations: where does the QALY model come from?","href":"https://drawcast.app/#gh=hmelberg/dcast/understanding-the-qaly/the-theoretical-foundations-where-does.cast"}
+enroll: https://drawcast.anvil.app
+
+chapter: "Eliciting the Weights"
+
+## Whose Judgment, Whose Weight?
 level: advanced
 domain:
-  x: [0, 15]
-  'y': [0, 1]
-  box:
-    x: 40
-    'y': 250
-    w: 920
-    h: 430
-elements:
-  - id: ax
-    type: axes
-    x_label: Years lived
-    y_label: Utility (u_t)
-  - id: line_full
-    type: curve
-    expr: '1'
-    x_from: 0
-    x_to: 13
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: label_full
-    type: label
-    text: Full health (u=1)
-    attach_to: line_full
-    side: right
-    font_size: 22
-  - id: line_dead
-    type: curve
-    expr: '0'
-    x_from: 0
-    x_to: 13
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: label_dead
-    type: label
-    text: Dead (u=0)
-    attach_to: line_dead
-    side: right
-    font_size: 22
-  - id: seg1
-    type: path
-    data: true
-    points:
-      - [0, 0.75]
-      - [5, 0.75]
-    style:
-      color: '#b5482e'
-      stroke_width: 3
-  - id: drop1
-    type: path
-    data: true
-    points:
-      - [5, 0.75]
-      - [5, 0.5]
-    style:
-      color: '#3d3833'
-      dash: true
-  - id: seg2
-    type: path
-    data: true
-    points:
-      - [5, 0.5]
-      - [10, 0.5]
-    style:
-      color: '#d0865f'
-      stroke_width: 3
-  - id: drop2
-    type: path
-    data: true
-    points:
-      - [10, 0.5]
-      - [10, 0]
-    style:
-      color: '#3d3833'
-      dash: true
-  - id: trajectory
-    type: group
-    members:
-      - seg1
-      - drop1
-      - seg2
-      - drop2
-  - id: val_075
-    type: label
-    text: u = 0.75
-    attach_to: seg1
-    side: above
-    style:
-      color: '#b5482e'
-  - id: val_050
-    type: label
-    text: u = 0.50
-    attach_to: seg2
-    side: below
-    style:
-      color: '#d0865f'
-  - id: qmark
-    type: text
-    text: '?'
-    at:
-      data: [5, 0.62]
-    font_size: 48
-    style:
-      color: '#8a5fa8'
-  - id: node_patient
-    type: node
-    shape: person
-    text: ''
-    width: 90
-    height: 90
-  - id: label_patient
-    type: label
-    text: Patient
-    attach_to: node_patient
-    side: below
-  - id: src_patient
-    type: group
-    members:
-      - node_patient
-      - label_patient
-  - id: node_public1
-    type: shape
-    shape: circle
-    radius: 22
-  - id: node_public2
-    type: shape
-    shape: circle
-    radius: 22
-    at:
-      ref: node_public1
-      side: right
-      gap: -14
-  - id: node_public3
-    type: shape
-    shape: circle
-    radius: 22
-    at:
-      ref: node_public1
-      side: left
-      gap: -14
-  - id: public_cluster
-    type: group
-    members:
-      - node_public1
-      - node_public2
-      - node_public3
-  - id: label_public
-    type: label
-    text: General public
-    attach_to: public_cluster
-    side: below
-  - id: src_public
-    type: group
-    members:
-      - public_cluster
-      - label_public
-  - id: node_clinician
-    type: shape
-    shape: circle
-    radius: 34
-  - id: clin_cross
-    type: text
-    text: +
-    font_size: 32
-    style:
-      color: '#2f6b8f'
-    at:
-      ref: node_clinician
-  - id: clinician_icon
-    type: group
-    members:
-      - node_clinician
-      - clin_cross
-  - id: label_clinician
-    type: label
-    text: Clinician
-    attach_to: clinician_icon
-    side: below
-  - id: src_clinician
-    type: group
-    members:
-      - clinician_icon
-      - label_clinician
-  - id: sources
-    type: group
-    members:
-      - src_patient
-      - src_public
-      - src_clinician
-    layout: row
-    gap: 90
-    fit:
-      x: 60
-      'y': 30
-      w: 900
-      h: 210
-  - id: label_dominant
-    type: label
-    text: Dominant source
-    attach_to: public_cluster
-    side: above
-    style:
-      color: '#8a5fa8'
-    gap: 45
-  - id: arrow_public
-    type: arrow
-    from:
-      ref: label_dominant
-      anchor: bottom
-    to:
-      ref: public_cluster
-      anchor: top
-    style:
-      color: '#8a5fa8'
-      stroke_width: 4
-  - id: mark_075
-    type: annotation
-    target:
-      - val_075
-    kind: box
-  - id: rater_25
-    type: shape
-    shape: circle
-    radius: 14
-    at:
-      ref: src_public
-      side: below-left
-      gap: 20
-    style:
-      color: '#8a5fa8'
-  - id: rater_adapted
-    type: shape
-    shape: circle
-    radius: 14
-    at:
-      ref: src_public
-      side: below-right
-      gap: 20
-    style:
-      color: '#8a5fa8'
-  - id: elicitor_arrow
-    type: arrow
-    from:
-      ref: rater_25
-      anchor: right
-    to:
-      ref: rater_adapted
-      anchor: left
-    style:
-      color: '#8a5fa8'
-      stroke_width: 3
-  - id: elicitor_label
-    type: label
-    text: Elicitor effect
-    attach_to: elicitor_arrow
-    side: below
-    font_size: 26
-    style:
-      color: '#8a5fa8'
-  - id: qmark_arrow
-    type: arrow
-    from:
-      ref: qmark
-      anchor: bottom
-    to:
-      ref: public_cluster
-      anchor: top
-    style:
-      color: '#8a5fa8'
-      dash: true
-commands:
-  - card:
-      title: Whose Judgment, Whose Weight?
-  - draw:
-      - ax
-      - line_full
-      - label_full
-      - line_dead
-      - label_dead
-    parallel: true
-    speak: Every QALY calculation rests on a number nobody watches you assign — the utility weight u_t — and today we open that black box.
-  - pause: 0.3
-  - draw:
-      - trajectory
-    speak: 'Here is the patient''s trajectory without treatment: ten years of remaining life, quality declining as the hip deteriorates.'
-  - pause: 0.4
-  - draw:
-      - val_075
-    speak: For the first five years the patient rates his own state at 0.75 — mobile, some pain, still working.
-  - highlight:
-      target:
-        - seg1
-        - val_075
-      effect: glow
-  - draw:
-      - val_050
-    speak: By year six the pain has worsened and mobility is lost; the same patient now anchors his state at 0.50.
-  - highlight:
-      target:
-        - seg2
-        - val_050
-      effect: glow
-  - hide:
-      - label_full
-      - label_dead
-  - draw:
-      - qmark
-    speak: Where did 0.75 and 0.50 come from?
-  - highlight:
-      target:
-        - line_full
-        - line_dead
-      effect: glow
-    speak: Not from a clinical chart — from someone's judgment about how bad the state is compared to full health and death.
-  - draw:
-      - qmark_arrow
-  - pause: 0.3
-  - draw:
-      - sources
-    speak: 'Three populations can supply that judgment: the patient living the state, a sample of the general public imagining it, or the treating clinician assessing it from outside.'
-  - draw:
-      - label_dominant
-      - arrow_public
-    speak: Most standard QALY estimates — including the ones regulators use — draw on general population values, not patient experience, because policy has to compare across diseases using one common yardstick.
-  - highlight:
-      target:
-        - src_public
-      effect: circle
-  - move:
-      target:
-        - public_cluster
-      scale: 1.3
-      duration: 0.8
-  - draw:
-      - rater_25
-      - rater_adapted
-      - elicitor_arrow
-      - elicitor_label
-    parallel: true
-    speak: 'That choice is not neutral: a healthy twenty-five-year-old imagining paraplegia and a patient adapting to it after two years rarely give the same number.'
-  - point:
-      at:
-        ref: rater_25
-      gesture: tap
-  - point:
-      at:
-        ref: rater_adapted
-      gesture: tap
-  - pause: 0.3
-  - camera:
-      'on':
-        - seg1
-        - val_075
-      zoom: fit
-  - draw:
-      - mark_075
-    speak: This single figure, 0.75, is therefore a compressed social judgment — and the next parts show exactly how it gets produced.
-  - camera:
-      reset: true
----
-title: 'Time Trade-Off: Trading Years for Health'
+    x:
+      - 0
+      - 15
+    'y':
+      - 0
+      - 1
+    box:
+      x: 40
+      'y': 250
+      w: 920
+      h: 430
+
+    axes ax x_label "Years lived" y_label "Utility (u_t)" hidden true
+    curve line_full dashed #8f887c expr "1" x_from 0 x_to 13 hidden true
+    label label_full "Full health (u=1)" right attach_to line_full font_size 22 hidden true
+    curve line_dead dashed #8f887c expr "0" x_from 0 x_to 13 hidden true
+    label label_dead "Dead (u=0)" right attach_to line_dead font_size 22 hidden true
+    path seg1 thick #b5482e points [[0,0.75],[5,0.75]] data true hidden true
+    path drop1 dashed #3d3833 points [[5,0.75],[5,0.5]] data true hidden true
+    path seg2 thick #d0865f points [[5,0.5],[10,0.5]] data true hidden true
+    path drop2 dashed #3d3833 points [[10,0.5],[10,0]] data true hidden true
+    group trajectory members ["seg1","drop1","seg2","drop2"] hidden true
+    label val_075 "u = 0.75" above #b5482e attach_to seg1 hidden true
+    label val_050 "u = 0.50" below #d0865f attach_to seg2 hidden true
+    text qmark "?" #8a5fa8 at.data [5,0.62] font_size 48 hidden true
+    person node_patient "" width 90 height 90 hidden true
+    label label_patient "Patient" below attach_to node_patient hidden true
+    group src_patient members ["node_patient","label_patient"] in sources hidden true
+    shape node_public1 shape circle radius 22 hidden true
+    shape node_public2 right node_public1 gap -14 shape circle radius 22 hidden true
+    shape node_public3 left node_public1 gap -14 shape circle radius 22 hidden true
+    group public_cluster members ["node_public1","node_public2","node_public3"] hidden true
+    label label_public "General public" below attach_to public_cluster hidden true
+    group src_public members ["public_cluster","label_public"] in sources hidden true
+    shape node_clinician shape circle radius 34 hidden true
+    text clin_cross "+" #2f6b8f at.ref node_clinician font_size 32 hidden true
+    group clinician_icon members ["node_clinician","clin_cross"] hidden true
+    label label_clinician "Clinician" below attach_to clinician_icon hidden true
+    group src_clinician members ["clinician_icon","label_clinician"] in sources hidden true
+    row sources gap 90 fit.h 210 fit.w 900 fit.x 60 fit.y 30 hidden true
+    label label_dominant "Dominant source" above #8a5fa8 attach_to public_cluster gap 45 hidden true
+    arrow arrow_public #8a5fa8 from.anchor bottom from.ref label_dominant to.anchor top to.ref public_cluster style.stroke_width 4 hidden true
+    mark mark_075 around val_075 kind box hidden true
+    shape rater_25 below-left src_public gap 20 #8a5fa8 shape circle radius 14 hidden true
+    shape rater_adapted below-right src_public gap 20 #8a5fa8 shape circle radius 14 hidden true
+    arrow elicitor_arrow thick #8a5fa8 from.anchor right from.ref rater_25 to.anchor left to.ref rater_adapted hidden true
+    label elicitor_label "Elicitor effect" below #8a5fa8 attach_to elicitor_arrow font_size 26 hidden true
+
+    card title "Whose Judgment, Whose Weight?"
+
+Every QALY calculation rests on a number nobody watches you assign — the utility weight u_t — and today we open that black box.
+    draw ax line_full label_full line_dead label_dead parallel true
+
+    pause 0.3
+
+Here is the patient's trajectory without treatment: ten years of remaining life, quality declining as the hip deteriorates.
+    draw trajectory
+
+    pause 0.4
+
+For the first five years the patient rates his own state at 0.75 — mobile, some pain, still working.
+    draw val_075
+
+    highlight seg1 val_075 effect glow
+
+By year six the pain has worsened and mobility is lost; the same patient now anchors his state at 0.50.
+    draw val_050
+
+    highlight seg2 val_050 effect glow
+
+    hide label_full label_dead
+
+Where did 0.75 and 0.50 come from?
+    draw qmark
+
+Not from a clinical chart — from someone's judgment about how bad the state is compared to full health and death.
+    highlight line_full line_dead effect glow
+
+    arrow qmark_arrow dashed #8a5fa8 from.anchor bottom from.ref qmark to.anchor top to.ref public_cluster
+
+    pause 0.3
+
+Three populations can supply that judgment: the patient living the state, a sample of the general public imagining it, or the treating clinician assessing it from outside.
+    draw sources
+
+Most standard QALY estimates — including the ones regulators use — draw on general population values, not patient experience, because policy has to compare across diseases using one common yardstick.
+    draw label_dominant arrow_public
+
+    highlight src_public effect circle
+
+    move public_cluster scale 1.3 duration 0.8
+
+That choice is not neutral: a healthy twenty-five-year-old imagining paraplegia and a patient adapting to it after two years rarely give the same number.
+    draw rater_25 rater_adapted elicitor_arrow elicitor_label parallel true
+
+    point at.ref rater_25 gesture tap
+
+    point at.ref rater_adapted gesture tap
+
+    pause 0.3
+
+    camera on ["seg1","val_075"] zoom fit
+
+This single figure, 0.75, is therefore a compressed social judgment — and the next parts show exactly how it gets produced.
+    draw mark_075
+
+    camera reset true
+
+## Time Trade-Off: Trading Years for Health
 level: advanced
-vars:
-  xf: 7
-elements:
-  - id: bar1
-    type: shape
-    shape: rect
-    x: 500
-    'y': 520
-    width: 680
-    height: 100
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: label_bar1
-    type: label
-    text: Hip state (u=?)
-    attach_to: bar1
-    side: above
-  - id: bar2
-    type: shape
-    shape: rect
-    width: 392
-    height: 100
-    at:
-      ref: bar1
-      anchor: left
-      offset: [0, -190]
-    anchor: left
-    bind:
-      width: 68*xf
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-  - id: label_bar2
-    type: label
-    text: Full health, 8.5 years
-    attach_to: bar2
-    side: below
-    gap: 30
-  - id: arr_shrink
-    type: arrow
-    from:
-      x: 650
-      'y': 415
-    to:
-      x: 550
-      'y': 415
-    style:
-      color: '#8f887c'
-  - id: arr_grow
-    type: arrow
-    from:
-      x: 650
-      'y': 435
-    to:
-      x: 750
-      'y': 435
-    style:
-      color: '#8f887c'
-  - id: eq_sign
-    type: text
-    text: '='
-    x: 880
-    'y': 425
-    font_size: 70
-    style:
-      color: '#8a5fa8'
-  - id: eq
-    type: math
-    tex: u = \frac{x}{t}
-    x: 500
-    'y': 190
-    size: 34
-    colors:
-      x: '#2f6b8f'
-      t: '#b5482e'
-    steps:
-      - u = \frac{8.5}{10} = 0.85
-  - id: result_box
-    type: annotation
-    target:
-      - eq_2
-    kind: box
-  - id: label_bar2_moving
-    type: label
-    text: Full health, ? years
-    attach_to: bar2
-    side: below
-    gap: 30
-  - id: label_bar1_solved
-    type: label
-    text: Hip state (u=0.85)
-    attach_to: bar1
-    side: above
-  - id: annot_exchange
-    type: label
-    text: Assumes years ↔ health exchangeable
-    style:
-      color: '#8f887c'
-    attach_to: eq_2
-    side: below
-    gap: 50
-  - id: label_negative
-    type: label
-    text: x < 0
-    attach_to: bar_negative
-    side: above
-    style:
-      color: '#b5482e'
-  - id: bar_negative
-    type: shape
-    shape: rect
-    width: 150
-    height: 100
-    at:
-      ref: bar2
-      anchor: left
-    anchor: right
-    style:
-      dash: true
-      color: '#b5482e'
-commands:
-  - card:
-      title: 'Time Trade-Off: Trading Years for Health'
-  - draw:
-      - bar1
-    speak: Now that we have seen why someone must assign u_t, the time trade-off method asks that someone directly to price health against time.
-  - draw:
-      - label_bar1
-    speak: Present the respondent with ten years lived in the state we are valuing — moderate residual pain, restricted mobility.
-  - point:
-      at:
-        ref: bar1
-      gesture: circle
-  - draw:
-      - bar2
-      - label_bar2_moving
-      - arr_shrink
-      - arr_grow
-    speak: Against it, offer fewer years in full health, and ask which the respondent prefers.
-  - speak: The interviewer moves the full-health bar back and forth — more years, fewer years — until the respondent is indifferent between the two.
-    blocking: false
-  - animate:
-      xf: 5
-    duration: 1.1
-  - animate:
-      xf: 9
-    duration: 1.3
-  - animate:
-      xf: 8.5
-    duration: 1.6
-    speak: Indifference here lands at 8.5 years of full health traded for 10 years in the pain state.
-  - hide:
-      - label_bar2_moving
-  - show:
-      - label_bar2
-  - draw:
-      - eq_sign
-  - pause: 0.3
-  - draw:
-      - eq
-    speak: 'The utility weight falls straight out of that trade: u equals the years of full health accepted divided by the years in the impaired state.'
-  - step: eq
-    speak: 8.5 divided by 10 gives u=0.85 — exactly the weight we will use for the hip-replacement outcome in the final part.
-  - erase:
-      - eq
-  - hide:
-      - label_bar1
-  - show:
-      - label_bar1_solved
-  - draw:
-      - result_box
-  - camera:
-      center:
-        ref: eq_2
-      zoom: 2.2
-  - pause: 0.6
-  - camera:
-      reset: true
-  - morph:
-      target: eq_2
-      tex: u = \frac{x}{t}
-      duration: 1
-  - highlight:
-      target:
-        - eq_2
-      part: t
-    speak: 'The logic generalizes to any duration t: respondents sacrifice some years to escape the state, and the fraction they keep is its utility.'
-  - draw:
-      - annot_exchange
-  - focus:
-      target:
-        - bar1
-        - bar2
-    speak: This method assumes people can meaningfully trade years of life against years of health, a premise the theory lecture will interrogate.
-  - draw:
-      - bar_negative
-      - label_negative
-    parallel: true
-  - highlight:
-      target:
-        - bar2
-      effect: pulse
-    speak: Time trade-off is intuitive and widely used, but it breaks down for states people rate as worse than death, where x would have to go negative.
----
-title: 'Standard Gamble and EQ-5D: Two More Roads to u_t'
+vars: {"xf":7}
+
+    shape bar1 #b5482e shape rect x 500 y 520 width 680 height 100 style.fill #b5482e hidden true
+    label label_bar1 "Hip state (u=?)" above attach_to bar1 hidden true
+    shape bar2 #2f6b8f at.anchor left at.offset [0,-190] at.ref bar1 anchor left shape rect width 392 height 100 bind.width 68*xf style.fill #2f6b8f hidden true
+    label label_bar2 "Full health, 8.5 years" below attach_to bar2 gap 30 hidden true
+    arrow arr_shrink #8f887c from.x 650 from.y 415 to.x 550 to.y 415 hidden true
+    arrow arr_grow #8f887c from.x 650 from.y 435 to.x 750 to.y 435 hidden true
+    text eq_sign "=" #8a5fa8 x 880 y 425 font_size 70 hidden true
+    math eq tex "u = \\frac{x}{t}" size 34 steps ["u = \\frac{8.5}{10} = 0.85"] colors.t #b5482e colors.x #2f6b8f x 500 y 190 hidden true
+    mark result_box around eq_2 kind box hidden true
+    label label_bar2_moving "Full health, ? years" below attach_to bar2 gap 30 hidden true
+    label label_bar1_solved "Hip state (u=0.85)" above attach_to bar1 hidden true
+    label annot_exchange "Assumes years ↔ health exchangeable" below #8f887c attach_to eq_2 gap 50 hidden true
+    label label_negative "x < 0" above #b5482e attach_to bar_negative hidden true
+    shape bar_negative dashed #b5482e at.anchor left at.ref bar2 anchor right shape rect width 150 height 100 hidden true
+
+    card title "Time Trade-Off: Trading Years for Health"
+
+Now that we have seen why someone must assign u_t, the time trade-off method asks that someone directly to price health against time.
+    draw bar1
+
+Present the respondent with ten years lived in the state we are valuing — moderate residual pain, restricted mobility.
+    draw label_bar1
+
+    point at.ref bar1 gesture circle
+
+Against it, offer fewer years in full health, and ask which the respondent prefers.
+    draw bar2 label_bar2_moving arr_shrink arr_grow
+
+The interviewer moves the full-health bar back and forth — more years, fewer years — until the respondent is indifferent between the two.
+    blocking false
+
+    animate xf 5 duration 1.1
+
+    animate xf 9 duration 1.3
+
+Indifference here lands at 8.5 years of full health traded for 10 years in the pain state.
+    animate xf 8.5 duration 1.6
+
+    hide label_bar2_moving
+
+    show label_bar2
+
+    draw eq_sign
+
+    pause 0.3
+
+The utility weight falls straight out of that trade: u equals the years of full health accepted divided by the years in the impaired state.
+    draw eq
+
+8.5 divided by 10 gives u=0.85 — exactly the weight we will use for the hip-replacement outcome in the final part.
+    step "eq"
+
+    erase eq
+
+    hide label_bar1
+
+    show label_bar1_solved
+
+    draw result_box
+
+    camera center.ref eq_2 zoom 2.2
+
+    pause 0.6
+
+    camera reset true
+
+    morph eq_2 tex "u = \\frac{x}{t}" duration 1
+
+The logic generalizes to any duration t: respondents sacrifice some years to escape the state, and the fraction they keep is its utility.
+    highlight eq_2 part t
+
+    draw annot_exchange
+
+This method assumes people can meaningfully trade years of life against years of health, a premise the theory lecture will interrogate.
+    focus bar1 bar2
+
+    draw bar_negative label_negative parallel true
+
+Time trade-off is intuitive and widely used, but it breaks down for states people rate as worse than death, where x would have to go negative.
+    highlight bar2 effect pulse
+
+## Standard Gamble and EQ-5D: Two More Roads to u_t
 level: advanced
-vars:
-  p: 0.5
-template: decision_tree
-params:
-  root:
-    id: choice
-    type: decision
-    label: Elicit u_t
-    children:
-      - label: Certain
-        node:
-          id: certain
-          type: terminal
-          label: Side-effect state
-      - label: Gamble
-        node:
-          id: gamble
-          type: chance
-          label: Gamble
-          children:
-            - label: Full health
-              probability: 0.5
-              node:
-                id: full
-                type: terminal
-                label: Full health
-            - label: Death
-              probability: 0.5
-              node:
-                id: death
-                type: terminal
-                label: Death
-  box: left
-elements:
-  - id: slider_track
-    type: path
-    points:
-      - [60, 190]
-      - [440, 190]
-    style:
-      color: '#8f887c'
-  - id: slider_lo
-    type: text
-    text: p = 0
-    x: 60
-    'y': 165
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: slider_hi
-    type: text
-    text: p = 1
-    x: 440
-    'y': 165
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: slider_marker
-    type: shape
-    shape: circle
-    radius: 12
-    x: 250
-    'y': 190
-    bind:
-      x: 60 + p*380
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-  - id: slider_value
-    type: label
-    text: p = {p:2}
-    attach_to: slider_marker
-    side: above
-  - id: indiff_mark
-    type: annotation
-    target:
-      - slider_marker
-    kind: circle
-  - id: indiff_text
-    type: label
-    text: p* = 0.60 → u_t
-    attach_to: slider_marker
-    side: below
-    style:
-      color: '#b5482e'
-  - id: eq5d
-    type: pieces
-    of: grid
-    x: 560
-    'y': 430
-    width: 380
-    height: 340
-    'n': 3
-    rows: 5
-  - id: row_label_mobility
-    type: label
-    text: Mobility
-    attach_to: eq5d_1
-    side: left
-  - id: row_label_selfcare
-    type: label
-    text: Self-care
-    attach_to: eq5d_4
-    side: left
-  - id: row_label_activities
-    type: label
-    text: Usual activities
-    attach_to: eq5d_7
-    side: left
-  - id: row_label_pain
-    type: label
-    text: Pain/Discomfort
-    attach_to: eq5d_10
-    side: left
-  - id: row_label_anxiety
-    type: label
-    text: Anxiety/Depression
-    attach_to: eq5d_13
-    side: left
-  - id: row_labels
-    type: group
-    members:
-      - row_label_mobility
-      - row_label_selfcare
-      - row_label_activities
-      - row_label_pain
-      - row_label_anxiety
-  - id: col_header_1
-    type: label
-    text: No problems
-    attach_to: eq5d_1
-    side: above
-  - id: col_header_2
-    type: label
-    text: Moderate problems
-    attach_to: eq5d_2
-    side: above
-  - id: col_header_3
-    type: label
-    text: Severe problems
-    attach_to: eq5d_3
-    side: above
-  - id: col_headers
-    type: group
-    members:
-      - col_header_1
-      - col_header_2
-      - col_header_3
-  - id: profile_code
-    type: label
-    text: 'Profile: 1-1-2-2-1'
-    attach_to: eq5d
-    side: below
-    style:
-      color: '#b5482e'
-  - id: lookup_box
-    type: shape
-    shape: rect
-    width: 200
-    height: 100
-    at:
-      ref: eq5d
-      side: right
-      gap: 70
-    style:
-      color: '#3d3833'
-  - id: lookup_title
-    type: label
-    text: Population value set
-    attach_to: lookup_box
-    side: above
-  - id: lookup_value
-    type: label
-    text: u = 0.60
-    attach_to: lookup_box
-    side: below
-    style:
-      color: '#b5482e'
-  - id: profile_to_table
-    type: arrow
-    from:
-      ref: eq5d
-      anchor: right
-    to:
-      ref: lookup_box
-      anchor: left
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: right_panel
-    type: group
-    members:
-      - eq5d
-      - col_headers
-      - row_labels
-      - lookup_box
-      - lookup_title
-      - profile_to_table
-      - lookup_value
-      - profile_code
-    fit: right
-  - id: bracket
-    type: arrow
-    from:
-      ref: slider_marker
-    to:
-      ref: lookup_value
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: bracket_label
-    type: label
-    text: u_t ≈ 0.60
-    attach_to: bracket
-    side: above
-    style:
-      color: '#8a5fa8'
-commands:
-  - card:
-      title: Standard Gamble & EQ-5D
-  - draw:
-      - node_choice
-      - label_choice
-    speak: Having built one weight from trading time, we turn to two more elicitation routes, starting with the standard gamble.
-  - draw:
-      - edge_choice_certain
-      - branchlabel_choice_certain
-      - node_certain
-      - label_certain
-    speak: 'One arm is certain: live the rest of life in the drug''s side-effect state.'
-  - draw:
-      - edge_choice_gamble
-      - branchlabel_choice_gamble
-      - node_gamble
-      - label_gamble
-      - edge_gamble_full
-      - branchlabel_gamble_full
-      - node_full
-      - label_full
-      - edge_gamble_death
-      - branchlabel_gamble_death
-      - node_death
-      - label_death
-    speak: The other arm is a gamble — probability p of full health, probability 1 minus p of immediate death.
-  - pause: 0.3
-  - draw:
-      - slider_track
-      - slider_lo
-      - slider_hi
-      - slider_marker
-      - slider_value
-  - animate:
-      p: 0.85
-      root.children.1.node.children.0.probability: 0.85
-      root.children.1.node.children.1.probability: 0.15
-    duration: 1.2
-    speak: The interviewer raises and lowers p until the respondent is indifferent between the sure state and the gamble.
-  - animate:
-      p: 0.3
-      root.children.1.node.children.0.probability: 0.3
-      root.children.1.node.children.1.probability: 0.7
-    duration: 1.1
-  - animate:
-      p: 0.6
-      root.children.1.node.children.0.probability: 0.6
-      root.children.1.node.children.1.probability: 0.4
-    duration: 1.1
-  - camera:
-      center:
-        ref: slider_marker
-      zoom: 2.3
-  - draw:
-      - indiff_mark
-      - indiff_text
-    speak: Indifference here occurs at p=0.60 — and that probability itself becomes the utility weight.
-  - pause: 0.3
-  - highlight:
-      target:
-        - node_gamble
-        - node_full
-        - node_death
-        - edge_gamble_full
-        - edge_gamble_death
-      effect: glow
-    speak: Standard gamble is theoretically the purest measure, because it embeds risk directly, the same currency expected-utility theory is built on — the subject of the next lecture.
-  - camera:
-      reset: true
-  - draw:
-      - eq5d
-      - col_headers
-      - row_labels
-    speak: 'EQ-5D sidesteps direct elicitation for this patient altogether, describing health through five dimensions: mobility, self-care, usual activities, pain or discomfort, anxiety or depression.'
-  - pause: 0.3
-  - highlight:
-      target:
-        - eq5d_1
-        - eq5d_4
-        - eq5d_8
-        - eq5d_11
-        - eq5d_13
-      effect: glow
-      color: '#b5482e'
-    speak: The side-effect state scores moderate problems on activities and pain, no problems on self-care — a five-digit profile, not a number yet.
-  - draw:
-      - profile_code
-  - draw:
-      - profile_to_table
-      - lookup_box
-      - lookup_title
-    speak: That profile is looked up in a value set, itself built from thousands of prior time-trade-off or discrete-choice interviews with the general population.
-  - draw:
-      - lookup_value
-    speak: The lookup returns u=0.60 — matching the standard gamble result, though the two methods do not always agree so neatly.
-  - pause: 0.3
-  - camera:
-      'on':
-        - slider_marker
-        - lookup_box
-      zoom: fit
-  - draw:
-      - bracket
-      - bracket_label
-    speak: Three different procedures, three numbers converging near the same weight — the rest of the calculation now just needs those weights and the time patients spend in each state.
-  - camera:
-      reset: true
----
-chapter: Building the Number
----
-title: From Profile to a Single Number
+vars: {"p":0.5}
+use: decision_tree
+with:
+    root:
+      id: choice
+      type: decision
+      label: Elicit u_t
+      children: [{label: Certain, node: {id: certain, type: terminal, label: Side-effect state}}, {label: Gamble, node: {id: gamble, type: chance, label: Gamble, children: [{label: Full health, probability: 0.5, node: {id: full, type: terminal, label: Full health}}, {label: Death, probability: 0.5, node: {id: death, type: terminal, label: Death}}]}}]
+    box: left
+
+    path slider_track #8f887c points [[60,190],[440,190]] hidden true
+    text slider_lo "p = 0" #8f887c x 60 y 165 font_size 20 hidden true
+    text slider_hi "p = 1" #8f887c x 440 y 165 font_size 20 hidden true
+    shape slider_marker #2f6b8f shape circle x 250 y 190 radius 12 bind.x "60 + p*380" style.fill #2f6b8f hidden true
+    label slider_value "p = {p:2}" above attach_to slider_marker hidden true
+    mark indiff_mark around slider_marker kind circle hidden true
+    label indiff_text "p* = 0.60 → u_t" below #b5482e attach_to slider_marker hidden true
+    pieces eq5d x 560 y 430 width 380 height 340 n 3 rows 5 of grid hidden true
+    label row_label_mobility "Mobility" left attach_to eq5d_1 hidden true
+    label row_label_selfcare "Self-care" left attach_to eq5d_4 hidden true
+    label row_label_activities "Usual activities" left attach_to eq5d_7 hidden true
+    label row_label_pain "Pain/Discomfort" left attach_to eq5d_10 hidden true
+    label row_label_anxiety "Anxiety/Depression" left attach_to eq5d_13 hidden true
+    group row_labels members ["row_label_mobility","row_label_selfcare","row_label_activities","row_label_pain","row_label_anxiety"] hidden true
+    label col_header_1 "No problems" above attach_to eq5d_1 hidden true
+    label col_header_2 "Moderate problems" above attach_to eq5d_2 hidden true
+    label col_header_3 "Severe problems" above attach_to eq5d_3 hidden true
+    group col_headers members ["col_header_1","col_header_2","col_header_3"] hidden true
+    label profile_code "Profile: 1-1-2-2-1" below #b5482e attach_to eq5d hidden true
+    shape lookup_box right eq5d gap 70 #3d3833 shape rect width 200 height 100 hidden true
+    label lookup_title "Population value set" above attach_to lookup_box hidden true
+    label lookup_value "u = 0.60" below #b5482e attach_to lookup_box hidden true
+    arrow profile_to_table curved #2f6b8f from.anchor right from.ref eq5d to.anchor left to.ref lookup_box hidden true
+    group right_panel members ["eq5d","col_headers","row_labels","lookup_box","lookup_title","profile_to_table","lookup_value","profile_code"] fit right hidden true
+
+    card title "Standard Gamble & EQ-5D"
+
+Having built one weight from trading time, we turn to two more elicitation routes, starting with the standard gamble.
+    draw node_choice label_choice
+
+One arm is certain: live the rest of life in the drug's side-effect state.
+    draw edge_choice_certain branchlabel_choice_certain node_certain label_certain
+
+The other arm is a gamble — probability p of full health, probability 1 minus p of immediate death.
+    draw edge_choice_gamble branchlabel_choice_gamble node_gamble label_gamble edge_gamble_full branchlabel_gamble_full node_full label_full edge_gamble_death branchlabel_gamble_death node_death label_death
+
+    pause 0.3
+
+    draw slider_track slider_lo slider_hi slider_marker slider_value
+
+The interviewer raises and lowers p until the respondent is indifferent between the sure state and the gamble.
+    animate p 0.85 root.children.1.node.children.0.probability 0.85 root.children.1.node.children.1.probability 0.15 duration 1.2
+
+    animate p 0.3 root.children.1.node.children.0.probability 0.3 root.children.1.node.children.1.probability 0.7 duration 1.1
+
+    animate p 0.6 root.children.1.node.children.0.probability 0.6 root.children.1.node.children.1.probability 0.4 duration 1.1
+
+    camera center.ref slider_marker zoom 2.3
+
+Indifference here occurs at p=0.60 — and that probability itself becomes the utility weight.
+    draw indiff_mark indiff_text
+
+    pause 0.3
+
+Standard gamble is theoretically the purest measure, because it embeds risk directly, the same currency expected-utility theory is built on — the subject of the next lecture.
+    highlight node_gamble node_full node_death edge_gamble_full edge_gamble_death effect glow
+
+    camera reset true
+
+EQ-5D sidesteps direct elicitation for this patient altogether, describing health through five dimensions: mobility, self-care, usual activities, pain or discomfort, anxiety or depression.
+    draw eq5d col_headers row_labels
+
+    pause 0.3
+
+The side-effect state scores moderate problems on activities and pain, no problems on self-care — a five-digit profile, not a number yet.
+    highlight eq5d_1 eq5d_4 eq5d_8 eq5d_11 eq5d_13 effect glow color #b5482e
+
+    draw profile_code
+
+That profile is looked up in a value set, itself built from thousands of prior time-trade-off or discrete-choice interviews with the general population.
+    draw profile_to_table lookup_box lookup_title
+
+The lookup returns u=0.60 — matching the standard gamble result, though the two methods do not always agree so neatly.
+    draw lookup_value
+
+    pause 0.3
+
+    camera on ["slider_marker","lookup_box"] zoom fit
+
+Three different procedures, three numbers converging near the same weight — the rest of the calculation now just needs those weights and the time patients spend in each state.
+    arrow bracket slider_marker -> lookup_value curved #8a5fa8
+    label bracket_label "u_t ≈ 0.60" above #8a5fa8 attach_to bracket
+
+    camera reset true
+
+chapter: "Building the Number"
+
+## From Profile to a Single Number
 level: advanced
 domain:
-  x: [0, 13]
-  'y': [0, 1.1]
-  box:
-    x: 90
-    'y': 150
-    w: 820
-    h: 420
-elements:
-  - id: eq
-    type: math
-    tex: QALY = \sum_t u_t \times \Delta t
-    x: 500
-    'y': 660
-    size: 34
-    colors:
-      u_t: '#2f6b8f'
-      \Delta t: '#b5482e'
-    details: 'Willingness-to-pay thresholds built on this sum vary by country: NICE in the UK generally uses £20,000–£30,000 per QALY gained.'
-  - id: ax
-    type: axes
-    x_label: Years
-    y_label: Utility (uₜ)
-  - id: zero
-    type: curve
-    expr: '0'
-    x_from: 0
-    x_to: 13
-    style:
-      opacity: 0
-  - id: baseline_1
-    type: curve
-    expr: '0.75'
-    x_from: 0
-    x_to: 5
-    style:
-      color: '#8f887c'
-  - id: baseline_2
-    type: curve
-    expr: '0.50'
-    x_from: 5
-    x_to: 10
-    style:
-      color: '#8f887c'
-  - id: region_baseline_1
-    type: region
-    between:
-      - baseline_1
-      - zero
-    x_from: 0
-    x_to: 5
-    style:
-      fill: '#8f887c'
-      fill_style: wash
-  - id: region_baseline_2
-    type: region
-    between:
-      - baseline_2
-      - zero
-    x_from: 5
-    x_to: 10
-    style:
-      fill: '#8f887c'
-      fill_style: wash
-  - id: optionA
-    type: curve
-    expr: '0.85'
-    x_from: 0
-    x_to: 10
-    style:
-      color: '#2f6b8f'
-  - id: region_A
-    type: region
-    between:
-      - optionA
-      - zero
-    x_from: 0
-    x_to: 10
-    style:
-      fill: '#2f6b8f'
-      fill_style: wash
-  - id: optionB
-    type: curve
-    expr: '0.60'
-    x_from: 0
-    x_to: 13
-    style:
-      color: '#b5482e'
-  - id: region_B
-    type: region
-    between:
-      - optionB
-      - zero
-    x_from: 0
-    x_to: 13
-    style:
-      fill: '#b5482e'
-      fill_style: wash
-  - id: label_baseline_area
-    type: label
-    text: 'Baseline: 6.25 QALYs'
-    attach_to: region_baseline_2
-    side: above-right
-    style:
-      color: '#8f887c'
-  - id: label_A_area
-    type: label
-    text: 'Option A (hip): 8.5 QALYs'
-    attach_to: region_A
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: label_B_area
-    type: label
-    text: 'Option B (drug): 7.8 QALYs'
-    attach_to: region_B
-    side: below
-    style:
-      color: '#b5482e'
-  - id: calc_baseline
-    type: scratch
-    work:
-      - 5 × 0.75 = 3.75
-      - 5 × 0.50 = 2.50
-      - Total = 6.25 QALYs
-    at:
-      place: top_right
-    font_size: 22
-  - id: calc_A
-    type: scratch
-    work:
-      - 10 × 0.85 = 8.5 QALYs
-    at:
-      place: top_right
-    font_size: 22
-  - id: calc_B
-    type: scratch
-    work:
-      - 13 × 0.60 = 7.8 QALYs
-    at:
-      place: top_right
-    font_size: 22
-  - id: arrow_compare
-    type: arrow
-    from:
-      ref: label_B_area
-    to:
-      ref: label_A_area
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: n_judgment
-    type: node
-    shape: rect
-    text: Judgment (patient/public/clinician)
-  - id: n_elicit
-    type: node
-    shape: rect
-    text: Elicitation (TTO/SG/EQ-5D)
-  - id: n_ut
-    type: node
-    shape: rect
-    text: uₜ
-  - id: n_sum
-    type: node
-    shape: rect
-    text: Σ uₜ·Δt
-  - id: n_qaly
-    type: node
-    shape: rect
-    text: QALY
-  - id: pipeline_row
-    type: group
-    members:
-      - n_judgment
-      - n_elicit
-      - n_ut
-      - n_sum
-      - n_qaly
-    layout: row
-    gap: 30
-    fit:
-      x: 60
-      'y': 15
-      w: 880
-      h: 115
-  - id: p_arrow1
-    type: arrow
-    from:
-      ref: n_judgment
-    to:
-      ref: n_elicit
-  - id: p_arrow2
-    type: arrow
-    from:
-      ref: n_elicit
-    to:
-      ref: n_ut
-  - id: p_arrow3
-    type: arrow
-    from:
-      ref: n_ut
-    to:
-      ref: n_sum
-  - id: p_arrow4
-    type: arrow
-    from:
-      ref: n_sum
-    to:
-      ref: n_qaly
-commands:
-  - card:
-      title: From Profile to a Single Number
-  - draw:
-      - ax
-  - draw:
-      - eq
-    speak: Now that we have three ways to produce u_t — trade-off, gamble, and descriptive lookup — the final step is turning a whole health profile into one number.
-  - highlight:
-      target:
-        - eq
-    speak: The QALY is simply the sum, over every period of the patient's life, of the utility weight times the time spent at that weight — the area under the health-state curve.
-  - draw:
-      - baseline_1
-      - baseline_2
-      - region_baseline_1
-      - region_baseline_2
-    parallel: true
-    speak: Untreated, the patient lives five years at u=0.75, then five more at u=0.50 as the hip deteriorates.
-  - pause: 0.3
-  - draw:
-      - calc_baseline_box
-      - calc_baseline_line_1
-      - calc_baseline_line_2
-      - calc_baseline_line_3
-      - label_baseline_area
-    speak: That profile sums to 3.75 plus 2.5 — 6.25 QALYs, the reference point against which both treatments are judged.
-  - point:
-      at:
-        ref: label_baseline_area
-      gesture: circle
-  - pause: 0.4
-  - erase:
-      - calc_baseline_box
-      - calc_baseline_line_1
-      - calc_baseline_line_2
-      - calc_baseline_line_3
-  - fade:
-      target:
-        - region_baseline_1
-        - region_baseline_2
-      to: 0.15
-  - draw:
-      - optionA
-      - region_A
-    parallel: true
-    speak: The hip replacement does not extend life, but it holds quality of life at 0.85 for the full ten years.
-  - draw:
-      - calc_A_box
-      - calc_A_line_1
-      - label_A_area
-    speak: Ten years times 0.85 gives 8.5 QALYs — over two full QALYs gained purely from quality, with zero extra survival.
-  - point:
-      at:
-        ref: label_A_area
-      gesture: circle
-  - pause: 0.3
-  - erase:
-      - calc_A_box
-      - calc_A_line_1
-  - draw:
-      - optionB
-      - region_B
-    parallel: true
-    speak: The drug extends survival to thirteen years, but the side effects hold quality down at 0.60 throughout.
-  - draw:
-      - calc_B_box
-      - calc_B_line_1
-      - label_B_area
-    speak: Thirteen times 0.60 gives 7.8 QALYs.
-  - point:
-      at:
-        ref: label_B_area
-      gesture: circle
-  - pause: 0.4
-  - erase:
-      - calc_B_box
-      - calc_B_line_1
-  - camera:
-      'on':
-        - region_A
-        - region_B
-        - label_A_area
-        - label_B_area
-      zoom: fit
-  - draw:
-      - arrow_compare
-    speak: Despite three additional years of life, the drug delivers fewer QALYs than the hip replacement — longevity and quality are literally interchangeable in this arithmetic, and here quality wins.
-  - pause: 0.5
-  - camera:
-      reset: true
-  - highlight:
-      target:
-        - eq
-        - label_baseline_area
-        - label_A_area
-        - label_B_area
-    speak: 'This is the entire mechanics of a QALY: elicit a weight for every distinguishable state a person can be in, multiply each by its duration, and add.'
-  - draw:
-      - pipeline_row
-      - p_arrow1
-      - p_arrow2
-      - p_arrow3
-      - p_arrow4
-    speak: Everything upstream — patient, public, or clinician judgment, captured by time trade-off, standard gamble, or EQ-5D — funnels into that single sum, which is why the same number can look objective while carrying every assumption we just unpacked.
-  - highlight:
-      target:
-        - eq
-        - pipeline_row
-    speak: 'What you can see now is the whole pipeline: a judgment about a state''s worth becomes a weight, the weight becomes an area under a curve, and the area becomes the one figure that decides which of these two treatments looks better on paper.'
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'The theoretical foundations: where does the QALY model come from?'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 3 of 5
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: The theoretical foundations: where does the QALY model come from?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+    x:
+      - 0
+      - 13
+    'y':
+      - 0
+      - 1.1
+    box:
+      x: 90
+      'y': 150
+      w: 820
+      h: 420
+
+    math eq details "Willingness-to-pay thresholds built on this sum vary by country: NICE in the UK generally uses £20,000–£30,000 per QALY gained." tex "QALY = \\sum_t u_t \\times \\Delta t" size 34 colors {"u_t":"#2f6b8f","\\Delta t":"#b5482e"} x 500 y 660 hidden true
+    axes ax x_label Years y_label "Utility (uₜ)" hidden true
+    curve zero expr "0" x_from 0 x_to 13 style.opacity 0 hidden true
+    curve baseline_1 #8f887c expr "0.75" x_from 0 x_to 5 hidden true
+    curve baseline_2 #8f887c expr "0.50" x_from 5 x_to 10 hidden true
+    region region_baseline_1 x_from 0 x_to 5 between ["baseline_1","zero"] style.fill #8f887c style.fill_style wash hidden true
+    region region_baseline_2 x_from 5 x_to 10 between ["baseline_2","zero"] style.fill #8f887c style.fill_style wash hidden true
+    curve optionA #2f6b8f expr "0.85" x_from 0 x_to 10 hidden true
+    region region_A x_from 0 x_to 10 between ["optionA","zero"] style.fill #2f6b8f style.fill_style wash hidden true
+    curve optionB #b5482e expr "0.60" x_from 0 x_to 13 hidden true
+    region region_B x_from 0 x_to 13 between ["optionB","zero"] style.fill #b5482e style.fill_style wash hidden true
+    label label_baseline_area "Baseline: 6.25 QALYs" above-right #8f887c attach_to region_baseline_2 hidden true
+    label label_A_area "Option A (hip): 8.5 QALYs" above #2f6b8f attach_to region_A hidden true
+    label label_B_area "Option B (drug): 7.8 QALYs" below #b5482e attach_to region_B hidden true
+    scratch calc_baseline top-right work ["5 × 0.75 = 3.75","5 × 0.50 = 2.50","Total = 6.25 QALYs"] font_size 22 hidden true
+    scratch calc_A top-right work ["10 × 0.85 = 8.5 QALYs"] font_size 22 hidden true
+    scratch calc_B top-right work ["13 × 0.60 = 7.8 QALYs"] font_size 22 hidden true
+    arrow arrow_compare label_B_area -> label_A_area curved #8a5fa8 hidden true
+    box n_judgment "Judgment (patient/public/clinician)" in pipeline_row hidden true
+    box n_elicit "Elicitation (TTO/SG/EQ-5D)" in pipeline_row hidden true
+    box n_ut "uₜ" in pipeline_row hidden true
+    box n_sum "Σ uₜ·Δt" in pipeline_row hidden true
+    box n_qaly "QALY" in pipeline_row hidden true
+    row pipeline_row gap 30 fit.h 115 fit.w 880 fit.x 60 fit.y 15 hidden true
+    arrow p_arrow1 n_judgment -> n_elicit hidden true
+    arrow p_arrow2 n_elicit -> n_ut hidden true
+    arrow p_arrow3 n_ut -> n_sum hidden true
+    arrow p_arrow4 n_sum -> n_qaly hidden true
+
+    card title "From Profile to a Single Number"
+
+    draw ax
+
+Now that we have three ways to produce u_t — trade-off, gamble, and descriptive lookup — the final step is turning a whole health profile into one number.
+    draw eq
+
+The QALY is simply the sum, over every period of the patient's life, of the utility weight times the time spent at that weight — the area under the health-state curve.
+    highlight eq
+
+Untreated, the patient lives five years at u=0.75, then five more at u=0.50 as the hip deteriorates.
+    draw baseline_1 baseline_2 region_baseline_1 region_baseline_2 parallel true
+
+    pause 0.3
+
+That profile sums to 3.75 plus 2.5 — 6.25 QALYs, the reference point against which both treatments are judged.
+    draw calc_baseline_box calc_baseline_line_1 calc_baseline_line_2 calc_baseline_line_3 label_baseline_area
+
+    point at.ref label_baseline_area gesture circle
+
+    pause 0.4
+
+    erase calc_baseline_box calc_baseline_line_1 calc_baseline_line_2 calc_baseline_line_3
+
+    fade region_baseline_1 region_baseline_2 to 0.15
+
+The hip replacement does not extend life, but it holds quality of life at 0.85 for the full ten years.
+    draw optionA region_A parallel true
+
+Ten years times 0.85 gives 8.5 QALYs — over two full QALYs gained purely from quality, with zero extra survival.
+    draw calc_A_box calc_A_line_1 label_A_area
+
+    point at.ref label_A_area gesture circle
+
+    pause 0.3
+
+    erase calc_A_box calc_A_line_1
+
+The drug extends survival to thirteen years, but the side effects hold quality down at 0.60 throughout.
+    draw optionB region_B parallel true
+
+Thirteen times 0.60 gives 7.8 QALYs.
+    draw calc_B_box calc_B_line_1 label_B_area
+
+    point at.ref label_B_area gesture circle
+
+    pause 0.4
+
+    erase calc_B_box calc_B_line_1
+
+    camera on ["region_A","region_B","label_A_area","label_B_area"] zoom fit
+
+Despite three additional years of life, the drug delivers fewer QALYs than the hip replacement — longevity and quality are literally interchangeable in this arithmetic, and here quality wins.
+    draw arrow_compare
+
+    pause 0.5
+
+    camera reset true
+
+This is the entire mechanics of a QALY: elicit a weight for every distinguishable state a person can be in, multiply each by its duration, and add.
+    highlight eq label_baseline_area label_A_area label_B_area
+
+Everything upstream — patient, public, or clinician judgment, captured by time trade-off, standard gamble, or EQ-5D — funnels into that single sum, which is why the same number can look objective while carrying every assumption we just unpacked.
+    draw pipeline_row p_arrow1 p_arrow2 p_arrow3 p_arrow4
+
+What you can see now is the whole pipeline: a judgment about a state's worth becomes a weight, the weight becomes an area under a curve, and the area becomes the one figure that decides which of these two treatments looks better on paper.
+    highlight eq pipeline_row
+
+## Where next
+end_page: true
+
+Next: The theoretical foundations: where does the QALY model come from?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:1 title "What is a QALY, and why do we need it?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:3 title "The theoretical foundations: where does the QALY model come from?" size 320 x 735 y 395
+
+    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
+    text end_count "2 of 5" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
