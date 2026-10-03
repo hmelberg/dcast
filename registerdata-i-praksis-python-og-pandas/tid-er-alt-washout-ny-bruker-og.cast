@@ -1,361 +1,147 @@
-playlist:
-  title: 'Tid er alt: washout, ny bruker og legemiddeldekning i pandas'
-  prompt: Hva er en washout-periode, og hvorfor avgjør den om pasienten telles som ny bruker? Hvordan gjør du utleveringsdatoer og DDD om til sammenhengende perioder med legemiddeldekning? Hvorfor er insidens og prevalens to helt forskjellige spørringer mot det samme datasettet? Hva gjør merge_asof som en vanlig merge ikke klarer?
-  next:
-    title: 'Tallene selv: bruk av diabeteslegemidler og kontakter i Norge'
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Tid er alt — er dette en ny bruker?
-level: advanced
+# Tid er alt: washout, ny bruker og legemiddeldekning i pandas
+prompt: "Hva er en washout-periode, og hvorfor avgjør den om pasienten telles som ny bruker? Hvordan gjør du utleveringsdatoer og DDD om til sammenhengende perioder med legemiddeldekning? Hvorfor er insidens og prevalens to helt forskjellige spørringer mot det samme datasettet? Hva gjør merge_asof som en vanlig merge ikke klarer?"
+next: {"title":"Tallene selv: bruk av diabeteslegemidler og kontakter i Norge","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.cast"}
+enroll: https://drawcast.anvil.app
+
+## Tid er alt — er dette en ny bruker?
 voice: female
-domain:
-  x:
-    - 0
-    - 30
-  'y':
-    - 0
-    - 10
-elements:
-  - id: tittel
-    type: text
-    text: Tid er alt — er dette en ny bruker?
-    x: 500
-    'y': 706
-    font_size: 34
-  - id: ax
-    type: axes
-    x_label: Tid (måneder fra 2018-01-01)
-  - id: p1
-    type: point
-    at:
-      x: 4
-      'y': 5
-    style:
-      color: '#2f6b8f'
-  - id: lab_p1
-    type: label
-    text: '2018-05-02'
-    attach_to: p1
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: p2
-    type: point
-    at:
-      x: 14.4
-      'y': 5
-    style:
-      color: '#b5482e'
-  - id: lab_p2
-    type: label
-    text: '2019-03-14'
-    attach_to: p2
-    side: below
-    style:
-      color: '#b5482e'
-  - id: p3
-    type: point
-    at:
-      x: 17.6
-      'y': 5
-    style:
-      color: '#2f6b8f'
-  - id: lab_p3
-    type: label
-    text: jun 19
-    attach_to: p3
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: p4
-    type: point
-    at:
-      x: 21
-      'y': 5
-    style:
-      color: '#2f6b8f'
-  - id: lab_p4
-    type: label
-    text: sep 19
-    attach_to: p4
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: p5
-    type: point
-    at:
-      x: 24.2
-      'y': 5
-    style:
-      color: '#2f6b8f'
-  - id: lab_p5
-    type: label
-    text: jan 20
-    attach_to: p5
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: gap
-    type: arrow
-    from:
-      x: 4
-      'y': 3.2
-    to:
-      x: 14.4
-      'y': 3.2
-    style:
-      color: '#8f887c'
-  - id: lab_gap
-    type: label
-    text: 316 dager uten A10
-    attach_to: gap
-    side: below
-    style:
-      color: '#8f887c'
-  - id: w12
-    type: arrow
-    from:
-      x: 14.4
-      'y': 7.2
-    to:
-      x: 2.4
-      'y': 7.2
-    style:
-      color: '#8a5fa8'
-  - id: lab_w12
-    type: label
-    text: Washout 12 mnd
-    attach_to: w12
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: w6
-    type: arrow
-    from:
-      x: 14.4
-      'y': 8.7
-    to:
-      x: 8.4
-      'y': 8.7
-    style:
-      color: '#d0865f'
-  - id: lab_w6
-    type: label
-    text: Washout 6 mnd
-    attach_to: w6
-    side: above
-    style:
-      color: '#d0865f'
-  - id: trunk
-    type: arrow
-    from:
-      x: 4
-      'y': 1.6
-    to:
-      x: 0
-      'y': 1.6
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: lab_trunk
-    type: label
-    text: bare 121 dager historikk
-    attach_to: trunk
-    side: below
-    style:
-      color: '#8f887c'
-  - id: mark_p2
-    type: annotation
-    target: lab_p2
-    kind: box
-  - id: road_title
-    type: text
-    text: Serien i fire steg
-    x: 500
-    'y': 636
-    font_size: 32
-  - id: steg1
-    type: text
-    text: '1.  Washout i kode: utlevering med tomrom foran'
-    x: 500
-    'y': 520
-    font_size: 26
-  - id: mark_steg1
-    type: annotation
-    target: steg1
-    kind: box
-  - id: steg2
-    type: text
-    text: 2.  Fra DDD til sammenhengende dekning
-    x: 500
-    'y': 436
-    font_size: 26
-  - id: steg3
-    type: text
-    text: '3.  Insidens og prevalens: to spørringer, samme lmr'
-    x: 500
-    'y': 352
-    font_size: 26
-  - id: steg4
-    type: text
-    text: '4.  merge_asof: koble til nærmeste hendelse før'
-    x: 500
-    'y': 268
-    font_size: 26
-commands:
-  - draw:
-      - tittel
-    speak: Insidenstallet i studien din kan doble seg uten at en eneste rad i lmr endrer seg — denne serien handler om hvorfor, og om hvordan du skriver «ny bruker» i pandas.
-  - draw:
-      - ax
-  - draw:
-      - p1
-      - lab_p1
-    speak: 'Her er pid 4711: én utlevering av metformin, A10BA02, andre mai 2018 — uttrekket vårt dekker fra første januar samme år.'
-  - pause: 1
-  - draw:
-      - p2
-      - lab_p2
-    speak: Så blir det stille lenge. Neste metforminutlevering kommer fjortende mars 2019.
-  - pause: 1
-  - draw:
-      - p3
-      - lab_p3
-      - p4
-      - lab_p4
-      - p5
-      - lab_p5
-    parallel: true
-    speak: 'Fra da av ligger utleveringene tett: juni, september, januar 2020 — en pasient i fast behandling.'
-  - pause: 1
-  - point:
-      at:
-        ref: p2
-      gesture: circle
-    speak: 'Så: skal mars 2019 telle som en ny bruker, eller som en gjenopptakelse?'
-  - wait: click
-  - draw:
-      - gap
-      - lab_gap
-    speak: Mellom de to første utleveringene går det 316 dager helt uten en eneste A10-utlevering.
-  - pause: 1
-  - draw:
-      - w12
-      - lab_w12
-    speak: En washout-periode er vinduet du ser bakover i fra en utlevering; er det tomt for samme legemiddelgruppe, kaller vi utleveringen en ny bruker.
-  - pause: 1
-  - highlight:
-      target:
-        - w12
-        - p1
-      effect: glow
-    speak: Tolv måneder rekker tilbake til fjortende mars 2018 — og der inne ligger maiutleveringen.
-  - pause: 1
-  - highlight:
-      target:
-        - lab_gap
-      effect: pulse
-    speak: 316 er mindre enn 365, så under tolvmånederskravet er dette ingen ny bruker.
-  - wait: click
-  - draw:
-      - w6
-      - lab_w6
-    speak: Krymp vinduet til seks måneder, og det starter fjortende september 2018.
-  - pause: 1
-  - highlight:
-      target:
-        - w6
-      effect: glow
-    speak: Nå er vinduet tomt — samme pasient, samme rader, motsatt svar.
-  - pause: 1
-  - draw:
-      - mark_p2
-    delivery: grave
-    speak: Washout-lengden er altså ikke en teknisk detalj, men en analytisk beslutning som må begrunnes og testes i en sensitivitetsanalyse.
-  - pause: 1
-  - speak: 'Tolvmånederskonvensjonen stammer fra Wayne Rays new-user-design fra 2003: prevalente brukere skjuler både de tidlige bivirkningene og seleksjonen av dem som allerede tåler legemidlet.'
-  - draw:
-      - trunk
-      - lab_trunk
-    speak: Den aller første utleveringen kan du dessuten ikke klassifisere i det hele tatt — foran den ligger bare 121 dager historikk.
-  - pause: 1
-  - highlight:
-      target:
-        - trunk
-      effect: glow
-    speak: Venstretrunkering er et hull i observasjonsvinduet, ikke i dataene, og derfor må kohorten alltid starte senere enn filen gjør.
-  - wait: click
-  - clear: {}
-  - draw:
-      - road_title
-    speak: Fire steg tar oss fra denne tidslinjen til kode som holder på millioner av rader.
-  - draw:
-      - steg1
-      - mark_steg1
-    speak: 'Først washout i pandas: sorter på pid og dato, regn differansen til forrige utlevering, behold dem med stort nok tomrom foran.'
-  - pause: 1
-  - draw:
-      - steg2
-    speak: Så fra utleveringsdato og DDD til sammenhengende dekningsperioder — hvor mange dager varer egentlig én pakning?
-  - pause: 1
-  - draw:
-      - steg3
-    speak: 'Så insidens mot prevalens: teller du nye brukere, eller alle brukere i et vindu — to spørringer mot samme lmr.'
-  - pause: 1
-  - draw:
-      - steg4
-    speak: Og til slutt merge_asof, som kobler hver kontakt til nærmeste utlevering før den — noe en vanlig merge på pid aldri får til.
-  - pause: 1
-  - delivery: grave
-    speak: 'Pasient 4711 er ny bruker i mars 2019 med seks måneders washout, og er det ikke med tolv: tallet du velger, er en del av resultatet ditt.'
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Tallene selv: bruk av diabeteslegemidler og kontakter i Norge'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 7 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Tallene selv: bruk av diabeteslegemidler og kontakter i Norge'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+domain: {"x":[0,30],"y":[0,10]}
+
+    text tittel "Tid er alt — er dette en ny bruker?" x 500 y 706 font_size 34 hidden true
+    axes ax x_label "Tid (måneder fra 2018-01-01)" hidden true
+    dot p1 #2f6b8f at.x 4 at.y 5 hidden true
+    label lab_p1 "2018-05-02" below #2f6b8f attach_to p1 hidden true
+    dot p2 #b5482e at.x 14.4 at.y 5 hidden true
+    label lab_p2 "2019-03-14" below #b5482e attach_to p2 hidden true
+    dot p3 #2f6b8f at.x 17.6 at.y 5 hidden true
+    label lab_p3 "jun 19" above #2f6b8f attach_to p3 hidden true
+    dot p4 #2f6b8f at.x 21 at.y 5 hidden true
+    label lab_p4 "sep 19" below #2f6b8f attach_to p4 hidden true
+    dot p5 #2f6b8f at.x 24.2 at.y 5 hidden true
+    label lab_p5 "jan 20" above #2f6b8f attach_to p5 hidden true
+    arrow gap #8f887c from.x 4 from.y 3.2 to.x 14.4 to.y 3.2 hidden true
+    label lab_gap "316 dager uten A10" below #8f887c attach_to gap hidden true
+    arrow w12 #8a5fa8 from.x 14.4 from.y 7.2 to.x 2.4 to.y 7.2 hidden true
+    label lab_w12 "Washout 12 mnd" above #8a5fa8 attach_to w12 hidden true
+    arrow w6 #d0865f from.x 14.4 from.y 8.7 to.x 8.4 to.y 8.7 hidden true
+    label lab_w6 "Washout 6 mnd" above #d0865f attach_to w6 hidden true
+    arrow trunk dashed #8f887c from.x 4 from.y 1.6 to.x 0 to.y 1.6 hidden true
+    label lab_trunk "bare 121 dager historikk" below #8f887c attach_to trunk hidden true
+
+Insidenstallet i studien din kan doble seg uten at en eneste rad i lmr endrer seg — denne serien handler om hvorfor, og om hvordan du skriver «ny bruker» i pandas.
+    draw tittel
+
+    draw ax
+
+Her er pid 4711: én utlevering av metformin, A10BA02, andre mai 2018 — uttrekket vårt dekker fra første januar samme år.
+    draw p1 lab_p1
+
+    pause 1
+
+Så blir det stille lenge. Neste metforminutlevering kommer fjortende mars 2019.
+    draw p2 lab_p2
+
+    pause 1
+
+Fra da av ligger utleveringene tett: juni, september, januar 2020 — en pasient i fast behandling.
+    draw p3 lab_p3 p4 lab_p4 p5 lab_p5 parallel true
+
+    pause 1
+
+Så: skal mars 2019 telle som en ny bruker, eller som en gjenopptakelse?
+    point at.ref p2 gesture circle
+
+    wait
+
+Mellom de to første utleveringene går det 316 dager helt uten en eneste A10-utlevering.
+    draw gap lab_gap
+
+    pause 1
+
+En washout-periode er vinduet du ser bakover i fra en utlevering; er det tomt for samme legemiddelgruppe, kaller vi utleveringen en ny bruker.
+    draw w12 lab_w12
+
+    pause 1
+
+Tolv måneder rekker tilbake til fjortende mars 2018 — og der inne ligger maiutleveringen.
+    highlight w12 p1 effect glow
+
+    pause 1
+
+316 er mindre enn 365, så under tolvmånederskravet er dette ingen ny bruker.
+    highlight lab_gap effect pulse
+
+    wait
+
+Krymp vinduet til seks måneder, og det starter fjortende september 2018.
+    draw w6 lab_w6
+
+    pause 1
+
+Nå er vinduet tomt — samme pasient, samme rader, motsatt svar.
+    highlight w6 effect glow
+
+    pause 1
+
+Washout-lengden er altså ikke en teknisk detalj, men en analytisk beslutning som må begrunnes og testes i en sensitivitetsanalyse.
+    mark mark_p2 target lab_p2 kind box
+    delivery grave
+
+    pause 1
+
+Tolvmånederskonvensjonen stammer fra Wayne Rays new-user-design fra 2003: prevalente brukere skjuler både de tidlige bivirkningene og seleksjonen av dem som allerede tåler legemidlet.
+
+Den aller første utleveringen kan du dessuten ikke klassifisere i det hele tatt — foran den ligger bare 121 dager historikk.
+    draw trunk lab_trunk
+
+    pause 1
+
+Venstretrunkering er et hull i observasjonsvinduet, ikke i dataene, og derfor må kohorten alltid starte senere enn filen gjør.
+    highlight trunk effect glow
+
+    wait
+
+    clear
+
+Fire steg tar oss fra denne tidslinjen til kode som holder på millioner av rader.
+    text road_title "Serien i fire steg" x 500 y 636 font_size 32
+
+Først washout i pandas: sorter på pid og dato, regn differansen til forrige utlevering, behold dem med stort nok tomrom foran.
+    text steg1 "1.  Washout i kode: utlevering med tomrom foran" x 500 y 520 font_size 26
+    mark mark_steg1 target steg1 kind box
+
+    pause 1
+
+Så fra utleveringsdato og DDD til sammenhengende dekningsperioder — hvor mange dager varer egentlig én pakning?
+    text steg2 "2.  Fra DDD til sammenhengende dekning" x 500 y 436 font_size 26
+
+    pause 1
+
+Så insidens mot prevalens: teller du nye brukere, eller alle brukere i et vindu — to spørringer mot samme lmr.
+    text steg3 "3.  Insidens og prevalens: to spørringer, samme lmr" x 500 y 352 font_size 26
+
+    pause 1
+
+Og til slutt merge_asof, som kobler hver kontakt til nærmeste utlevering før den — noe en vanlig merge på pid aldri får til.
+    text steg4 "4.  merge_asof: koble til nærmeste hendelse før" x 500 y 268 font_size 26
+
+    pause 1
+
+Pasient 4711 er ny bruker i mars 2019 med seks måneders washout, og er det ikke med tolv: tallet du velger, er en del av resultatet ditt.
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Tallene selv: bruk av diabeteslegemidler og kontakter i Norge
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:5 title "Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:7 title "Tallene selv: bruk av diabeteslegemidler og kontakter i Norge" size 320 x 735 y 395
+
+    link end_again href lecture:6 title "Watch again" form text open here x 500 y 160
+    text end_count "6 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

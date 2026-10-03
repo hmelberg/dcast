@@ -1,615 +1,287 @@
-playlist:
-  title: Holder én E11-kode for å kalle noen diabetiker?
-  prompt: Hvordan filtrerer du på ICD-10 og ATC uten å miste undergrupper — str.startswith, isin eller regex? Hva skjer med kohorten når du krever to kontakter i stedet for én, eller legger til ATC A10 fra lmr? Hva vinner og hva taper du på en streng kohortdefinisjon?
-  next:
-    title: 'Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?'
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Holder én E11-kode? — Én kode, én pasient?
+# Holder én E11-kode for å kalle noen diabetiker?
+prompt: "Hvordan filtrerer du på ICD-10 og ATC uten å miste undergrupper — str.startswith, isin eller regex? Hva skjer med kohorten når du krever to kontakter i stedet for én, eller legger til ATC A10 fra lmr? Hva vinner og hva taper du på en streng kohortdefinisjon?"
+next: {"title":"Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.cast"}
+enroll: https://drawcast.anvil.app
+
+## Holder én E11-kode? — Én kode, én pasient?
 voice: female
-elements:
-  - id: tittel
-    type: text
-    text: Holder én E11-kode?
-    x: 500
-    'y': 700
-    font_size: 40
-  - id: q
-    type: code
-    language: python
-    show: left
-    x: 500
-    'y': 390
-    width: 920
-    font_size: 15
-    code: |-
-      import pandas as pd
-      npr = pd.DataFrame({"pid": [4711, 4711, 4711],
-                          "dato_inn": ["2019-03-12", "2021-06-02", "2022-01-20"],
-                          "icd10": ["S52.5", "E11.9", "J18.9"]})
-      npr[npr["icd10"].str.startswith("E11")]
-  - id: n_code
-    type: node
-    shape: rect
-    text: Én E11.9-kode
-    x: 200
-    'y': 420
-    style:
-      color: '#8a5fa8'
-  - id: n_true
-    type: node
-    shape: rect
-    text: Reell type 2-diabetes
-    x: 720
-    'y': 600
-    style:
-      color: '#2f6b8f'
-  - id: n_wrong
-    type: node
-    shape: rect
-    text: 'Feilkoding: egentlig E10'
-    x: 720
-    'y': 420
-    style:
-      color: '#b5482e'
-  - id: n_susp
-    type: node
-    shape: rect
-    text: Utredning uten diagnose
-    x: 720
-    'y': 240
-    style:
-      color: '#b5482e'
-  - id: a_true
-    type: arrow
-    from:
-      ref: n_code
-    to:
-      ref: n_true
-  - id: a_wrong
-    type: arrow
-    from:
-      ref: n_code
-    to:
-      ref: n_wrong
-  - id: a_susp
-    type: arrow
-    from:
-      ref: n_code
-    to:
-      ref: n_susp
-  - id: n_missed
-    type: node
-    shape: rect
-    text: 'Kun fastlege: ingen E11 i npr'
-    x: 270
-    'y': 150
-    style:
-      color: '#8f887c'
-  - id: l_missed
-    type: label
-    text: Den motsatte feilen
-    attach_to: n_missed
-    side: above
-    style:
-      color: '#8f887c'
-  - id: f1
-    type: node
-    shape: rect
-    text: 'Kodefilter: E11'
-    x: 170
-    'y': 450
-    style:
-      color: '#8a5fa8'
-  - id: mark_f1
-    type: annotation
-    target: f1
-    kind: box
-  - id: f2
-    type: node
-    shape: rect
-    text: 'kohort: én rad per pid'
-    x: 500
-    'y': 450
-  - id: f3
-    type: node
-    shape: rect
-    text: Prevalens
-    x: 820
-    'y': 600
-  - id: f4
-    type: node
-    shape: rect
-    text: Legemiddelbruk
-    x: 820
-    'y': 450
-  - id: f5
-    type: node
-    shape: rect
-    text: Risikoestimat
-    x: 820
-    'y': 300
-  - id: e1
-    type: arrow
-    from:
-      ref: f1
-    to:
-      ref: f2
-  - id: e2
-    type: arrow
-    from:
-      ref: f2
-    to:
-      ref: f3
-  - id: e3
-    type: arrow
-    from:
-      ref: f2
-    to:
-      ref: f4
-  - id: e4
-    type: arrow
-    from:
-      ref: f2
-    to:
-      ref: f5
-  - id: konklusjon
-    type: text
-    text: Kohortdefinisjonen er et analysevalg, ikke en teknisk detalj.
-    x: 500
-    'y': 150
-    font_size: 26
-  - id: mark_k
-    type: annotation
-    target: konklusjon
-    kind: box
-commands:
-  - draw:
-      - tittel
-    speak: 'Denne serien bygger en type 2-diabeteskohort fra registerdata — og hele resultatet henger på ett valg du gjør før du har analysert noe som helst: hvor mye skal til for å kalle noen diabetiker?'
-  - draw:
-      - q
-      - q_line_1
-      - q_line_2
-      - q_line_3
-      - q_line_4
-    parallel: true
-    speak: 'Her er alle npr-radene for én pasient, pid 4711: tre kontakter mellom 2019 og 2022.'
-  - draw:
-      - q_line_5
-    speak: Vi plukker ut kontaktene der icd10 begynner på E11 — koden for type 2-diabetes.
-  - draw:
-      - q_out
-    speak: 'Én rad kommer tilbake: en kontakt 2. juni 2021, med E11.9.'
-  - highlight:
-      target:
-        - q_out
-      effect: glow
-    speak: Er pid 4711 dermed diabetiker, eller er dette bare én kode i en fil?
-  - pause: 0.6
-  - clear:
-      keep:
-        - tittel
-  - draw:
-      - n_code
-    speak: Den ene koden kan skjule minst tre ganske ulike virkeligheter.
-  - draw:
-      - a_true
-      - n_true
-    speak: 'Den vanligste er den enkleste: pasienten har type 2-diabetes, og fikk koden på sykehuset.'
-  - draw:
-      - a_wrong
-      - n_wrong
-    speak: Men ICD-10 i npr er like mye et finansieringsspråk som et klinisk — koden følger DRG-oppgjøret, og en type 1-pasient kan havne på E11.
-  - draw:
-      - a_susp
-      - n_susp
-    speak: Eller koden ble satt under en utredning som endte uten diabetesdiagnose.
-  - pause: 0.4
-  - draw:
-      - n_missed
-      - l_missed
-    speak: 'Og så den motsatte feilen, den som gjør mest skade: mesteparten av type 2-diabetes følges opp hos fastlegen, og de pasientene setter aldri fot i npr.'
-  - focus:
-      target:
-        - n_true
-        - n_missed
-    speak: Ett kodetreff fanger altså dem som har vært på sykehus — upresist, men billig — og er helt blindt for alle som aldri var der.
-  - pause: 0.5
-  - clear:
-      keep:
-        - tittel
-  - draw:
-      - f1
-      - mark_f1
-    speak: Valget ser ut som en linje kode i et filter.
-  - draw:
-      - e1
-      - f2
-    speak: Men det avgjør hvem som i det hele tatt får en rad i kohort-tabellen vi bygger gjennom kurset.
-  - draw:
-      - e2
-      - f3
-      - e3
-      - f4
-      - e4
-      - f5
-    speak: Og kohorten bestemmer prevalensen, legemiddelbruken og hvert eneste risikoestimat du rapporterer etterpå.
-  - highlight:
-      target:
-        - f2
-      effect: glow
-    speak: 'Vidt filter seksti tusen pasienter, strengt filter førtifem tusen: samme rådata, femten tusen menneskers forskjell — og ingen av tallene er feil.'
-  - draw:
-      - konklusjon
-      - mark_k
-    delivery: grave
-    speak: 'Så: holder én E11-kode? Den er ikke et faktum om pasienten, men en hypotese — og resten av serien prøver hypotesen med flere kontakter og med A10 fra lmr.'
 level: basic
----
-title: startswith, isin eller regex?
+
+    text tittel "Holder én E11-kode?" x 500 y 700 font_size 40 hidden true
+    ```python q x 500 y 390 width 920 font_size 15 show left hidden true
+    import pandas as pd
+    npr = pd.DataFrame({"pid": [4711, 4711, 4711],
+                        "dato_inn": ["2019-03-12", "2021-06-02", "2022-01-20"],
+                        "icd10": ["S52.5", "E11.9", "J18.9"]})
+    npr[npr["icd10"].str.startswith("E11")]
+    ```
+    box n_code "Én E11.9-kode" #8a5fa8 x 200 y 420 hidden true
+    box n_true "Reell type 2-diabetes" #2f6b8f x 720 y 600 hidden true
+    box n_wrong "Feilkoding: egentlig E10" #b5482e x 720 y 420 hidden true
+    box n_susp "Utredning uten diagnose" #b5482e x 720 y 240 hidden true
+    arrow a_true n_code -> n_true hidden true
+    arrow a_wrong n_code -> n_wrong hidden true
+    arrow a_susp n_code -> n_susp hidden true
+    box n_missed "Kun fastlege: ingen E11 i npr" #8f887c x 270 y 150 hidden true
+    label l_missed "Den motsatte feilen" above #8f887c attach_to n_missed hidden true
+    box f1 "Kodefilter: E11" #8a5fa8 x 170 y 450 hidden true
+    mark mark_f1 target f1 kind box hidden true
+    box f2 "kohort: én rad per pid" x 500 y 450 hidden true
+    box f3 "Prevalens" x 820 y 600 hidden true
+    box f4 "Legemiddelbruk" x 820 y 450 hidden true
+    box f5 "Risikoestimat" x 820 y 300 hidden true
+    arrow e1 f1 -> f2 hidden true
+    arrow e2 f2 -> f3 hidden true
+    arrow e3 f2 -> f4 hidden true
+    arrow e4 f2 -> f5 hidden true
+
+Denne serien bygger en type 2-diabeteskohort fra registerdata — og hele resultatet henger på ett valg du gjør før du har analysert noe som helst: hvor mye skal til for å kalle noen diabetiker?
+    draw tittel
+
+Her er alle npr-radene for én pasient, pid 4711: tre kontakter mellom 2019 og 2022.
+    draw q q_line_1 q_line_2 q_line_3 q_line_4 parallel true
+
+Vi plukker ut kontaktene der icd10 begynner på E11 — koden for type 2-diabetes.
+    draw q_line_5
+
+Én rad kommer tilbake: en kontakt 2. juni 2021, med E11.9.
+    draw q_out
+
+Er pid 4711 dermed diabetiker, eller er dette bare én kode i en fil?
+    highlight q_out effect glow
+
+    pause 0.6
+
+    clear keep ["tittel"]
+
+Den ene koden kan skjule minst tre ganske ulike virkeligheter.
+    draw n_code
+
+Den vanligste er den enkleste: pasienten har type 2-diabetes, og fikk koden på sykehuset.
+    draw a_true n_true
+
+Men ICD-10 i npr er like mye et finansieringsspråk som et klinisk — koden følger DRG-oppgjøret, og en type 1-pasient kan havne på E11.
+    draw a_wrong n_wrong
+
+Eller koden ble satt under en utredning som endte uten diabetesdiagnose.
+    draw a_susp n_susp
+
+    pause 0.4
+
+Og så den motsatte feilen, den som gjør mest skade: mesteparten av type 2-diabetes følges opp hos fastlegen, og de pasientene setter aldri fot i npr.
+    draw n_missed l_missed
+
+Ett kodetreff fanger altså dem som har vært på sykehus — upresist, men billig — og er helt blindt for alle som aldri var der.
+    focus n_true n_missed
+
+    pause 0.5
+
+    clear keep ["tittel"]
+
+Valget ser ut som en linje kode i et filter.
+    draw f1 mark_f1
+
+Men det avgjør hvem som i det hele tatt får en rad i kohort-tabellen vi bygger gjennom kurset.
+    draw e1 f2
+
+Og kohorten bestemmer prevalensen, legemiddelbruken og hvert eneste risikoestimat du rapporterer etterpå.
+    draw e2 f3 e3 f4 e4 f5
+
+Vidt filter seksti tusen pasienter, strengt filter førtifem tusen: samme rådata, femten tusen menneskers forskjell — og ingen av tallene er feil.
+    highlight f2 effect glow
+
+Så: holder én E11-kode? Den er ikke et faktum om pasienten, men en hypotese — og resten av serien prøver hypotesen med flere kontakter og med A10 fra lmr.
+    text konklusjon "Kohortdefinisjonen er et analysevalg, ikke en teknisk detalj." x 500 y 150 font_size 26
+    mark mark_k target konklusjon kind box
+    delivery grave
+
+## startswith, isin eller regex?
 voice: female
-template: bar_chart
-params:
-  labels:
-    - isin(['E11'])
-    - startswith('E11')
-    - match(r'^E11')
-  values: '{filt.tall}'
-  value_labels: true
-  y_label: Rader truffet (av 8)
-  title: Å treffe E11 – uten å miste undergrupper
-elements:
-  - id: filt
-    type: code
-    language: python
-    show: code
-    code: |-
-      import pandas as pd
-      koder = ["E11", "E11.9", "E1165", "E110", None, "E10.9", "E11.65", "I10"]
-      npr = pd.DataFrame({"pid": range(8), "icd10": koder})
-      eksakt = npr["icd10"].isin(["E11"]).sum()
-      kode = npr["icd10"].fillna("").str.replace(".", "", regex=False)
-      prefiks = kode.str.startswith("E11").sum()
-      regexp = kode.str.match(r"^E11").sum()
-      tall = [int(eksakt), int(prefiks), int(regexp)]
-      lmr = pd.DataFrame({"atc": ["A10BA02", "A10A", "A10BK01", "A11CC", None]})
-      a10 = int(lmr["atc"].fillna("").str.startswith("A10").sum())
-  - id: t1
-    type: text
-    text: startswith – rask, men krever na=False
-    x: 245
-    'y': 560
-    font_size: 21
-  - id: t2
-    type: text
-    text: isin – reviderbar, men mister E11.65
-    x: 245
-    'y': 480
-    font_size: 21
-  - id: t3
-    type: text
-    text: regex – presis, men husk ankeret ^
-    x: 245
-    'y': 400
-    font_size: 21
-  - id: t4
-    type: text
-    text: Normaliser først, match på prefiks
-    x: 245
-    'y': 295
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: mark_t4
-    type: annotation
-    target: t4
-    kind: box
-commands:
-  - draw:
-      - title
-      - filt
-      - filt_line_1
-    parallel: true
-    speak: 'Nå som vi har sett at én E11-kode gir en skjør kohort, kommer et enklere spørsmål som er minst like farlig: en filtrering som ser riktig ut kan slette pasienter uten å si fra.'
-  - draw:
-      - filt_line_2
-      - filt_line_3
-    speak: 'Åtte kontakter fra npr, og se på diagnosekolonnen: E11, E11.9, E1165, E110, en tom celle, E10.9, E11.65 og I10.'
-  - point:
-      at:
-        ref: filt_line_2
-      gesture: underline
-    speak: E11.65 er type 2-diabetes med hyperglykemi — like mye diabetiker som E11, bare mer spesifikt kodet, og skrevet med eller uten punktum alt etter hvem som leverte filen.
-  - pause: 0.3
-  - draw:
-      - filt_line_4
-    speak: 'Første forsøk er isin med en liste: eksakt treff, og bare eksakt treff.'
-  - draw:
-      - axes
-      - bar_1
-    speak: Én rad av åtte.
-  - highlight:
-      target:
-        - bar_1
-      effect: glow
-    speak: Seks av de sju andre radene er ikke feil i dataene — de er pasienter vi nettopp mistet, uten en eneste feilmelding.
-    delivery: grave
-  - pause: 0.4
-  - draw:
-      - filt_line_5
-    speak: 'Så normaliserer vi først: fyll tomme celler med tom streng og fjern punktumet — uten fillna stopper pandas deg med Cannot mask with non-boolean array containing NA or NaN values.'
-  - draw:
-      - filt_line_6
-      - bar_2
-    speak: startswith på den normaliserte kolonnen fanger fem rader — og lar E109 stå igjen, for type 1-diabetes skal ikke inn i kohorten.
-  - draw:
-      - filt_line_7
-      - filt_line_8
-      - bar_3
-    speak: Regex gir nøyaktig samme svar, siden str.match er forankret i starten — men bruker du str.contains, må du skrive ankeret ^E11 selv, ellers treffer E11 også midt inne i en lengre streng.
-  - pause: 0.3
-  - draw:
-      - filt_line_9
-      - filt_line_10
-    speak: 'Samme grep i lmr: A10 fanger metformin A10BA02, A10A og A10BK01, men ikke A11CC — ATC er bygd strengt hierarkisk, så der ER prefikset undergruppen, mens ICD-10 bare ligner på et hierarki.'
-  - clear:
-      keep:
-        - title
-        - axes
-        - bar_1
-        - bar_2
-        - bar_3
-    speak: Så hva vinner og taper du på hver av de tre?
-  - draw:
-      - t1
-    speak: startswith er rask og tåler at koden får flere tegn — men er blind for punktum, og krever na=False eller en fillna foran seg.
-  - draw:
-      - t2
-    speak: 'isin er den mest reviderbare: du skriver ned nøyaktig hvilke koder som teller — og nettopp derfor mister den undergruppene du glemte.'
-  - draw:
-      - t3
-    speak: Regex kan alt de to andre kan, og er derfor lettest å ta subtilt feil uten at noe krasjer.
-  - draw:
-      - t4
-      - mark_t4
-    speak: 'Du kan nå se hvor kohorten faktisk avgjøres: normaliser kolonnen først og match på prefiks, så er det definisjonen din — ikke strengformatet i leveransen — som bestemmer hvem som blir diabetiker.'
-    delivery: grave
 level: basic
----
-title: 'Streng eller vid: hva vinner og taper du?'
+use: bar_chart
+with:
+    labels:
+      - isin(['E11'])
+      - startswith('E11')
+      - match(r'^E11')
+    values: '{filt.tall}'
+    value_labels: true
+    y_label: Rader truffet (av 8)
+    title: Å treffe E11 – uten å miste undergrupper
+
+    ```python filt show code hidden true
+    import pandas as pd
+    koder = ["E11", "E11.9", "E1165", "E110", None, "E10.9", "E11.65", "I10"]
+    npr = pd.DataFrame({"pid": range(8), "icd10": koder})
+    eksakt = npr["icd10"].isin(["E11"]).sum()
+    kode = npr["icd10"].fillna("").str.replace(".", "", regex=False)
+    prefiks = kode.str.startswith("E11").sum()
+    regexp = kode.str.match(r"^E11").sum()
+    tall = [int(eksakt), int(prefiks), int(regexp)]
+    lmr = pd.DataFrame({"atc": ["A10BA02", "A10A", "A10BK01", "A11CC", None]})
+    a10 = int(lmr["atc"].fillna("").str.startswith("A10").sum())
+    ```
+
+Nå som vi har sett at én E11-kode gir en skjør kohort, kommer et enklere spørsmål som er minst like farlig: en filtrering som ser riktig ut kan slette pasienter uten å si fra.
+    draw title filt filt_line_1 parallel true
+
+Åtte kontakter fra npr, og se på diagnosekolonnen: E11, E11.9, E1165, E110, en tom celle, E10.9, E11.65 og I10.
+    draw filt_line_2 filt_line_3
+
+E11.65 er type 2-diabetes med hyperglykemi — like mye diabetiker som E11, bare mer spesifikt kodet, og skrevet med eller uten punktum alt etter hvem som leverte filen.
+    point at.ref filt_line_2 gesture underline
+
+    pause 0.3
+
+Første forsøk er isin med en liste: eksakt treff, og bare eksakt treff.
+    draw filt_line_4
+
+Én rad av åtte.
+    draw axes bar_1
+
+Seks av de sju andre radene er ikke feil i dataene — de er pasienter vi nettopp mistet, uten en eneste feilmelding.
+    highlight bar_1 effect glow delivery grave
+
+    pause 0.4
+
+Så normaliserer vi først: fyll tomme celler med tom streng og fjern punktumet — uten fillna stopper pandas deg med Cannot mask with non-boolean array containing NA or NaN values.
+    draw filt_line_5
+
+startswith på den normaliserte kolonnen fanger fem rader — og lar E109 stå igjen, for type 1-diabetes skal ikke inn i kohorten.
+    draw filt_line_6 bar_2
+
+Regex gir nøyaktig samme svar, siden str.match er forankret i starten — men bruker du str.contains, må du skrive ankeret ^E11 selv, ellers treffer E11 også midt inne i en lengre streng.
+    draw filt_line_7 filt_line_8 bar_3
+
+    pause 0.3
+
+Samme grep i lmr: A10 fanger metformin A10BA02, A10A og A10BK01, men ikke A11CC — ATC er bygd strengt hierarkisk, så der ER prefikset undergruppen, mens ICD-10 bare ligner på et hierarki.
+    draw filt_line_9 filt_line_10
+
+Så hva vinner og taper du på hver av de tre?
+    clear keep ["title","axes","bar_1","bar_2","bar_3"]
+
+startswith er rask og tåler at koden får flere tegn — men er blind for punktum, og krever na=False eller en fillna foran seg.
+    text t1 "startswith – rask, men krever na=False" x 245 y 560 font_size 21
+
+isin er den mest reviderbare: du skriver ned nøyaktig hvilke koder som teller — og nettopp derfor mister den undergruppene du glemte.
+    text t2 "isin – reviderbar, men mister E11.65" x 245 y 480 font_size 21
+
+Regex kan alt de to andre kan, og er derfor lettest å ta subtilt feil uten at noe krasjer.
+    text t3 "regex – presis, men husk ankeret ^" x 245 y 400 font_size 21
+
+Du kan nå se hvor kohorten faktisk avgjøres: normaliser kolonnen først og match på prefiks, så er det definisjonen din — ikke strengformatet i leveransen — som bestemmer hvem som blir diabetiker.
+    text t4 "Normaliser først, match på prefiks" #b5482e x 245 y 295 font_size 22
+    mark mark_t4 target t4 kind box
+    delivery grave
+
+## Streng eller vid: hva vinner og taper du?
 voice: female
-template: bar_chart
-params:
-  labels:
-    - ≥1 E11
-    - ≥2 E11
-    - ≥2 E11 el. A10
-  values:
-    - 12400
-    - 8900
-    - 11600
-  value_labels: true
-  y_label: Antall pasienter
-  title: Tre definisjoner, samme datagrunnlag
-elements:
-  - id: node_vid
-    type: node
-    shape: rect
-    text: 'Vid: ≥1 E11'
-    x: 265
-    'y': 600
-    style:
-      color: '#b5482e'
-  - id: node_streng
-    type: node
-    shape: rect
-    text: 'Streng: ≥2 el. A10'
-    x: 735
-    'y': 600
-    style:
-      color: '#2f6b8f'
-  - id: t_vid_p
-    type: text
-    text: + Fanger nesten alle syke
-    x: 265
-    'y': 500
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: t_vid_m1
-    type: text
-    text: − Arbeidsdiagnoser blir med
-    x: 265
-    'y': 452
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: t_vid_m2
-    type: text
-    text: − Støy trekker effekten mot null
-    x: 265
-    'y': 404
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: t_str_p
-    type: text
-    text: + Nesten alle er reelt syke
-    x: 735
-    'y': 500
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: t_str_m1
-    type: text
-    text: − Mister de mildeste
-    x: 735
-    'y': 452
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: t_str_m2
-    type: text
-    text: − Skjevhet mot sykere pasienter
-    x: 735
-    'y': 404
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: t_middle
-    type: text
-    text: Definisjonen må passe spørsmålet — ikke omvendt.
-    x: 500
-    'y': 250
-    font_size: 26
-  - id: mark_middle
-    type: annotation
-    target: t_middle
-    kind: box
-  - id: def_kode
-    type: code
-    language: python
-    show: left
-    x: 500
-    'y': 380
-    width: 960
-    font_size: 14
-    code: |-
-      import pandas as pd
-      npr = pd.DataFrame({"pid": [1, 1, 2, 3],
-          "icd10": ["E11.9", "E119", "E10.9", "E11"]})
-      lmr = pd.DataFrame({"pid": [2, 3], "atc": ["A10BA02"] * 2})
-      kode = npr.icd10.str.replace(".", "", regex=False)
-      e11 = npr.loc[kode.str.startswith("E11"), "pid"]
-      teller = e11.value_counts()
-      fra_npr = set(teller[teller >= 2].index)
-      fra_lmr = set(lmr.loc[lmr.atc.str.startswith("A10"), "pid"])
-      kohort = sorted(fra_npr | fra_lmr)
-      print(kohort)
-commands:
-  - draw:
-      - title
-      - axes
-    speak: Nå som vi har sett hva to kontakter og en A10-resept gjør med kohorten, står valget igjen — og det avgjør hvem forekomsttallet ditt handler om.
-  - draw:
-      - bar_1
-    speak: Med én E11-kode i npr er vi 12 400 voksne — den videste definisjonen vi kan lage.
-  - draw:
-      - bar_2
-    speak: Krever vi to kontakter på ulike datoer, sitter vi igjen med 8 900. Nesten hver tredje person forsvant.
-  - draw:
-      - bar_3
-    speak: Godtar vi i tillegg alle med et A10-uttak i lmr, er vi tilbake på 11 600.
-  - pause: 0.4
-  - point:
-      at:
-        ref: bar_2
-      gesture: circle
-    speak: Men er de 3 500 som falt ut feilkodinger vi ble kvitt — eller pasienter vi mistet?
-  - clear: {}
-    speak: Begge deler, og de to feilene gjør ulik skade.
-  - draw:
-      - node_vid
-      - t_vid_p
-    speak: Den vide definisjonen fanger nesten alle som faktisk har type 2-diabetes.
-  - draw:
-      - t_vid_m1
-      - t_vid_m2
-    speak: Men mistanke og arbeidsdiagnoser blir med, og ikke-differensiell feilklassifisering trekker som regel effektestimatet mot null — du underdriver, du overdriver ikke.
-  - pause: 0.3
-  - draw:
-      - node_streng
-      - t_str_p
-    speak: Den strenge definisjonen krever to kontakter eller et legemiddel, og da er nesten alle i kohorten reelt syke.
-  - draw:
-      - t_str_m1
-      - t_str_m2
-    speak: Prisen er de mildeste — de som følges hos fastlegen og aldri havner i npr — så kohorten din blir sykere enn Norge er.
-  - draw:
-      - t_middle
-      - mark_middle
-    speak: Skal du anslå forekomst, koster det å være streng; skal du måle effekten av metformin, koster det å være vid.
-    delivery: grave
-  - clear: {}
-    speak: Det som redder analysen, er ikke å velge riktig, men å skrive valget ned som kode andre kan kjøre.
-  - draw:
-      - def_kode
-      - def_kode_line_1
-      - def_kode_line_2
-      - def_kode_line_3
-      - def_kode_line_4
-    parallel: true
-    speak: Her er hele kohortdefinisjonen, med et lite leketøys-npr og lmr så den faktisk kjører.
-  - draw:
-      - def_kode_line_5
-      - def_kode_line_6
-    speak: Først fjerner vi punktum i koden og plukker alt som starter med E11, slik at både E11.9 og E119 blir med.
-  - draw:
-      - def_kode_line_7
-      - def_kode_line_8
-      - def_kode_line_9
-    speak: Så teller vi kontakter per pid og krever minst to — og henter alle med A10 fra lmr.
-  - draw:
-      - def_kode_line_10
-      - def_kode_line_11
-      - def_kode_out
-    speak: 'Unionen gir kohorten: tre pasienter, inne av tre ulike grunner.'
-  - highlight:
-      target:
-        - def_kode_out
-      effect: glow
-    speak: 'Så: holder én E11-kode? Til å finne alle, ja; til å være sikker, nei — det som holder, er en definisjon du kan begrunne, telle konsekvensene av, og kjøre på nytt.'
-    delivery: grave
 level: basic
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 5 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+use: bar_chart
+with:
+    labels:
+      - ≥1 E11
+      - ≥2 E11
+      - ≥2 E11 el. A10
+    values:
+      - 12400
+      - 8900
+      - 11600
+    value_labels: true
+    y_label: Antall pasienter
+    title: Tre definisjoner, samme datagrunnlag
+
+    box node_vid "Vid: ≥1 E11" #b5482e x 265 y 600 hidden true
+    box node_streng "Streng: ≥2 el. A10" #2f6b8f x 735 y 600 hidden true
+    text t_vid_p "+ Fanger nesten alle syke" #b5482e x 265 y 500 font_size 22 hidden true
+    text t_vid_m1 "− Arbeidsdiagnoser blir med" #b5482e x 265 y 452 font_size 22 hidden true
+    text t_vid_m2 "− Støy trekker effekten mot null" #b5482e x 265 y 404 font_size 22 hidden true
+    text t_str_p "+ Nesten alle er reelt syke" #2f6b8f x 735 y 500 font_size 22 hidden true
+    text t_str_m1 "− Mister de mildeste" #2f6b8f x 735 y 452 font_size 22 hidden true
+    text t_str_m2 "− Skjevhet mot sykere pasienter" #2f6b8f x 735 y 404 font_size 22 hidden true
+    text t_middle "Definisjonen må passe spørsmålet — ikke omvendt." x 500 y 250 font_size 26 hidden true
+    mark mark_middle target t_middle kind box hidden true
+    ```python def_kode x 500 y 380 width 960 font_size 14 show left hidden true
+    import pandas as pd
+    npr = pd.DataFrame({"pid": [1, 1, 2, 3],
+        "icd10": ["E11.9", "E119", "E10.9", "E11"]})
+    lmr = pd.DataFrame({"pid": [2, 3], "atc": ["A10BA02"] * 2})
+    kode = npr.icd10.str.replace(".", "", regex=False)
+    e11 = npr.loc[kode.str.startswith("E11"), "pid"]
+    teller = e11.value_counts()
+    fra_npr = set(teller[teller >= 2].index)
+    fra_lmr = set(lmr.loc[lmr.atc.str.startswith("A10"), "pid"])
+    kohort = sorted(fra_npr | fra_lmr)
+    print(kohort)
+    ```
+
+Nå som vi har sett hva to kontakter og en A10-resept gjør med kohorten, står valget igjen — og det avgjør hvem forekomsttallet ditt handler om.
+    draw title axes
+
+Med én E11-kode i npr er vi 12 400 voksne — den videste definisjonen vi kan lage.
+    draw bar_1
+
+Krever vi to kontakter på ulike datoer, sitter vi igjen med 8 900. Nesten hver tredje person forsvant.
+    draw bar_2
+
+Godtar vi i tillegg alle med et A10-uttak i lmr, er vi tilbake på 11 600.
+    draw bar_3
+
+    pause 0.4
+
+Men er de 3 500 som falt ut feilkodinger vi ble kvitt — eller pasienter vi mistet?
+    point at.ref bar_2 gesture circle
+
+Begge deler, og de to feilene gjør ulik skade.
+    clear
+
+Den vide definisjonen fanger nesten alle som faktisk har type 2-diabetes.
+    draw node_vid t_vid_p
+
+Men mistanke og arbeidsdiagnoser blir med, og ikke-differensiell feilklassifisering trekker som regel effektestimatet mot null — du underdriver, du overdriver ikke.
+    draw t_vid_m1 t_vid_m2
+
+    pause 0.3
+
+Den strenge definisjonen krever to kontakter eller et legemiddel, og da er nesten alle i kohorten reelt syke.
+    draw node_streng t_str_p
+
+Prisen er de mildeste — de som følges hos fastlegen og aldri havner i npr — så kohorten din blir sykere enn Norge er.
+    draw t_str_m1 t_str_m2
+
+Skal du anslå forekomst, koster det å være streng; skal du måle effekten av metformin, koster det å være vid.
+    draw t_middle mark_middle delivery grave
+
+Det som redder analysen, er ikke å velge riktig, men å skrive valget ned som kode andre kan kjøre.
+    clear
+
+Her er hele kohortdefinisjonen, med et lite leketøys-npr og lmr så den faktisk kjører.
+    draw def_kode def_kode_line_1 def_kode_line_2 def_kode_line_3 def_kode_line_4 parallel true
+
+Først fjerner vi punktum i koden og plukker alt som starter med E11, slik at både E11.9 og E119 blir med.
+    draw def_kode_line_5 def_kode_line_6
+
+Så teller vi kontakter per pid og krever minst to — og henter alle med A10 fra lmr.
+    draw def_kode_line_7 def_kode_line_8 def_kode_line_9
+
+Unionen gir kohorten: tre pasienter, inne av tre ulike grunner.
+    draw def_kode_line_10 def_kode_line_11 def_kode_out
+
+Så: holder én E11-kode? Til å finne alle, ja; til å være sikker, nei — det som holder, er en definisjon du kan begrunne, telle konsekvensene av, og kjøre på nytt.
+    highlight def_kode_out effect glow delivery grave
+
+## Where next
+end_page: true
+
+Next: Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:3 title "Hva er det egentlig som binder en sykehuskontakt til en resept?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:5 title "Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?" size 320 x 735 y 395
+
+    link end_again href lecture:4 title "Watch again" form text open here x 500 y 160
+    text end_count "4 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
