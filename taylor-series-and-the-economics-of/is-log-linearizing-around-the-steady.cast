@@ -1,577 +1,273 @@
-playlist:
-  title: Is log-linearizing around the steady state a technique or a bet?
-  prompt: Why do macroeconomists write x̂ = ln(x/x̄), and in what sense is that just a first-order Taylor expansion wearing a hat? Walk the Euler equation of our CRRA household from its nonlinear form to its linearized form — which terms survive and which are declared second-order small? If first-order approximations can rank welfare across policies incorrectly, and the zero lower bound is a kink rather than a smooth curve, when does the local polynomial stop being an honest model? First-order, second-order, or global solution methods — what is actually being traded away at each step?
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  enroll: https://drawcast.anvil.app
----
-title: The Hat Is a Taylor Term
-level: advanced
+# Is log-linearizing around the steady state a technique or a bet?
+prompt: "Why do macroeconomists write x̂ = ln(x/x̄), and in what sense is that just a first-order Taylor expansion wearing a hat? Walk the Euler equation of our CRRA household from its nonlinear form to its linearized form — which terms survive and which are declared second-order small? If first-order approximations can rank welfare across policies incorrectly, and the zero lower bound is a kink rather than a smooth curve, when does the local polynomial stop being an honest model? First-order, second-order, or global solution methods — what is actually being traded away at each step?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+enroll: https://drawcast.anvil.app
+
+## The Hat Is a Taylor Term
 voice: male
-template: line_chart
-params:
-  x: '{calc.ratio}'
-  series:
-    - name: ĉ = ln(c/c̄)
-      values: '{calc.exact}'
-    - name: (c−c̄)/c̄
-      values: '{calc.linear}'
-  xlim:
-    - 0.5
-    - 1.6
-  ylim:
-    - -0.75
-    - 0.65
-  x_label: c / c̄
-  y_label: deviation
-  box:
-    x: 140
-    'y': 100
-    w: 680
-    h: 430
-elements:
-  - id: calc
-    type: code
-    language: brython
-    show: none
-    code: |-
-      import math
-      ratio = [round(0.5 + 0.05 * i, 2) for i in range(23)]
-      exact = [round(math.log(r), 4) for r in ratio]
-      linear = [round(r - 1.0, 4) for r in ratio]
-  - id: title
-    type: text
-    text: Is log-linearizing a technique — or a bet?
-    x: 500
-    'y': 712
-    font_size: 32
-  - id: claim_a
-    type: text
-    text: “Nothing is approximated.”
-    x: 250
-    'y': 648
-    font_size: 22
-  - id: claim_b
-    type: text
-    text: “A first-order truncation.”
-    x: 752
-    'y': 648
-    font_size: 22
-  - id: strike_a
-    type: annotation
-    target: claim_a
-    kind: strike
-  - id: eq_a
-    type: text
-    text: ln c ≈ ln c̄ + (1/c̄)(c − c̄)
-    x: 500
-    'y': 565
-    font_size: 27
-  - id: eq_b
-    type: text
-    text: ĉ ≡ ln(c/c̄) ≈ (c − c̄)/c̄ ≡ ε
-    x: 500
-    'y': 495
-    font_size: 27
-    style:
-      color: '#2f6b8f'
-  - id: eq_c
-    type: text
-    text: R₁ = −(1/2ξ²)(c − c̄)²   ⇒   ε − ĉ ≈ ½ε²
-    x: 500
-    'y': 423
-    font_size: 25
-    style:
-      color: '#8a5fa8'
-  - id: eq_crra
-    type: text
-    text: ln u′(c) = −γ ln c   ⇒   û′ = −γ ĉ   (exact)
-    x: 500
-    'y': 350
-    font_size: 25
-  - id: ledger_h
-    type: text
-    text: What the truncation costs
-    x: 500
-    'y': 290
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: ledger_1
-    type: text
-    text: ε = 0.05  →  ĉ = 0.0488   (error 0.0012)
-    x: 500
-    'y': 246
-    font_size: 23
-  - id: ledger_2
-    type: text
-    text: ε = 0.20  →  ĉ = 0.1823   (error 0.0177)
-    x: 500
-    'y': 204
-    font_size: 23
-  - id: ledger_3
-    type: text
-    text: ε = 0.50  →  ĉ = 0.4055   (error 0.0945)
-    x: 500
-    'y': 162
-    font_size: 23
-  - id: anchor_q
-    type: text
-    text: Is c̄ even the right anchor?
-    x: 500
-    'y': 103
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-commands:
-  - draw:
-      - title
-    speak: Across five parts we ask whether log-linearizing a macro model around its steady state is a harmless technique or a substantive bet, and this first part shows that the little hat over every variable is a Taylor term in disguise.
-  - draw:
-      - claim_a
-      - claim_b
-    parallel: true
-    speak: 'Two claims you will hear in the same seminar: that writing x-hat approximates nothing at all, and that it is a first-order truncation with a domain of validity.'
-  - draw:
-      - axes
-      - line_1
-    speak: 'Take the household we have been carrying: CRRA utility over consumption c, sitting around its mean c-bar. The hat is defined as the log ratio, and this curve is exact at every point.'
-  - pause: 0.3
-  - draw:
-      - line_2
-    speak: The straight line is the percentage deviation, c minus c-bar over c-bar — the object people usually mean when they say a one percent deviation.
-  - highlight:
-      target:
-        - line_1
-        - line_2
-      effect: glow
-    speak: Near c-bar the two are indistinguishable; out at c equal to one and a half c-bar, the log deviation is 0.405 while the linear one insists on 0.5.
-  - clear:
-      keep:
-        - title
-        - claim_a
-        - claim_b
-    speak: Why they agree near the anchor is the entire content of the first claim.
-  - draw:
-      - eq_a
-    speak: Expand the natural log around the reference point a equal to c-bar; the derivative of log there is one over c-bar, so the first-order polynomial is this.
-  - draw:
-      - eq_b
-    speak: Subtract log c-bar from both sides and the left-hand side is exactly the hat — so the hat and the first-order Taylor term are the same object, up to the remainder.
-  - pause: 0.4
-  - draw:
-      - eq_c
-    speak: 'In Lagrange form the remainder is minus one over two xi squared times the squared deviation, so the gap between the curves is one half epsilon squared: second-order small, a phrase which, read honestly, means we have decided not to look at it.'
-  - draw:
-      - eq_crra
-    speak: 'One place the truncation costs nothing: with CRRA, marginal utility is c to the minus gamma, so its log is exactly minus gamma times log c — which is why the linearized Euler equation looks so clean, the surviving nonlinearity hiding in the constraints and in the expectation, not in felicity.'
-  - draw:
-      - ledger_h
-      - ledger_1
-      - ledger_2
-      - ledger_3
-    speak: 'Put numbers on it: at five percent the error is about one part in a thousand, at twenty percent nearly two parts in a hundred, and at fifty percent almost a tenth — quadrupling epsilon multiplies the error roughly sixteenfold.'
-  - quiz:
-      intro: A quick check.
-      question: The truncation error grows with which power of the deviation ε?
-      choices:
-        - Linearly, with ε
-        - With ε²
-        - With ε³
-      correct: 2
-      right: With epsilon squared — halving the deviation quarters the error, which is exactly why business-cycle amplitudes forgive it and development-sized ones do not.
-      wrong: 'Read the third column: epsilon goes from 0.05 to 0.20, and the error goes up about sixteenfold.'
-  - draw:
-      - anchor_q
-    speak: 'There is a live disagreement about the anchor itself: at first order the model is certainty-equivalent, so the household behaves as though it already knows the future — convenient — and Coeurdacier, Rey and Winant argue the economy actually orbits a risky steady state that the deterministic one misses.'
-  - highlight:
-      target:
-        - anchor_q
-      effect: glow
-    speak: Defenders answer that for business-cycle-sized shocks that displacement is itself second-order small; critics reply that in portfolio choice and asset pricing the second-order object is the entire question.
-  - draw:
-      - strike_a
-    speak: 'So the first claim does not survive: the hat is exact, but the model built from it is a truncation carrying an error that grows with the square of the deviation.'
-  - speak: Every hat in a linearized macro model is a promise that epsilon squared is negligible — and next time we watch that promise being made, term by term, in the Euler equation.
-    delivery: grave
----
-title: The Welfare Objection
 level: advanced
+use: line_chart
+with:
+    x: '{calc.ratio}'
+    series:
+      - {name: ĉ = ln(c/c̄), values: '{calc.exact}'}
+      - {name: (c−c̄)/c̄, values: '{calc.linear}'}
+    xlim:
+      - 0.5
+      - 1.6
+    ylim:
+      - -0.75
+      - 0.65
+    x_label: c / c̄
+    y_label: deviation
+    box:
+      x: 140
+      'y': 100
+      w: 680
+      h: 430
+
+    ```brython calc show none hidden true
+    import math
+    ratio = [round(0.5 + 0.05 * i, 2) for i in range(23)]
+    exact = [round(math.log(r), 4) for r in ratio]
+    linear = [round(r - 1.0, 4) for r in ratio]
+    ```
+    text title "Is log-linearizing a technique — or a bet?" x 500 y 712 font_size 32 hidden true
+    text claim_a "“Nothing is approximated.”" x 250 y 648 font_size 22 hidden true
+    text claim_b "“A first-order truncation.”" x 752 y 648 font_size 22 hidden true
+    mark strike_a target claim_a kind strike hidden true
+
+Across five parts we ask whether log-linearizing a macro model around its steady state is a harmless technique or a substantive bet, and this first part shows that the little hat over every variable is a Taylor term in disguise.
+    draw title
+
+Two claims you will hear in the same seminar: that writing x-hat approximates nothing at all, and that it is a first-order truncation with a domain of validity.
+    draw claim_a claim_b parallel true
+
+Take the household we have been carrying: CRRA utility over consumption c, sitting around its mean c-bar. The hat is defined as the log ratio, and this curve is exact at every point.
+    draw axes line_1
+
+    pause 0.3
+
+The straight line is the percentage deviation, c minus c-bar over c-bar — the object people usually mean when they say a one percent deviation.
+    draw line_2
+
+Near c-bar the two are indistinguishable; out at c equal to one and a half c-bar, the log deviation is 0.405 while the linear one insists on 0.5.
+    highlight line_1 line_2 effect glow
+
+Why they agree near the anchor is the entire content of the first claim.
+    clear keep ["title","claim_a","claim_b"]
+
+Expand the natural log around the reference point a equal to c-bar; the derivative of log there is one over c-bar, so the first-order polynomial is this.
+    text eq_a "ln c ≈ ln c̄ + (1/c̄)(c − c̄)" x 500 y 565 font_size 27
+
+Subtract log c-bar from both sides and the left-hand side is exactly the hat — so the hat and the first-order Taylor term are the same object, up to the remainder.
+    text eq_b "ĉ ≡ ln(c/c̄) ≈ (c − c̄)/c̄ ≡ ε" #2f6b8f x 500 y 495 font_size 27
+
+    pause 0.4
+
+In Lagrange form the remainder is minus one over two xi squared times the squared deviation, so the gap between the curves is one half epsilon squared: second-order small, a phrase which, read honestly, means we have decided not to look at it.
+    text eq_c "R₁ = −(1/2ξ²)(c − c̄)²   ⇒   ε − ĉ ≈ ½ε²" #8a5fa8 x 500 y 423 font_size 25
+
+One place the truncation costs nothing: with CRRA, marginal utility is c to the minus gamma, so its log is exactly minus gamma times log c — which is why the linearized Euler equation looks so clean, the surviving nonlinearity hiding in the constraints and in the expectation, not in felicity.
+    text eq_crra "ln u′(c) = −γ ln c   ⇒   û′ = −γ ĉ   (exact)" x 500 y 350 font_size 25
+
+Put numbers on it: at five percent the error is about one part in a thousand, at twenty percent nearly two parts in a hundred, and at fifty percent almost a tenth — quadrupling epsilon multiplies the error roughly sixteenfold.
+    text ledger_h "What the truncation costs" #8f887c x 500 y 290 font_size 22
+    text ledger_1 "ε = 0.05  →  ĉ = 0.0488   (error 0.0012)" x 500 y 246 font_size 23
+    text ledger_2 "ε = 0.20  →  ĉ = 0.1823   (error 0.0177)" x 500 y 204 font_size 23
+    text ledger_3 "ε = 0.50  →  ĉ = 0.4055   (error 0.0945)" x 500 y 162 font_size 23
+
+    quiz "The truncation error grows with which power of the deviation ε?" intro "A quick check."
+        right: With epsilon squared — halving the deviation quarters the error, which is exactly why business-cycle amplitudes forgive it and development-sized ones do not.
+        wrong: Read the third column: epsilon goes from 0.05 to 0.20, and the error goes up about sixteenfold.
+        * Linearly, with ε
+        + With ε²
+        * With ε³
+
+There is a live disagreement about the anchor itself: at first order the model is certainty-equivalent, so the household behaves as though it already knows the future — convenient — and Coeurdacier, Rey and Winant argue the economy actually orbits a risky steady state that the deterministic one misses.
+    text anchor_q "Is c̄ even the right anchor?" #8a5fa8 x 500 y 103 font_size 24
+
+Defenders answer that for business-cycle-sized shocks that displacement is itself second-order small; critics reply that in portfolio choice and asset pricing the second-order object is the entire question.
+    highlight anchor_q effect glow
+
+So the first claim does not survive: the hat is exact, but the model built from it is a truncation carrying an error that grows with the square of the deviation.
+    draw strike_a
+
+Every hat in a linearized macro model is a promise that epsilon squared is negligible — and next time we watch that promise being made, term by term, in the Euler equation.
+    delivery grave
+
+## The Welfare Objection
 voice: male
-template: line_chart
-params:
-  x:
-    - First-order valuation
-    - Second-order valuation
-  series:
-    - name: 'A: stabilise'
-      values:
-        - - 99.9
-        - - 99.9
-          - 99.89
-    - name: 'B: do nothing'
-      values:
-        - - 100
-        - - 100
-          - 99.75
-  stage: 0
-  points: true
-  ylim:
-    - 99.6
-    - 100.1
-  y_label: Welfare, % of steady-state consumption
-  box:
-    x: 180
-    'y': 100
-    w: 640
-    h: 430
-elements:
-  - id: heading
-    type: text
-    text: The welfare objection to log-linearization
-    x: 500
-    'y': 715
-    font_size: 28
-  - id: c1a
-    type: text
-    text: 'Claim A: first order suffices —'
-    x: 260
-    'y': 668
-    font_size: 21
-    style:
-      color: '#2f6b8f'
-  - id: c1b
-    type: text
-    text: what it drops is second-order small.
-    x: 260
-    'y': 640
-    font_size: 21
-    style:
-      color: '#2f6b8f'
-  - id: c2a
-    type: text
-    text: 'Claim B: it cannot rank —'
-    x: 745
-    'y': 668
-    font_size: 21
-    style:
-      color: '#b5482e'
-  - id: c2b
-    type: text
-    text: the welfare gap is itself second order.
-    x: 745
-    'y': 640
-    font_size: 21
-    style:
-      color: '#b5482e'
-  - id: exp1
-    type: text
-    text: E[u(c)] ≈ u(c̄) + u′(c̄)·E[c−c̄]
-    x: 330
-    'y': 595
-    font_size: 22
-  - id: exp2
-    type: text
-    text: + ½·u″(c̄)·Var(c)
-    x: 690
-    'y': 595
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: strike1
-    type: annotation
-    target: c1a
-    kind: strike
-  - id: strike2
-    type: annotation
-    target: c1b
-    kind: strike
-commands:
-  - draw:
-      - heading
-    speak: Now that the Euler equation is linear in hats, the tempting next step is to rank stabilisation policies with it — and that step is where the trouble starts.
-  - draw:
-      - c1a
-      - c1b
-    speak: One camp says a first-order solution ranks policies perfectly well, since everything it discards is of order epsilon squared.
-  - draw:
-      - c2a
-      - c2b
-    speak: The other says it cannot rank them at all, because the welfare difference between policies is itself of order epsilon squared.
-  - draw:
-      - exp1
-    speak: 'Take expectations of the second-order expansion around the steady state: the level, plus a term in the mean deviation.'
-  - draw:
-      - exp2
-    speak: And then this one — half the second derivative times the variance, the only place where volatility enters welfare at all.
-  - highlight:
-      target:
-        - exp2
-      effect: glow
-    speak: A certainty-equivalent linear solution sets the mean deviation to zero and never computes the variance term, so what survives is a comparison of means.
-  - draw:
-      - axes
-  - draw:
-      - line_1
-    speak: 'Our CRRA household, gamma of two, steady-state consumption normalised to one. Policy A stabilises consumption to one percent volatility, at a resource cost of a tenth of a percent: on means alone, 99.90.'
-  - draw:
-      - line_2
-    speak: 'Policy B does nothing: five percent volatility, no resource cost, and a mean of exactly one hundred.'
-  - point:
-      at:
-        ref: line_2
-      gesture: underline
-    speak: So the first-order valuation prefers B, and prefers it with complete confidence. It has simply not been told that consumption varies.
-  - animate:
-      stage: 1
-    duration: 3
-    speak: 'Now restore the term that was dropped: minus one half gamma sigma squared, the penalty volatility imposes on the certainty equivalent.'
-  - highlight:
-      target:
-        - line_1
-        - line_2
-    delivery: grave
-    speak: Policy B loses a quarter of a percent, policy A one hundredth — and the ranking reverses by fourteen hundredths of a percent.
-  - quiz:
-      intro: A check before we go on.
-      question: Why does the linear solution rank these two policies wrongly?
-      choices:
-        - Its approximation error is large
-        - The ranking itself lives at second order
-        - The steady state is mis-specified
-      correct: 2
-      right: The welfare gap is of order sigma squared — exactly the order a certainty-equivalent solution discards.
-      wrong: The linear solution's error is small in levels; the trouble is that the ranking lives at the order it threw away.
-  - draw:
-      - strike1
-      - strike2
-    speak: So claim A fails. What it discarded is second-order small; unfortunately, so is the answer.
-  - focus:
-      target:
-        - line_1
-        - line_2
-    speak: Kim and Kim, in two thousand and three, found that linear decision rules can make autarky appear to beat complete markets — an ordering no one is prepared to defend.
-  - speak: 'The remedy is still disputed: Schmitt-Grohé and Uribe compute second-order decision rules, while Benigno and Woodford argue a properly constructed linear-quadratic problem keeps linear dynamics valid — provided the steady-state distortion is corrected first, which in a large model is easier to state than to do.'
-  - highlight:
-      target:
-        - c2a
-        - c2b
-    speak: 'So the hats are not wrong; they are being asked a question one order below the one they answer. Next: a kink no polynomial of any order can follow.'
----
-title: The Ladder and the Bet
 level: advanced
+use: line_chart
+with:
+    x:
+      - First-order valuation
+      - Second-order valuation
+    series:
+      - {name: 'A: stabilise', values: [[99.9], [99.9, 99.89]]}
+      - {name: 'B: do nothing', values: [[100], [100, 99.75]]}
+    stage: 0
+    points: true
+    ylim:
+      - 99.6
+      - 100.1
+    y_label: Welfare, % of steady-state consumption
+    box:
+      x: 180
+      'y': 100
+      w: 640
+      h: 430
+
+Now that the Euler equation is linear in hats, the tempting next step is to rank stabilisation policies with it — and that step is where the trouble starts.
+    text heading "The welfare objection to log-linearization" x 500 y 715 font_size 28
+
+One camp says a first-order solution ranks policies perfectly well, since everything it discards is of order epsilon squared.
+    text c1a "Claim A: first order suffices —" #2f6b8f x 260 y 668 font_size 21
+    text c1b "what it drops is second-order small." #2f6b8f x 260 y 640 font_size 21
+
+The other says it cannot rank them at all, because the welfare difference between policies is itself of order epsilon squared.
+    text c2a "Claim B: it cannot rank —" #b5482e x 745 y 668 font_size 21
+    text c2b "the welfare gap is itself second order." #b5482e x 745 y 640 font_size 21
+
+Take expectations of the second-order expansion around the steady state: the level, plus a term in the mean deviation.
+    text exp1 "E[u(c)] ≈ u(c̄) + u′(c̄)·E[c−c̄]" x 330 y 595 font_size 22
+
+And then this one — half the second derivative times the variance, the only place where volatility enters welfare at all.
+    text exp2 "+ ½·u″(c̄)·Var(c)" #b5482e x 690 y 595 font_size 22
+
+A certainty-equivalent linear solution sets the mean deviation to zero and never computes the variance term, so what survives is a comparison of means.
+    highlight exp2 effect glow
+
+    draw axes
+
+Our CRRA household, gamma of two, steady-state consumption normalised to one. Policy A stabilises consumption to one percent volatility, at a resource cost of a tenth of a percent: on means alone, 99.90.
+    draw line_1
+
+Policy B does nothing: five percent volatility, no resource cost, and a mean of exactly one hundred.
+    draw line_2
+
+So the first-order valuation prefers B, and prefers it with complete confidence. It has simply not been told that consumption varies.
+    point at.ref line_2 gesture underline
+
+Now restore the term that was dropped: minus one half gamma sigma squared, the penalty volatility imposes on the certainty equivalent.
+    animate stage 1 duration 3
+
+Policy B loses a quarter of a percent, policy A one hundredth — and the ranking reverses by fourteen hundredths of a percent.
+    highlight line_1 line_2 delivery grave
+
+    quiz "Why does the linear solution rank these two policies wrongly?" intro "A check before we go on."
+        right: The welfare gap is of order sigma squared — exactly the order a certainty-equivalent solution discards.
+        wrong: The linear solution's error is small in levels; the trouble is that the ranking lives at the order it threw away.
+        * Its approximation error is large
+        + The ranking itself lives at second order
+        * The steady state is mis-specified
+
+So claim A fails. What it discarded is second-order small; unfortunately, so is the answer.
+    mark strike1 target c1a kind strike
+    mark strike2 target c1b kind strike
+
+Kim and Kim, in two thousand and three, found that linear decision rules can make autarky appear to beat complete markets — an ordering no one is prepared to defend.
+    focus line_1 line_2
+
+The remedy is still disputed: Schmitt-Grohé and Uribe compute second-order decision rules, while Benigno and Woodford argue a properly constructed linear-quadratic problem keeps linear dynamics valid — provided the steady-state distortion is corrected first, which in a large model is easier to state than to do.
+
+So the hats are not wrong; they are being asked a question one order below the one they answer. Next: a kink no polynomial of any order can follow.
+    highlight c2a c2b
+
+## The Ladder and the Bet
 voice: male
-elements:
-  - id: title
-    type: text
-    text: The Ladder and the Bet
-    x: 500
-    'y': 705
-    font_size: 34
-  - id: claim_tech
-    type: node
-    shape: rect
-    text: 'A technique: a change of units'
-    x: 265
-    'y': 610
-    style:
-      color: '#2f6b8f'
-  - id: claim_bet
-    type: node
-    shape: rect
-    text: 'A bet: deviations stay small'
-    x: 735
-    'y': 610
-    style:
-      color: '#b5482e'
-  - id: num1
-    type: text
-    text: ĉ = ln(c/c̄) = −0.10   ⇒   c/c̄ = e^(−0.10) = 0.9048
-    x: 500
-    'y': 470
-    font_size: 26
-  - id: num2
-    type: text
-    text: hat says −10%   ·   level fell 9.52%   ·   gap = ½ĉ² ≈ 0.5%
-    x: 500
-    'y': 395
-    font_size: 26
-  - id: strike_tech
-    type: annotation
-    target: claim_tech
-    kind: strike
-  - id: ax
-    type: axes
-    x_label: Computational cost
-    y_label: Fidelity away from x̄
-  - id: r1
-    type: node
-    shape: rect
-    text: First order
-    x: 250
-    'y': 300
-    style:
-      color: '#2f6b8f'
-  - id: l1
-    type: label
-    text: 'Certainty equivalence: σ² priced at zero'
-    attach_to: r1
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: r2
-    type: node
-    shape: rect
-    text: Second order
-    x: 500
-    'y': 420
-    style:
-      color: '#8a5fa8'
-  - id: a12
-    type: arrow
-    from:
-      ref: r1
-    to:
-      ref: r2
-  - id: l2
-    type: label
-    text: Risk premia, welfare rankings — still one point
-    attach_to: r2
-    side: below
-    style:
-      color: '#8a5fa8'
-  - id: r3
-    type: node
-    shape: rect
-    text: Global
-    x: 770
-    'y': 545
-    style:
-      color: '#b5482e'
-  - id: a23
-    type: arrow
-    from:
-      ref: r2
-    to:
-      ref: r3
-  - id: l3
-    type: label
-    text: Kinks and large shocks — paid for in dimensions
-    attach_to: r3
-    side: below
-    style:
-      color: '#b5482e'
-  - id: bet1
-    type: text
-    text: 'The bet you are placing:'
-    x: 500
-    'y': 470
-    font_size: 30
-  - id: bet2
-    type: text
-    text: R₂ = ½ f''(ξ)(x − x̄)²  is negligible
-    x: 500
-    'y': 390
-    font_size: 28
-  - id: bet3
-    type: text
-    text: for this question, at this horizon
-    x: 500
-    'y': 320
-    font_size: 26
-  - id: box_bet
-    type: annotation
-    target: bet2
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: Now that we have seen the zero lower bound break the polynomial, we have to decide what to write in a paper's methods section — and whether that sentence is a disclosure or a disclaimer.
-  - draw:
-      - claim_tech
-      - claim_bet
-    parallel: true
-    speak: Some say log-linearizing is a technique — a harmless change of units; others say it is a bet that the economy stays in a neighbourhood of x̄.
-  - draw:
-      - num1
-    speak: 'Our household again: ĉ equal to minus one tenth means c over c̄ is e to the minus 0.10, which is 0.9048.'
-  - draw:
-      - num2
-    speak: The hat reports minus ten percent; consumption actually fell 9.52 — and the missing half-percent is the ½ĉ² term we agreed to drop.
-  - draw:
-      - strike_tech
-    delivery: grave
-    speak: 'A change of units has no remainder, so the first claim is out: we bought tractability, and the price appeared on the receipt.'
-  - clear:
-      keep:
-        - title
-    speak: The live question is how large a bet — and there are three rungs to choose from.
-  - draw:
-      - ax
-  - draw:
-      - r1
-      - l1
-    speak: 'Rung one, first order: ĉ_t equals expected ĉ_{t+1} minus one over γ times r̂_t — linear, solvable, and with the variance of the shocks nowhere in it.'
-  - highlight:
-      target:
-        - l1
-      effect: glow
-    speak: With γ = 2 and two-percent consumption volatility, ½γσ² is four hundredths of a percent — the order of magnitude Lucas computed for the welfare cost of business cycles. At first order it is not small; it is exactly zero.
-  - quiz:
-      intro: A quick check.
-      question: In the first-order Euler equation, where does the shock variance σ² appear?
-      choices:
-        - Nowhere — certainty equivalence
-        - In the intercept
-        - Inside the coefficient 1/γ
-      correct: 1
-      right: 'Nowhere: the expansion is linear in the shock, so σ² has no place to sit and risk is priced at zero.'
-      wrong: It never appears — the expansion is linear in the shock, so there is no room for its second moment.
-  - draw:
-      - a12
-      - r2
-      - l2
-    speak: 'Rung two, second order: Schmitt-Grohé and Uribe''s point is that welfare comparisons need it, since the variance terms separating two policies only enter there.'
-  - point:
-      at:
-        ref: r2
-      gesture: circle
-    speak: 'Kim and Kim showed the stakes: in a linearized two-country model, full risk sharing can be ranked below autarky — a welfare reversal manufactured entirely by the approximation.'
-  - draw:
-      - a23
-      - r3
-      - l3
-    speak: 'Rung three, global: projection or value function iteration over the whole state space, the only rung that sees the bound coming, because it expands nothing anywhere.'
-  - focus:
-      target:
-        - r3
-        - l3
-    speak: 'And this is unresolved: Fernández-Villaverde and coauthors argue that at the bound the nonlinearity is the phenomenon, not a correction to it, while perturbation''s defenders answer that piecewise-linear solvers like OccBin catch the kink at nearly linear cost — and that a twenty-state policy model has no global solution to be compared against.'
-  - quiz:
-      intro: One more.
-      question: Why can no Taylor expansion at the interior steady state represent the zero lower bound?
-      choices:
-        - The bound is a kink — the function is not differentiable there
-        - The steady state is unstable
-        - γ is too large
-      correct: 1
-      right: The bound is a kink, and derivatives taken at an interior point carry no information about a non-differentiability somewhere else.
-      wrong: 'The problem is not stability or curvature: derivatives at x̄ cannot encode a kink they never touch.'
-  - clear:
-      keep:
-        - title
-    speak: '{score} of {score_total} — and one line left to write down.'
-  - draw:
-      - bet1
-      - bet2
-    speak: 'Every rung is the same wager placed with a different amount of money: that the remainder you truncated is smaller than the effect you are measuring.'
-  - draw:
-      - bet3
-      - box_bet
-    speak: Which is why it is never won in general — only for a given question, at a given horizon, with shocks of a given size.
-  - speak: 'The hat was a Taylor term, the linear Euler equation a first-order truncation, and across all three lectures the test never changed: not whether the approximation is exact, but whether what you discarded is smaller than what you are trying to measure.'
+level: advanced
+
+    text title "The Ladder and the Bet" x 500 y 705 font_size 34 hidden true
+    box claim_tech "A technique: a change of units" #2f6b8f x 265 y 610 hidden true
+    box claim_bet "A bet: deviations stay small" #b5482e x 735 y 610 hidden true
+    text num1 "ĉ = ln(c/c̄) = −0.10   ⇒   c/c̄ = e^(−0.10) = 0.9048" x 500 y 470 font_size 26 hidden true
+    text num2 "hat says −10%   ·   level fell 9.52%   ·   gap = ½ĉ² ≈ 0.5%" x 500 y 395 font_size 26 hidden true
+    mark strike_tech target claim_tech kind strike hidden true
+    axes ax x_label "Computational cost" y_label "Fidelity away from x̄" hidden true
+    box r1 "First order" #2f6b8f x 250 y 300 hidden true
+    label l1 "Certainty equivalence: σ² priced at zero" below #2f6b8f attach_to r1 hidden true
+    box r2 "Second order" #8a5fa8 x 500 y 420 hidden true
+    arrow a12 r1 -> r2 hidden true
+    label l2 "Risk premia, welfare rankings — still one point" below #8a5fa8 attach_to r2 hidden true
+    box r3 "Global" #b5482e x 770 y 545 hidden true
+    arrow a23 r2 -> r3 hidden true
+    label l3 "Kinks and large shocks — paid for in dimensions" below #b5482e attach_to r3 hidden true
+
+Now that we have seen the zero lower bound break the polynomial, we have to decide what to write in a paper's methods section — and whether that sentence is a disclosure or a disclaimer.
+    draw title
+
+Some say log-linearizing is a technique — a harmless change of units; others say it is a bet that the economy stays in a neighbourhood of x̄.
+    draw claim_tech claim_bet parallel true
+
+Our household again: ĉ equal to minus one tenth means c over c̄ is e to the minus 0.10, which is 0.9048.
+    draw num1
+
+The hat reports minus ten percent; consumption actually fell 9.52 — and the missing half-percent is the ½ĉ² term we agreed to drop.
+    draw num2
+
+A change of units has no remainder, so the first claim is out: we bought tractability, and the price appeared on the receipt.
+    draw strike_tech delivery grave
+
+The live question is how large a bet — and there are three rungs to choose from.
+    clear keep ["title"]
+
+    draw ax
+
+Rung one, first order: ĉ_t equals expected ĉ_{t+1} minus one over γ times r̂_t — linear, solvable, and with the variance of the shocks nowhere in it.
+    draw r1 l1
+
+With γ = 2 and two-percent consumption volatility, ½γσ² is four hundredths of a percent — the order of magnitude Lucas computed for the welfare cost of business cycles. At first order it is not small; it is exactly zero.
+    highlight l1 effect glow
+
+    quiz "In the first-order Euler equation, where does the shock variance σ² appear?" intro "A quick check."
+        right: Nowhere: the expansion is linear in the shock, so σ² has no place to sit and risk is priced at zero.
+        wrong: It never appears — the expansion is linear in the shock, so there is no room for its second moment.
+        + Nowhere — certainty equivalence
+        * In the intercept
+        * Inside the coefficient 1/γ
+
+Rung two, second order: Schmitt-Grohé and Uribe's point is that welfare comparisons need it, since the variance terms separating two policies only enter there.
+    draw a12 r2 l2
+
+Kim and Kim showed the stakes: in a linearized two-country model, full risk sharing can be ranked below autarky — a welfare reversal manufactured entirely by the approximation.
+    point at.ref r2 gesture circle
+
+Rung three, global: projection or value function iteration over the whole state space, the only rung that sees the bound coming, because it expands nothing anywhere.
+    draw a23 r3 l3
+
+And this is unresolved: Fernández-Villaverde and coauthors argue that at the bound the nonlinearity is the phenomenon, not a correction to it, while perturbation's defenders answer that piecewise-linear solvers like OccBin catch the kink at nearly linear cost — and that a twenty-state policy model has no global solution to be compared against.
+    focus r3 l3
+
+    quiz "Why can no Taylor expansion at the interior steady state represent the zero lower bound?" intro "One more."
+        right: The bound is a kink, and derivatives taken at an interior point carry no information about a non-differentiability somewhere else.
+        wrong: The problem is not stability or curvature: derivatives at x̄ cannot encode a kink they never touch.
+        + The bound is a kink — the function is not differentiable there
+        * The steady state is unstable
+        * γ is too large
+
+{score} of {score_total} — and one line left to write down.
+    clear keep ["title"]
+
+Every rung is the same wager placed with a different amount of money: that the remainder you truncated is smaller than the effect you are measuring.
+    text bet1 "The bet you are placing:" x 500 y 470 font_size 30
+    text bet2 "R₂ = ½ f''(ξ)(x − x̄)²  is negligible" x 500 y 390 font_size 28
+
+Which is why it is never won in general — only for a given question, at a given horizon, with shocks of a given size.
+    text bet3 "for this question, at this horizon" x 500 y 320 font_size 26
+    mark box_bet target bet2 kind box
+
+The hat was a Taylor term, the linear Euler equation a first-order truncation, and across all three lectures the test never changed: not whether the approximation is exact, but whether what you discarded is smaller than what you are trying to measure.
+
+## Where next
+end_page: true
+
+    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:2 title "What is the second derivative doing in the utility function?" size 320 x 500 y 395
+
+    link end_again href lecture:3 title "Watch again" form text open here x 500 y 160
+    text end_count "3 of 3" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

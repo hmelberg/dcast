@@ -77,19 +77,6 @@
       "updated": "2026-09-05"
     },
     {
-      "slug": "taylor-series-and-the-economics-of",
-      "title": "Taylor Series and the Economics of Approximation",
-      "files": [
-        "taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.yaml",
-        "taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.yaml",
-        "taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.yaml",
-        "taylor-series-and-the-economics-of/course.md",
-        "taylor-series-and-the-economics-of/index.html",
-        "taylor-series-and-the-economics-of/README.md"
-      ],
-      "updated": "2026-09-06"
-    },
-    {
       "slug": "microdata",
       "title": "Doing Data Analysis in microdata.no: A Scripting Course",
       "files": [
@@ -123,6 +110,19 @@
         "understanding-the-qaly/README.md"
       ],
       "updated": "2026-09-28"
+    },
+    {
+      "slug": "taylor-series-and-the-economics-of",
+      "title": "Taylor Series and the Economics of Approximation",
+      "files": [
+        "taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.cast",
+        "taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.cast",
+        "taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.cast",
+        "taylor-series-and-the-economics-of/course.md",
+        "taylor-series-and-the-economics-of/index.html",
+        "taylor-series-and-the-economics-of/README.md"
+      ],
+      "updated": "2026-10-03"
     }
   ]
 }
