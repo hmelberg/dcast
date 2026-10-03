@@ -1,21 +1,6 @@
 {
   "courses": [
     {
-      "slug": "understanding-the-qaly",
-      "title": "Understanding the QALY: Definition, Calculation, and Debates",
-      "files": [
-        "understanding-the-qaly/what-is-a-qaly-and-why-do-we-need-it.cast",
-        "understanding-the-qaly/how-is-a-qaly-actually-calculated.cast",
-        "understanding-the-qaly/the-theoretical-foundations-where-does.cast",
-        "understanding-the-qaly/the-ethical-debate-whose-life-counts-and.cast",
-        "understanding-the-qaly/does-it-work-in-practice-evidence-limits.cast",
-        "understanding-the-qaly/course.md",
-        "understanding-the-qaly/index.html",
-        "understanding-the-qaly/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "microdata",
       "title": "Doing Data Analysis in microdata.no: A Scripting Course",
       "files": [
@@ -121,6 +106,21 @@
         "registerdata-i-praksis-python-og-pandas/course.md",
         "registerdata-i-praksis-python-og-pandas/index.html",
         "registerdata-i-praksis-python-og-pandas/README.md"
+      ],
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "understanding-the-qaly",
+      "title": "Understanding the QALY: Definition, Calculation, and Debates",
+      "files": [
+        "understanding-the-qaly/what-is-a-qaly-and-why-do-we-need-it.cast",
+        "understanding-the-qaly/how-is-a-qaly-actually-calculated.cast",
+        "understanding-the-qaly/the-theoretical-foundations-where-does.cast",
+        "understanding-the-qaly/the-ethical-debate-whose-life-counts-and.cast",
+        "understanding-the-qaly/does-it-work-in-practice-evidence-limits.cast",
+        "understanding-the-qaly/course.md",
+        "understanding-the-qaly/index.html",
+        "understanding-the-qaly/README.md"
       ],
       "updated": "2026-10-03"
     }

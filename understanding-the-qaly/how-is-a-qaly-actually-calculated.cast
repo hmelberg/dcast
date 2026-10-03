@@ -41,7 +41,7 @@ domain:
     shape node_public2 right node_public1 gap -14 shape circle radius 22 hidden true
     shape node_public3 left node_public1 gap -14 shape circle radius 22 hidden true
     group public_cluster members ["node_public1","node_public2","node_public3"] hidden true
-    label label_public "General public" below attach_to public_cluster hidden true
+    label label_public "General public" above attach_to public_cluster hidden true
     group src_public members ["public_cluster","label_public"] in sources hidden true
     shape node_clinician shape circle radius 34 hidden true
     text clin_cross "+" #2f6b8f at.ref node_clinician font_size 32 hidden true
@@ -49,11 +49,10 @@ domain:
     label label_clinician "Clinician" below attach_to clinician_icon hidden true
     group src_clinician members ["clinician_icon","label_clinician"] in sources hidden true
     row sources gap 90 fit.h 210 fit.w 900 fit.x 60 fit.y 30 hidden true
-    label label_dominant "Dominant source" above #8a5fa8 attach_to public_cluster gap 45 hidden true
-    arrow arrow_public #8a5fa8 from.anchor bottom from.ref label_dominant to.anchor top to.ref public_cluster style.stroke_width 4 hidden true
+    label label_dominant "Dominant source" above #8a5fa8 attach_to public_cluster gap 55 hidden true
     mark mark_075 around val_075 kind box hidden true
-    shape rater_25 below-left src_public gap 20 #8a5fa8 shape circle radius 14 hidden true
-    shape rater_adapted below-right src_public gap 20 #8a5fa8 shape circle radius 14 hidden true
+    shape rater_25 below-left public_cluster gap 15 #8a5fa8 shape circle radius 14 hidden true
+    shape rater_adapted below-right public_cluster gap 15 #8a5fa8 shape circle radius 14 hidden true
     arrow elicitor_arrow thick #8a5fa8 from.anchor right from.ref rater_25 to.anchor left to.ref rater_adapted hidden true
     label elicitor_label "Elicitor effect" below #8a5fa8 attach_to elicitor_arrow font_size 26 hidden true
 
@@ -95,11 +94,11 @@ Three populations can supply that judgment: the patient living the state, a samp
     draw sources
 
 Most standard QALY estimates — including the ones regulators use — draw on general population values, not patient experience, because policy has to compare across diseases using one common yardstick.
-    draw label_dominant arrow_public
+    draw label_dominant
 
     highlight src_public effect circle
 
-    move public_cluster scale 1.3 duration 0.8
+    erase qmark_arrow
 
 That choice is not neutral: a healthy twenty-five-year-old imagining paraplegia and a patient adapting to it after two years rarely give the same number.
     draw rater_25 rater_adapted elicitor_arrow elicitor_label parallel true
@@ -121,18 +120,18 @@ This single figure, 0.75, is therefore a compressed social judgment — and the 
 level: advanced
 vars: {"xf":7}
 
-    shape bar1 #b5482e shape rect x 500 y 520 width 680 height 100 style.fill #b5482e hidden true
+    shape bar1 #b5482e shape rect x 500 y 550 width 680 height 100 style.fill #b5482e hidden true
     label label_bar1 "Hip state (u=?)" above attach_to bar1 hidden true
-    shape bar2 #2f6b8f at.anchor left at.offset [0,-190] at.ref bar1 anchor left shape rect width 392 height 100 bind.width 68*xf style.fill #2f6b8f hidden true
+    shape bar2 #2f6b8f at.anchor left at.offset [0,-170] at.ref bar1 anchor left shape rect width 392 height 100 bind.width 68*xf style.fill #2f6b8f hidden true
     label label_bar2 "Full health, 8.5 years" below attach_to bar2 gap 30 hidden true
-    arrow arr_shrink #8f887c from.x 650 from.y 415 to.x 550 to.y 415 hidden true
-    arrow arr_grow #8f887c from.x 650 from.y 435 to.x 750 to.y 435 hidden true
-    text eq_sign "=" #8a5fa8 x 880 y 425 font_size 70 hidden true
-    math eq tex "u = \\frac{x}{t}" size 34 steps ["u = \\frac{8.5}{10} = 0.85"] colors.t #b5482e colors.x #2f6b8f x 500 y 190 hidden true
-    mark result_box around eq_2 kind box hidden true
-    label label_bar2_moving "Full health, ? years" below attach_to bar2 gap 30 hidden true
-    label label_bar1_solved "Hip state (u=0.85)" above attach_to bar1 hidden true
-    label annot_exchange "Assumes years ↔ health exchangeable" below #8f887c attach_to eq_2 gap 50 hidden true
+    arrow arr_shrink #8f887c from.x 650 from.y 455 to.x 550 to.y 455 hidden true
+    arrow arr_grow #8f887c from.x 650 from.y 475 to.x 750 to.y 475 hidden true
+    text eq_sign "=" #8a5fa8 x 880 y 465 font_size 70 hidden true
+    math eq tex "u = \\frac{x}{t}" size 34 steps ["u = \\frac{8.5}{10} = 0.85"] colors.t #b5482e colors.x #2f6b8f x 500 y 215 hidden true
+    mark result_box around eq kind box hidden true
+    text label_bar2_moving "Full health, ? years" x 300 y 298 font_size 22 hidden true
+    text label_bar1_solved "Hip state (u=0.85)" x 500 y 628 font_size 22 hidden true
+    label annot_exchange "Years ↔ health" right #8f887c attach_to eq gap 40 hidden true
     label label_negative "x < 0" above #b5482e attach_to bar_negative hidden true
     shape bar_negative dashed #b5482e at.anchor left at.ref bar2 anchor right shape rect width 150 height 100 hidden true
 
@@ -171,9 +170,7 @@ The utility weight falls straight out of that trade: u equals the years of full 
     draw eq
 
 8.5 divided by 10 gives u=0.85 — exactly the weight we will use for the hip-replacement outcome in the final part.
-    step "eq"
-
-    erase eq
+    step target eq in_place true
 
     hide label_bar1
 
@@ -181,16 +178,16 @@ The utility weight falls straight out of that trade: u equals the years of full 
 
     draw result_box
 
-    camera center.ref eq_2 zoom 2.2
+    camera center.ref eq zoom 2.2
 
     pause 0.6
 
     camera reset true
 
-    morph eq_2 tex "u = \\frac{x}{t}" duration 1
+    morph eq tex "u = \\frac{x}{t}" duration 1
 
 The logic generalizes to any duration t: respondents sacrifice some years to escape the state, and the fraction they keep is its utility.
-    highlight eq_2 part t
+    highlight eq part t
 
     draw annot_exchange
 
@@ -212,32 +209,36 @@ with:
       type: decision
       label: Elicit u_t
       children: [{label: Certain, node: {id: certain, type: terminal, label: Side-effect state}}, {label: Gamble, node: {id: gamble, type: chance, label: Gamble, children: [{label: Full health, probability: 0.5, node: {id: full, type: terminal, label: Full health}}, {label: Death, probability: 0.5, node: {id: death, type: terminal, label: Death}}]}}]
-    box: left
+    box:
+      x: 20
+      'y': 290
+      w: 460
+      h: 370
 
-    path slider_track #8f887c points [[60,190],[440,190]] hidden true
-    text slider_lo "p = 0" #8f887c x 60 y 165 font_size 20 hidden true
-    text slider_hi "p = 1" #8f887c x 440 y 165 font_size 20 hidden true
-    shape slider_marker #2f6b8f shape circle x 250 y 190 radius 12 bind.x "60 + p*380" style.fill #2f6b8f hidden true
+    path slider_track #8f887c points [[60,240],[440,240]] hidden true
+    text slider_lo "p = 0" #8f887c x 60 y 215 font_size 20 hidden true
+    text slider_hi "p = 1" #8f887c x 440 y 215 font_size 20 hidden true
+    shape slider_marker #2f6b8f shape circle x 250 y 240 radius 12 bind.x "60 + p*380" style.fill #2f6b8f hidden true
     label slider_value "p = {p:2}" above attach_to slider_marker hidden true
     mark indiff_mark around slider_marker kind circle hidden true
     label indiff_text "p* = 0.60 → u_t" below #b5482e attach_to slider_marker hidden true
     pieces eq5d x 560 y 430 width 380 height 340 n 3 rows 5 of grid hidden true
     label row_label_mobility "Mobility" left attach_to eq5d_1 hidden true
     label row_label_selfcare "Self-care" left attach_to eq5d_4 hidden true
-    label row_label_activities "Usual activities" left attach_to eq5d_7 hidden true
-    label row_label_pain "Pain/Discomfort" left attach_to eq5d_10 hidden true
-    label row_label_anxiety "Anxiety/Depression" left attach_to eq5d_13 hidden true
+    label row_label_activities "Activities" left attach_to eq5d_7 hidden true
+    label row_label_pain "Pain" left attach_to eq5d_10 hidden true
+    label row_label_anxiety "Anxiety" left attach_to eq5d_13 hidden true
     group row_labels members ["row_label_mobility","row_label_selfcare","row_label_activities","row_label_pain","row_label_anxiety"] hidden true
-    label col_header_1 "No problems" above attach_to eq5d_1 hidden true
-    label col_header_2 "Moderate problems" above attach_to eq5d_2 hidden true
-    label col_header_3 "Severe problems" above attach_to eq5d_3 hidden true
+    label col_header_1 "None" above attach_to eq5d_1 hidden true
+    label col_header_2 "Moderate" above attach_to eq5d_2 hidden true
+    label col_header_3 "Severe" above attach_to eq5d_3 hidden true
     group col_headers members ["col_header_1","col_header_2","col_header_3"] hidden true
-    label profile_code "Profile: 1-1-2-2-1" below #b5482e attach_to eq5d hidden true
-    shape lookup_box right eq5d gap 70 #3d3833 shape rect width 200 height 100 hidden true
-    label lookup_title "Population value set" above attach_to lookup_box hidden true
-    label lookup_value "u = 0.60" below #b5482e attach_to lookup_box hidden true
-    arrow profile_to_table curved #2f6b8f from.anchor right from.ref eq5d to.anchor left to.ref lookup_box hidden true
-    group right_panel members ["eq5d","col_headers","row_labels","lookup_box","lookup_title","profile_to_table","lookup_value","profile_code"] fit right hidden true
+    label profile_code "Profile: 1-1-2-2-1" left #b5482e attach_to profile_to_table hidden true
+    shape lookup_box below eq5d gap 110 #3d3833 shape rect width 200 height 100 hidden true
+    label lookup_title "Value set" left attach_to lookup_box hidden true
+    label lookup_value "u = 0.60" right #b5482e attach_to lookup_box hidden true
+    arrow profile_to_table #2f6b8f from.anchor bottom from.ref eq5d to.anchor top to.ref lookup_box curved false hidden true
+    group right_panel members ["eq5d","col_headers","row_labels","lookup_box","lookup_title","profile_to_table","lookup_value","profile_code"] fit.h 480 fit.w 460 fit.x 520 fit.y 170 hidden true
 
     card title "Standard Gamble & EQ-5D"
 
@@ -291,13 +292,9 @@ The lookup returns u=0.60 — matching the standard gamble result, though the tw
 
     pause 0.3
 
-    camera on ["slider_marker","lookup_box"] zoom fit
-
 Three different procedures, three numbers converging near the same weight — the rest of the calculation now just needs those weights and the time patients spend in each state.
-    arrow bracket slider_marker -> lookup_value curved #8a5fa8
+    arrow bracket curved #8a5fa8 from.ref slider_marker to.anchor left to.ref lookup_box
     label bracket_label "u_t ≈ 0.60" above #8a5fa8 attach_to bracket
-
-    camera reset true
 
 chapter: "Building the Number"
 
@@ -316,7 +313,7 @@ domain:
       w: 820
       h: 420
 
-    math eq details "Willingness-to-pay thresholds built on this sum vary by country: NICE in the UK generally uses £20,000–£30,000 per QALY gained." tex "QALY = \\sum_t u_t \\times \\Delta t" size 34 colors {"u_t":"#2f6b8f","\\Delta t":"#b5482e"} x 500 y 660 hidden true
+    math eq details "Willingness-to-pay thresholds built on this sum vary by country: NICE in the UK used £20,000–£30,000 per QALY gained, raised to £25,000–£35,000 from April 2026." tex "QALY = \\sum_t u_t \\times \\Delta t" size 34 colors {"u_t":"#2f6b8f","\\Delta t":"#b5482e"} x 500 y 660 hidden true
     axes ax x_label Years y_label "Utility (uₜ)" hidden true
     curve zero expr "0" x_from 0 x_to 13 style.opacity 0 hidden true
     curve baseline_1 #8f887c expr "0.75" x_from 0 x_to 5 hidden true
@@ -327,18 +324,17 @@ domain:
     region region_A x_from 0 x_to 10 between ["optionA","zero"] style.fill #2f6b8f style.fill_style wash hidden true
     curve optionB #b5482e expr "0.60" x_from 0 x_to 13 hidden true
     region region_B x_from 0 x_to 13 between ["optionB","zero"] style.fill #b5482e style.fill_style wash hidden true
-    label label_baseline_area "Baseline: 6.25 QALYs" above-right #8f887c attach_to region_baseline_2 hidden true
-    label label_A_area "Option A (hip): 8.5 QALYs" above #2f6b8f attach_to region_A hidden true
-    label label_B_area "Option B (drug): 7.8 QALYs" below #b5482e attach_to region_B hidden true
+    label label_baseline_area "Baseline: 6.25" above-right #8f887c attach_to region_baseline_2 font_size 28 hidden true
+    label label_A_area "Hip: 8.5" above #2f6b8f attach_to region_A font_size 28 hidden true
+    label label_B_area "Drug: 7.8" below #b5482e attach_to region_B font_size 28 hidden true
     scratch calc_baseline top-right work ["5 × 0.75 = 3.75","5 × 0.50 = 2.50","Total = 6.25 QALYs"] font_size 22 hidden true
     scratch calc_A top-right work ["10 × 0.85 = 8.5 QALYs"] font_size 22 hidden true
     scratch calc_B top-right work ["13 × 0.60 = 7.8 QALYs"] font_size 22 hidden true
-    arrow arrow_compare label_B_area -> label_A_area curved #8a5fa8 hidden true
-    box n_judgment "Judgment (patient/public/clinician)" in pipeline_row hidden true
-    box n_elicit "Elicitation (TTO/SG/EQ-5D)" in pipeline_row hidden true
-    box n_ut "uₜ" in pipeline_row hidden true
-    box n_sum "Σ uₜ·Δt" in pipeline_row hidden true
-    box n_qaly "QALY" in pipeline_row hidden true
+    box n_judgment "Judgment" width 150 height 70 in pipeline_row hidden true
+    box n_elicit "Elicitation" width 150 height 70 in pipeline_row hidden true
+    box n_ut "uₜ" width 150 height 70 in pipeline_row hidden true
+    box n_sum "Σ uₜ·Δt" width 150 height 70 in pipeline_row hidden true
+    box n_qaly "QALY" width 150 height 70 in pipeline_row hidden true
     row pipeline_row gap 30 fit.h 115 fit.w 880 fit.x 60 fit.y 15 hidden true
     arrow p_arrow1 n_judgment -> n_elicit hidden true
     arrow p_arrow2 n_elicit -> n_ut hidden true
@@ -398,7 +394,7 @@ Thirteen times 0.60 gives 7.8 QALYs.
     camera on ["region_A","region_B","label_A_area","label_B_area"] zoom fit
 
 Despite three additional years of life, the drug delivers fewer QALYs than the hip replacement — longevity and quality are literally interchangeable in this arithmetic, and here quality wins.
-    draw arrow_compare
+    highlight label_A_area label_B_area
 
     pause 0.5
 

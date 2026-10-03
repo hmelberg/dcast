@@ -22,7 +22,7 @@ sources:
     row boxes_row at.gap 70 at.ref patient at.side below gap 70 hidden true
     arrow arrow_a #2f6b8f from.anchor bottom from.ref patient to.anchor top to.ref optionA_grp hidden true
     arrow arrow_b #b5482e from.anchor bottom from.ref patient to.anchor top to.ref optionB_grp hidden true
-    group scene_left members ["patient","label_patient","boxes_row","arrow_a","arrow_b"] fit.h 660 fit.w 680 fit.x 10 fit.y 10 hidden true
+    group scene_left members ["patient","label_patient","boxes_row","arrow_a","arrow_b"] fit.h 500 fit.w 680 fit.x 10 fit.y 160 hidden true
     text axioms_title "vN-M axioms (1944)" cites ["vnm1944"] x 810 y 580 font_size 22 in axioms_list hidden true
     text axiom1 "1. Completeness" x 810 y 530 font_size 22 in axioms_list hidden true
     text axiom2 "2. Transitivity" x 810 y 480 font_size 22 in axioms_list hidden true
@@ -35,7 +35,6 @@ sources:
     label arrow_b_label "Option B: Drug" above #b5482e attach_to optionB_grp hidden true
     text optA_line "10y, u=0.8 → 8 QALYs" #2f6b8f x 180 y 245 font_size 26 in optionA_grp hidden true
     text optB_line "15y, u=0.6 → 9 QALYs" #b5482e x 480 y 245 font_size 26 in optionB_grp hidden true
-    label portrait_caption "& Morgenstern" below attach_to portrait_vn hidden true
 
     card title "Why Addition Is Allowed"
 
@@ -65,9 +64,9 @@ Saying 9 beats 8 assumes you can add years of very different quality as if they 
     pause 1
 
 That license comes from expected utility theory, formalized by von Neumann and Morgenstern in 1944 for choices under risk, later borrowed wholesale by health economists.
-    draw portrait_vn portrait_caption
+    draw portrait_vn
 
-    erase portrait_vn portrait_caption
+    erase portrait_vn
 
     pause 0.5
 
@@ -94,15 +93,15 @@ level: advanced
 domain: {"x":[0,22],"y":[0,18]}
 
     axes axes x_label "Years remaining" y_label "Years traded for full health" hidden true
-    scratch tto top-left work ["Time trade-off question:","10 years at u = 0.8 = X years in full health"] font_size 20 hidden true
+    scratch tto work ["Time trade-off question:","10 years at u = 0.8 = X years in full health"] x 360 y 560 font_size 26 hidden true
     dot point1 #2f6b8f at.x 10 at.y 8 guides true hidden true
     label label_point1 "(10, 8)" above-right attach_to point1 hidden true
     dot point2 #2f6b8f at.x 20 at.y 16 guides true hidden true
     label label_point2 "(20, 16)" right attach_to point2 hidden true
     line trade_line #b5482e through [{"x":0,"y":0}] slope 0.8 hidden true
-    label label_trade_line "Constant proportional trade-off, slope = u_t = 0.8" above-left attach_to trade_line hidden true
+    label label_trade_line "Slope = u = 0.8" above-left attach_to trade_line hidden true
     curve curve_nonlinear dashed #8f887c expr "1.3*x - 0.04*x*x" x_from 0 x_to 22 hidden true
-    label label_curve_nonlinear "If trade-off were not constant" above attach_to curve_nonlinear gap 45 hidden true
+    label label_curve_nonlinear "Not constant" above attach_to curve_nonlinear gap 45 hidden true
 
     card title "One Exchange Rate for Life"
 
@@ -176,19 +175,6 @@ with:
       - {label: Pliskin et al., sublabel: '1980'}
       - {label: NICE, sublabel: 1999–present, emphasize: true}
 adjust:
-    label_0:
-      move: [4, -4]
-      scale: 0.95
-    label_1:
-      move: [0, -4]
-    label_2:
-      move: [0, -14]
-    label_3:
-      move: [0, -10]
-    label_4:
-      move: [0, -6]
-    label_5:
-      move: [8, -20]
     dot_0:
       scale: 1.3
     dot_1:
@@ -201,9 +187,6 @@ adjust:
       scale: 1.3
     dot_5:
       scale: 1.4
-    line:
-      move: [0, 15]
-      scale: 1.15
 sources:
     - id: fanshelbush
       title: A Health-Status Index and Its Application to Health-Services Outcomes
@@ -224,19 +207,19 @@ sources:
     - id: nice_src
       title: Guide to the Methods of Technology Appraisal
       authors: National Institute for Health and Care Excellence
-      year: 1999
+      year: 2004
+      finding: Made explicit the £20,000–£30,000 per QALY range NICE had applied since its founding in 1999; raised to £25,000–£35,000 from April 2026.
 
     label nice_threshold "£20–30k/QALY" below attach_to label_5 cites ["nice_src"] gap 6 hidden true
-    text patient_hip "Hip replacement: 8 QALYs, $12,000 (~$1,500/QALY)" #2f6b8f x 500 y 400 font_size 30 in patient_callout hidden true
-    text patient_drug "Drug: 9 QALYs, $36,000 (~$4,000/QALY)" #b5482e x 500 y 350 font_size 30 in patient_callout hidden true
+    text patient_hip "Hip: 8 QALYs, ~$1,500/QALY" #2f6b8f x 480 y 632 font_size 26 hidden true
+    text patient_drug "Drug: 9 QALYs, ~$4,000/QALY" #b5482e x 480 y 592 font_size 26 hidden true
     label axioms_note "(axioms, Part 2)" above #8f887c attach_to dot_4 hidden true
-    column patient_callout at.place top_right gap 16 align center hidden true
-    mark patient_box around patient_callout kind box hidden true
-    dot conv_point #8a5fa8 at.x 820 at.y 520 radius 6 hidden true
+    mark patient_box around patient_hip patient_drug kind box hidden true
+    dot conv_point #8a5fa8 at.x 600 at.y 540 radius 6 hidden true
     arrow conv_arrow_1 dot_0 -> conv_point curved #2f6b8f hidden true
     label conv_label_1 "Health status indices" above #2f6b8f attach_to conv_arrow_1 hidden true
     arrow conv_arrow_2 dot_1 -> conv_point curved #b5482e hidden true
-    label conv_label_2 "Preference elicitation" above #b5482e attach_to conv_arrow_2 hidden true
+    label conv_label_2 "Preference elicitation" below #b5482e attach_to conv_arrow_2 hidden true
     arrow conv_arrow_3 dot_4 -> conv_point curved #8a5fa8 hidden true
     label conv_label_3 "Expected-utility axioms" above #8a5fa8 attach_to conv_arrow_3 hidden true
     arrow nice_leader dot_5 -> label_5 dashed #8f887c hidden true
@@ -281,13 +264,13 @@ From 1999 onward, the UK's National Institute for Health and Care Excellence ins
     pause 1
 
 This is the decision our patient's clinician actually faces: if the hip replacement costs less per QALY than the drug, it is exactly the axioms we covered that let a single number represent that comparison at all.
-    draw patient_callout patient_box parallel true
+    draw patient_hip patient_drug patient_box parallel true
 
     pause 1
 
     fade dot_0 dot_1 dot_2 dot_3 to 0.3 duration 1
 
-    erase label_0 label_1 label_2 label_3 axioms_note patient_callout patient_box
+    erase label_0 label_1 label_2 label_3 axioms_note patient_hip patient_drug patient_box
 
     pause 0.5
 
