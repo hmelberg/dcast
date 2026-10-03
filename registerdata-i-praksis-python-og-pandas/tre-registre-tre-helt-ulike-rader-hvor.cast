@@ -1,788 +1,290 @@
-playlist:
-  title: Tre registre, tre helt ulike rader — hvor kommer dataene fra?
-  prompt: Hva representerer egentlig én rad i npr, i lmr og i kuhr? Hvorfor ble alle tre registrene bygget for administrasjon og refusjon, ikke for forskning — og hva gjør det med dataene dine? Hvorfor er 2007 et vannskille for Norsk pasientregister, og hva skjedde med Reseptregisteret i 2024?
-  next:
-    title: Hvordan leser du en 12 GB registerfil uten at maskinen dør?
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Én pasient, tre rader
+# Tre registre, tre helt ulike rader — hvor kommer dataene fra?
+prompt: "Hva representerer egentlig én rad i npr, i lmr og i kuhr? Hvorfor ble alle tre registrene bygget for administrasjon og refusjon, ikke for forskning — og hva gjør det med dataene dine? Hvorfor er 2007 et vannskille for Norsk pasientregister, og hva skjedde med Reseptregisteret i 2024?"
+next: {"title":"Hvordan leser du en 12 GB registerfil uten at maskinen dør?","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.cast"}
+enroll: https://drawcast.anvil.app
+
+## Én pasient, tre rader
 voice: male
-elements:
-  - id: title
-    type: text
-    text: Én pasient, tre rader
-    x: 500
-    'y': 700
-    font_size: 36
-  - id: pid
-    type: node
-    shape: rect
-    text: pid = 100237
-    x: 500
-    'y': 622
-  - id: h_npr
-    type: node
-    shape: rect
-    text: npr
-    x: 175
-    'y': 535
-    style:
-      color: '#b5482e'
-  - id: npr_def
-    type: text
-    text: én rad = én kontakt
-    x: 175
-    'y': 478
-    font_size: 21
-    style:
-      color: '#b5482e'
-  - id: npr_v1
-    type: text
-    text: 'dato_inn: 2019-03-14'
-    x: 175
-    'y': 438
-    font_size: 20
-  - id: npr_v2
-    type: text
-    text: 'dato_ut: 2019-03-16'
-    x: 175
-    'y': 408
-    font_size: 20
-  - id: npr_v3
-    type: text
-    text: 'icd10: E11.9'
-    x: 175
-    'y': 378
-    font_size: 20
-  - id: h_lmr
-    type: node
-    shape: rect
-    text: lmr
-    x: 500
-    'y': 535
-    style:
-      color: '#2f6b8f'
-  - id: lmr_def
-    type: text
-    text: én rad = én utlevering
-    x: 500
-    'y': 478
-    font_size: 21
-    style:
-      color: '#2f6b8f'
-  - id: lmr_v1
-    type: text
-    text: 'dato_utlev: 2019-04-02'
-    x: 500
-    'y': 438
-    font_size: 20
-  - id: lmr_v2
-    type: text
-    text: 'atc: A10BA02'
-    x: 500
-    'y': 408
-    font_size: 20
-  - id: lmr_v3
-    type: text
-    text: 'ddd: 168 · antall_pakn: 2'
-    x: 500
-    'y': 378
-    font_size: 20
-  - id: h_kuhr
-    type: node
-    shape: rect
-    text: kuhr
-    x: 825
-    'y': 535
-    style:
-      color: '#8a5fa8'
-  - id: kuhr_def
-    type: text
-    text: én rad = ett refusjonskrav
-    x: 825
-    'y': 478
-    font_size: 21
-    style:
-      color: '#8a5fa8'
-  - id: kuhr_v1
-    type: text
-    text: 'dato_krav: 2019-05-08'
-    x: 825
-    'y': 438
-    font_size: 20
-  - id: kuhr_v2
-    type: text
-    text: 'takst: 2ad'
-    x: 825
-    'y': 408
-    font_size: 20
-  - id: kuhr_v3
-    type: text
-    text: ingen diagnose i uttrekket
-    x: 825
-    'y': 378
-    font_size: 20
-  - id: a_npr
-    type: arrow
-    from:
-      ref: pid
-    to:
-      ref: h_npr
-    style:
-      color: '#8f887c'
-  - id: a_lmr
-    type: arrow
-    from:
-      ref: pid
-    to:
-      ref: h_lmr
-    style:
-      color: '#8f887c'
-  - id: a_kuhr
-    type: arrow
-    from:
-      ref: pid
-    to:
-      ref: h_kuhr
-    style:
-      color: '#8f887c'
-  - id: c_npr
-    type: text
-    text: 'npr: 3 rader'
-    x: 320
-    'y': 510
-    font_size: 28
-    style:
-      color: '#b5482e'
-  - id: c_lmr
-    type: text
-    text: 'lmr: 11 rader'
-    x: 320
-    'y': 450
-    font_size: 28
-    style:
-      color: '#2f6b8f'
-  - id: c_kuhr
-    type: text
-    text: 'kuhr: 24 rader'
-    x: 320
-    'y': 390
-    font_size: 28
-    style:
-      color: '#8a5fa8'
-  - id: a_sum
-    type: arrow
-    from:
-      x: 470
-      'y': 450
-    to:
-      ref: sum_node
-    style:
-      color: '#8f887c'
-  - id: sum_node
-    type: node
-    shape: rect
-    text: 1 pasient
-    x: 740
-    'y': 450
-  - id: insight
-    type: text
-    text: Hva er det én rad teller?
-    x: 500
-    'y': 235
-    font_size: 30
-  - id: mark
-    type: annotation
-    target: insight
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: Teller du rader i npr og tror du teller pasienter, er prevalenstallet ditt feil før analysen har begynt — denne serien handler om hvor radene faktisk kommer fra.
-  - draw:
-      - pid
-    speak: 'Vi følger én person hele veien: pid 100237, et pseudonymt løpenummer i diabeteskohorten vår.'
-  - pause: 1
-  - draw:
-      - h_npr
-      - npr_def
-    speak: I npr, Norsk pasientregister, er én rad én kontakt eller ett opphold i spesialisthelsetjenesten.
-  - draw:
-      - npr_v1
-      - npr_v2
-      - npr_v3
-    speak: 'Raden hennes sier: inn fjortende mars 2019, ut to dager senere, med icd10-koden E11.9 — type 2-diabetes uten komplikasjoner.'
-  - pause: 1
-  - draw:
-      - h_lmr
-      - lmr_def
-    speak: I lmr, Legemiddelregisteret, er én rad én utlevering på apotek — ikke en resept, og slett ikke en tablett som er svelget.
-  - draw:
-      - lmr_v1
-      - lmr_v2
-      - lmr_v3
-    speak: Andre april hentet hun to pakninger metformin, ATC A10BA02, til sammen hundre og sekstiåtte definerte døgndoser.
-  - pause: 1
-  - draw:
-      - h_kuhr
-      - kuhr_def
-    speak: I kuhr er én rad ett refusjonskrav fra en behandler til Helfo — altså en regning.
-  - draw:
-      - kuhr_v1
-      - kuhr_v2
-      - kuhr_v3
-    speak: Åttende mai krevde fastlegen takst 2ad for en konsultasjon, og i vårt uttrekk følger det ingen diagnose med det kravet.
-  - pause: 1
-  - draw:
-      - a_npr
-      - a_lmr
-      - a_kuhr
-    parallel: true
-    speak: Tre rader med ulike kolonner, ulike datoer og ulike kodeverk — det eneste som binder dem sammen, er pid.
-  - focus:
-      target:
-        - npr_def
-        - lmr_def
-        - kuhr_def
-    speak: 'De ble aldri bygget for å passe sammen heller: Norsk pasientregister ble opprettet i 1997, Reseptregisteret leverte sin første utlevering første januar 2004, og KUHR ble laget for å betale ut penger til behandlere.'
-  - pause: 1
-  - clear:
-      keep:
-        - title
-    speak: Så la oss telle radene denne ene personen lagde i løpet av 2019.
-  - draw:
-      - c_npr
-      - c_lmr
-      - c_kuhr
-    speak: Tre rader i npr, elleve utleveringer i lmr og tjuefire refusjonskrav i kuhr.
-  - pause: 1
-  - draw:
-      - a_sum
-      - sum_node
-    speak: Trettiåtte rader — og én pasient.
-    delivery: grave
-  - highlight:
-      target:
-        - c_kuhr
-        - sum_node
-      effect: glow
-    speak: 'Og legg merke til hvilket register som bidrar mest: den som er sykest i tabellen din, er ofte bare den som har flest regninger.'
-  - pause: 1
-  - draw:
-      - insight
-      - mark
-    speak: Derfor er det første spørsmålet du stiller et hvert uttrekk dette.
-  - speak: Tre registre svarer på tre ulike spørsmål — og først når du vet hvilket spørsmål raden svarer på, kan du bygge kohorten.
 level: basic
----
-title: Bygd for refusjon, ikke for forskning
+
+Teller du rader i npr og tror du teller pasienter, er prevalenstallet ditt feil før analysen har begynt — denne serien handler om hvor radene faktisk kommer fra.
+    text title "Én pasient, tre rader" x 500 y 700 font_size 36
+
+Vi følger én person hele veien: pid 100237, et pseudonymt løpenummer i diabeteskohorten vår.
+    box pid "pid = 100237" x 500 y 622
+
+    pause 1
+
+I npr, Norsk pasientregister, er én rad én kontakt eller ett opphold i spesialisthelsetjenesten.
+    box h_npr "npr" #b5482e x 175 y 535
+    text npr_def "én rad = én kontakt" #b5482e x 175 y 478 font_size 21
+
+Raden hennes sier: inn fjortende mars 2019, ut to dager senere, med icd10-koden E11.9 — type 2-diabetes uten komplikasjoner.
+    text npr_v1 "dato_inn: 2019-03-14" x 175 y 438 font_size 20
+    text npr_v2 "dato_ut: 2019-03-16" x 175 y 408 font_size 20
+    text npr_v3 "icd10: E11.9" x 175 y 378 font_size 20
+
+    pause 1
+
+I lmr, Legemiddelregisteret, er én rad én utlevering på apotek — ikke en resept, og slett ikke en tablett som er svelget.
+    box h_lmr "lmr" #2f6b8f x 500 y 535
+    text lmr_def "én rad = én utlevering" #2f6b8f x 500 y 478 font_size 21
+
+Andre april hentet hun to pakninger metformin, ATC A10BA02, til sammen hundre og sekstiåtte definerte døgndoser.
+    text lmr_v1 "dato_utlev: 2019-04-02" x 500 y 438 font_size 20
+    text lmr_v2 "atc: A10BA02" x 500 y 408 font_size 20
+    text lmr_v3 "ddd: 168 · antall_pakn: 2" x 500 y 378 font_size 20
+
+    pause 1
+
+I kuhr er én rad ett refusjonskrav fra en behandler til Helfo — altså en regning.
+    box h_kuhr "kuhr" #8a5fa8 x 825 y 535
+    text kuhr_def "én rad = ett refusjonskrav" #8a5fa8 x 825 y 478 font_size 21
+
+Åttende mai krevde fastlegen takst 2ad for en konsultasjon, og i vårt uttrekk følger det ingen diagnose med det kravet.
+    text kuhr_v1 "dato_krav: 2019-05-08" x 825 y 438 font_size 20
+    text kuhr_v2 "takst: 2ad" x 825 y 408 font_size 20
+    text kuhr_v3 "ingen diagnose i uttrekket" x 825 y 378 font_size 20
+
+    pause 1
+
+Tre rader med ulike kolonner, ulike datoer og ulike kodeverk — det eneste som binder dem sammen, er pid.
+    arrow a_npr pid -> h_npr #8f887c
+    arrow a_lmr pid -> h_lmr #8f887c
+    arrow a_kuhr pid -> h_kuhr #8f887c
+    parallel true
+
+De ble aldri bygget for å passe sammen heller: Norsk pasientregister ble opprettet i 1997, Reseptregisteret leverte sin første utlevering første januar 2004, og KUHR ble laget for å betale ut penger til behandlere.
+    focus npr_def lmr_def kuhr_def
+
+    pause 1
+
+Så la oss telle radene denne ene personen lagde i løpet av 2019.
+    clear keep ["title"]
+
+Tre rader i npr, elleve utleveringer i lmr og tjuefire refusjonskrav i kuhr.
+    text c_npr "npr: 3 rader" #b5482e x 320 y 510 font_size 28
+    text c_lmr "lmr: 11 rader" #2f6b8f x 320 y 450 font_size 28
+    text c_kuhr "kuhr: 24 rader" #8a5fa8 x 320 y 390 font_size 28
+
+    pause 1
+
+Trettiåtte rader — og én pasient.
+    arrow a_sum #8f887c from.x 470 from.y 450 to.ref sum_node
+    box sum_node "1 pasient" x 740 y 450
+    delivery grave
+
+Og legg merke til hvilket register som bidrar mest: den som er sykest i tabellen din, er ofte bare den som har flest regninger.
+    highlight c_kuhr sum_node effect glow
+
+    pause 1
+
+Derfor er det første spørsmålet du stiller et hvert uttrekk dette.
+    text insight "Hva er det én rad teller?" x 500 y 235 font_size 30
+    mark mark target insight kind box
+
+Tre registre svarer på tre ulike spørsmål — og først når du vet hvilket spørsmål raden svarer på, kan du bygge kohorten.
+
+## Bygd for refusjon, ikke for forskning
 voice: male
-elements:
-  - id: title
-    type: text
-    text: Bygd for refusjon, ikke for forskning
-    x: 500
-    'y': 700
-    font_size: 38
-  - id: n_syk
-    type: node
-    shape: rect
-    text: Sykehusopphold
-    x: 140
-    'y': 545
-  - id: n_apo
-    type: node
-    shape: rect
-    text: Apotekutlevering
-    x: 140
-    'y': 400
-  - id: n_fast
-    type: node
-    shape: rect
-    text: Fastlegekontakt
-    x: 140
-    'y': 255
-  - id: pay1
-    type: node
-    shape: rect
-    text: ISF-refusjon
-    x: 480
-    'y': 545
-    style:
-      color: '#b5482e'
-  - id: pay2
-    type: node
-    shape: rect
-    text: Blåresept-refusjon
-    x: 480
-    'y': 400
-    style:
-      color: '#b5482e'
-  - id: pay3
-    type: node
-    shape: rect
-    text: Takst til Helfo
-    x: 480
-    'y': 255
-    style:
-      color: '#b5482e'
-  - id: reg1
-    type: node
-    shape: rect
-    text: npr
-    x: 830
-    'y': 545
-    style:
-      color: '#2f6b8f'
-  - id: reg2
-    type: node
-    shape: rect
-    text: lmr
-    x: 830
-    'y': 400
-    style:
-      color: '#2f6b8f'
-  - id: reg3
-    type: node
-    shape: rect
-    text: kuhr
-    x: 830
-    'y': 255
-    style:
-      color: '#2f6b8f'
-  - id: a1
-    type: arrow
-    from:
-      ref: n_syk
-    to:
-      ref: pay1
-    style:
-      color: '#b5482e'
-  - id: a2
-    type: arrow
-    from:
-      ref: pay1
-    to:
-      ref: reg1
-    style:
-      color: '#2f6b8f'
-  - id: a3
-    type: arrow
-    from:
-      ref: n_apo
-    to:
-      ref: pay2
-    style:
-      color: '#b5482e'
-  - id: a4
-    type: arrow
-    from:
-      ref: pay2
-    to:
-      ref: reg2
-    style:
-      color: '#2f6b8f'
-  - id: a5
-    type: arrow
-    from:
-      ref: n_fast
-    to:
-      ref: pay3
-    style:
-      color: '#b5482e'
-  - id: a6
-    type: arrow
-    from:
-      ref: pay3
-    to:
-      ref: reg3
-    style:
-      color: '#2f6b8f'
-  - id: lbl_isf
-    type: label
-    text: ISF fra 1997
-    attach_to: pay1
-    side: above
-    style:
-      color: '#8f887c'
-  - id: c1
-    type: text
-    text: utlevert ≠ inntatt
-    x: 500
-    'y': 565
-    font_size: 34
-    style:
-      color: '#b5482e'
-  - id: c1e
-    type: label
-    text: esken forlot apoteket — resten vet vi ikke
-    attach_to: c1
-    side: below
-    style:
-      color: '#8f887c'
-  - id: c2
-    type: text
-    text: takst ≠ diagnose
-    x: 500
-    'y': 410
-    font_size: 34
-    style:
-      color: '#b5482e'
-  - id: c2e
-    type: label
-    text: koden sier hva som ble krevd betalt
-    attach_to: c2
-    side: below
-    style:
-      color: '#8f887c'
-  - id: c3
-    type: text
-    text: ingen rad ≠ ingen sykdom
-    x: 500
-    'y': 255
-    font_size: 34
-    style:
-      color: '#b5482e'
-  - id: c3e
-    type: label
-    text: uten refusjonskrav, ingen spor
-    attach_to: c3
-    side: below
-    style:
-      color: '#8f887c'
-  - id: h_str
-    type: text
-    text: Styrker
-    x: 270
-    'y': 555
-    font_size: 32
-    style:
-      color: '#2f6b8f'
-  - id: s1
-    type: text
-    text: Hele befolkningen
-    x: 270
-    'y': 480
-    font_size: 24
-  - id: s2
-    type: text
-    text: Ingen hukommelsesskjevhet
-    x: 270
-    'y': 425
-    font_size: 24
-  - id: s3
-    type: text
-    text: Mange år bakover i tid
-    x: 270
-    'y': 370
-    font_size: 24
-  - id: h_wk
-    type: text
-    text: Svakheter
-    x: 730
-    'y': 555
-    font_size: 32
-    style:
-      color: '#b5482e'
-  - id: w1
-    type: text
-    text: Ingen HbA1c eller BMI
-    x: 730
-    'y': 480
-    font_size: 24
-  - id: w2
-    type: text
-    text: Ingen etterlevelse
-    x: 730
-    'y': 425
-    font_size: 24
-  - id: w3
-    type: text
-    text: Koding følger pengene
-    x: 730
-    'y': 370
-    font_size: 24
-  - id: syn
-    type: text
-    text: Registrene vet hvem det ble betalt for
-    x: 500
-    'y': 230
-    font_size: 28
-  - id: mark_syn
-    type: annotation
-    target: syn
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: Nå som vi har sett hva én rad er i npr, lmr og kuhr, skal vi se hvorfor raden finnes — for den avgjør hvilke spørsmål kohorten din tåler.
-  - draw:
-      - n_syk
-      - n_apo
-      - n_fast
-    parallel: true
-    speak: Kari, 62 år, med type 2-diabetes, møter helsevesenet tre steder i løpet av 2023.
-  - pause: 1
-  - draw:
-      - a1
-      - pay1
-      - a2
-      - reg1
-    speak: To døgn på sykehus i mars, meldt med E11 — og meldingen finnes fordi ISF-refusjonen regnes ut fra den. Den er raden i npr.
-  - pause: 1
-  - draw:
-      - a3
-      - pay2
-      - a4
-      - reg2
-    speak: Fire ganger henter hun metformin, A10BA02, på blå resept; apoteket krever statens andel, og kravet blir raden i lmr med dato_utlev og ddd.
-  - pause: 1
-  - draw:
-      - a5
-      - pay3
-      - a6
-      - reg3
-    speak: Og hos fastlegen blir hvert besøk til takster på regningen til Helfo — regningen er raden i kuhr.
-  - pause: 1
-  - focus:
-      target:
-        - pay1
-        - pay2
-        - pay3
-    speak: 'Midtkolonnen er motivet: ingen av de tolv radene om Kari ble skrevet for å beskrive henne, de ble skrevet for å utløse en betaling.'
-  - draw:
-      - lbl_isf
-    speak: Det er nyere enn mange tror — med innsatsstyrt finansiering fra 1997 ble sykehusaktivitet gjort om til penger, og koding ble en økonomisk handling.
-  - pause: 1
-  - clear:
-      keep:
-        - title
-  - draw:
-      - c1
-      - c1e
-    speak: 'Første konsekvens: Karis fire lmr-rader sier at eskene forlot apoteket, ikke at tablettene ble svelget.'
-  - pause: 1
-  - draw:
-      - c2
-      - c2e
-    speak: 'Andre: takstkoden forteller hva fastlegen krevde betalt for, ikke hvor syk Kari var den dagen.'
-  - pause: 1
-  - draw:
-      - c3
-      - c3e
-    speak: 'Tredje, og den dyreste: en Kari som klarer seg med kosthold, eller som får medisinene sine på sykehjem, mangler ikke sykdom — hun mangler refusjonskrav, og forsvinner ut av kohorten din.'
-  - pause: 1
-  - highlight:
-      target:
-        - c1
-        - c2
-        - c3
-      effect: glow
-    speak: 'Alle tre er samme feil: å lese en pengestrøm som om den var en journal.'
-  - pause: 1
-  - clear:
-      keep:
-        - title
-  - draw:
-      - h_str
-      - s1
-      - s2
-      - s3
-    speak: Men det er nettopp fordi pengene måtte kontrolleres at du får hele befolkningen, uten at noen skal huske noe i ettertid, mange år bakover.
-  - draw:
-      - h_wk
-      - w1
-      - w2
-      - w3
-    speak: Den samme logikken gir deg ingen HbA1c, ingen BMI, ingen etterlevelse — og en koding formet av refusjonsreglene.
-  - pause: 1
-  - draw:
-      - syn
-      - mark_syn
-    delivery: grave
-    speak: Registrene vet nøyaktig hvem det ble betalt for; du spør hvem som er syk — og avstanden mellom de to spørsmålene er hele analysen din.
 level: basic
----
-title: '2007 og 2024: dataene har en historie'
+
+    text title "Bygd for refusjon, ikke for forskning" x 500 y 700 font_size 38 hidden true
+    box n_syk "Sykehusopphold" x 140 y 545 hidden true
+    box n_apo "Apotekutlevering" x 140 y 400 hidden true
+    box n_fast "Fastlegekontakt" x 140 y 255 hidden true
+    box pay1 "ISF-refusjon" #b5482e x 480 y 545 hidden true
+    box pay2 "Blåresept-refusjon" #b5482e x 480 y 400 hidden true
+    box pay3 "Takst til Helfo" #b5482e x 480 y 255 hidden true
+    box reg1 "npr" #2f6b8f x 830 y 545 hidden true
+    box reg2 "lmr" #2f6b8f x 830 y 400 hidden true
+    box reg3 "kuhr" #2f6b8f x 830 y 255 hidden true
+    arrow a1 n_syk -> pay1 #b5482e hidden true
+    arrow a2 pay1 -> reg1 #2f6b8f hidden true
+    arrow a3 n_apo -> pay2 #b5482e hidden true
+    arrow a4 pay2 -> reg2 #2f6b8f hidden true
+    arrow a5 n_fast -> pay3 #b5482e hidden true
+    arrow a6 pay3 -> reg3 #2f6b8f hidden true
+
+Nå som vi har sett hva én rad er i npr, lmr og kuhr, skal vi se hvorfor raden finnes — for den avgjør hvilke spørsmål kohorten din tåler.
+    draw title
+
+Kari, 62 år, med type 2-diabetes, møter helsevesenet tre steder i løpet av 2023.
+    draw n_syk n_apo n_fast parallel true
+
+    pause 1
+
+To døgn på sykehus i mars, meldt med E11 — og meldingen finnes fordi ISF-refusjonen regnes ut fra den. Den er raden i npr.
+    draw a1 pay1 a2 reg1
+
+    pause 1
+
+Fire ganger henter hun metformin, A10BA02, på blå resept; apoteket krever statens andel, og kravet blir raden i lmr med dato_utlev og ddd.
+    draw a3 pay2 a4 reg2
+
+    pause 1
+
+Og hos fastlegen blir hvert besøk til takster på regningen til Helfo — regningen er raden i kuhr.
+    draw a5 pay3 a6 reg3
+
+    pause 1
+
+Midtkolonnen er motivet: ingen av de tolv radene om Kari ble skrevet for å beskrive henne, de ble skrevet for å utløse en betaling.
+    focus pay1 pay2 pay3
+
+Det er nyere enn mange tror — med innsatsstyrt finansiering fra 1997 ble sykehusaktivitet gjort om til penger, og koding ble en økonomisk handling.
+    label lbl_isf "ISF fra 1997" above #8f887c attach_to pay1
+
+    pause 1
+
+    clear keep ["title"]
+
+Første konsekvens: Karis fire lmr-rader sier at eskene forlot apoteket, ikke at tablettene ble svelget.
+    text c1 "utlevert ≠ inntatt" #b5482e x 500 y 565 font_size 34
+    label c1e "esken forlot apoteket — resten vet vi ikke" below #8f887c attach_to c1
+
+    pause 1
+
+Andre: takstkoden forteller hva fastlegen krevde betalt for, ikke hvor syk Kari var den dagen.
+    text c2 "takst ≠ diagnose" #b5482e x 500 y 410 font_size 34
+    label c2e "koden sier hva som ble krevd betalt" below #8f887c attach_to c2
+
+    pause 1
+
+Tredje, og den dyreste: en Kari som klarer seg med kosthold, eller som får medisinene sine på sykehjem, mangler ikke sykdom — hun mangler refusjonskrav, og forsvinner ut av kohorten din.
+    text c3 "ingen rad ≠ ingen sykdom" #b5482e x 500 y 255 font_size 34
+    label c3e "uten refusjonskrav, ingen spor" below #8f887c attach_to c3
+
+    pause 1
+
+Alle tre er samme feil: å lese en pengestrøm som om den var en journal.
+    highlight c1 c2 c3 effect glow
+
+    pause 1
+
+    clear keep ["title"]
+
+Men det er nettopp fordi pengene måtte kontrolleres at du får hele befolkningen, uten at noen skal huske noe i ettertid, mange år bakover.
+    text h_str "Styrker" #2f6b8f x 270 y 555 font_size 32
+    text s1 "Hele befolkningen" x 270 y 480 font_size 24
+    text s2 "Ingen hukommelsesskjevhet" x 270 y 425 font_size 24
+    text s3 "Mange år bakover i tid" x 270 y 370 font_size 24
+
+Den samme logikken gir deg ingen HbA1c, ingen BMI, ingen etterlevelse — og en koding formet av refusjonsreglene.
+    text h_wk "Svakheter" #b5482e x 730 y 555 font_size 32
+    text w1 "Ingen HbA1c eller BMI" x 730 y 480 font_size 24
+    text w2 "Ingen etterlevelse" x 730 y 425 font_size 24
+    text w3 "Koding følger pengene" x 730 y 370 font_size 24
+
+    pause 1
+
+Registrene vet nøyaktig hvem det ble betalt for; du spør hvem som er syk — og avstanden mellom de to spørsmålene er hele analysen din.
+    text syn "Registrene vet hvem det ble betalt for" x 500 y 230 font_size 28
+    mark mark_syn target syn kind box
+    delivery grave
+
+## 2007 og 2024: dataene har en historie
 voice: male
-template: timeline
-params:
-  title: '2007 og 2024: dataene har en historie'
-  start_label: Registrene blir til
-  end_label: I dag
-  milestones:
-    - label: '1997'
-      sublabel: NPR opprettet – aggregert
-    - label: '2004'
-      sublabel: Reseptregisteret – pseudonymt
-    - label: KUHR
-      sublabel: refusjonskrav, midten av 2000-tallet
-    - label: '2007'
-      sublabel: NPR personidentifiserbart
-      emphasize: true
-    - label: '2024'
-      sublabel: Legemiddelregisteret (lmr)
-      emphasize: true
-elements:
-  - id: ex_head
-    type: text
-    text: 'Studievindu: 2005–2010'
-    x: 500
-    'y': 650
-    font_size: 34
-  - id: ex_lmr
-    type: text
-    text: 'lmr: utleveringer fra 2004'
-    x: 500
-    'y': 545
-    font_size: 28
-    style:
-      color: '#2f6b8f'
-  - id: ex_npr
-    type: text
-    text: 'npr: pasientnivå først fra 2007'
-    x: 500
-    'y': 475
-    font_size: 28
-    style:
-      color: '#b5482e'
-  - id: ex_gap
-    type: text
-    text: '2005 og 2006: hull i historikken'
-    x: 500
-    'y': 360
-    font_size: 30
-  - id: rule
-    type: text
-    text: Velg vinduet ut fra hva registeret var da.
-    x: 500
-    'y': 205
-    font_size: 30
-  - id: rule_mark
-    type: annotation
-    target: rule
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: 'Nå som vi har sett at alle tre registrene er bygd for refusjon og administrasjon, gjenstår én ting: dataene har også en historie, og den historien kan se ut som funn i tallene dine.'
-  - draw:
-      - line
-  - draw:
-      - dot_0
-      - label_0
-    speak: 'Norsk pasientregister ble opprettet i 1997, men de første ti årene var det i praksis et tellverk: aktivitet per sykehus, ikke per person.'
-  - pause: 1
-  - draw:
-      - dot_1
-      - label_1
-    speak: Reseptregisteret kom i 2004, og det ble bevisst gjort pseudonymt — personvernkompromisset som gjorde at registeret i det hele tatt lot seg opprette.
-  - pause: 1
-  - draw:
-      - dot_2
-      - label_2
-    speak: KUHR, refusjonskravene fra fastlegene, kom på plass midt på to tusen-tallet, og er den yngste av de tre kildene vi bruker.
-  - pause: 1
-  - draw:
-      - dot_3
-      - label_3
-    speak: Og så, fra 2007, ble Norsk pasientregister personidentifiserbart.
-    delivery: grave
-  - focus:
-      target:
-        - dot_3
-        - label_3
-    speak: 'Det er vannskillet: først da kunne to opphold for samme person knyttes sammen over tid — først da fikk npr i praksis en pid å koble på.'
-  - pause: 1
-  - highlight:
-      target:
-        - label_3
-      effect: glow
-    speak: Regner du prevalens av E11 fra 2005 og framover, ser du en pen økning rundt 2007 — men den økningen er registeret, ikke pasientene.
-  - pause: 1
-  - draw:
-      - dot_4
-      - label_4
-    speak: 'I 2024 skjedde det samme på legemiddelsiden: Reseptregisteret ble erstattet av Legemiddelregisteret, det vi kaller lmr.'
-  - highlight:
-      target:
-        - label_4
-      effect: glow
-    speak: Pseudonymet ble byttet ut med en personidentifiserbar nøkkel, og registeret skal etter hvert også dekke legemidler gitt i institusjon — kompromisset fra 2004 ble altså reversert tjue år senere.
-  - pause: 1
-  - clear: {}
-  - draw:
-      - ex_head
-    speak: La oss ta kohorten vår og sette studievinduet til 2005 til 2010.
-  - pause: 1
-  - draw:
-      - ex_lmr
-    speak: 'Utleveringene finnes: lmr rekker tilbake til 2004, så en treårs washout før første metformin i 2008 går akkurat opp.'
-  - pause: 1
-  - draw:
-      - ex_npr
-    speak: Men E11-kodene på personnivå finnes først fra 2007.
-  - pause: 1
-  - draw:
-      - ex_gap
-      - rule_mark
-    speak: 2005 og 2006 blir tomme — ikke fordi ingen hadde diabetes, men fordi registeret den gangen ikke kunne følge en person.
-  - pause: 1
-  - draw:
-      - rule
-    speak: 'Derfor regelen vi tar med oss videre: velg studievindu og tolkning ut fra hva registeret var på det tidspunktet, ikke hva det er i dag.'
-  - pause: 1
-  - speak: Én pasient ga oss tre rader; radene betyr tre ulike ting; de er skrevet for refusjon — og nå ser du at hver av dem også har en dato der registeret ble et annet register.
-    delivery: grave
 level: basic
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Hvordan leser du en 12 GB registerfil uten at maskinen dør?
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 2 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Hvordan leser du en 12 GB registerfil uten at maskinen dør?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+use: timeline
+with:
+    title: '2007 og 2024: dataene har en historie'
+    start_label: Registrene blir til
+    end_label: I dag
+    milestones:
+      - {label: '1997', sublabel: NPR opprettet – aggregert}
+      - {label: '2004', sublabel: Reseptregisteret – pseudonymt}
+      - {label: KUHR, sublabel: 'refusjonskrav, midten av 2000-tallet'}
+      - {label: '2007', sublabel: NPR personidentifiserbart, emphasize: true}
+      - {label: '2024', sublabel: Legemiddelregisteret (lmr), emphasize: true}
+
+    text ex_head "Studievindu: 2005–2010" x 500 y 650 font_size 34 hidden true
+    text ex_lmr "lmr: utleveringer fra 2004" #2f6b8f x 500 y 545 font_size 28 hidden true
+    text ex_npr "npr: pasientnivå først fra 2007" #b5482e x 500 y 475 font_size 28 hidden true
+    text ex_gap "2005 og 2006: hull i historikken" x 500 y 360 font_size 30 hidden true
+    text rule "Velg vinduet ut fra hva registeret var da." x 500 y 205 font_size 30 hidden true
+    mark rule_mark target rule kind box hidden true
+
+Nå som vi har sett at alle tre registrene er bygd for refusjon og administrasjon, gjenstår én ting: dataene har også en historie, og den historien kan se ut som funn i tallene dine.
+    draw title
+
+    draw line
+
+Norsk pasientregister ble opprettet i 1997, men de første ti årene var det i praksis et tellverk: aktivitet per sykehus, ikke per person.
+    draw dot_0 label_0
+
+    pause 1
+
+Reseptregisteret kom i 2004, og det ble bevisst gjort pseudonymt — personvernkompromisset som gjorde at registeret i det hele tatt lot seg opprette.
+    draw dot_1 label_1
+
+    pause 1
+
+KUHR, refusjonskravene fra fastlegene, kom på plass midt på to tusen-tallet, og er den yngste av de tre kildene vi bruker.
+    draw dot_2 label_2
+
+    pause 1
+
+Og så, fra 2007, ble Norsk pasientregister personidentifiserbart.
+    draw dot_3 label_3 delivery grave
+
+Det er vannskillet: først da kunne to opphold for samme person knyttes sammen over tid — først da fikk npr i praksis en pid å koble på.
+    focus dot_3 label_3
+
+    pause 1
+
+Regner du prevalens av E11 fra 2005 og framover, ser du en pen økning rundt 2007 — men den økningen er registeret, ikke pasientene.
+    highlight label_3 effect glow
+
+    pause 1
+
+I 2024 skjedde det samme på legemiddelsiden: Reseptregisteret ble erstattet av Legemiddelregisteret, det vi kaller lmr.
+    draw dot_4 label_4
+
+Pseudonymet ble byttet ut med en personidentifiserbar nøkkel, og registeret skal etter hvert også dekke legemidler gitt i institusjon — kompromisset fra 2004 ble altså reversert tjue år senere.
+    highlight label_4 effect glow
+
+    pause 1
+
+    clear
+
+La oss ta kohorten vår og sette studievinduet til 2005 til 2010.
+    draw ex_head
+
+    pause 1
+
+Utleveringene finnes: lmr rekker tilbake til 2004, så en treårs washout før første metformin i 2008 går akkurat opp.
+    draw ex_lmr
+
+    pause 1
+
+Men E11-kodene på personnivå finnes først fra 2007.
+    draw ex_npr
+
+    pause 1
+
+2005 og 2006 blir tomme — ikke fordi ingen hadde diabetes, men fordi registeret den gangen ikke kunne følge en person.
+    draw ex_gap rule_mark
+
+    pause 1
+
+Derfor regelen vi tar med oss videre: velg studievindu og tolkning ut fra hva registeret var på det tidspunktet, ikke hva det er i dag.
+    draw rule
+
+    pause 1
+
+Én pasient ga oss tre rader; radene betyr tre ulike ting; de er skrevet for refusjon — og nå ser du at hver av dem også har en dato der registeret ble et annet register.
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Hvordan leser du en 12 GB registerfil uten at maskinen dør?
+    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:2 title "Hvordan leser du en 12 GB registerfil uten at maskinen dør?" size 320 x 500 y 395
+
+    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
+    text end_count "1 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

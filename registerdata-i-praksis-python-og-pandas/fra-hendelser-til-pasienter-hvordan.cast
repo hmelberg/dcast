@@ -1,252 +1,133 @@
-playlist:
-  title: 'Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?'
-  prompt: Hvordan går du fra én rad per kontakt til én rad per pasient uten å miste det du trenger senere? Når bruker du groupby().agg(), når transform(), og når pivot_table? Hvorfor er første og siste dato per pid nesten alltid de to viktigste kolonnene i kohort?
-  next:
-    title: 'Tid er alt: washout, ny bruker og legemiddeldekning i pandas'
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.yaml
-  enroll: https://drawcast.anvil.app
----
-title: groupby().agg() bygger kohort
+# Fra hendelser til pasienter: hvordan kollapser du millioner av rader til én rad per person?
+prompt: "Hvordan går du fra én rad per kontakt til én rad per pasient uten å miste det du trenger senere? Når bruker du groupby().agg(), når transform(), og når pivot_table? Hvorfor er første og siste dato per pid nesten alltid de to viktigste kolonnene i kohort?"
+next: {"title":"Tid er alt: washout, ny bruker og legemiddeldekning i pandas","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.cast"}
+enroll: https://drawcast.anvil.app
+
+## groupby().agg() bygger kohort
 voice: male
-template: data_table
-params:
-  columns:
-    - pid
-    - dato_inn
-    - icd10
-  rows:
-    - - 1001
-      - '2018-03-04'
-      - E11
-    - - 1001
-      - '2019-11-22'
-      - E11
-    - - 1001
-      - '2021-06-01'
-      - I10
-    - - 1002
-      - '2017-01-09'
-      - E11
-    - - 1003
-      - '2020-08-17'
-      - E11
-    - - 1003
-      - '2020-08-30'
-      - N18
-    - - 1003
-      - '2022-02-14'
-      - E11
-    - - 1003
-      - '2023-05-03'
-      - J44
-  title: 'npr: åtte rader, tre pasienter'
-elements:
-  - id: py
-    type: code
-    language: python
-    show: left
-    width: 960
-    font_size: 15
-    code: |-
-      import pandas as pd
-      pid = [1001, 1001, 1001, 1002, 1003, 1003, 1003, 1003]
-      kode = ["E11", "E11", "I10", "E11", "E11", "N18", "E11", "J44"]
-      dato = ["2018-03-04", "2019-11-22", "2021-06-01", "2017-01-09",
-              "2020-08-17", "2020-08-30", "2022-02-14", "2023-05-03"]
-      npr = pd.DataFrame({"pid": pid, "icd10": kode,
-                          "dato_inn": pd.to_datetime(dato)})
-      e11 = npr[npr["icd10"].str.startswith("E11")]
-      kohort = npr.groupby("pid").agg(
-          n_kontakter=("icd10", "size"),
-          n_koder=("icd10", "nunique"))
-      debut = e11.groupby("pid")["dato_inn"].min()
-      kohort["forste_e11"] = debut.dt.date
-      kohort.reset_index()
-  - id: mark
-    type: annotation
-    target: py_out
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: Nå som vi har sett at én pid kan ha titalls rader — kollapsen til én rad per pasient er den eneste operasjonen i hele kurset du ikke kan angre på.
-    voice: a
-    delivery: grave
-  - draw:
-      - header
-      - row_1
-      - row_2
-      - row_3
-    speak: 'Her er npr i miniatyr: én rad per kontakt. Pasient 1001 har tre — to med E11, og én med I10, høyt blodtrykk.'
-    voice: a
-  - pause: 0.3
-  - draw:
-      - row_4
-      - row_5
-      - row_6
-      - row_7
-      - row_8
-    parallel: true
-    speak: 1002 har vært innom nøyaktig én gang, i 2017 — kohortens minst dramatiske pasient. 1003 har fire kontakter og tre forskjellige koder.
-    voice: a
-  - point:
-      at:
-        ref: row_5
-      gesture: circle
-    speak: Da tar jeg vel bare groupby pid og first, så har jeg én rad per pasient?
-    voice: b
-  - highlight:
-      target:
-        - row_5
-        - row_6
-        - row_7
-        - row_8
-      effect: glow
-    speak: Én rad får du, ja — men 1003 ser da ut som en pasient med én kontakt og én kode, og de tre andre radene finnes ikke lenger noe sted.
-    voice: a
-  - quiz:
-      intro: Kjapp sjekk før vi koder.
-      question: Hvor mange rader får kohort når vi grupperer disse åtte radene på pid?
-      choices:
-        - '3'
-        - '8'
-        - '4'
-      correct: 1
-      right: Tre — én rad per unik pid, uansett hvor mange kontakter hver av dem har.
-      wrong: Antall rader inn spiller ingen rolle; det er antall unike pid som bestemmer høyden på kohort.
-  - clear: {}
-  - draw:
-      - py
-      - py_line_1
-      - py_line_2
-      - py_line_3
-      - py_line_4
-      - py_line_5
-      - py_line_6
-      - py_line_7
-    parallel: true
-    speak: Samme tabellen i kode — datoene lest inn som ekte datoer, ikke tekst; på tekst gir min() deg alfabetisk minste streng, som tilfeldigvis stemmer for ISO-datoer og aldri for noe annet.
-    voice: a
-  - draw:
-      - py_line_8
-    speak: 'Først et filter: bare radene der icd10 starter på E11. Det er der debutdatoen bor.'
-    voice: a
-  - draw:
-      - py_line_9
-    speak: groupby('pid') deler tabellen i én bunke per person — ingenting er regnet ut ennå.
-    voice: a
-  - draw:
-      - py_line_10
-    speak: 'Så ordboken: navnet du vil ha ut, kildekolonnen, og funksjonen. size teller radene — altså kontakter.'
-    voice: a
-  - point:
-      at:
-        ref: py_line_10
-      gesture: underline
-    speak: Hvorfor size og ikke count?
-    voice: b
-  - highlight:
-      target:
-        - py_line_10
-      effect: glow
-    speak: count hopper over manglende verdier — mangler icd10 på en kontakt, forsvinner kontakten fra tellingen din. size teller radene som de er.
-    voice: a
-    delivery: soft
-  - draw:
-      - py_line_11
-    speak: nunique på samme kolonne gir kodebredden — 1003 skal få tre.
-    voice: a
-  - draw:
-      - py_line_12
-      - py_line_13
-    speak: Og debutdatoen henter vi fra det filtrerte settet, og limer den på kohort — pid mot pid.
-    voice: a
-  - point:
-      at:
-        ref: py_line_12
-      gesture: tap
-    speak: Hmm — kunne vi ikke bare tatt min på dato_inn i hele npr? Det er jo samme pasient.
-    voice: b
-  - highlight:
-      target:
-        - py_line_8
-        - py_line_12
-      effect: glow
-    speak: For 1003 blir det tilfeldigvis riktig. Men hadde KOLS-kontakten ligget først, hadde du datert diabetesdebuten flere år for tidlig — og hele washout-vinduet i neste forelesning hviler på akkurat den datoen.
-    voice: a
-    delivery: grave
-  - draw:
-      - py_line_14
-      - py_out
-    speak: 'Og der er kohort: tre rader, én per pasient — med kontakter, kodebredde og debutdato i behold.'
-    voice: a
-  - pause: 0.5
-  - speak: Åtte rader inn, tre ut — og ingenting av tellingen er borte.
-    voice: b
-    delivery: brisk
-  - quiz:
-      intro: En siste sjekk på tabellen.
-      question: Hva står det i n_koder for pasient 1003?
-      choices:
-        - '4'
-        - '3'
-        - '1'
-      correct: 2
-      right: 'Tre — fire kontakter, men bare tre forskjellige koder: E11, N18 og J44.'
-      wrong: Kontaktene teller ikke her; nunique teller forskjellige koder, ikke rader.
-  - draw:
-      - mark
-    speak: 'Aggregeringsordboken er hele oversettelsen fra hendelser til pasienter: alt du ikke skriver inn i den, finnes ikke etter kollapsen.'
-    voice: a
-    delivery: grave
 level: basic
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Tid er alt: washout, ny bruker og legemiddeldekning i pandas'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 6 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Tid er alt: washout, ny bruker og legemiddeldekning i pandas'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+use: data_table
+with:
+    columns:
+      - pid
+      - dato_inn
+      - icd10
+    rows:
+      - [1001, '2018-03-04', E11]
+      - [1001, '2019-11-22', E11]
+      - [1001, '2021-06-01', I10]
+      - [1002, '2017-01-09', E11]
+      - [1003, '2020-08-17', E11]
+      - [1003, '2020-08-30', N18]
+      - [1003, '2022-02-14', E11]
+      - [1003, '2023-05-03', J44]
+    title: 'npr: åtte rader, tre pasienter'
+
+    ```python py width 960 font_size 15 show left hidden true
+    import pandas as pd
+    pid = [1001, 1001, 1001, 1002, 1003, 1003, 1003, 1003]
+    kode = ["E11", "E11", "I10", "E11", "E11", "N18", "E11", "J44"]
+    dato = ["2018-03-04", "2019-11-22", "2021-06-01", "2017-01-09",
+            "2020-08-17", "2020-08-30", "2022-02-14", "2023-05-03"]
+    npr = pd.DataFrame({"pid": pid, "icd10": kode,
+                        "dato_inn": pd.to_datetime(dato)})
+    e11 = npr[npr["icd10"].str.startswith("E11")]
+    kohort = npr.groupby("pid").agg(
+        n_kontakter=("icd10", "size"),
+        n_koder=("icd10", "nunique"))
+    debut = e11.groupby("pid")["dato_inn"].min()
+    kohort["forste_e11"] = debut.dt.date
+    kohort.reset_index()
+    ```
+
+A: Nå som vi har sett at én pid kan ha titalls rader — kollapsen til én rad per pasient er den eneste operasjonen i hele kurset du ikke kan angre på.
+    draw title delivery grave
+
+A: Her er npr i miniatyr: én rad per kontakt. Pasient 1001 har tre — to med E11, og én med I10, høyt blodtrykk.
+    draw header row_1 row_2 row_3
+
+    pause 0.3
+
+A: 1002 har vært innom nøyaktig én gang, i 2017 — kohortens minst dramatiske pasient. 1003 har fire kontakter og tre forskjellige koder.
+    draw row_4 row_5 row_6 row_7 row_8 parallel true
+
+B: Da tar jeg vel bare groupby pid og first, så har jeg én rad per pasient?
+    point at.ref row_5 gesture circle
+
+A: Én rad får du, ja — men 1003 ser da ut som en pasient med én kontakt og én kode, og de tre andre radene finnes ikke lenger noe sted.
+    highlight row_5 row_6 row_7 row_8 effect glow
+
+    quiz "Hvor mange rader får kohort når vi grupperer disse åtte radene på pid?"
+        intro: Kjapp sjekk før vi koder.
+        right: Tre — én rad per unik pid, uansett hvor mange kontakter hver av dem har.
+        wrong: Antall rader inn spiller ingen rolle; det er antall unike pid som bestemmer høyden på kohort.
+        + 3
+        * 8
+        * 4
+
+    clear
+
+A: Samme tabellen i kode — datoene lest inn som ekte datoer, ikke tekst; på tekst gir min() deg alfabetisk minste streng, som tilfeldigvis stemmer for ISO-datoer og aldri for noe annet.
+    draw py py_line_1 py_line_2 py_line_3 py_line_4 py_line_5 py_line_6 py_line_7 parallel true
+
+A: Først et filter: bare radene der icd10 starter på E11. Det er der debutdatoen bor.
+    draw py_line_8
+
+A: groupby('pid') deler tabellen i én bunke per person — ingenting er regnet ut ennå.
+    draw py_line_9
+
+A: Så ordboken: navnet du vil ha ut, kildekolonnen, og funksjonen. size teller radene — altså kontakter.
+    draw py_line_10
+
+B: Hvorfor size og ikke count?
+    point at.ref py_line_10 gesture underline
+
+A: count hopper over manglende verdier — mangler icd10 på en kontakt, forsvinner kontakten fra tellingen din. size teller radene som de er.
+    highlight py_line_10 effect glow delivery soft
+
+A: nunique på samme kolonne gir kodebredden — 1003 skal få tre.
+    draw py_line_11
+
+A: Og debutdatoen henter vi fra det filtrerte settet, og limer den på kohort — pid mot pid.
+    draw py_line_12 py_line_13
+
+B: Hmm — kunne vi ikke bare tatt min på dato_inn i hele npr? Det er jo samme pasient.
+    point at.ref py_line_12 gesture tap
+
+A: For 1003 blir det tilfeldigvis riktig. Men hadde KOLS-kontakten ligget først, hadde du datert diabetesdebuten flere år for tidlig — og hele washout-vinduet i neste forelesning hviler på akkurat den datoen.
+    highlight py_line_8 py_line_12 effect glow delivery grave
+
+A: Og der er kohort: tre rader, én per pasient — med kontakter, kodebredde og debutdato i behold.
+    draw py_line_14 py_out
+
+    pause 0.5
+
+B: Åtte rader inn, tre ut — og ingenting av tellingen er borte.
+    delivery brisk
+
+    quiz "Hva står det i n_koder for pasient 1003?"
+        intro: En siste sjekk på tabellen.
+        right: Tre — fire kontakter, men bare tre forskjellige koder: E11, N18 og J44.
+        wrong: Kontaktene teller ikke her; nunique teller forskjellige koder, ikke rader.
+        * 4
+        + 3
+        * 1
+
+A: Aggregeringsordboken er hele oversettelsen fra hendelser til pasienter: alt du ikke skriver inn i den, finnes ikke etter kollapsen.
+    mark mark target py_out kind box
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Tid er alt: washout, ny bruker og legemiddeldekning i pandas
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:4 title "Holder én E11-kode for å kalle noen diabetiker?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:6 title "Tid er alt: washout, ny bruker og legemiddeldekning i pandas" size 320 x 735 y 395
+
+    link end_again href lecture:5 title "Watch again" form text open here x 500 y 160
+    text end_count "5 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

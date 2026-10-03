@@ -1,899 +1,363 @@
-playlist:
-  title: Hva er det egentlig som binder en sykehuskontakt til en resept?
-  prompt: 'Hvorfor er pid og en dato det eneste du har — og hva betyr det for hva du kan spørre om? Hvorfor blir det plutselig tre ganger så mange rader etter en merge, og hva redder validate= deg fra? Left join eller inner join: hvordan gir de to ulike kohorter av de samme pasientene?'
-  next:
-    title: Holder én E11-kode for å kalle noen diabetiker?
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Én pasient, to registre, én nøkkel
+# Hva er det egentlig som binder en sykehuskontakt til en resept?
+prompt: "Hvorfor er pid og en dato det eneste du har — og hva betyr det for hva du kan spørre om? Hvorfor blir det plutselig tre ganger så mange rader etter en merge, og hva redder validate= deg fra? Left join eller inner join: hvordan gir de to ulike kohorter av de samme pasientene?"
+next: {"title":"Holder én E11-kode for å kalle noen diabetiker?","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.cast"}
+enroll: https://drawcast.anvil.app
+
+## Én pasient, to registre, én nøkkel
 voice: male
-elements:
-  - id: tittel
-    type: text
-    text: Én pasient, to registre, én nøkkel
-    x: 500
-    'y': 705
-    font_size: 34
-  - id: boks_npr
-    type: path
-    points:
-      - - 60
-        - 380
-      - - 470
-        - 380
-      - - 470
-        - 645
-      - - 60
-        - 645
-    closed: true
-    style:
-      color: '#2f6b8f'
-  - id: hdr_npr
-    type: text
-    text: npr — én rad per kontakt
-    x: 265
-    'y': 608
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: npr_pid
-    type: text
-    text: 'pid: 100234'
-    x: 265
-    'y': 558
-    font_size: 25
-    style:
-      color: '#8a5fa8'
-  - id: npr_dato
-    type: text
-    text: 'dato_inn: 2019-03-14'
-    x: 265
-    'y': 513
-    font_size: 25
-    style:
-      color: '#2f6b8f'
-  - id: npr_ut
-    type: text
-    text: 'dato_ut: 2019-03-18'
-    x: 265
-    'y': 468
-    font_size: 25
-    style:
-      color: '#2f6b8f'
-  - id: npr_icd
-    type: text
-    text: 'icd10: E11.9'
-    x: 265
-    'y': 423
-    font_size: 25
-    style:
-      color: '#2f6b8f'
-  - id: boks_lmr
-    type: path
-    points:
-      - - 530
-        - 380
-      - - 940
-        - 380
-      - - 940
-        - 645
-      - - 530
-        - 645
-    closed: true
-    style:
-      color: '#b5482e'
-  - id: hdr_lmr
-    type: text
-    text: lmr — én rad per utlevering
-    x: 735
-    'y': 608
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: lmr_pid
-    type: text
-    text: 'pid: 100234'
-    x: 735
-    'y': 558
-    font_size: 25
-    style:
-      color: '#8a5fa8'
-  - id: lmr_dato
-    type: text
-    text: 'dato_utlev: 2019-04-02'
-    x: 735
-    'y': 513
-    font_size: 25
-    style:
-      color: '#b5482e'
-  - id: lmr_atc
-    type: text
-    text: 'atc: A10BA02 (metformin)'
-    x: 735
-    'y': 468
-    font_size: 23
-    style:
-      color: '#b5482e'
-  - id: lmr_ddd
-    type: text
-    text: 'ddd: 90'
-    x: 735
-    'y': 423
-    font_size: 25
-    style:
-      color: '#b5482e'
-  - id: kobling
-    type: edge
-    from:
-      ref: npr_pid
-    to:
-      ref: lmr_pid
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: lbl_nokkel
-    type: label
-    text: pid — den eneste fysiske koblingen
-    attach_to: kobling
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: tidslinje
-    type: path
-    points:
-      - - 110
-        - 225
-      - - 890
-        - 225
-    style:
-      color: '#8f887c'
-  - id: m1
-    type: shape
-    shape: circle
-    x: 200
-    'y': 225
-    radius: 9
-    style:
-      color: '#2f6b8f'
-  - id: m2
-    type: shape
-    shape: circle
-    x: 340
-    'y': 225
-    radius: 9
-    style:
-      color: '#2f6b8f'
-  - id: m3
-    type: shape
-    shape: circle
-    x: 680
-    'y': 225
-    radius: 9
-    style:
-      color: '#b5482e'
-  - id: lbl_m1
-    type: label
-    text: dato_inn 14. mars
-    attach_to: m1
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: lbl_m2
-    type: label
-    text: dato_ut 18. mars
-    attach_to: m2
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: lbl_m3
-    type: label
-    text: dato_utlev 2. april
-    attach_to: m3
-    side: below
-    style:
-      color: '#b5482e'
-  - id: gap
-    type: arrow
-    from:
-      x: 345
-      'y': 278
-    to:
-      x: 675
-      'y': 278
-  - id: lbl_gap
-    type: label
-    text: 15 dager?
-    attach_to: gap
-    side: above
-  - id: sum1
-    type: text
-    text: pid  →  HVEM
-    x: 500
-    'y': 540
-    font_size: 34
-    style:
-      color: '#8a5fa8'
-  - id: sum2
-    type: text
-    text: dato  →  NÅR
-    x: 500
-    'y': 465
-    font_size: 34
-  - id: sum3
-    type: text
-    text: Koblingen mellom dem lager du selv.
-    x: 500
-    'y': 365
-    font_size: 28
-  - id: mark_sum
-    type: annotation
-    target: sum3
-    kind: box
-  - id: neste
-    type: text
-    text: 'Del 2: hva pid og en dato lar deg spørre om'
-    x: 500
-    'y': 255
-    font_size: 24
-    style:
-      color: '#8f887c'
-commands:
-  - draw:
-      - tittel
-    speak: 'Denne serien handler om én ting: hva som faktisk binder en sykehuskontakt til en resept — og hva som ikke gjør det.'
-  - draw:
-      - boks_npr
-      - hdr_npr
-      - npr_pid
-      - npr_dato
-      - npr_ut
-      - npr_icd
-    speak: 'Her er én rad fra npr: pasient 100234, innlagt fjortende mars 2019, utskrevet fire dager senere, med hoveddiagnose E11.9 — type 2-diabetes.'
-  - pause: 0.4
-  - draw:
-      - boks_lmr
-      - hdr_lmr
-      - lmr_pid
-      - lmr_dato
-      - lmr_atc
-      - lmr_ddd
-    speak: 'Og her er én rad fra Legemiddelregisteret: andre april hentes metformin ut på apotek, A10BA02, nitti definerte døgndoser.'
-  - pause: 0.4
-  - focus:
-      target:
-        - npr_icd
-        - lmr_atc
-    speak: Diagnosen står i den ene raden, legemidlet i den andre. Men hva inne i radene forteller deg at dette er samme menneske?
-  - pause: 1.8
-  - camera:
-      center:
-        x: 500
-        'y': 555
-      zoom: 1.7
-    speak: Svaret står øverst i begge — og det er verken navn, fødselsnummer eller fastlege.
-  - draw:
-      - kobling
-      - lbl_nokkel
-    speak: 'pid: et pseudonymt løpenummer som datautleveren har satt inn i stedet for fødselsnummeret, likt i alle tre filene.'
-  - highlight:
-      target:
-        - npr_pid
-        - lmr_pid
-      effect: glow
-    speak: Det finnes ingen kontakt-ID i utleveringen, og ingen peker tilbake til resepten i kontakten. Denne ene kolonnen er hele broen.
-  - camera:
-      reset: true
-    speak: Og løpenummeret lever bare i ditt prosjekt — i neste utlevering av de samme pasientene har de helt andre numre.
-  - speak: Men pid sier bare hvem. Hvis du vil vite om denne resepten hører til dette oppholdet, hva mer trenger du?
-  - pause: 1.8
-  - draw:
-      - tidslinje
-      - m1
-      - m2
-      - lbl_m1
-      - lbl_m2
-    speak: Datoene — den andre og siste opplysningen du har. Oppholdet varer fra fjortende til attende mars.
-  - draw:
-      - m3
-      - lbl_m3
-    speak: Utleveringen ligger her, andre april.
-  - draw:
-      - gap
-      - lbl_gap
-    speak: Femten dager etter utskrivelsen — eller nitten dager etter innleggelsen. Hvilken av dem er «samme forløp»?
-  - pause: 1.5
-  - highlight:
-      target:
-        - gap
-      effect: pulse
-    speak: 'Registrene svarer ikke: ingen kolonne sier at denne metforminpakken ble startet på grunn av dette oppholdet.'
-  - clear:
-      keep:
-        - tittel
-  - draw:
-      - sum1
-      - sum2
-    speak: 'Så det du har fått utlevert, er to opplysninger: pid svarer på hvem, datoene svarer på når.'
-  - draw:
-      - sum3
-      - mark_sum
-    delivery: grave
-    speak: Alt det andre — at resepten hører til kontakten — er en antakelse du selv må skrive inn i koden.
-  - draw:
-      - neste
-    speak: I neste del ser vi på nøyaktig hva pid og en dato lar deg spørre om — og hva de aldri kan svare på.
----
-title: Hvorfor ble det tre ganger så mange rader?
+
+    text tittel "Én pasient, to registre, én nøkkel" x 500 y 705 font_size 34 hidden true
+    path boks_npr closed #2f6b8f points [[60,380],[470,380],[470,645],[60,645]] hidden true
+    text hdr_npr "npr — én rad per kontakt" #2f6b8f x 265 y 608 font_size 24 hidden true
+    text npr_pid "pid: 100234" #8a5fa8 x 265 y 558 font_size 25 hidden true
+    text npr_dato "dato_inn: 2019-03-14" #2f6b8f x 265 y 513 font_size 25 hidden true
+    text npr_ut "dato_ut: 2019-03-18" #2f6b8f x 265 y 468 font_size 25 hidden true
+    text npr_icd "icd10: E11.9" #2f6b8f x 265 y 423 font_size 25 hidden true
+    path boks_lmr closed #b5482e points [[530,380],[940,380],[940,645],[530,645]] hidden true
+    text hdr_lmr "lmr — én rad per utlevering" #b5482e x 735 y 608 font_size 24 hidden true
+    text lmr_pid "pid: 100234" #8a5fa8 x 735 y 558 font_size 25 hidden true
+    text lmr_dato "dato_utlev: 2019-04-02" #b5482e x 735 y 513 font_size 25 hidden true
+    text lmr_atc "atc: A10BA02 (metformin)" #b5482e x 735 y 468 font_size 23 hidden true
+    text lmr_ddd "ddd: 90" #b5482e x 735 y 423 font_size 25 hidden true
+    edge kobling npr_pid -> lmr_pid curved #8a5fa8 hidden true
+    label lbl_nokkel "pid — den eneste fysiske koblingen" above #8a5fa8 attach_to kobling hidden true
+    path tidslinje #8f887c points [[110,225],[890,225]] hidden true
+    shape m1 #2f6b8f shape circle x 200 y 225 radius 9 hidden true
+    shape m2 #2f6b8f shape circle x 340 y 225 radius 9 hidden true
+    shape m3 #b5482e shape circle x 680 y 225 radius 9 hidden true
+    label lbl_m1 "dato_inn 14. mars" below #2f6b8f attach_to m1 hidden true
+    label lbl_m2 "dato_ut 18. mars" below #2f6b8f attach_to m2 hidden true
+    label lbl_m3 "dato_utlev 2. april" below #b5482e attach_to m3 hidden true
+
+Denne serien handler om én ting: hva som faktisk binder en sykehuskontakt til en resept — og hva som ikke gjør det.
+    draw tittel
+
+Her er én rad fra npr: pasient 100234, innlagt fjortende mars 2019, utskrevet fire dager senere, med hoveddiagnose E11.9 — type 2-diabetes.
+    draw boks_npr hdr_npr npr_pid npr_dato npr_ut npr_icd
+
+    pause 0.4
+
+Og her er én rad fra Legemiddelregisteret: andre april hentes metformin ut på apotek, A10BA02, nitti definerte døgndoser.
+    draw boks_lmr hdr_lmr lmr_pid lmr_dato lmr_atc lmr_ddd
+
+    pause 0.4
+
+Diagnosen står i den ene raden, legemidlet i den andre. Men hva inne i radene forteller deg at dette er samme menneske?
+    focus npr_icd lmr_atc
+
+    pause 1.8
+
+Svaret står øverst i begge — og det er verken navn, fødselsnummer eller fastlege.
+    camera center.x 500 center.y 555 zoom 1.7
+
+pid: et pseudonymt løpenummer som datautleveren har satt inn i stedet for fødselsnummeret, likt i alle tre filene.
+    draw kobling lbl_nokkel
+
+Det finnes ingen kontakt-ID i utleveringen, og ingen peker tilbake til resepten i kontakten. Denne ene kolonnen er hele broen.
+    highlight npr_pid lmr_pid effect glow
+
+Og løpenummeret lever bare i ditt prosjekt — i neste utlevering av de samme pasientene har de helt andre numre.
+    camera reset true
+
+Men pid sier bare hvem. Hvis du vil vite om denne resepten hører til dette oppholdet, hva mer trenger du?
+
+    pause 1.8
+
+Datoene — den andre og siste opplysningen du har. Oppholdet varer fra fjortende til attende mars.
+    draw tidslinje m1 m2 lbl_m1 lbl_m2
+
+Utleveringen ligger her, andre april.
+    draw m3 lbl_m3
+
+Femten dager etter utskrivelsen — eller nitten dager etter innleggelsen. Hvilken av dem er «samme forløp»?
+    arrow gap from.x 345 from.y 278 to.x 675 to.y 278
+    label lbl_gap "15 dager?" above attach_to gap
+
+    pause 1.5
+
+Registrene svarer ikke: ingen kolonne sier at denne metforminpakken ble startet på grunn av dette oppholdet.
+    highlight gap effect pulse
+
+    clear keep ["tittel"]
+
+Så det du har fått utlevert, er to opplysninger: pid svarer på hvem, datoene svarer på når.
+    text sum1 "pid  →  HVEM" #8a5fa8 x 500 y 540 font_size 34
+    text sum2 "dato  →  NÅR" x 500 y 465 font_size 34
+
+Alt det andre — at resepten hører til kontakten — er en antakelse du selv må skrive inn i koden.
+    text sum3 "Koblingen mellom dem lager du selv." x 500 y 365 font_size 28
+    mark mark_sum target sum3 kind box
+    delivery grave
+
+I neste del ser vi på nøyaktig hva pid og en dato lar deg spørre om — og hva de aldri kan svare på.
+    text neste "Del 2: hva pid og en dato lar deg spørre om" #8f887c x 500 y 255 font_size 24
+
+## Hvorfor ble det tre ganger så mange rader?
 voice: male
-elements:
-  - id: tittel
-    type: text
-    text: Hvorfor ble det tre ganger så mange rader?
-    x: 500
-    'y': 700
-    font_size: 34
-  - id: k1
-    type: node
-    shape: rect
-    text: 'npr: kontakt 12.03'
-    style:
-      color: '#2f6b8f'
-  - id: k2
-    type: node
-    shape: rect
-    text: 'npr: kontakt 04.09'
-    style:
-      color: '#2f6b8f'
-  - id: u1
-    type: node
-    shape: rect
-    text: 'lmr: utlev. 20.02'
-    style:
-      color: '#b5482e'
-  - id: u2
-    type: node
-    shape: rect
-    text: 'lmr: utlev. 18.05'
-    style:
-      color: '#b5482e'
-  - id: u3
-    type: node
-    shape: rect
-    text: 'lmr: utlev. 14.08'
-    style:
-      color: '#b5482e'
-  - id: lab_npr
-    type: label
-    text: E11, pid 4711
-    attach_to: k1
-    side: left
-    style:
-      color: '#2f6b8f'
-  - id: lab_lmr
-    type: label
-    text: A10BA02 — 90 DDD hver
-    attach_to: u2
-    side: right
-    style:
-      color: '#b5482e'
-  - id: e11
-    type: edge
-    from:
-      ref: k1
-    to:
-      ref: u1
-    style:
-      color: '#8f887c'
-  - id: e12
-    type: edge
-    from:
-      ref: k1
-    to:
-      ref: u2
-    style:
-      color: '#8f887c'
-  - id: e13
-    type: edge
-    from:
-      ref: k1
-    to:
-      ref: u3
-    style:
-      color: '#8f887c'
-  - id: e21
-    type: edge
-    from:
-      ref: k2
-    to:
-      ref: u1
-    style:
-      color: '#8f887c'
-  - id: e22
-    type: edge
-    from:
-      ref: k2
-    to:
-      ref: u2
-    style:
-      color: '#8f887c'
-  - id: e23
-    type: edge
-    from:
-      ref: k2
-    to:
-      ref: u3
-    style:
-      color: '#8f887c'
-  - id: sum_text
-    type: text
-    text: 2 kontakter × 3 utleveringer = 6 rader
-    x: 500
-    'y': 110
-    font_size: 30
-  - id: sum_box
-    type: annotation
-    target: sum_text
-    kind: box
-  - id: kode
-    type: code
-    language: python
-    show: left
-    x: 500
-    'y': 390
-    width: 940
-    font_size: 15
-    code: |-
-      import pandas as pd
-      npr = pd.DataFrame({"pid": [4711, 4711],
-                          "dato_inn": ["2019-03-12", "2019-09-04"]})
-      lmr = pd.DataFrame({"pid": [4711, 4711, 4711],
-                          "dato_utlev": ["2019-02-20", "2019-05-18",
-                                         "2019-08-14"],
-                          "ddd": [90, 90, 90]})
-      m = pd.merge(npr, lmr, on="pid")
-      print("rader:", len(npr), len(lmr), "->", len(m))
-      print("ddd:", lmr["ddd"].sum(), "->", m["ddd"].sum())
-  - id: konkl
-    type: text
-    text: Radene er ikke pasienter — de er par
-    x: 500
-    'y': 430
-    font_size: 34
-  - id: konkl_box
-    type: annotation
-    target: konkl
-    kind: box
-  - id: konkl2
-    type: text
-    text: summen av ddd teller samme utlevering om igjen
-    x: 500
-    'y': 340
-    font_size: 24
-    style:
-      color: '#8f887c'
-commands:
-  - draw:
-      - tittel
-    speak: 'Nå som vi vet hva pid og en dato lar oss spørre om: en kobling på pid alene kan doble legemiddelbruken i materialet ditt uten å si et ord om det.'
-  - draw:
-      - k1
-      - k2
-      - lab_npr
-    speak: Pasient 4711 har to kontakter i npr — én i mars, én i september — begge kodet E11.
-  - draw:
-      - u1
-      - u2
-      - u3
-      - lab_lmr
-    speak: 'Samme pid har tre utleveringer i lmr: metformin, A10BA02, nitti DDD på hver pakning.'
-  - speak: Fem rader inn. Hvor mange rader kommer ut av pd.merge på pid?
-  - pause: 1.8
-  - draw:
-      - e11
-      - e12
-      - e13
-      - e21
-      - e22
-      - e23
-    parallel: true
-    speak: Hver kontakt pares med hver utlevering — pandas har ingen datoinformasjon å velge med.
-  - draw:
-      - sum_text
-      - sum_box
-    speak: 'To ganger tre: seks rader, der vi bare hadde fem hendelser.'
-  - point:
-      at:
-        ref: e13
-      gesture: circle
-    speak: Marskontakten står nå sammen med augustutleveringen — et par ingen klinisk hendelse svarer til.
-  - clear:
-      keep:
-        - tittel
-    speak: La oss telle det samme i pandas, med tallene foran oss.
-  - draw:
-      - kode
-      - kode_line_1
-      - kode_line_2
-      - kode_line_3
-    parallel: true
-    speak: 'npr: to rader for pid 4711, med hver sin innleggelsesdato.'
-  - draw:
-      - kode_line_4
-      - kode_line_5
-      - kode_line_6
-      - kode_line_7
-    speak: 'lmr: tre utleveringer, nitti DDD hver — to hundre og sytti DDD til sammen.'
-  - speak: Hva tror du DDD-summen blir etter koblingen?
-  - pause: 1.8
-  - draw:
-      - kode_line_8
-      - kode_line_9
-      - kode_line_10
-    speak: pd.merge på pid, uten dato og uten validate — en many-to-many-kobling som skjer helt i stillhet, så vi ber om radetall og DDD-sum.
-  - draw:
-      - kode_out
-    speak: Seks rader — og to hundre og sytti DDD er blitt fem hundre og førti.
-    delivery: grave
-  - camera:
-      center:
-        ref: kode_out
-      zoom: 1.8
-    speak: 'Hver utlevering telles på nytt for hver kontakt pasienten hadde: dobbelt her, fordi hun lå inne to ganger.'
-  - camera:
-      reset: true
-  - erase:
-      - kode
-      - kode_out
-    speak: 'Og oppblåsingen rammer hardest de sykeste: ti kontakter og tjue resepter gir to hundre rader for én eneste person, så nettopp de med mest sykdom veier tyngst i en analyse de aldri skulle dominert.'
-  - draw:
-      - konkl
-      - konkl_box
-      - konkl2
-    speak: Radene er ikke pasienter, de er par — og alt du summerer etter en slik kobling, teller den samme utleveringen om igjen.
----
-title: validate= som sperre mot stille feil
+
+    text tittel "Hvorfor ble det tre ganger så mange rader?" x 500 y 700 font_size 34 hidden true
+    box k1 "npr: kontakt 12.03" #2f6b8f hidden true
+    box k2 "npr: kontakt 04.09" #2f6b8f hidden true
+    box u1 "lmr: utlev. 20.02" #b5482e hidden true
+    box u2 "lmr: utlev. 18.05" #b5482e hidden true
+    box u3 "lmr: utlev. 14.08" #b5482e hidden true
+    label lab_npr "E11, pid 4711" left #2f6b8f attach_to k1 hidden true
+    label lab_lmr "A10BA02 — 90 DDD hver" right #b5482e attach_to u2 hidden true
+    edge e11 k1 -> u1 #8f887c hidden true
+    edge e12 k1 -> u2 #8f887c hidden true
+    edge e13 k1 -> u3 #8f887c hidden true
+    edge e21 k2 -> u1 #8f887c hidden true
+    edge e22 k2 -> u2 #8f887c hidden true
+    edge e23 k2 -> u3 #8f887c hidden true
+    text sum_text "2 kontakter × 3 utleveringer = 6 rader" x 500 y 110 font_size 30 hidden true
+    mark sum_box target sum_text kind box hidden true
+    ```python kode x 500 y 390 width 940 font_size 15 show left hidden true
+    import pandas as pd
+    npr = pd.DataFrame({"pid": [4711, 4711],
+                        "dato_inn": ["2019-03-12", "2019-09-04"]})
+    lmr = pd.DataFrame({"pid": [4711, 4711, 4711],
+                        "dato_utlev": ["2019-02-20", "2019-05-18",
+                                       "2019-08-14"],
+                        "ddd": [90, 90, 90]})
+    m = pd.merge(npr, lmr, on="pid")
+    print("rader:", len(npr), len(lmr), "->", len(m))
+    print("ddd:", lmr["ddd"].sum(), "->", m["ddd"].sum())
+    ```
+
+Nå som vi vet hva pid og en dato lar oss spørre om: en kobling på pid alene kan doble legemiddelbruken i materialet ditt uten å si et ord om det.
+    draw tittel
+
+Pasient 4711 har to kontakter i npr — én i mars, én i september — begge kodet E11.
+    draw k1 k2 lab_npr
+
+Samme pid har tre utleveringer i lmr: metformin, A10BA02, nitti DDD på hver pakning.
+    draw u1 u2 u3 lab_lmr
+
+Fem rader inn. Hvor mange rader kommer ut av pd.merge på pid?
+
+    pause 1.8
+
+Hver kontakt pares med hver utlevering — pandas har ingen datoinformasjon å velge med.
+    draw e11 e12 e13 e21 e22 e23 parallel true
+
+To ganger tre: seks rader, der vi bare hadde fem hendelser.
+    draw sum_text sum_box
+
+Marskontakten står nå sammen med augustutleveringen — et par ingen klinisk hendelse svarer til.
+    point at.ref e13 gesture circle
+
+La oss telle det samme i pandas, med tallene foran oss.
+    clear keep ["tittel"]
+
+npr: to rader for pid 4711, med hver sin innleggelsesdato.
+    draw kode kode_line_1 kode_line_2 kode_line_3 parallel true
+
+lmr: tre utleveringer, nitti DDD hver — to hundre og sytti DDD til sammen.
+    draw kode_line_4 kode_line_5 kode_line_6 kode_line_7
+
+Hva tror du DDD-summen blir etter koblingen?
+
+    pause 1.8
+
+pd.merge på pid, uten dato og uten validate — en many-to-many-kobling som skjer helt i stillhet, så vi ber om radetall og DDD-sum.
+    draw kode_line_8 kode_line_9 kode_line_10
+
+Seks rader — og to hundre og sytti DDD er blitt fem hundre og førti.
+    draw kode_out delivery grave
+
+Hver utlevering telles på nytt for hver kontakt pasienten hadde: dobbelt her, fordi hun lå inne to ganger.
+    camera center.ref kode_out zoom 1.8
+
+    camera reset true
+
+Og oppblåsingen rammer hardest de sykeste: ti kontakter og tjue resepter gir to hundre rader for én eneste person, så nettopp de med mest sykdom veier tyngst i en analyse de aldri skulle dominert.
+    erase kode kode_out
+
+Radene er ikke pasienter, de er par — og alt du summerer etter en slik kobling, teller den samme utleveringen om igjen.
+    text konkl "Radene er ikke pasienter — de er par" x 500 y 430 font_size 34
+    mark konkl_box target konkl kind box
+    text konkl2 "summen av ddd teller samme utlevering om igjen" #8f887c x 500 y 340 font_size 24
+
+## validate= som sperre mot stille feil
 voice: male
-elements:
-  - id: tittel
-    type: text
-    text: validate= — sperren mot stille feil
-    x: 500
-    'y': 702
-    font_size: 34
-  - id: kode
-    type: code
-    language: python
-    show: left
-    width: 920
-    x: 500
-    'y': 385
-    font_size: 15
-    code: |-
-      import pandas as pd
-      npr = pd.DataFrame({"pid": [1, 1, 2, 3], "icd10": "E11"})
-      lmr = pd.DataFrame({"pid": [1, 1, 1, 2, 2, 2, 3, 3, 3], "atc": "A10BA02"})
-      print("npr:", len(npr), "lmr:", len(lmr))
-      kobling = npr.merge(lmr, on="pid", how="inner")
-      print("etter merge:", len(kobling))
-      try:
-          npr.merge(lmr, on="pid", how="inner", validate="one_to_many")
-      except pd.errors.MergeError as e:
-          print("MergeError:", e)
-      kohort = npr.drop_duplicates("pid")
-      sjekk = kohort.merge(lmr, on="pid", how="inner", validate="one_to_many")
-      print("med unik pid:", len(sjekk))
-  - id: n_kontakt
-    type: node
-    shape: rect
-    text: E11-kontakt 04.03.2019
-    style:
-      color: '#2f6b8f'
-  - id: n_utlev
-    type: node
-    shape: rect
-    text: A10BA02 utlevert 17.11.2023
-    style:
-      color: '#b5482e'
-  - id: arr
-    type: arrow
-    from:
-      ref: n_kontakt
-    to:
-      ref: n_utlev
-    curved: true
-    style:
-      color: '#8f887c'
-  - id: lab_gap
-    type: label
-    text: samme pid — 4 år og 8 måneder imellom
-    attach_to: arr
-    side: above
-    style:
-      color: '#8f887c'
-  - id: t_ok
-    type: text
-    text: validate="one_to_many" → ingen feil
-    x: 500
-    'y': 248
-    font_size: 26
-  - id: t_konkl
-    type: text
-    text: Kardinalitet ≠ faglig mening
-    x: 500
-    'y': 158
-    font_size: 30
-    style:
-      color: '#b5482e'
-  - id: boks
-    type: annotation
-    target: t_konkl
-    kind: box
-commands:
-  - draw:
-      - tittel
-    speak: Nå som vi har sett fire kontakter og ni utleveringer bli tolv rader, skal vi få pandas til å nekte å gjøre den koblingen i det hele tatt.
-  - draw:
-      - kode
-      - kode_line_1
-      - kode_line_2
-      - kode_line_3
-    parallel: true
-    speak: Fire E11-kontakter fordelt på tre pasienter — pid 1 har to opphold — og ni A10-utleveringer.
-  - draw:
-      - kode_line_4
-      - kode_line_5
-      - kode_line_6
-    speak: 'Og her er koblingen fra forrige del: merge på pid alene, uten noe krav om hvor mange rader hver side har lov til å ha.'
-  - speak: Hvorfor sier ikke pandas fra her, når resultatet blir tre ganger så mange rader som npr?
-  - pause: 1.8
-  - highlight:
-      target:
-        - kode_line_5
-      effect: glow
-    speak: Fordi mange-til-mange er helt lovlig pandas — den kan ikke gjette hva du hadde tenkt deg.
-  - draw:
-      - kode_line_7
-      - kode_line_8
-      - kode_line_9
-      - kode_line_10
-    speak: 'Så vi sier antakelsen høyt: validate lik one_to_many lover at pid er unik i npr — kortformen er 1:m, og søsknene er m:1, 1:1 og m:m, der m:m er den som ikke sjekker noen ting.'
-  - draw:
-      - kode_line_11
-      - kode_line_12
-      - kode_line_13
-    speak: Nederst gjør vi det samme, men med én rad per pasient før koblingen.
-  - speak: Hva skriver skriptet ut nå — tolv rader, eller ingen tabell i det hele tatt?
-  - pause: 1.8
-  - draw:
-      - kode_out
-    speak: Fire og ni rader inn, tolv rader ut av den ubeskyttede merge-en — og så stopper det.
-  - camera:
-      center:
-        ref: kode_out
-      zoom: 1.8
-    speak: 'MergeError: Merge keys are not unique in left dataset; not a one-to-many merge.'
-  - camera:
-      reset: true
-    speak: 'Med drop_duplicates på pid går det gjennom: ni rader, én per utlevering, akkurat som lovet.'
-  - point:
-      at:
-        ref: kode_line_8
-      gesture: underline
-    speak: Styrken ligger i hvor feilen kommer — i linja som kobler, ikke tre steg senere i en tabell som ser helt fin ut.
-    delivery: grave
-  - clear:
-      keep:
-        - tittel
-    speak: Men betyr et grønt validate at koblingen faktisk er faglig riktig?
-  - pause: 1.8
-  - draw:
-      - n_kontakt
-      - arr
-      - n_utlev
-    speak: 'Her er et par som består testen med glans: en E11-kontakt i mars 2019 og en metforminutlevering i november 2023.'
-  - draw:
-      - lab_gap
-    speak: Samme pid, fire og et halvt år imellom — merge bryr seg ikke, og validate teller bare rader.
-  - draw:
-      - t_ok
-      - t_konkl
-      - boks
-    speak: validate= sperrer mot feil kardinalitet, ikke mot meningsløse koblinger — kravet til dato må du sette selv.
-    delivery: grave
----
-title: 'Left eller inner: to kohorter av de samme pasientene'
+
+    text tittel "validate= — sperren mot stille feil" x 500 y 702 font_size 34 hidden true
+    ```python kode x 500 y 385 width 920 font_size 15 show left hidden true
+    import pandas as pd
+    npr = pd.DataFrame({"pid": [1, 1, 2, 3], "icd10": "E11"})
+    lmr = pd.DataFrame({"pid": [1, 1, 1, 2, 2, 2, 3, 3, 3], "atc": "A10BA02"})
+    print("npr:", len(npr), "lmr:", len(lmr))
+    kobling = npr.merge(lmr, on="pid", how="inner")
+    print("etter merge:", len(kobling))
+    try:
+        npr.merge(lmr, on="pid", how="inner", validate="one_to_many")
+    except pd.errors.MergeError as e:
+        print("MergeError:", e)
+    kohort = npr.drop_duplicates("pid")
+    sjekk = kohort.merge(lmr, on="pid", how="inner", validate="one_to_many")
+    print("med unik pid:", len(sjekk))
+    ```
+    box n_kontakt "E11-kontakt 04.03.2019" #2f6b8f hidden true
+    box n_utlev "A10BA02 utlevert 17.11.2023" #b5482e hidden true
+    arrow arr n_kontakt -> n_utlev curved #8f887c hidden true
+
+Nå som vi har sett fire kontakter og ni utleveringer bli tolv rader, skal vi få pandas til å nekte å gjøre den koblingen i det hele tatt.
+    draw tittel
+
+Fire E11-kontakter fordelt på tre pasienter — pid 1 har to opphold — og ni A10-utleveringer.
+    draw kode kode_line_1 kode_line_2 kode_line_3 parallel true
+
+Og her er koblingen fra forrige del: merge på pid alene, uten noe krav om hvor mange rader hver side har lov til å ha.
+    draw kode_line_4 kode_line_5 kode_line_6
+
+Hvorfor sier ikke pandas fra her, når resultatet blir tre ganger så mange rader som npr?
+
+    pause 1.8
+
+Fordi mange-til-mange er helt lovlig pandas — den kan ikke gjette hva du hadde tenkt deg.
+    highlight kode_line_5 effect glow
+
+Så vi sier antakelsen høyt: validate lik one_to_many lover at pid er unik i npr — kortformen er 1:m, og søsknene er m:1, 1:1 og m:m, der m:m er den som ikke sjekker noen ting.
+    draw kode_line_7 kode_line_8 kode_line_9 kode_line_10
+
+Nederst gjør vi det samme, men med én rad per pasient før koblingen.
+    draw kode_line_11 kode_line_12 kode_line_13
+
+Hva skriver skriptet ut nå — tolv rader, eller ingen tabell i det hele tatt?
+
+    pause 1.8
+
+Fire og ni rader inn, tolv rader ut av den ubeskyttede merge-en — og så stopper det.
+    draw kode_out
+
+MergeError: Merge keys are not unique in left dataset; not a one-to-many merge.
+    camera center.ref kode_out zoom 1.8
+
+Med drop_duplicates på pid går det gjennom: ni rader, én per utlevering, akkurat som lovet.
+    camera reset true
+
+Styrken ligger i hvor feilen kommer — i linja som kobler, ikke tre steg senere i en tabell som ser helt fin ut.
+    point at.ref kode_line_8 gesture underline delivery grave
+
+Men betyr et grønt validate at koblingen faktisk er faglig riktig?
+    clear keep ["tittel"]
+
+    pause 1.8
+
+Her er et par som består testen med glans: en E11-kontakt i mars 2019 og en metforminutlevering i november 2023.
+    draw n_kontakt arr n_utlev
+
+Samme pid, fire og et halvt år imellom — merge bryr seg ikke, og validate teller bare rader.
+    label lab_gap "samme pid — 4 år og 8 måneder imellom" above #8f887c attach_to arr
+
+validate= sperrer mot feil kardinalitet, ikke mot meningsløse koblinger — kravet til dato må du sette selv.
+    text t_ok "validate=\"one_to_many\" → ingen feil" x 500 y 248 font_size 26
+    text t_konkl "Kardinalitet ≠ faglig mening" #b5482e x 500 y 158 font_size 30
+    mark boks target t_konkl kind box
+    delivery grave
+
+## Left eller inner: to kohorter av de samme pasientene
 voice: male
-template: venn_diagram
-params:
-  sets:
-    - label: E11 i npr (4 200)
-      only_label: 'Bare kode: 850'
-    - label: A10BA02 i lmr (5 100)
-      only_label: 'Bare metformin: 1 750'
-  overlap_labels:
-    ab: 'Begge: 3 350'
-  shade:
-    - a
-    - ab
-  universe_box: true
-  title: Samme pid-univers, to kohorter
-elements:
-  - id: kode
-    type: code
-    language: python
-    show: left
-    x: 500
-    'y': 390
-    width: 900
-    code: |-
-      import pandas as pd
-      e11 = pd.DataFrame({"pid": list(range(1, 4201))})
-      met = pd.DataFrame({"pid": list(range(851, 5951))})
-      kohort_left = e11.merge(met, on="pid", how="left", validate="1:1")
-      kohort_inner = e11.merge(met, on="pid", how="inner", validate="1:1")
-      print("left :", len(kohort_left), "pasienter")
-      print("inner:", len(kohort_inner), "pasienter")
-  - id: regel_head
-    type: text
-    text: Koblingsregelen
-    x: 500
-    'y': 580
-    font_size: 40
-  - id: r1
-    type: text
-    text: 1. Definer tidsvinduet før du kobler
-    x: 500
-    'y': 470
-    font_size: 30
-  - id: r2
-    type: text
-    text: 2. Valider kardinaliteten med validate=
-    x: 500
-    'y': 390
-    font_size: 30
-  - id: r3
-    type: text
-    text: 3. Velg join bevisst — den definerer kohorten
-    x: 500
-    'y': 310
-    font_size: 30
-  - id: mark
-    type: annotation
-    target: r3
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: 'Nå som validate= vokter kardinaliteten, gjenstår ett ord som stille bestemmer hvem kohorten din består av: left eller inner.'
-  - draw:
-      - universe
-  - draw:
-      - set_0
-      - set_label_0
-    speak: Denne sirkelen er 4 200 voksne med minst én E11-kontakt i npr — diabetesdiagnosen vår.
-  - draw:
-      - set_1
-      - set_label_1
-    speak: Og denne er 5 100 personer med minst én utlevering av metformin, A10BA02, i lmr.
-  - highlight:
-      target:
-        - set_0
-        - set_1
-      effect: glow
-    speak: Hvor mange av de 4 200 tror du finner igjen en metforminutlevering innenfor tidsvinduet på 365 dager?
-  - pause: 1.8
-  - draw:
-      - shade_ab
-      - region_label_ab
-    speak: 3 350 — snittet er pasientene som har både koden i npr og utleveringen i lmr.
-  - point:
-      at:
-        ref: region_label_ab
-      gesture: circle
-    speak: Det er nøyaktig denne mengden en inner join gir deg tilbake.
-  - point:
-      at:
-        ref: set_label_0
-      gesture: tap
-    speak: Men hvem er de 850 E11-pasientene som blir liggende utenfor snittet?
-  - pause: 1.8
-  - draw:
-      - shade_a
-      - region_label_a
-      - region_label_b
-    speak: Kostregulerte, insulinbrukere, og de som fikk diagnosen sent i året — mens de 1 750 på andre siden bruker metformin uten E11-kode, mange av dem for PCOS.
-  - camera:
-      center:
-        ref: shade_a
-      zoom: 1.8
-    speak: Etter en left join er de 850 fortsatt der, én rad hver, men med NaN i atc, dato_utlev og ddd.
-  - camera:
-      reset: true
-  - clear: {}
-  - draw:
-      - kode
-      - kode_line_1
-      - kode_line_2
-      - kode_line_3
-    parallel: true
-    speak: I pandas er hele forskjellen ett ord. Her er de to tabellene, redusert til én rad per pid.
-  - draw:
-      - kode_line_4
-      - kode_line_5
-    speak: Samme nøkkel, samme validate — bare left byttet ut med inner.
-  - draw:
-      - kode_line_6
-      - kode_line_7
-    speak: Hvor mange rader står igjen i hver av dem?
-  - pause: 1.5
-  - draw:
-      - kode_out
-    speak: 4 200 mot 3 350. Ett ord, 850 pasienter i forskjell.
-  - highlight:
-      target:
-        - kode_out
-      effect: glow
-    delivery: grave
-    speak: 'Og de 850 forsvinner ikke tilfeldig: inner join fjerner systematisk dem uten legemiddelbruk, og gjør kohorten sykere enn befolkningen du ville beskrive.'
-  - clear: {}
-  - draw:
-      - regel_head
-      - r1
-      - r2
-      - r3
-    speak: 'Koblingsregelen fra hele serien: definer tidsvinduet først, valider kardinaliteten med validate, og velg join-typen bevisst.'
-  - draw:
-      - mark
-    delivery: grave
-    speak: For pid og en dato gir deg bare retten til å koble — tidsvinduet og join-typen avgjør hvem pasientene dine faktisk er.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Holder én E11-kode for å kalle noen diabetiker?
-    x: 500
-    'y': 390
-    font_size: 35
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 4 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Holder én E11-kode for å kalle noen diabetiker?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+use: venn_diagram
+with:
+    sets:
+      - {label: E11 i npr (4 200), only_label: 'Bare kode: 850'}
+      - {label: A10BA02 i lmr (5 100), only_label: 'Bare metformin: 1 750'}
+    overlap_labels:
+      ab: 'Begge: 3 350'
+    shade:
+      - a
+      - ab
+    universe_box: true
+    title: Samme pid-univers, to kohorter
+
+    ```python kode x 500 y 390 width 900 show left hidden true
+    import pandas as pd
+    e11 = pd.DataFrame({"pid": list(range(1, 4201))})
+    met = pd.DataFrame({"pid": list(range(851, 5951))})
+    kohort_left = e11.merge(met, on="pid", how="left", validate="1:1")
+    kohort_inner = e11.merge(met, on="pid", how="inner", validate="1:1")
+    print("left :", len(kohort_left), "pasienter")
+    print("inner:", len(kohort_inner), "pasienter")
+    ```
+
+Nå som validate= vokter kardinaliteten, gjenstår ett ord som stille bestemmer hvem kohorten din består av: left eller inner.
+    draw title
+
+    draw universe
+
+Denne sirkelen er 4 200 voksne med minst én E11-kontakt i npr — diabetesdiagnosen vår.
+    draw set_0 set_label_0
+
+Og denne er 5 100 personer med minst én utlevering av metformin, A10BA02, i lmr.
+    draw set_1 set_label_1
+
+Hvor mange av de 4 200 tror du finner igjen en metforminutlevering innenfor tidsvinduet på 365 dager?
+    highlight set_0 set_1 effect glow
+
+    pause 1.8
+
+3 350 — snittet er pasientene som har både koden i npr og utleveringen i lmr.
+    draw shade_ab region_label_ab
+
+Det er nøyaktig denne mengden en inner join gir deg tilbake.
+    point at.ref region_label_ab gesture circle
+
+Men hvem er de 850 E11-pasientene som blir liggende utenfor snittet?
+    point at.ref set_label_0 gesture tap
+
+    pause 1.8
+
+Kostregulerte, insulinbrukere, og de som fikk diagnosen sent i året — mens de 1 750 på andre siden bruker metformin uten E11-kode, mange av dem for PCOS.
+    draw shade_a region_label_a region_label_b
+
+Etter en left join er de 850 fortsatt der, én rad hver, men med NaN i atc, dato_utlev og ddd.
+    camera center.ref shade_a zoom 1.8
+
+    camera reset true
+
+    clear
+
+I pandas er hele forskjellen ett ord. Her er de to tabellene, redusert til én rad per pid.
+    draw kode kode_line_1 kode_line_2 kode_line_3 parallel true
+
+Samme nøkkel, samme validate — bare left byttet ut med inner.
+    draw kode_line_4 kode_line_5
+
+Hvor mange rader står igjen i hver av dem?
+    draw kode_line_6 kode_line_7
+
+    pause 1.5
+
+4 200 mot 3 350. Ett ord, 850 pasienter i forskjell.
+    draw kode_out
+
+Og de 850 forsvinner ikke tilfeldig: inner join fjerner systematisk dem uten legemiddelbruk, og gjør kohorten sykere enn befolkningen du ville beskrive.
+    highlight kode_out effect glow delivery grave
+
+    clear
+
+Koblingsregelen fra hele serien: definer tidsvinduet først, valider kardinaliteten med validate, og velg join-typen bevisst.
+    text regel_head "Koblingsregelen" x 500 y 580 font_size 40
+    text r1 "1. Definer tidsvinduet før du kobler" x 500 y 470 font_size 30
+    text r2 "2. Valider kardinaliteten med validate=" x 500 y 390 font_size 30
+    text r3 "3. Velg join bevisst — den definerer kohorten" x 500 y 310 font_size 30
+
+For pid og en dato gir deg bare retten til å koble — tidsvinduet og join-typen avgjør hvem pasientene dine faktisk er.
+    mark mark target r3 kind box
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Holder én E11-kode for å kalle noen diabetiker?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:2 title "Hvordan leser du en 12 GB registerfil uten at maskinen dør?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:4 title "Holder én E11-kode for å kalle noen diabetiker?" size 320 x 735 y 395
+
+    link end_again href lecture:3 title "Watch again" form text open here x 500 y 160
+    text end_count "3 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

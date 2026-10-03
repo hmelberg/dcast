@@ -1,651 +1,336 @@
-playlist:
-  title: 'Tallene selv: bruk av diabeteslegemidler og kontakter i Norge'
-  prompt: 'Antall brukere av A10-legemidler per år, hentet fra Legemiddelregisterets åpne statistikkbank Alders- og kjønnsfordeling blant brukerne — hva ser du i pyramiden? Kontakttyper i NPR: døgnopphold, dagbehandling og poliklinikk side om side Fra groupby til figur: én tabell, tre plott, med matplotlib rett på pandas-objektet'
-  next:
-    title: Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn
-    href: https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.yaml
-  enroll: https://drawcast.anvil.app
----
-title: Hvor mange bruker A10?
+# Tallene selv: bruk av diabeteslegemidler og kontakter i Norge
+prompt: "Antall brukere av A10-legemidler per år, hentet fra Legemiddelregisterets åpne statistikkbank Alders- og kjønnsfordeling blant brukerne — hva ser du i pyramiden? Kontakttyper i NPR: døgnopphold, dagbehandling og poliklinikk side om side Fra groupby til figur: én tabell, tre plott, med matplotlib rett på pandas-objektet"
+next: {"title":"Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn","href":"https://drawcast.app/#gh=hmelberg/dcast/registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.cast"}
+enroll: https://drawcast.anvil.app
+
+## Hvor mange bruker A10?
 voice: male
-template: line_chart
-params:
-  x:
-    - 2010
-    - 2012
-    - 2014
-    - 2016
-    - 2018
-    - 2020
-    - 2022
-    - 2024
-  series:
-    - name: A10 – blodsukkersenkende
-      values:
-        - - 145
-          - 160
-          - 175
-        - - 145
-          - 160
-          - 175
-          - 190
-          - 205
-        - - 145
-          - 160
-          - 175
-          - 190
-          - 205
-          - 225
-          - 255
-          - 285
-  stage: 0
-  points: true
-  xlim:
-    - 2010
-    - 2024
-  ylim:
-    - 0
-    - 320
-  x_label: År
-  y_label: Brukere (tusen)
-  title: Brukere av A10-legemidler i Norge
-elements:
-  - id: n_lmr
-    type: node
-    shape: rect
-    text: lmr
-    x: 170
-    'y': 520
-  - id: lbl_lmr
-    type: label
-    text: én rad per utlevering
-    attach_to: n_lmr
-    side: below
-  - id: n_filt
-    type: node
-    shape: rect
-    text: atc starter på A10
-    x: 500
-    'y': 520
-  - id: n_cnt
-    type: node
-    shape: rect
-    text: unike pid per år
-    x: 830
-    'y': 520
-    style:
-      color: '#b5482e'
-  - id: a1
-    type: arrow
-    from:
-      ref: n_lmr
-    to:
-      ref: n_filt
-  - id: a2
-    type: arrow
-    from:
-      ref: n_filt
-    to:
-      ref: n_cnt
-  - id: code1
-    type: text
-    text: a10 = lmr[lmr.atc.str.startswith("A10")]
-    x: 500
-    'y': 340
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: code2
-    type: text
-    text: a10.groupby(a10.dato_utlev.dt.year).pid.nunique()
-    x: 500
-    'y': 285
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: mark
-    type: annotation
-    target: code2
-    kind: box
-  - id: teaser
-    type: text
-    text: 'Neste del: alder og kjønn bak den samme kurven'
-    x: 500
-    'y': 150
-    font_size: 26
-    style:
-      color: '#8f887c'
-commands:
-  - draw:
-      - title
-    speak: 'Fire deler, ett spørsmål: hva viser de norske registrene faktisk om diabetes — og treffer vårt eget uttrekk de samme tallene som den offentlige statistikken?'
-  - draw:
-      - axes
-    speak: 'Fasiten vi skal måle oss mot ligger åpent i Legemiddelregisterets statistikkbank: antall personer som henter minst ett A10-legemiddel i løpet av et år.'
-  - draw:
-      - line_1
-    speak: Rundt 2010 var det omtrent hundre og førtifem tusen — jeg runder til nærmeste fem tusen, for det er formen som betyr noe her.
-  - highlight:
-      target:
-        - line_1
-      effect: glow
-    speak: Tre prosent av befolkningen, altså grovt sagt én av tretti nordmenn, hvert eneste år.
-  - animate:
-      stage: 1
-    duration: 3
-    speak: Fram mot 2018 stiger den jevnt, noen tusen nye i året.
-  - animate:
-      stage: 2
-    duration: 3.5
-    easing: linear
-    speak: Så blir den brattere, og i dag nærmer vi oss to hundre og åtti tusen.
-  - camera:
-      center:
-        x: 800
-        'y': 470
-      zoom: 1.7
-      duration: 1.2
-    speak: Knekkpunktet ligger et sted rundt 2018.
-  - highlight:
-      target:
-        - line_1
-      effect: pulse
-    speak: Der tas GLP-1-analogene og SGLT2-hemmerne for alvor i bruk — metformin, A10BA02, er fortsatt klart vanligst, men veksten ligger i de nye gruppene.
-  - camera:
-      reset: true
-    speak: Og kurven teller utleveringer, ikke diagnoser.
-  - speak: De som behandles med kost og trening alene mangler helt, mens metformin ved PCOS og semaglutid mot fedme teller med — uten en eneste E11-kode bak seg.
-    delivery: grave
-  - clear: {}
-    speak: Kan vi så gjenskape nøyaktig denne kurven fra vårt eget uttrekk?
-  - draw:
-      - n_lmr
-      - lbl_lmr
-    speak: I lmr er én rad én utlevering, og samme person har lett tjue rader på ett år.
-  - draw:
-      - a1
-      - n_filt
-    speak: Vi filtrerer på ATC-koder som begynner på A10.
-  - draw:
-      - a2
-      - n_cnt
-    speak: Og teller unike pid per uttaksår — mennesker, ikke rader.
-  - draw:
-      - code1
-      - code2
-      - mark
-    speak: 'Tre ledd: filter, groupby på dato_utlev punktum dt punktum year, og nunique på pid.'
-  - draw:
-      - teaser
-    speak: Kurven er ikke diabetes i Norge — den er folk som hentet en A10-resept, og nunique er hele forskjellen mellom å telle resepter og å telle personer.
 level: basic
----
-title: 'Pyramiden: alder og kjønn'
+use: line_chart
+with:
+    x:
+      - 2010
+      - 2012
+      - 2014
+      - 2016
+      - 2018
+      - 2020
+      - 2022
+      - 2024
+    series:
+      - {name: A10 – blodsukkersenkende, values: [[145, 160, 175], [145, 160, 175, 190, 205], [145, 160, 175, 190, 205, 225, 255, 285]]}
+    stage: 0
+    points: true
+    xlim:
+      - 2010
+      - 2024
+    ylim:
+      - 0
+      - 320
+    x_label: År
+    y_label: Brukere (tusen)
+    title: Brukere av A10-legemidler i Norge
+
+    box n_lmr "lmr" x 170 y 520 hidden true
+    label lbl_lmr "én rad per utlevering" below attach_to n_lmr hidden true
+    box n_filt "atc starter på A10" x 500 y 520 hidden true
+    box n_cnt "unike pid per år" #b5482e x 830 y 520 hidden true
+    arrow a1 n_lmr -> n_filt hidden true
+    arrow a2 n_filt -> n_cnt hidden true
+
+Fire deler, ett spørsmål: hva viser de norske registrene faktisk om diabetes — og treffer vårt eget uttrekk de samme tallene som den offentlige statistikken?
+    draw title
+
+Fasiten vi skal måle oss mot ligger åpent i Legemiddelregisterets statistikkbank: antall personer som henter minst ett A10-legemiddel i løpet av et år.
+    draw axes
+
+Rundt 2010 var det omtrent hundre og førtifem tusen — jeg runder til nærmeste fem tusen, for det er formen som betyr noe her.
+    draw line_1
+
+Tre prosent av befolkningen, altså grovt sagt én av tretti nordmenn, hvert eneste år.
+    highlight line_1 effect glow
+
+Fram mot 2018 stiger den jevnt, noen tusen nye i året.
+    animate stage 1 duration 3
+
+Så blir den brattere, og i dag nærmer vi oss to hundre og åtti tusen.
+    animate stage 2 duration 3.5 easing linear
+
+Knekkpunktet ligger et sted rundt 2018.
+    camera center.x 800 center.y 470 zoom 1.7 duration 1.2
+
+Der tas GLP-1-analogene og SGLT2-hemmerne for alvor i bruk — metformin, A10BA02, er fortsatt klart vanligst, men veksten ligger i de nye gruppene.
+    highlight line_1 effect pulse
+
+Og kurven teller utleveringer, ikke diagnoser.
+    camera reset true
+
+De som behandles med kost og trening alene mangler helt, mens metformin ved PCOS og semaglutid mot fedme teller med — uten en eneste E11-kode bak seg.
+    delivery grave
+
+Kan vi så gjenskape nøyaktig denne kurven fra vårt eget uttrekk?
+    clear
+
+I lmr er én rad én utlevering, og samme person har lett tjue rader på ett år.
+    draw n_lmr lbl_lmr
+
+Vi filtrerer på ATC-koder som begynner på A10.
+    draw a1 n_filt
+
+Og teller unike pid per uttaksår — mennesker, ikke rader.
+    draw a2 n_cnt
+
+Tre ledd: filter, groupby på dato_utlev punktum dt punktum year, og nunique på pid.
+    text code1 "a10 = lmr[lmr.atc.str.startswith(\"A10\")]" #2f6b8f x 500 y 340 font_size 24
+    text code2 "a10.groupby(a10.dato_utlev.dt.year).pid.nunique()" #2f6b8f x 500 y 285 font_size 24
+    mark mark target code2 kind box
+
+Kurven er ikke diabetes i Norge — den er folk som hentet en A10-resept, og nunique er hele forskjellen mellom å telle resepter og å telle personer.
+    text teaser "Neste del: alder og kjønn bak den samme kurven" #8f887c x 500 y 150 font_size 26
+
+## Pyramiden: alder og kjønn
 voice: male
-template: bar_chart
-params:
-  labels:
-    - 18-39
-    - 40-49
-    - 50-59
-    - 60-69
-    - 70-79
-    - 80+
-  series:
-    - name: Menn
-      values: '{agg.menn}'
-    - name: Kvinner
-      values: '{agg.kvinner}'
-  value_labels: true
-  x_label: Aldersgruppe
-  y_label: Brukere (tusen)
-  title: A10-brukere etter alder og kjønn
-elements:
-  - id: agg
-    type: code
-    language: brython
-    show: code
-    code: |-
-      import pandas as pd
-      # tab = kohort.groupby(["aldersgruppe", "kjonn"]).pid.nunique().unstack()
-      tab = pd.DataFrame({
-          "alder": ["18-39", "40-49", "50-59", "60-69", "70-79", "80+"],
-          "Menn": [5, 13, 25, 38, 41, 18],
-          "Kvinner": [4, 9, 18, 28, 31, 21]})
-      menn = tab["Menn"].tolist()
-      kvinner = tab["Kvinner"].tolist()
-  - id: mark_topp
-    type: annotation
-    target: bar_5
-    kind: circle
-commands:
-  - draw:
-      - title
-    speak: 'Nå som vi vet at rundt 250 000 nordmenn henter minst ett A10-legemiddel i året, avgjør neste spørsmål om kurven fra forrige del i det hele tatt kan tolkes: hvem er de?'
-  - draw:
-      - agg
-      - agg_line_1
-      - agg_line_2
-    parallel: true
-    speak: 'Én linje i pandas gjør hele jobben: grupper kohort på aldersgruppe og kjønn, og tell unike pid-er.'
-  - draw:
-      - agg_line_3
-      - agg_line_4
-      - agg_line_5
-      - agg_line_6
-    parallel: true
-    speak: Her limer jeg resultatet inn som tall i tusen — avrundet og illustrativt, men formen er den registrene faktisk viser.
-  - draw:
-      - agg_line_7
-      - agg_line_8
-    parallel: true
-    speak: To lister, én for menn og én for kvinner, er alt figuren trenger.
-  - draw:
-      - axes
-  - draw:
-      - bar_1
-      - bar_2
-      - bar_3
-    parallel: true
-    speak: 'Under femti år er det tynt: ni tusen brukere før førti, tjueto tusen i førtiårene.'
-  - pause: 0.3
-  - draw:
-      - bar_4
-      - bar_5
-      - bar_6
-      - legend
-    parallel: true
-    speak: Fra seksti og oppover løfter det seg brått — over halvparten av alle brukerne er mellom 60 og 80 år.
-  - highlight:
-      target:
-        - bar_5
-      effect: glow
-    speak: 'Tyngdepunktet ligger i syttiårene: omtrent 72 000 brukere i én eneste tiårsgruppe.'
-  - camera:
-      center:
-        ref: bar_6
-      zoom: 2
-    speak: Og så faller søylene etter åtti, ned mot førti tusen til sammen.
-  - highlight:
-      target:
-        - bar_6
-      effect: pulse
-    speak: Ikke fordi risikoen synker — men fordi det er langt færre nordmenn igjen over åtti.
-    delivery: grave
-  - camera:
-      reset: true
-    speak: En søyle er risiko ganget med folketall, så pyramiden viser hvor pasientene er, ikke hvor risikoen er høyest.
-  - focus:
-      target:
-        - bar_3
-        - bar_4
-        - bar_5
-    speak: 'Kjønnsforskjellen er liten, men systematisk: fra femti til åtti er mennene flest i hver gruppe, rundt 56 prosent samlet.'
-  - point:
-      at:
-        ref: bar_6
-      gesture: circle
-    speak: Bare blant de aller eldste snur det, der er kvinnene i flertall — rett og slett fordi flere av dem lever så lenge.
-  - clear:
-      keep:
-        - title
-        - axes
-        - bar_1
-        - bar_2
-        - bar_3
-        - bar_4
-        - bar_5
-        - bar_6
-        - legend
-    speak: Uten koden i veien er det formen som argumenterer.
-  - draw:
-      - mark_topp
-    speak: Når de store etterkrigskullene fyller nettopp disse feltene, vokser antallet brukere selv om risikoen i hver aldersgruppe skulle stå helt stille.
-  - speak: 'Derfor aldersstandardiserer vi: uten alders- og kjønnsfordelingen måler kurven fra forrige del like mye demografi som diabetes.'
-    delivery: grave
 level: basic
----
-title: Tre kontakttyper side om side
+use: bar_chart
+with:
+    labels:
+      - 18-39
+      - 40-49
+      - 50-59
+      - 60-69
+      - 70-79
+      - 80+
+    series:
+      - {name: Menn, values: '{agg.menn}'}
+      - {name: Kvinner, values: '{agg.kvinner}'}
+    value_labels: true
+    x_label: Aldersgruppe
+    y_label: Brukere (tusen)
+    title: A10-brukere etter alder og kjønn
+
+    ```brython agg show code hidden true
+    import pandas as pd
+    # tab = kohort.groupby(["aldersgruppe", "kjonn"]).pid.nunique().unstack()
+    tab = pd.DataFrame({
+        "alder": ["18-39", "40-49", "50-59", "60-69", "70-79", "80+"],
+        "Menn": [5, 13, 25, 38, 41, 18],
+        "Kvinner": [4, 9, 18, 28, 31, 21]})
+    menn = tab["Menn"].tolist()
+    kvinner = tab["Kvinner"].tolist()
+    ```
+
+Nå som vi vet at rundt 250 000 nordmenn henter minst ett A10-legemiddel i året, avgjør neste spørsmål om kurven fra forrige del i det hele tatt kan tolkes: hvem er de?
+    draw title
+
+Én linje i pandas gjør hele jobben: grupper kohort på aldersgruppe og kjønn, og tell unike pid-er.
+    draw agg agg_line_1 agg_line_2 parallel true
+
+Her limer jeg resultatet inn som tall i tusen — avrundet og illustrativt, men formen er den registrene faktisk viser.
+    draw agg_line_3 agg_line_4 agg_line_5 agg_line_6 parallel true
+
+To lister, én for menn og én for kvinner, er alt figuren trenger.
+    draw agg_line_7 agg_line_8 parallel true
+
+    draw axes
+
+Under femti år er det tynt: ni tusen brukere før førti, tjueto tusen i førtiårene.
+    draw bar_1 bar_2 bar_3 parallel true
+
+    pause 0.3
+
+Fra seksti og oppover løfter det seg brått — over halvparten av alle brukerne er mellom 60 og 80 år.
+    draw bar_4 bar_5 bar_6 legend parallel true
+
+Tyngdepunktet ligger i syttiårene: omtrent 72 000 brukere i én eneste tiårsgruppe.
+    highlight bar_5 effect glow
+
+Og så faller søylene etter åtti, ned mot førti tusen til sammen.
+    camera center.ref bar_6 zoom 2
+
+Ikke fordi risikoen synker — men fordi det er langt færre nordmenn igjen over åtti.
+    highlight bar_6 effect pulse delivery grave
+
+En søyle er risiko ganget med folketall, så pyramiden viser hvor pasientene er, ikke hvor risikoen er høyest.
+    camera reset true
+
+Kjønnsforskjellen er liten, men systematisk: fra femti til åtti er mennene flest i hver gruppe, rundt 56 prosent samlet.
+    focus bar_3 bar_4 bar_5
+
+Bare blant de aller eldste snur det, der er kvinnene i flertall — rett og slett fordi flere av dem lever så lenge.
+    point at.ref bar_6 gesture circle
+
+Uten koden i veien er det formen som argumenterer.
+    clear keep ["title","axes","bar_1","bar_2","bar_3","bar_4","bar_5","bar_6","legend"]
+
+Når de store etterkrigskullene fyller nettopp disse feltene, vokser antallet brukere selv om risikoen i hver aldersgruppe skulle stå helt stille.
+    mark mark_topp target bar_5 kind circle
+
+Derfor aldersstandardiserer vi: uten alders- og kjønnsfordelingen måler kurven fra forrige del like mye demografi som diabetes.
+    delivery grave
+
+## Tre kontakttyper side om side
 voice: male
-template: bar_chart
-params:
-  labels:
-    - '2019'
-    - '2020'
-    - '2021'
-    - '2022'
-    - '2023'
-  series:
-    - name: Døgnopphold
-      values:
-        - - 6800
-          - 5900
-          - 6200
-          - 6600
-          - 6900
-        - - 6800
-          - 5900
-          - 6200
-          - 6600
-          - 6900
-        - - 6800
-          - 5900
-          - 6200
-          - 6600
-          - 6900
-    - name: Dagbehandling
-      values:
-        - - 0
-          - 0
-          - 0
-          - 0
-          - 0
-        - - 3100
-          - 2400
-          - 2800
-          - 3200
-          - 3400
-        - - 3100
-          - 2400
-          - 2800
-          - 3200
-          - 3400
-    - name: Poliklinikk
-      values:
-        - - 0
-          - 0
-          - 0
-          - 0
-          - 0
-        - - 0
-          - 0
-          - 0
-          - 0
-          - 0
-        - - 48200
-          - 46100
-          - 50400
-          - 54300
-          - 57100
-  stage: 0
-  ylim:
-    - 0
-    - 62000
-  value_labels: false
-  x_label: År
-  y_label: Antall kontakter
-  title: Kontakter i npr, kohorten 2019–2023 (illustrative tall)
-elements:
-  - id: t1
-    type: text
-    x: 500
-    'y': 520
-    font_size: 30
-    text: 1 rad i npr = 1 kontakt, ikke 1 pasient
-  - id: t2
-    type: text
-    x: 500
-    'y': 420
-    font_size: 30
-    text: Teller du rader uten kontakttype, teller du poliklinikk
-  - id: mark_t2
-    type: annotation
-    target: t2
-    kind: box
-  - id: t3
-    type: text
-    x: 500
-    'y': 320
-    font_size: 30
-    text: Døgnoppholdene er få — og dyrest per kontakt
-commands:
-  - draw:
-      - title
-    speak: 'Nå som vi har sett hvem brukerne er: her er kontaktene deres i npr — og formen på figuren avgjør om en enkel radtelling måler det du tror.'
-  - draw:
-      - axes
-  - draw:
-      - bar_1
-      - bar_2
-      - bar_3
-      - bar_4
-      - bar_5
-      - legend
-    parallel: true
-    speak: 'Først døgnoppholdene: rundt 6 800 i 2019 — radene med både dato_inn og dato_ut, altså minst én natt i seng.'
-  - camera:
-      center:
-        ref: bar_2
-      zoom: 2.5
-    speak: 'Zoomer vi inn på 2020, ser du dippen: 5 900 opphold, da planlagt aktivitet ble utsatt gjennom pandemiåret.'
-  - camera:
-      reset: true
-    speak: Tilbake til hele bildet — søylene er små fordi skalaen allerede er satt for det som kommer.
-  - animate:
-      stage: 1
-    duration: 2.5
-    speak: 'Dagbehandling er enda færre: rundt 3 000 i året, planlagte prosedyrer der pasienten reiser hjem samme dag.'
-  - point:
-      at:
-        ref: bar_3
-      gesture: tap
-    speak: Til sammen ligger seng og dagbehandling under ti tusen kontakter i året.
-  - animate:
-      stage: 2
-    duration: 3
-    delivery: grave
-    speak: 'Og så poliklinikken: over 48 000 konsultasjoner i 2019 — resten av figuren forsvinner nesten.'
-  - highlight:
-      target:
-        - bar_1
-      effect: glow
-    speak: Sju polikliniske kontakter for hvert eneste døgnopphold, i samme kohort og samme år.
-  - highlight:
-      target:
-        - bar_2
-      effect: glow
-    speak: I 2020 falt poliklinikken bare svakt — telefon- og videokonsultasjoner ble rapportert til npr og holdt tallet oppe.
-  - point:
-      at:
-        ref: bar_5
-      gesture: circle
-    speak: Så vokser den til 57 100 i 2023, mens døgnoppholdene ligger flatt rundt 6 900.
-  - speak: 'Nasjonalt er mønsteret det samme: polikliniske konsultasjoner telles i millioner, døgnopphold i hundretusener.'
-  - clear:
-      keep:
-        - title
-    speak: Hva betyr denne skjevheten når du analyserer npr?
-  - draw:
-      - t1
-    speak: En rad i npr er én kontakt, ikke én pasient — og kontaktene fordeler seg svært skjevt.
-  - draw:
-      - t2
-      - mark_t2
-    speak: Teller du rader uten å skille på kontakttype, teller du i praksis poliklinikk.
-  - draw:
-      - t3
-    speak: Døgnoppholdene er få, men de er de dyreste — et døgn i seng koster mange ganger en poliklinisk time, så volum og ressursbruk peker hver sin vei.
-  - speak: Poliklinikken bærer volumet, døgnoppholdene bærer kostnaden — og hvilken du teller, avgjør hva analysen din faktisk måler.
 level: basic
----
-title: Fra groupby til figur
+use: bar_chart
+with:
+    labels:
+      - '2019'
+      - '2020'
+      - '2021'
+      - '2022'
+      - '2023'
+    series:
+      - {name: Døgnopphold, values: [[6800, 5900, 6200, 6600, 6900], [6800, 5900, 6200, 6600, 6900], [6800, 5900, 6200, 6600, 6900]]}
+      - {name: Dagbehandling, values: [[0, 0, 0, 0, 0], [3100, 2400, 2800, 3200, 3400], [3100, 2400, 2800, 3200, 3400]]}
+      - {name: Poliklinikk, values: [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [48200, 46100, 50400, 54300, 57100]]}
+    stage: 0
+    ylim:
+      - 0
+      - 62000
+    value_labels: false
+    x_label: År
+    y_label: Antall kontakter
+    title: Kontakter i npr, kohorten 2019–2023 (illustrative tall)
+
+Nå som vi har sett hvem brukerne er: her er kontaktene deres i npr — og formen på figuren avgjør om en enkel radtelling måler det du tror.
+    draw title
+
+    draw axes
+
+Først døgnoppholdene: rundt 6 800 i 2019 — radene med både dato_inn og dato_ut, altså minst én natt i seng.
+    draw bar_1 bar_2 bar_3 bar_4 bar_5 legend parallel true
+
+Zoomer vi inn på 2020, ser du dippen: 5 900 opphold, da planlagt aktivitet ble utsatt gjennom pandemiåret.
+    camera center.ref bar_2 zoom 2.5
+
+Tilbake til hele bildet — søylene er små fordi skalaen allerede er satt for det som kommer.
+    camera reset true
+
+Dagbehandling er enda færre: rundt 3 000 i året, planlagte prosedyrer der pasienten reiser hjem samme dag.
+    animate stage 1 duration 2.5
+
+Til sammen ligger seng og dagbehandling under ti tusen kontakter i året.
+    point at.ref bar_3 gesture tap
+
+Og så poliklinikken: over 48 000 konsultasjoner i 2019 — resten av figuren forsvinner nesten.
+    animate stage 2 delivery grave duration 3
+
+Sju polikliniske kontakter for hvert eneste døgnopphold, i samme kohort og samme år.
+    highlight bar_1 effect glow
+
+I 2020 falt poliklinikken bare svakt — telefon- og videokonsultasjoner ble rapportert til npr og holdt tallet oppe.
+    highlight bar_2 effect glow
+
+Så vokser den til 57 100 i 2023, mens døgnoppholdene ligger flatt rundt 6 900.
+    point at.ref bar_5 gesture circle
+
+Nasjonalt er mønsteret det samme: polikliniske konsultasjoner telles i millioner, døgnopphold i hundretusener.
+
+Hva betyr denne skjevheten når du analyserer npr?
+    clear keep ["title"]
+
+En rad i npr er én kontakt, ikke én pasient — og kontaktene fordeler seg svært skjevt.
+    text t1 "1 rad i npr = 1 kontakt, ikke 1 pasient" x 500 y 520 font_size 30
+
+Teller du rader uten å skille på kontakttype, teller du i praksis poliklinikk.
+    text t2 "Teller du rader uten kontakttype, teller du poliklinikk" x 500 y 420 font_size 30
+    mark mark_t2 target t2 kind box
+
+Døgnoppholdene er få, men de er de dyreste — et døgn i seng koster mange ganger en poliklinisk time, så volum og ressursbruk peker hver sin vei.
+    text t3 "Døgnoppholdene er få — og dyrest per kontakt" x 500 y 320 font_size 30
+
+Poliklinikken bærer volumet, døgnoppholdene bærer kostnaden — og hvilken du teller, avgjør hva analysen din faktisk måler.
+
+## Fra groupby til figur
 voice: male
-elements:
-  - id: tittel
-    type: text
-    text: Fra groupby til figur
-    x: 500
-    'y': 712
-    font_size: 34
-  - id: kode
-    type: code
-    language: python
-    show: left
-    lines: 8
-    width: 900
-    x: 500
-    'y': 340
-    code: |-
-      import pandas as pd
-      import matplotlib.pyplot as plt
-      lmr = pd.DataFrame({"aar": [2014, 2017, 2020, 2023], "n": [214, 236, 252, 268]})
-      alder = pd.DataFrame({"gruppe": ["45-59", "60-69", "70-79", "80+"] * 2,
-                            "kjonn": ["Kvinner"] * 4 + ["Menn"] * 4,
-                            "n": [22, 33, 34, 22, 30, 43, 40, 19]})
-      npr = pd.DataFrame({"type": ["Døgn", "Dag", "Poliklinikk"], "n": [41, 96, 612]})
-      plt.figure(); _ = lmr.groupby("aar")["n"].sum().plot(marker="o")
-      plt.title("A10-brukere per år (tusen)")
-      plt.figure(); _ = alder.groupby(["gruppe", "kjonn"])["n"].sum().unstack().plot.barh()
-      plt.title("Alder og kjønn (tusen)")
-      plt.figure(); _ = npr.groupby("type")["n"].sum().plot.bar()
-      plt.title("Kontakttyper i NPR (tusen)")
-    figures: 3
-  - id: steg1
-    type: text
-    text: 1   groupby("kolonne")
-    x: 500
-    'y': 520
-    font_size: 30
-  - id: steg2
-    type: text
-    text: 2   .sum()  eller  .size()
-    x: 500
-    'y': 440
-    font_size: 30
-  - id: steg3
-    type: text
-    text: 3   .plot()   →   figur
-    x: 500
-    'y': 360
-    font_size: 30
-  - id: mark
-    type: annotation
-    target: steg3
-    kind: box
-commands:
-  - draw:
-      - tittel
-    speak: 'Nå som vi har sett de tre kontakttypene side om side: alle tre figurene i denne forelesningen kommer ut av det samme grepet, og det sparer deg for å skrive tre ulike plottescript.'
-  - draw:
-      - kode
-      - kode_line_1
-      - kode_line_2
-    parallel: true
-    speak: pandas og matplotlib — det er hele verktøykassa vi trenger for å tegne tallene selv.
-  - draw:
-      - kode_line_3
-    speak: 'Årstallene fra statistikkbanken: rundt 214 000 A10-brukere i 2014, rundt 268 000 i 2023 — avrundede tall, det er størrelsesordenen som teller.'
-  - draw:
-      - kode_line_4
-      - kode_line_5
-      - kode_line_6
-      - kode_line_7
-    parallel: true
-    speak: Så alder og kjønn i tusen brukere, og kontaktene i NPR fordelt på døgn, dag og poliklinikk.
-  - pause: 0.4
-  - draw:
-      - kode_line_8
-      - kode_line_9
-    parallel: true
-    speak: 'Og her er mønsteret: groupby, én aggregering, og så punktum plot rett på pandas-objektet.'
-  - draw:
-      - kode_line_10
-      - kode_line_11
-    parallel: true
-    speak: Samme tre ledd for pyramiden — unstack snur kjønn ut i hver sin kolonne, barh legger stolpene vannrett.
-  - draw:
-      - kode_line_12
-      - kode_line_13
-    parallel: true
-    speak: Og samme tre ledd en tredje gang for kontakttypene.
-  - draw:
-      - kode_fig_1
-    speak: 'Første plott: kurven stiger jevnt gjennom hele tiåret — omtrent en kvart million nordmenn henter et A10-legemiddel i året.'
-  - point:
-      at:
-        ref: kode_fig_1
-      gesture: underline
-    speak: Ingen knekk, ingen hopp — kronisk sykdom beveger seg sakte, og det er nettopp derfor et enkeltår aldri er noe varsku.
-  - draw:
-      - kode_fig_2
-    speak: 'Andre plott, samme tre ledd: tyngdepunktet blant brukerne ligger i 60- og 70-årene.'
-  - camera:
-      center:
-        ref: kode_fig_2
-      zoom: 1.8
-    speak: Og stolpene er skjeve — det er flere menn enn kvinner blant brukerne, slik type 2-diabetes fordeler seg i Norge.
-  - camera:
-      reset: true
-  - draw:
-      - kode_fig_3
-    speak: 'Tredje plott: poliklinikk knuser de to andre søylene.'
-  - highlight:
-      target:
-        - kode_fig_3
-      effect: glow
-    speak: Men ti døgn på sengepost er én rad, og en kontroll på tjue minutter er også én rad — søylen teller kontakter, ikke ressursbruk.
-  - pause: 0.5
-  - clear:
-      keep:
-        - tittel
-  - draw:
-      - steg1
-      - steg2
-      - steg3
-    speak: 'Oppskriften er den samme uansett hvilket register du står i: grupper, aggreger, tegn.'
-  - draw:
-      - mark
-    speak: Det siste leddet koster én linje, fordi plot ligger rett på pandas-objektet.
-  - speak: Tre figurer, tre registre, ett grep — når kohorten først er bygget, er tallene selv bare én groupby unna.
-    delivery: grave
 level: basic
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 8 of 8
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+
+    text tittel "Fra groupby til figur" x 500 y 712 font_size 34 hidden true
+    ```python kode x 500 y 340 width 900 show left lines 8 figures 3 hidden true
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    lmr = pd.DataFrame({"aar": [2014, 2017, 2020, 2023], "n": [214, 236, 252, 268]})
+    alder = pd.DataFrame({"gruppe": ["45-59", "60-69", "70-79", "80+"] * 2,
+                          "kjonn": ["Kvinner"] * 4 + ["Menn"] * 4,
+                          "n": [22, 33, 34, 22, 30, 43, 40, 19]})
+    npr = pd.DataFrame({"type": ["Døgn", "Dag", "Poliklinikk"], "n": [41, 96, 612]})
+    plt.figure(); _ = lmr.groupby("aar")["n"].sum().plot(marker="o")
+    plt.title("A10-brukere per år (tusen)")
+    plt.figure(); _ = alder.groupby(["gruppe", "kjonn"])["n"].sum().unstack().plot.barh()
+    plt.title("Alder og kjønn (tusen)")
+    plt.figure(); _ = npr.groupby("type")["n"].sum().plot.bar()
+    plt.title("Kontakttyper i NPR (tusen)")
+    ```
+
+Nå som vi har sett de tre kontakttypene side om side: alle tre figurene i denne forelesningen kommer ut av det samme grepet, og det sparer deg for å skrive tre ulike plottescript.
+    draw tittel
+
+pandas og matplotlib — det er hele verktøykassa vi trenger for å tegne tallene selv.
+    draw kode kode_line_1 kode_line_2 parallel true
+
+Årstallene fra statistikkbanken: rundt 214 000 A10-brukere i 2014, rundt 268 000 i 2023 — avrundede tall, det er størrelsesordenen som teller.
+    draw kode_line_3
+
+Så alder og kjønn i tusen brukere, og kontaktene i NPR fordelt på døgn, dag og poliklinikk.
+    draw kode_line_4 kode_line_5 kode_line_6 kode_line_7 parallel true
+
+    pause 0.4
+
+Og her er mønsteret: groupby, én aggregering, og så punktum plot rett på pandas-objektet.
+    draw kode_line_8 kode_line_9 parallel true
+
+Samme tre ledd for pyramiden — unstack snur kjønn ut i hver sin kolonne, barh legger stolpene vannrett.
+    draw kode_line_10 kode_line_11 parallel true
+
+Og samme tre ledd en tredje gang for kontakttypene.
+    draw kode_line_12 kode_line_13 parallel true
+
+Første plott: kurven stiger jevnt gjennom hele tiåret — omtrent en kvart million nordmenn henter et A10-legemiddel i året.
+    draw kode_fig_1
+
+Ingen knekk, ingen hopp — kronisk sykdom beveger seg sakte, og det er nettopp derfor et enkeltår aldri er noe varsku.
+    point at.ref kode_fig_1 gesture underline
+
+Andre plott, samme tre ledd: tyngdepunktet blant brukerne ligger i 60- og 70-årene.
+    draw kode_fig_2
+
+Og stolpene er skjeve — det er flere menn enn kvinner blant brukerne, slik type 2-diabetes fordeler seg i Norge.
+    camera center.ref kode_fig_2 zoom 1.8
+
+    camera reset true
+
+Tredje plott: poliklinikk knuser de to andre søylene.
+    draw kode_fig_3
+
+Men ti døgn på sengepost er én rad, og en kontroll på tjue minutter er også én rad — søylen teller kontakter, ikke ressursbruk.
+    highlight kode_fig_3 effect glow
+
+    pause 0.5
+
+    clear keep ["tittel"]
+
+Oppskriften er den samme uansett hvilket register du står i: grupper, aggreger, tegn.
+    text steg1 "1   groupby(\"kolonne\")" x 500 y 520 font_size 30
+    text steg2 "2   .sum()  eller  .size()" x 500 y 440 font_size 30
+    text steg3 "3   .plot()   →   figur" x 500 y 360 font_size 30
+
+Det siste leddet koster én linje, fordi plot ligger rett på pandas-objektet.
+    mark mark target steg3 kind box
+
+Tre figurer, tre registre, ett grep — når kohorten først er bygget, er tallene selv bare én groupby unna.
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:6 title "Tid er alt: washout, ny bruker og legemiddeldekning i pandas" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:8 title "Hva registrene ikke måler — og hvorfor analysen din må tåle innsyn" size 320 x 735 y 395
+
+    link end_again href lecture:7 title "Watch again" form text open here x 500 y 160
+    text end_count "7 of 8" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
