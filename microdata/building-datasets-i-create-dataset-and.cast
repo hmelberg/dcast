@@ -1,1285 +1,512 @@
-playlist:
-  title: 'Building datasets I: create-dataset and the four shapes of import'
-  prompt: Why does `import db/BEFOLKNING_KJOENN as sex` need no date while `import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage` needs two? What is the difference between a fixed variable, a status variable measured on a date, an accumulated variable measured over a period and an event variable? What happens to the rows of your dataset the first time you import — and why is the first import the one that defines the population?
-  next:
-    title: 'Building datasets II: collapse and merge, or how to change the unit of analysis'
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/building-datasets-ii-collapse-and-merge.yaml
----
-title: Building datasets I — 1. The empty dataset
-level: advanced
+# Building datasets I: create-dataset and the four shapes of import
+prompt: "Why does `import db/BEFOLKNING_KJOENN as sex` need no date while `import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage` needs two? What is the difference between a fixed variable, a status variable measured on a date, an accumulated variable measured over a period and an event variable? What happens to the rows of your dataset the first time you import — and why is the first import the one that defines the population?"
+next: {"title":"Building datasets II: collapse and merge, or how to change the unit of analysis","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/building-datasets-ii-collapse-and-merge.cast"}
+
+## Building datasets I — 1. The empty dataset
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 6
-    width: 960
-    font_size: 17
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
-      // refused: import db/INNTEKT_WLONN as wage
-    marks:
-      - BEFOLKNING_KJOENN as sex
-      - 2015-01-01 to 2015-12-31
-      - text: import db/INNTEKT_WLONN as wage
-        kind: strike
-commands:
-  - card:
-      title: Building datasets I
-      subtitle: 1. The empty dataset
-    speak: Across these five parts we build the gender-gap dataset from nothing, and see why a variable's shape in time — not your taste — dictates what its import line looks like.
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: 'We are back in the script from lecture one. Line one is the handshake: version fifty-four of the FDB datastore, addressed from here on as db — and check the catalogue for the current version before you run it.'
-  - draw:
-      - md_line_2
-    speak: Then create-dataset persons. This is the line people misread, because it fetches nothing at all.
-  - speak: How many rows does persons hold at this moment — five million, or none?
-  - pause: 1.8
-  - highlight:
-      target:
-        - md_line_2
-      effect: glow
-    speak: 'None. Zero rows, zero columns: a named, empty frame on the server, and your only handle on it.'
-  - point:
-      at:
-        ref: md_line_2
-      gesture: underline
-    speak: And you will never see those rows — a microdata dataset is something you compute on, not a spreadsheet you scroll.
-  - draw:
-      - md_line_3
-    speak: 'Now the first real import: sex, from BEFOLKNING_KJOENN — and notice what is missing from the line.'
-  - draw:
-      - md_mark_1
-    speak: Variable, alias, and nothing else. No date anywhere in it.
-  - speak: Ask yourself what a date would even mean there — sex on the first of January 2015, as opposed to sex in March?
-  - pause: 1.5
-  - draw:
-      - md_line_4
-    speak: Now wage income for those same people, and suddenly the line carries two dates.
-  - draw:
-      - md_mark_2
-    speak: 'First of January to the thirty-first of December: wage income is not a state you can photograph, it is a sum accumulated across that window.'
-  - quiz:
-      intro: A quick check.
-      question: Why does INNTEKT_WLONN take a period while BEFOLKNING_KJOENN takes no date?
-      choices:
-        - Income data are updated more often
-        - Income is accumulated over an interval; sex is fixed in time
-        - Two dates make the query run faster
-        - The datastore holds income only yearly
-      correct: 2
-      right: Wage income exists only as a sum over an interval, so the interval is part of the value; sex has one value and no time index at all.
-      wrong: It is not about update frequency or speed — it is about whether the variable has a value at an instant, over a span, or outside time.
-  - draw:
-      - md_line_5
-    speak: Which is why this version, written without a period, is not merely sloppy.
-  - draw:
-      - md_mark_3
-    speak: There is no such number as a person's wage income at an instant, so the script is refused rather than quietly handed a default year.
-  - speak: 'And municipality sits between the two: one value at a time, so exactly one date — one shape per line, and there turn out to be four of them.'
-  - quiz:
-      question: What does create-dataset persons put into your dataset?
-      choices:
-        - Everyone in the population
-        - Nothing — it stays empty until the first import
-        - The variables named later in the script
-      correct: 2
-      right: It creates an empty named dataset; rows appear only with the first import — which is what makes that first import so consequential.
-  - highlight:
-      target:
-        - md_line_3
-        - md_line_4
-      effect: pulse
-    delivery: grave
-    speak: 'So before you type import, answer one question: does this variable have a value at an instant, over a span, or no time at all? Part two names all four shapes.'
----
-title: Four shapes of a variable
 level: advanced
+
+    ```microdata md width 960 font_size 17 show code lines 6 frame screen marks ["BEFOLKNING_KJOENN as sex","2015-01-01 to 2015-12-31",{"text":"import db/INNTEKT_WLONN as wage","kind":"strike"}] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
+    // refused: import db/INNTEKT_WLONN as wage
+    ```
+
+Across these five parts we build the gender-gap dataset from nothing, and see why a variable's shape in time — not your taste — dictates what its import line looks like.
+    card title "Building datasets I" subtitle "1. The empty dataset"
+
+We are back in the script from lecture one. Line one is the handshake: version fifty-four of the FDB datastore, addressed from here on as db — and check the catalogue for the current version before you run it.
+    draw md md_line_1 parallel true
+
+Then create-dataset persons. This is the line people misread, because it fetches nothing at all.
+    draw md_line_2
+
+How many rows does persons hold at this moment — five million, or none?
+
+    pause 1.8
+
+None. Zero rows, zero columns: a named, empty frame on the server, and your only handle on it.
+    highlight md_line_2 effect glow
+
+And you will never see those rows — a microdata dataset is something you compute on, not a spreadsheet you scroll.
+    point at.ref md_line_2 gesture underline
+
+Now the first real import: sex, from BEFOLKNING_KJOENN — and notice what is missing from the line.
+    draw md_line_3
+
+Variable, alias, and nothing else. No date anywhere in it.
+    draw md_mark_1
+
+Ask yourself what a date would even mean there — sex on the first of January 2015, as opposed to sex in March?
+
+    pause 1.5
+
+Now wage income for those same people, and suddenly the line carries two dates.
+    draw md_line_4
+
+First of January to the thirty-first of December: wage income is not a state you can photograph, it is a sum accumulated across that window.
+    draw md_mark_2
+
+    quiz "Why does INNTEKT_WLONN take a period while BEFOLKNING_KJOENN takes no date?" intro "A quick check."
+        right: Wage income exists only as a sum over an interval, so the interval is part of the value; sex has one value and no time index at all.
+        wrong: It is not about update frequency or speed — it is about whether the variable has a value at an instant, over a span, or outside time.
+        * Income data are updated more often
+        + Income is accumulated over an interval; sex is fixed in time
+        * Two dates make the query run faster
+        * The datastore holds income only yearly
+
+Which is why this version, written without a period, is not merely sloppy.
+    draw md_line_5
+
+There is no such number as a person's wage income at an instant, so the script is refused rather than quietly handed a default year.
+    draw md_mark_3
+
+And municipality sits between the two: one value at a time, so exactly one date — one shape per line, and there turn out to be four of them.
+
+    quiz "What does create-dataset persons put into your dataset?"
+        right: It creates an empty named dataset; rows appear only with the first import — which is what makes that first import so consequential.
+        * Everyone in the population
+        + Nothing — it stays empty until the first import
+        * The variables named later in the script
+
+So before you type import, answer one question: does this variable have a value at an instant, over a span, or no time at all? Part two names all four shapes.
+    highlight md_line_3 md_line_4 effect pulse delivery grave
+
+## Four shapes of a variable
 voice: female
-elements:
-  - id: title
-    type: text
-    text: Four shapes of a variable
-    x: 500
-    'y': 712
-    font_size: 32
-  - id: axis
-    type: arrow
-    from:
-      x: 230
-      'y': 120
-    to:
-      x: 880
-      'y': 120
-  - id: time_cap
-    type: text
-    text: calendar time
-    x: 800
-    'y': 62
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: tlab_a
-    type: text
-    text: '2015-01-01'
-    x: 390
-    'y': 88
-    font_size: 19
-    style:
-      color: '#8f887c'
-  - id: tlab_b
-    type: text
-    text: '2015-07-01'
-    x: 550
-    'y': 88
-    font_size: 19
-    style:
-      color: '#8f887c'
-  - id: tlab_c
-    type: text
-    text: '2015-12-31'
-    x: 708
-    'y': 88
-    font_size: 19
-    style:
-      color: '#8f887c'
-  - id: guide_a
-    type: path
-    points:
-      - [390, 128]
-      - [390, 470]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: guide_b
-    type: path
-    points:
-      - [550, 128]
-      - [550, 470]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: guide_c
-    type: path
-    points:
-      - [708, 128]
-      - [708, 380]
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: name_fixed
-    type: text
-    text: FIXED
-    x: 118
-    'y': 560
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-  - id: fixed_line
-    type: path
-    points:
-      - [205, 560]
-      - [878, 560]
-    style:
-      color: '#8a5fa8'
-      stroke_width: 4
-  - id: cap_fixed
-    type: label
-    text: sex — BEFOLKNING_KJOENN
-    attach_to: fixed_line
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: n_fixed
-    type: text
-    text: no date
-    x: 932
-    'y': 560
-    font_size: 19
-    style:
-      color: '#8a5fa8'
-  - id: name_status
-    type: text
-    text: STATUS
-    x: 118
-    'y': 455
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: status_line
-    type: path
-    points:
-      - [230, 455]
-      - [870, 455]
-    style:
-      color: '#8f887c'
-      dash: true
-      stroke_width: 1.5
-  - id: status_dot
-    type: shape
-    shape: circle
-    x: 390
-    'y': 455
-    radius: 11
-    style:
-      color: '#2f6b8f'
-      fill: '#2f6b8f'
-  - id: status_dot_2
-    type: shape
-    shape: circle
-    x: 550
-    'y': 455
-    radius: 11
-    style:
-      color: '#2f6b8f'
-      fill: '#2f6b8f'
-  - id: cap_status
-    type: label
-    text: kommune — BEFOLKNING_KOMMNR_FORMELL
-    attach_to: status_dot
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: val_status_1
-    type: label
-    text: 0301 Oslo
-    attach_to: status_dot
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: val_status_2
-    type: label
-    text: 4601 Bergen
-    attach_to: status_dot_2
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: n_status
-    type: text
-    text: one date
-    x: 932
-    'y': 455
-    font_size: 19
-    style:
-      color: '#2f6b8f'
-  - id: name_accum
-    type: text
-    text: ACCUMULATED
-    x: 118
-    'y': 352
-    font_size: 20
-    style:
-      color: '#b5482e'
-  - id: accum_line
-    type: path
-    points:
-      - [230, 352]
-      - [870, 352]
-    style:
-      color: '#8f887c'
-      dash: true
-      stroke_width: 1.5
-  - id: accum_band
-    type: shape
-    shape: rect
-    x: 549
-    'y': 352
-    width: 318
-    height: 46
-    style:
-      color: '#b5482e'
-      fill: '#f2c14e'
-  - id: val_accum
-    type: text
-    text: 486 000 kr
-    x: 549
-    'y': 352
-    font_size: 22
-  - id: cap_accum
-    type: label
-    text: wage — INNTEKT_WLONN
-    attach_to: accum_band
-    side: above
-    style:
-      color: '#b5482e'
-  - id: n_accum
-    type: text
-    text: two dates
-    x: 932
-    'y': 352
-    font_size: 19
-    style:
-      color: '#b5482e'
-  - id: name_event
-    type: text
-    text: EVENT
-    x: 118
-    'y': 235
-    font_size: 24
-    style:
-      color: '#87a878'
-  - id: event_line
-    type: path
-    points:
-      - [230, 235]
-      - [870, 235]
-    style:
-      color: '#8f887c'
-      dash: true
-      stroke_width: 1.5
-  - id: event_1
-    type: shape
-    shape: circle
-    x: 300
-    'y': 235
-    radius: 10
-    style:
-      color: '#87a878'
-      fill: '#87a878'
-  - id: event_spell
-    type: shape
-    shape: rect
-    x: 476
-    'y': 235
-    width: 67
-    height: 16
-    style:
-      color: '#87a878'
-      fill: '#87a878'
-  - id: event_3
-    type: shape
-    shape: circle
-    x: 790
-    'y': 235
-    radius: 10
-    style:
-      color: '#87a878'
-      fill: '#87a878'
-  - id: cap_event
-    type: label
-    text: each record carries its own dates
-    attach_to: event_line
-    side: above
-    style:
-      color: '#87a878'
-  - id: n_event
-    type: text
-    text: its own dates
-    x: 932
-    'y': 235
-    font_size: 19
-    style:
-      color: '#87a878'
-commands:
-  - draw:
-      - title
-    speak: Now that we have an empty dataset waiting for its first variable, let's ask what a datastore variable actually is — because every one of them has a shape in time.
-  - draw:
-      - axis
-      - tlab_a
-      - tlab_b
-      - tlab_c
-      - time_cap
-  - speak: 'Our example throughout: one woman from the 1985 cohort. Four facts about her — and four different shapes. Start with her sex, BEFOLKNING_KJOENN. On which date would you measure it?'
-  - pause: 1.8
-  - draw:
-      - name_fixed
-      - fixed_line
-      - cap_fixed
-    speak: 'There is no date to give: the datastore holds one value per person, with no time dimension at all, so the line runs straight past both edges of the calendar.'
-  - draw:
-      - n_fixed
-    speak: And fixed is a storage decision, not a claim about biology — the variable simply has nowhere to put a change.
-  - pause: 0.4
-  - speak: Next, her municipality. She lived in Oslo in January 2015 and in Bergen by July. So what is her municipality?
-  - pause: 1.8
-  - draw:
-      - name_status
-      - status_line
-      - status_dot
-      - guide_a
-      - val_status_1
-      - cap_status
-    speak: The question was incomplete. A status variable is a state read at an instant — on the first of January she is 0301, Oslo.
-  - draw:
-      - status_dot_2
-      - guide_b
-      - val_status_2
-      - n_status
-    speak: Read the very same variable on the first of July and she is 4601, Bergen. One date in, one value out.
-  - pause: 0.4
-  - speak: Her wage income for 2015 was 486 thousand kroner. So what was her wage income on the twelfth of March?
-  - pause: 1.8
-  - draw:
-      - name_accum
-      - accum_line
-      - accum_band
-      - guide_c
-      - val_accum
-      - cap_accum
-    speak: That question has no answer. Wage income is not a state but a flow, accumulated over an interval — the number belongs to the whole window you asked for.
-  - draw:
-      - n_accum
-    speak: Ask for only the first half of 2015 and the same person and the same variable give a smaller number — which is why an accumulated variable needs a start and an end.
-  - highlight:
-      target:
-        - status_dot
-        - accum_band
-      effect: glow
-    speak: 'If you come from national accounting, you already own this distinction: a status variable is a stock, an accumulated variable is a flow. The register writes it into the import itself.'
-  - quiz:
-      intro: A quick check.
-      question: You import INNTEKT_WLONN for a single instant, 2015-06-30. What can the datastore return?
-      choices:
-        - Her wage that day
-        - Nothing meaningful — a flow needs an interval
-        - The year's total divided by 365
-      correct: 2
-      right: A flow only has a value over an interval, so an instant marks no span for anything to accumulate in.
-      wrong: An accumulated variable is a flow, not a state — a single instant defines no amount.
-  - speak: And some variables are neither a state nor a total. Her sick-leave spell began on the ninth of March and ended in May. Which date do you ask for?
-  - pause: 1.7
-  - draw:
-      - name_event
-      - event_line
-      - event_1
-      - event_spell
-      - event_3
-      - cap_event
-      - n_event
-    speak: 'Neither: an event variable arrives as records with their own start and end dates. You give a window, but the timing inside it is data, not something you choose.'
-  - erase:
-      - guide_a
-      - guide_b
-      - guide_c
-  - focus:
-      target:
-        - name_status
-        - status_line
-        - status_dot
-        - status_dot_2
-        - name_accum
-        - accum_line
-        - accum_band
-        - val_accum
-    speak: 'These two middle rows are the ones people quietly conflate: a point on a line, and a stretch of line — a stock you read, and a flow you sum.'
-  - highlight:
-      target:
-        - n_fixed
-        - n_status
-        - n_accum
-        - n_event
-      effect: glow
-    speak: 'The shape decides how much time information the measurement carries: none, one instant, one interval, or the data''s own clock.'
-  - quiz:
-      question: NUDB_BU, highest completed education — which shape is it?
-      choices:
-        - Fixed
-        - Status on a date
-        - Accumulated over a period
-      correct: 2
-      right: Education is a state that can change, so it is read on a date — her degree in 2015 need not be her degree in 2025.
-      wrong: 'People keep studying: the level is a state with a date, not a lifetime constant.'
-  - highlight:
-      target:
-        - fixed_line
-        - status_dot
-        - accum_band
-        - event_spell
-      effect: pulse
-    speak: 'So before writing a single line you can now ask of any variable in the catalogue: does this measurement live outside time, at an instant, over an interval — or does it bring its own dates? In the next part, that reading becomes the syntax.'
----
-title: Shape dictates syntax
 level: advanced
+
+    text title "Four shapes of a variable" x 500 y 712 font_size 32 hidden true
+    arrow axis from.x 230 from.y 120 to.x 880 to.y 120 hidden true
+    text time_cap "calendar time" #8f887c x 800 y 62 font_size 20 hidden true
+    text tlab_a "2015-01-01" #8f887c x 390 y 88 font_size 19 hidden true
+    text tlab_b "2015-07-01" #8f887c x 550 y 88 font_size 19 hidden true
+    text tlab_c "2015-12-31" #8f887c x 708 y 88 font_size 19 hidden true
+    path guide_a dashed #8f887c points [[390,128],[390,470]] hidden true
+    path guide_b dashed #8f887c points [[550,128],[550,470]] hidden true
+    path guide_c dashed #8f887c points [[708,128],[708,380]] hidden true
+    text name_fixed "FIXED" #8a5fa8 x 118 y 560 font_size 24 hidden true
+    path fixed_line #8a5fa8 points [[205,560],[878,560]] style.stroke_width 4 hidden true
+    label cap_fixed "sex — BEFOLKNING_KJOENN" above #8a5fa8 attach_to fixed_line hidden true
+    text n_fixed "no date" #8a5fa8 x 932 y 560 font_size 19 hidden true
+    text name_status "STATUS" #2f6b8f x 118 y 455 font_size 24 hidden true
+    path status_line dashed #8f887c points [[230,455],[870,455]] style.stroke_width 1.5 hidden true
+    shape status_dot #2f6b8f shape circle x 390 y 455 radius 11 style.fill #2f6b8f hidden true
+    shape status_dot_2 #2f6b8f shape circle x 550 y 455 radius 11 style.fill #2f6b8f hidden true
+    label cap_status "kommune — BEFOLKNING_KOMMNR_FORMELL" above #2f6b8f attach_to status_dot hidden true
+    label val_status_1 "0301 Oslo" below #2f6b8f attach_to status_dot hidden true
+    label val_status_2 "4601 Bergen" below #2f6b8f attach_to status_dot_2 hidden true
+    text n_status "one date" #2f6b8f x 932 y 455 font_size 19 hidden true
+    text name_accum "ACCUMULATED" #b5482e x 118 y 352 font_size 20 hidden true
+    path accum_line dashed #8f887c points [[230,352],[870,352]] style.stroke_width 1.5 hidden true
+    shape accum_band #b5482e shape rect x 549 y 352 width 318 height 46 style.fill #f2c14e hidden true
+    text val_accum "486 000 kr" x 549 y 352 font_size 22 hidden true
+    label cap_accum "wage — INNTEKT_WLONN" above #b5482e attach_to accum_band hidden true
+
+Now that we have an empty dataset waiting for its first variable, let's ask what a datastore variable actually is — because every one of them has a shape in time.
+    draw title
+
+    draw axis tlab_a tlab_b tlab_c time_cap
+
+Our example throughout: one woman from the 1985 cohort. Four facts about her — and four different shapes. Start with her sex, BEFOLKNING_KJOENN. On which date would you measure it?
+
+    pause 1.8
+
+There is no date to give: the datastore holds one value per person, with no time dimension at all, so the line runs straight past both edges of the calendar.
+    draw name_fixed fixed_line cap_fixed
+
+And fixed is a storage decision, not a claim about biology — the variable simply has nowhere to put a change.
+    draw n_fixed
+
+    pause 0.4
+
+Next, her municipality. She lived in Oslo in January 2015 and in Bergen by July. So what is her municipality?
+
+    pause 1.8
+
+The question was incomplete. A status variable is a state read at an instant — on the first of January she is 0301, Oslo.
+    draw name_status status_line status_dot guide_a val_status_1 cap_status
+
+Read the very same variable on the first of July and she is 4601, Bergen. One date in, one value out.
+    draw status_dot_2 guide_b val_status_2 n_status
+
+    pause 0.4
+
+Her wage income for 2015 was 486 thousand kroner. So what was her wage income on the twelfth of March?
+
+    pause 1.8
+
+That question has no answer. Wage income is not a state but a flow, accumulated over an interval — the number belongs to the whole window you asked for.
+    draw name_accum accum_line accum_band guide_c val_accum cap_accum
+
+Ask for only the first half of 2015 and the same person and the same variable give a smaller number — which is why an accumulated variable needs a start and an end.
+    text n_accum "two dates" #b5482e x 932 y 352 font_size 19
+
+If you come from national accounting, you already own this distinction: a status variable is a stock, an accumulated variable is a flow. The register writes it into the import itself.
+    highlight status_dot accum_band effect glow
+
+    quiz "You import INNTEKT_WLONN for a single instant, 2015-06-30. What can the datastore return?" intro "A quick check."
+        right: A flow only has a value over an interval, so an instant marks no span for anything to accumulate in.
+        wrong: An accumulated variable is a flow, not a state — a single instant defines no amount.
+        * Her wage that day
+        + Nothing meaningful — a flow needs an interval
+        * The year's total divided by 365
+
+And some variables are neither a state nor a total. Her sick-leave spell began on the ninth of March and ended in May. Which date do you ask for?
+
+    pause 1.7
+
+Neither: an event variable arrives as records with their own start and end dates. You give a window, but the timing inside it is data, not something you choose.
+    text name_event "EVENT" #87a878 x 118 y 235 font_size 24
+    path event_line dashed #8f887c points [[230,235],[870,235]] style.stroke_width 1.5
+    shape event_1 #87a878 shape circle x 300 y 235 radius 10 style.fill #87a878
+    shape event_spell #87a878 shape rect x 476 y 235 width 67 height 16 style.fill #87a878
+    shape event_3 #87a878 shape circle x 790 y 235 radius 10 style.fill #87a878
+    label cap_event "each record carries its own dates" above #87a878 attach_to event_line
+    text n_event "its own dates" #87a878 x 932 y 235 font_size 19
+
+    erase guide_a guide_b guide_c
+
+These two middle rows are the ones people quietly conflate: a point on a line, and a stretch of line — a stock you read, and a flow you sum.
+    focus name_status status_line status_dot status_dot_2 name_accum accum_line accum_band val_accum
+
+The shape decides how much time information the measurement carries: none, one instant, one interval, or the data's own clock.
+    highlight n_fixed n_status n_accum n_event effect glow
+
+    quiz "NUDB_BU, highest completed education — which shape is it?"
+        right: Education is a state that can change, so it is read on a date — her degree in 2015 need not be her degree in 2025.
+        wrong: People keep studying: the level is a state with a date, not a lifetime constant.
+        * Fixed
+        + Status on a date
+        * Accumulated over a period
+
+So before writing a single line you can now ask of any variable in the catalogue: does this measurement live outside time, at an instant, over an interval — or does it bring its own dates? In the next part, that reading becomes the syntax.
+    highlight fixed_line status_dot accum_band event_spell effect pulse
+
+## Shape dictates syntax
 voice: female
-elements:
-  - id: title_t
-    type: text
-    text: Shape dictates syntax
-    x: 500
-    'y': 722
-    font_size: 30
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 8
-    width: 950
-    font_size: 15
-    frame: screen
-    x: 500
-    'y': 355
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KOMMNR_FORMELL 2015-01-01 as kommune
-      import db/NUDB_BU 2015-01-01 as educ
-      import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
-      summarize wage
-    marks:
-      - import db/BEFOLKNING_KJOENN as sex
-      - 2015-01-01 as kommune
-      - 2015-01-01 to 2015-12-31
-  - id: sig_a
-    type: text
-    text: import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
-    x: 500
-    'y': 580
-    font_size: 21
-  - id: note_a
-    type: text
-    text: 'accumulated: the window is SUMMED into one number'
-    font_size: 22
-    at:
-      ref: sig_a
-      side: below
-      gap: 26
-    style:
-      color: '#2f6b8f'
-  - id: sig_b
-    type: text
-    text: import db/<EVENT_VARIABLE> 2015-01-01 to 2015-12-31 as move
-    font_size: 21
-    at:
-      ref: note_a
-      side: below
-      gap: 54
-  - id: note_b
-    type: text
-    text: 'event: the window SELECTS which events come back'
-    font_size: 22
-    at:
-      ref: sig_b
-      side: below
-      gap: 26
-    style:
-      color: '#b5482e'
-  - id: pop_reg
-    type: node
-    shape: rect
-    text: Population register
-    x: 275
-    'y': 250
-    width: 330
-    height: 80
-  - id: pop_conseq
-    type: text
-    text: logs changes as they happen → any date
-    font_size: 20
-    at:
-      ref: pop_reg
-      side: below
-      gap: 22
-    style:
-      color: '#8f887c'
-  - id: tax_reg
-    type: node
-    shape: rect
-    text: Tax register
-    x: 725
-    'y': 250
-    width: 330
-    height: 80
-  - id: tax_conseq
-    type: text
-    text: closes once a year → one span
-    font_size: 20
-    at:
-      ref: tax_reg
-      side: below
-      gap: 22
-    style:
-      color: '#8f887c'
-  - id: keeper
-    type: text
-    text: The date is not a filter. It is part of what the number is.
-    x: 500
-    'y': 110
-    font_size: 26
-  - id: keeper_box
-    type: annotation
-    target: keeper
-    kind: box
-commands:
-  - draw:
-      - title_t
-      - md
-      - md_line_1
-    parallel: true
-    speak: Now that we have seen the four shapes a variable can take, watch what each shape does to the line you type — get the dates wrong and the script still runs, quietly answering a different question.
-  - draw:
-      - md_line_2
-    speak: One empty dataset called persons — every import from here lands in it.
-  - speak: 'Sex, and year of birth. Before I type them: how many dates do you think those two lines need?'
-  - pause: 1.8
-  - draw:
-      - md_line_3
-      - md_line_4
-    speak: None. A fixed variable holds one value for the whole of a person's register life, so there is no moment to name.
-  - draw:
-      - md_mark_1
-    speak: The whole line is variable, alias, and nothing else — the syntax has no slot where a date could go.
-  - speak: Municipality next. Our cohort born in 1985 turns thirty in 2015, and people that age move. What does that do to the line?
-  - pause: 1.8
-  - draw:
-      - md_line_5
-    speak: One date. A status variable has a value at every instant, so the import only means something once you name the instant.
-  - draw:
-      - md_mark_2
-    speak: On the first of January 2015 this person is registered in 0301, Oslo. Had they moved to Stavanger in June, the same variable read in December would return 1103.
-  - draw:
-      - md_line_6
-    speak: Highest completed education takes the same signature — the degree as it stood on that date, not the one finished three years later.
-  - speak: And wage income for 2015. What date would you put on that one?
-  - pause: 1.8
-  - draw:
-      - md_line_7
-    speak: 'Two dates — a span. Wage income is accumulated: not a state you are in, but a sum that builds between two instants.'
-  - draw:
-      - md_mark_3
-    speak: And that span is not a filter on rows; it is part of the number's definition — kroner earned between those two dates.
-  - draw:
-      - md_line_8
-      - md_out
-    speak: 'Summarize proves the shape: one wage figure per person for the whole year, never twelve monthly ones.'
-  - quiz:
-      intro: A quick check.
-      question: Which signature does INNTEKT_WLONN require?
-      choices:
-        - No date
-        - One date
-        - A from–to span
-      correct: 3
-      right: A span — wage income is accumulated, so the two dates define the number itself.
-      wrong: Wage income is not a state held at an instant; it is a sum over a window.
-  - clear:
-      keep:
-        - title_t
-    speak: But two of the four shapes share one signature, and that is where scripts go quietly wrong.
-  - draw:
-      - sig_a
-      - note_a
-    speak: 'Here is the accumulated span again: everything inside the window is summed into a single number.'
-  - draw:
-      - sig_b
-      - note_b
-    speak: 'And here is an event variable — the same two dates, a completely different meaning: the window selects which events come back, with their dates of occurrence.'
-  - highlight:
-      target:
-        - sig_a
-        - sig_b
-      effect: glow
-    speak: Nothing in the syntax separates them; only the variable's shape in the metadata catalogue does — which is why lecture two sent you there first.
-  - draw:
-      - pop_reg
-      - pop_conseq
-    speak: And these shapes are not the language's invention — the population register logs changes as they happen, so you may ask it for any date you like.
-  - draw:
-      - tax_reg
-      - tax_conseq
-    speak: The tax register closes an annual assessment, so wage income exists only as a whole year. There is no Tuesday to ask about.
-  - quiz:
-      question: Why does wage income refuse a single date?
-      choices:
-        - The language reserves single dates for population variables
-        - The tax register only closes a full-year assessment
-        - Monthly wages are too confidential to release
-      correct: 2
-      right: Income exists in the register only as an annual accumulation, so a span is the only honest way to ask for it.
-      wrong: It is not a rule of the language — it is how the tax register keeps its books.
-  - draw:
-      - keeper
-      - keeper_box
-    speak: So the number of dates in an import is never style and never a filter — it is the shape of someone else's bookkeeping showing through your syntax.
-    delivery: grave
----
-title: The first import makes the population
 level: advanced
+
+    text title_t "Shape dictates syntax" x 500 y 722 font_size 30 hidden true
+    ```microdata md x 500 y 355 width 950 font_size 15 show below lines 8 frame screen marks ["import db/BEFOLKNING_KJOENN as sex","2015-01-01 as kommune","2015-01-01 to 2015-12-31"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KOMMNR_FORMELL 2015-01-01 as kommune
+    import db/NUDB_BU 2015-01-01 as educ
+    import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
+    summarize wage
+    ```
+
+Now that we have seen the four shapes a variable can take, watch what each shape does to the line you type — get the dates wrong and the script still runs, quietly answering a different question.
+    draw title_t md md_line_1 parallel true
+
+One empty dataset called persons — every import from here lands in it.
+    draw md_line_2
+
+Sex, and year of birth. Before I type them: how many dates do you think those two lines need?
+
+    pause 1.8
+
+None. A fixed variable holds one value for the whole of a person's register life, so there is no moment to name.
+    draw md_line_3 md_line_4
+
+The whole line is variable, alias, and nothing else — the syntax has no slot where a date could go.
+    draw md_mark_1
+
+Municipality next. Our cohort born in 1985 turns thirty in 2015, and people that age move. What does that do to the line?
+
+    pause 1.8
+
+One date. A status variable has a value at every instant, so the import only means something once you name the instant.
+    draw md_line_5
+
+On the first of January 2015 this person is registered in 0301, Oslo. Had they moved to Stavanger in June, the same variable read in December would return 1103.
+    draw md_mark_2
+
+Highest completed education takes the same signature — the degree as it stood on that date, not the one finished three years later.
+    draw md_line_6
+
+And wage income for 2015. What date would you put on that one?
+
+    pause 1.8
+
+Two dates — a span. Wage income is accumulated: not a state you are in, but a sum that builds between two instants.
+    draw md_line_7
+
+And that span is not a filter on rows; it is part of the number's definition — kroner earned between those two dates.
+    draw md_mark_3
+
+Summarize proves the shape: one wage figure per person for the whole year, never twelve monthly ones.
+    draw md_line_8 md_out
+
+    quiz "Which signature does INNTEKT_WLONN require?" intro "A quick check."
+        right: A span — wage income is accumulated, so the two dates define the number itself.
+        wrong: Wage income is not a state held at an instant; it is a sum over a window.
+        * No date
+        * One date
+        + A from–to span
+
+But two of the four shapes share one signature, and that is where scripts go quietly wrong.
+    clear keep ["title_t"]
+
+Here is the accumulated span again: everything inside the window is summed into a single number.
+    text sig_a "import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage" x 500 y 580 font_size 21
+    text note_a "accumulated: the window is SUMMED into one number" below sig_a gap 26 #2f6b8f font_size 22
+
+And here is an event variable — the same two dates, a completely different meaning: the window selects which events come back, with their dates of occurrence.
+    text sig_b "import db/<EVENT_VARIABLE> 2015-01-01 to 2015-12-31 as move" below note_a gap 54 font_size 21
+    text note_b "event: the window SELECTS which events come back" below sig_b gap 26 #b5482e font_size 22
+
+Nothing in the syntax separates them; only the variable's shape in the metadata catalogue does — which is why lecture two sent you there first.
+    highlight sig_a sig_b effect glow
+
+And these shapes are not the language's invention — the population register logs changes as they happen, so you may ask it for any date you like.
+    box pop_reg "Population register" x 275 y 250 width 330 height 80
+    text pop_conseq "logs changes as they happen → any date" below pop_reg gap 22 #8f887c font_size 20
+
+The tax register closes an annual assessment, so wage income exists only as a whole year. There is no Tuesday to ask about.
+    box tax_reg "Tax register" x 725 y 250 width 330 height 80
+    text tax_conseq "closes once a year → one span" below tax_reg gap 22 #8f887c font_size 20
+
+    quiz "Why does wage income refuse a single date?"
+        right: Income exists in the register only as an annual accumulation, so a span is the only honest way to ask for it.
+        wrong: It is not a rule of the language — it is how the tax register keeps its books.
+        * The language reserves single dates for population variables
+        + The tax register only closes a full-year assessment
+        * Monthly wages are too confidential to release
+
+So the number of dates in an import is never style and never a filter — it is the shape of someone else's bookkeeping showing through your syntax.
+    text keeper "The date is not a filter. It is part of what the number is." x 500 y 110 font_size 26
+    mark keeper_box target keeper kind box
+    delivery grave
+
+## The first import makes the population
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    x: 260
-    'y': 420
-    width: 500
-    font_size: 14
-    lines: 6
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
-    marks:
-      - import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
-  - id: tbl_box
-    type: shape
-    shape: rect
-    x: 755
-    'y': 495
-    width: 460
-    height: 270
-  - id: tbl_title
-    type: label
-    text: 'dataset: persons'
-    attach_to: tbl_box
-    side: above
-  - id: rule
-    type: path
-    points:
-      - [530, 578]
-      - [980, 578]
-    style:
-      color: '#8f887c'
-  - id: h_person
-    type: text
-    text: person
-    x: 583
-    'y': 600
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: h_birth
-    type: text
-    text: birth
-    x: 698
-    'y': 600
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: h_sex
-    type: text
-    text: sex
-    x: 813
-    'y': 600
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: h_wage
-    type: text
-    text: wage
-    x: 928
-    'y': 600
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: r1_id
-    type: text
-    text: '#1'
-    x: 583
-    'y': 538
-    font_size: 22
-  - id: r2_id
-    type: text
-    text: '#2'
-    x: 583
-    'y': 490
-    font_size: 22
-  - id: r3_id
-    type: text
-    text: '#3'
-    x: 583
-    'y': 442
-    font_size: 22
-  - id: r4_id
-    type: text
-    text: '#4'
-    x: 583
-    'y': 394
-    font_size: 22
-  - id: r1_birth
-    type: text
-    text: 1985-03
-    x: 698
-    'y': 538
-    font_size: 22
-  - id: r2_birth
-    type: text
-    text: 1985-07
-    x: 698
-    'y': 490
-    font_size: 22
-  - id: r3_birth
-    type: text
-    text: 1985-11
-    x: 698
-    'y': 442
-    font_size: 22
-  - id: r4_birth
-    type: text
-    text: 2019-05
-    x: 698
-    'y': 394
-    font_size: 22
-  - id: r1_sex
-    type: text
-    text: '1'
-    x: 813
-    'y': 538
-    font_size: 22
-  - id: r2_sex
-    type: text
-    text: '2'
-    x: 813
-    'y': 490
-    font_size: 22
-  - id: r3_sex
-    type: text
-    text: '2'
-    x: 813
-    'y': 442
-    font_size: 22
-  - id: r4_sex
-    type: text
-    text: '1'
-    x: 813
-    'y': 394
-    font_size: 22
-  - id: r1_wage
-    type: text
-    text: 512 000
-    x: 928
-    'y': 538
-    font_size: 22
-  - id: r2_wage
-    type: text
-    text: 388 000
-    x: 928
-    'y': 490
-    font_size: 22
-  - id: r3_wage
-    type: text
-    text: .
-    x: 928
-    'y': 442
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: r4_wage
-    type: text
-    text: .
-    x: 928
-    'y': 394
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: col_id
-    type: group
-    members:
-      - h_person
-      - r1_id
-      - r2_id
-      - r3_id
-      - r4_id
-  - id: col_birth
-    type: group
-    members:
-      - h_birth
-      - r1_birth
-      - r2_birth
-      - r3_birth
-      - r4_birth
-  - id: col_sex
-    type: group
-    members:
-      - h_sex
-      - r1_sex
-      - r2_sex
-      - r3_sex
-      - r4_sex
-  - id: col_wage
-    type: group
-    members:
-      - h_wage
-      - r1_wage
-      - r2_wage
-      - r3_wage
-      - r4_wage
-  - id: pop_all
-    type: shape
-    shape: rect
-    x: 640
-    'y': 440
-    width: 180
-    height: 280
-    style:
-      fill: '#87a878'
-      color: '#3d3833'
-  - id: pop_wage
-    type: shape
-    shape: rect
-    x: 880
-    'y': 381
-    width: 180
-    height: 162
-    style:
-      fill: '#c96567'
-      color: '#b5482e'
-  - id: lab_all
-    type: label
-    text: All persons
-    attach_to: pop_all
-    side: above
-  - id: lab_wage
-    type: label
-    text: Wage earners 2015
-    attach_to: pop_wage
-    side: above
-  - id: note
-    type: text
-    text: a gap among earners only
-    x: 755
-    'y': 240
-    font_size: 24
-    style:
-      color: '#b5482e'
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that we have seen how each shape dictates its syntax, let's follow the rows — because the very first import quietly decides who is in your study.
-  - draw:
-      - tbl_box
-      - tbl_title
-    speak: 'create-dataset persons gives you this: a table with no columns and, the part people forget, no rows at all.'
-  - point:
-      at:
-        ref: tbl_box
-      gesture: circle
-    speak: So when the first import runs, where do the rows actually come from?
-  - pause: 1.6
-  - draw:
-      - md_line_3
-      - col_id
-    speak: 'From the variable itself: every unit in the register that has a value for birth year and month becomes one row — one person, several million of them.'
-  - draw:
-      - col_birth
-    speak: 'The values arrive with the rows, and notice the fourth person, born in twenty nineteen: a fixed variable carries no time limit, so the population is everyone the register has ever held.'
-  - highlight:
-      target:
-        - col_id
-      effect: glow
-    speak: You never see these identifiers — microdata returns tables, never rows — so your population is something you reason about, not something you can look at.
-  - highlight:
-      target:
-        - tbl_box
-      effect: pulse
-    speak: The next line imports sex, which also covers everyone in the register. Does the table get taller, or only wider?
-  - pause: 1.6
-  - draw:
-      - md_line_4
-      - col_sex
-    speak: 'Only wider: every import after the first is a join onto rows that already exist — raw codes here, one and two, labels come later in the course.'
-  - draw:
-      - md_line_5
-      - col_wage
-    speak: Now wage income for twenty fifteen, an accumulated variable measured over a whole period — and two of our four cells come back empty.
-  - highlight:
-      target:
-        - r3_wage
-        - r4_wage
-      effect: circle
-    speak: 'A woman born in eighty-five with no wage that year, and a child born four years after the period: the rows survive, the cells are system missing — which you test with sysmiss of wage, never with wage equals dot.'
-  - quiz:
-      question: A person has wage income in 2015 but no row in persons. What does the wage import do with them?
-      choices:
-        - Adds a new row for them
-        - Attaches the value to the nearest row
-        - Nothing at all
-      correct: 3
-      right: Nothing — a later import only fills cells on rows that already exist, so that person stays invisible for the rest of the script.
-      wrong: No import after the first can create a row; it can only fill cells on rows that are already there.
-      intro: A quick check before we go on.
-  - draw:
-      - md_mark_1
-    speak: So — what if this line had been the first import instead?
-  - pause: 1.6
-  - erase:
-      - r3_id
-      - r3_birth
-      - r3_sex
-      - r3_wage
-      - r4_id
-      - r4_birth
-      - r4_sex
-      - r4_wage
-    parallel: true
-    speak: Then the population would be defined as people with a wage record in twenty fifteen, and these two would never have existed.
-  - highlight:
-      target:
-        - col_wage
-      effect: glow
-    speak: 'And nothing later brings them back: no filter, no further import, puts a row into a table that never had one.'
-  - clear:
-      keep:
-        - md
-        - md_line_1
-        - md_line_2
-        - md_line_3
-        - md_line_4
-        - md_line_5
-        - md_mark_1
-  - draw:
-      - pop_all
-      - lab_all
-      - pop_wage
-      - lab_wage
-      - note
-    speak: 'The two populations are nowhere near the same size: the register holds more than five million people, while wage income in twenty fifteen exists for roughly three million — so the gender gap you go on to measure would be a gap among earners only.'
-    delivery: grave
-  - quiz:
-      question: Why does that earners-only population make the measured gender wage gap look smaller?
-      choices:
-        - Wages are top-coded
-        - Women with no wage income are not in the data
-        - Men are more often missing
-      correct: 2
-      right: Zero-earning women drop out of the table entirely, so the gap is computed only among those who do earn.
-      wrong: 'Think about who is missing: the people with no wage record at all, and who those people mostly are.'
-  - highlight:
-      target:
-        - md_line_3
-      effect: glow
-    speak: create-dataset makes the shell, the first import makes the people, and every line after it can only fill cells — so choosing your first import is choosing your population.
----
-title: The 1985 cohort, assembled
 level: advanced
+
+    ```microdata md x 260 y 420 width 500 font_size 14 show code lines 6 frame screen marks ["import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
+    ```
+    shape tbl_box shape rect x 755 y 495 width 460 height 270 hidden true
+    label tbl_title "dataset: persons" above attach_to tbl_box hidden true
+    path rule #8f887c points [[530,578],[980,578]] hidden true
+    text h_person "person" #8f887c x 583 y 600 font_size 22 hidden true
+    text h_birth "birth" #8f887c x 698 y 600 font_size 22 hidden true
+    text h_sex "sex" #8f887c x 813 y 600 font_size 22 hidden true
+    text h_wage "wage" #8f887c x 928 y 600 font_size 22 hidden true
+    text r1_id "#1" x 583 y 538 font_size 22 hidden true
+    text r2_id "#2" x 583 y 490 font_size 22 hidden true
+    text r3_id "#3" x 583 y 442 font_size 22 hidden true
+    text r4_id "#4" x 583 y 394 font_size 22 hidden true
+    text r1_birth "1985-03" x 698 y 538 font_size 22 hidden true
+    text r2_birth "1985-07" x 698 y 490 font_size 22 hidden true
+    text r3_birth "1985-11" x 698 y 442 font_size 22 hidden true
+    text r4_birth "2019-05" x 698 y 394 font_size 22 hidden true
+    text r1_sex "1" x 813 y 538 font_size 22 hidden true
+    text r2_sex "2" x 813 y 490 font_size 22 hidden true
+    text r3_sex "2" x 813 y 442 font_size 22 hidden true
+    text r4_sex "1" x 813 y 394 font_size 22 hidden true
+    text r1_wage "512 000" x 928 y 538 font_size 22 hidden true
+    text r2_wage "388 000" x 928 y 490 font_size 22 hidden true
+    text r3_wage "." #8f887c x 928 y 442 font_size 22 hidden true
+    text r4_wage "." #8f887c x 928 y 394 font_size 22 hidden true
+    group col_id members ["h_person","r1_id","r2_id","r3_id","r4_id"] hidden true
+    group col_birth members ["h_birth","r1_birth","r2_birth","r3_birth","r4_birth"] hidden true
+    group col_sex members ["h_sex","r1_sex","r2_sex","r3_sex","r4_sex"] hidden true
+    group col_wage members ["h_wage","r1_wage","r2_wage","r3_wage","r4_wage"] hidden true
+    shape pop_all #3d3833 shape rect x 640 y 440 width 180 height 280 style.fill #87a878 hidden true
+    shape pop_wage #b5482e shape rect x 880 y 381 width 180 height 162 style.fill #c96567 hidden true
+    label lab_all "All persons" above attach_to pop_all hidden true
+    label lab_wage "Wage earners 2015" above attach_to pop_wage hidden true
+    text note "a gap among earners only" #b5482e x 755 y 240 font_size 24 hidden true
+
+Now that we have seen how each shape dictates its syntax, let's follow the rows — because the very first import quietly decides who is in your study.
+    draw md md_line_1 md_line_2 parallel true
+
+create-dataset persons gives you this: a table with no columns and, the part people forget, no rows at all.
+    draw tbl_box tbl_title
+
+So when the first import runs, where do the rows actually come from?
+    point at.ref tbl_box gesture circle
+
+    pause 1.6
+
+From the variable itself: every unit in the register that has a value for birth year and month becomes one row — one person, several million of them.
+    draw md_line_3 col_id
+
+The values arrive with the rows, and notice the fourth person, born in twenty nineteen: a fixed variable carries no time limit, so the population is everyone the register has ever held.
+    draw col_birth
+
+You never see these identifiers — microdata returns tables, never rows — so your population is something you reason about, not something you can look at.
+    highlight col_id effect glow
+
+The next line imports sex, which also covers everyone in the register. Does the table get taller, or only wider?
+    highlight tbl_box effect pulse
+
+    pause 1.6
+
+Only wider: every import after the first is a join onto rows that already exist — raw codes here, one and two, labels come later in the course.
+    draw md_line_4 col_sex
+
+Now wage income for twenty fifteen, an accumulated variable measured over a whole period — and two of our four cells come back empty.
+    draw md_line_5 col_wage
+
+A woman born in eighty-five with no wage that year, and a child born four years after the period: the rows survive, the cells are system missing — which you test with sysmiss of wage, never with wage equals dot.
+    highlight r3_wage r4_wage effect circle
+
+    quiz "A person has wage income in 2015 but no row in persons. What does the wage import do with them?"
+        intro: A quick check before we go on.
+        right: Nothing — a later import only fills cells on rows that already exist, so that person stays invisible for the rest of the script.
+        wrong: No import after the first can create a row; it can only fill cells on rows that are already there.
+        * Adds a new row for them
+        * Attaches the value to the nearest row
+        + Nothing at all
+
+So — what if this line had been the first import instead?
+    draw md_mark_1
+
+    pause 1.6
+
+Then the population would be defined as people with a wage record in twenty fifteen, and these two would never have existed.
+    erase r3_id r3_birth r3_sex r3_wage r4_id r4_birth r4_sex r4_wage parallel true
+
+And nothing later brings them back: no filter, no further import, puts a row into a table that never had one.
+    highlight col_wage effect glow
+
+    clear keep ["md","md_line_1","md_line_2","md_line_3","md_line_4","md_line_5","md_mark_1"]
+
+The two populations are nowhere near the same size: the register holds more than five million people, while wage income in twenty fifteen exists for roughly three million — so the gender gap you go on to measure would be a gap among earners only.
+    draw pop_all lab_all pop_wage lab_wage note delivery grave
+
+    quiz "Why does that earners-only population make the measured gender wage gap look smaller?"
+        right: Zero-earning women drop out of the table entirely, so the gap is computed only among those who do earn.
+        wrong: Think about who is missing: the people with no wage record at all, and who those people mostly are.
+        * Wages are top-coded
+        + Women with no wage income are not in the data
+        * Men are more often missing
+
+create-dataset makes the shell, the first import makes the people, and every line after it can only fill cells — so choosing your first import is choosing your population.
+    highlight md_line_3 effect glow
+
+## The 1985 cohort, assembled
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: left
-    width: 940
-    lines: 8
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      // The 1985 cohort - one row per person
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      destring born
-      keep if born >= 198501
-      keep if born <= 198512
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_KOMMNR_FORMELL 2015-01-01 as kommune
-      import db/NUDB_BU 2015-10-01 as educ
-      import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
-      // event variables would add rows, not columns
-      summarize wage
-    marks:
-      - import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      - 2015-01-01 to 2015-12-31
-  - id: head
-    type: text
-    text: Before you write an import
-    x: 500
-    'y': 645
-    font_size: 34
-  - id: c1
-    type: text
-    text: Fixed trait  →  no date
-    at:
-      ref: head
-      side: below
-      gap: 42
-    font_size: 28
-    style:
-      color: '#2f6b8f'
-  - id: c2
-    type: text
-    text: Status on a date  →  one date
-    at:
-      ref: c1
-      side: below
-      gap: 26
-    font_size: 28
-    style:
-      color: '#8a5fa8'
-  - id: c3
-    type: text
-    text: Accumulated over a period  →  two dates
-    at:
-      ref: c2
-      side: below
-      gap: 26
-    font_size: 28
-    style:
-      color: '#b5482e'
-  - id: c4
-    type: text
-    text: Event  →  a window, and extra rows
-    at:
-      ref: c3
-      side: below
-      gap: 26
-    font_size: 28
-    style:
-      color: '#d0865f'
-  - id: c5
-    type: text
-    text: The first import writes the rows
-    at:
-      ref: c4
-      side: below
-      gap: 48
-    font_size: 30
-  - id: ann
-    type: annotation
-    target: c5
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that we have seen the first import write the rows, here is the whole lecture as one script — and the order of its lines silently decides who your gender gap is even about.
-  - draw:
-      - md_line_3
-    speak: 'create-dataset gives us persons: a named frame, columns still to come, and so far not a single row.'
-  - speak: Sex and birth month are both fixed traits with no date. Which of them has to be imported first?
-  - pause: 1.8
-  - draw:
-      - md_line_4
-    speak: Birth month — because this import decides who exists, and everyone in the population register carries it.
-  - draw:
-      - md_line_5
-      - md_line_6
-      - md_line_7
-    speak: destring makes it numeric, and the two keeps cut the rows to the 1985 cohort — a little over sixty thousand people.
-  - draw:
-      - md_mark_1
-    speak: Every later line is now a column hung on those rows, never a new set of people.
-  - draw:
-      - md_line_8
-    speak: 'So sex simply attaches: a fixed trait, no date, because registered sex is not a fact about a particular Tuesday.'
-  - draw:
-      - md_line_9
-    speak: Municipality only means something relative to a moment, so we ask where each person was registered on the first of January 2015.
-  - draw:
-      - md_line_10
-    speak: Education is status too, but the education register is stamped in October — that is the date it can honestly answer for.
-  - speak: Then why can wage income not be asked for on a single date at all?
-  - pause: 1.6
-  - draw:
-      - md_line_11
-    speak: Because nobody has a wage on a date — they have wage earned between two dates, so an accumulated variable takes a from and a to.
-  - draw:
-      - md_mark_2
-    speak: 'That window is the measurement: narrow it to one quarter and the same person returns a different number, with nothing else in the script changed.'
-  - quiz:
-      question: Why does INNTEKT_WLONN need two dates when BEFOLKNING_KOMMNR_FORMELL needs one?
-      choices:
-        - It is accumulated over a period
-        - It changes too often for one date
-        - The income register updates twice a year
-      correct: 1
-      right: Wage income is a sum over an interval, so the interval has to be stated; municipality is a status you can read off on a single day.
-      wrong: It is not about update frequency — it is about what kind of quantity the variable is.
-  - draw:
-      - md_line_12
-    speak: 'The fourth shape would break this table outright: an event — a move, a birth, a spell of unemployment — arrives as one row per occurrence, which is why it waits until lecture nine.'
-  - draw:
-      - md_line_13
-      - md_out
-    speak: 'And summarize confirms the frame survived intact: one row per person, one 2015 wage each.'
-  - pause: 0.5
-  - clear: {}
-  - draw:
-      - head
-    speak: Strip the script away and what remains is a checklist to run before writing any import at all.
-  - draw:
-      - c1
-      - c2
-    speak: Fixed traits take no date; status variables take exactly one, and it must be a date the register can defend.
-  - draw:
-      - c3
-      - c4
-    speak: Accumulated variables take two, because the period is the measurement; event variables take a window and hand you rows instead of columns.
-  - draw:
-      - c5
-      - ann
-    speak: 'And above all four: the first import writes the rows.'
-  - quiz:
-      question: You open an empty dataset and import NUDB_BU first. What population have you defined?
-      choices:
-        - Everyone in Norway
-        - Everyone with a registered education
-        - The 1985 cohort
-      correct: 2
-      right: Your population becomes everyone with a value in that register — people with no registered education never enter, and nothing later in the script will tell you they are missing.
-      wrong: The dataset starts with no rows, so the rows come from whoever the first imported variable covers.
-  - highlight:
-      target:
-        - c5
-      effect: glow
-    delivery: grave
-    speak: 'So a script is never a list of variables you wanted: it is a population chosen by your first import, measured on dates you chose on purpose — and next lecture we change the unit of analysis underneath it.'
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Building datasets II: collapse and merge, or how to change the unit of analysis'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 4 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Building datasets II: collapse and merge, or how to change the unit of analysis'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+
+    ```microdata md width 940 show left lines 8 frame screen marks ["import db/BEFOLKNING_FOEDSELS_AAR_MND as born","2015-01-01 to 2015-12-31"] draw.mode type hidden true
+    // The 1985 cohort - one row per person
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    destring born
+    keep if born >= 198501
+    keep if born <= 198512
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_KOMMNR_FORMELL 2015-01-01 as kommune
+    import db/NUDB_BU 2015-10-01 as educ
+    import db/INNTEKT_WLONN 2015-01-01 to 2015-12-31 as wage
+    // event variables would add rows, not columns
+    summarize wage
+    ```
+
+Now that we have seen the first import write the rows, here is the whole lecture as one script — and the order of its lines silently decides who your gender gap is even about.
+    draw md md_line_1 md_line_2 parallel true
+
+create-dataset gives us persons: a named frame, columns still to come, and so far not a single row.
+    draw md_line_3
+
+Sex and birth month are both fixed traits with no date. Which of them has to be imported first?
+
+    pause 1.8
+
+Birth month — because this import decides who exists, and everyone in the population register carries it.
+    draw md_line_4
+
+destring makes it numeric, and the two keeps cut the rows to the 1985 cohort — a little over sixty thousand people.
+    draw md_line_5 md_line_6 md_line_7
+
+Every later line is now a column hung on those rows, never a new set of people.
+    draw md_mark_1
+
+So sex simply attaches: a fixed trait, no date, because registered sex is not a fact about a particular Tuesday.
+    draw md_line_8
+
+Municipality only means something relative to a moment, so we ask where each person was registered on the first of January 2015.
+    draw md_line_9
+
+Education is status too, but the education register is stamped in October — that is the date it can honestly answer for.
+    draw md_line_10
+
+Then why can wage income not be asked for on a single date at all?
+
+    pause 1.6
+
+Because nobody has a wage on a date — they have wage earned between two dates, so an accumulated variable takes a from and a to.
+    draw md_line_11
+
+That window is the measurement: narrow it to one quarter and the same person returns a different number, with nothing else in the script changed.
+    draw md_mark_2
+
+    quiz "Why does INNTEKT_WLONN need two dates when BEFOLKNING_KOMMNR_FORMELL needs one?"
+        right: Wage income is a sum over an interval, so the interval has to be stated; municipality is a status you can read off on a single day.
+        wrong: It is not about update frequency — it is about what kind of quantity the variable is.
+        + It is accumulated over a period
+        * It changes too often for one date
+        * The income register updates twice a year
+
+The fourth shape would break this table outright: an event — a move, a birth, a spell of unemployment — arrives as one row per occurrence, which is why it waits until lecture nine.
+    draw md_line_12
+
+And summarize confirms the frame survived intact: one row per person, one 2015 wage each.
+    draw md_line_13 md_out
+
+    pause 0.5
+
+    clear
+
+Strip the script away and what remains is a checklist to run before writing any import at all.
+    text head "Before you write an import" x 500 y 645 font_size 34
+
+Fixed traits take no date; status variables take exactly one, and it must be a date the register can defend.
+    text c1 "Fixed trait  →  no date" below head gap 42 #2f6b8f font_size 28
+    text c2 "Status on a date  →  one date" below c1 gap 26 #8a5fa8 font_size 28
+
+Accumulated variables take two, because the period is the measurement; event variables take a window and hand you rows instead of columns.
+    text c3 "Accumulated over a period  →  two dates" below c2 gap 26 #b5482e font_size 28
+    text c4 "Event  →  a window, and extra rows" below c3 gap 26 #d0865f font_size 28
+
+And above all four: the first import writes the rows.
+    text c5 "The first import writes the rows" below c4 gap 48 font_size 30
+    mark ann target c5 kind box
+
+    quiz "You open an empty dataset and import NUDB_BU first. What population have you defined?"
+        right: Your population becomes everyone with a value in that register — people with no registered education never enter, and nothing later in the script will tell you they are missing.
+        wrong: The dataset starts with no rows, so the rows come from whoever the first imported variable covers.
+        * Everyone in Norway
+        + Everyone with a registered education
+        * The 1985 cohort
+
+So a script is never a list of variables you wanted: it is a population chosen by your first import, measured on dates you chose on purpose — and next lecture we change the unit of analysis underneath it.
+    highlight c5 effect glow delivery grave
+
+## Where next
+end_page: true
+
+Next: Building datasets II: collapse and merge, or how to change the unit of analysis
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:2 title "What is actually inside the datastore" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:4 title "Building datasets II: collapse and merge, or how to change the unit of analysis" size 320 x 735 y 395
+
+    link end_again href lecture:3 title "Watch again" form text open here x 500 y 160
+    text end_count "3 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

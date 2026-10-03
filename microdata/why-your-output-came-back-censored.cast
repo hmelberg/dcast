@@ -1,1257 +1,469 @@
-playlist:
-  title: Why your output came back censored
-  prompt: 'Why does microdata.no refuse to print a cell with very few observations, and what exactly does the service do to your results before you see them? How should you rewrite a script that keeps hitting suppression — coarser categories, larger populations, fewer crossings? The real debate: how much statistical disclosure control can you add before the research answer changes?'
-  next:
-    title: 'Many years at once: panels, event data and the gap over the life cycle'
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/many-years-at-once-panels-event-data-and.yaml
----
-title: The empty cell
-level: advanced
-voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    x: 500
-    'y': 375
-    width: 880
-    lines: 12
-    font_size: 18
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      destring born
-      keep if born >= 198501
-      keep if born <= 198512
-      keep if sex == '2'
-      tabulate educ kommune
-    marks:
-      - tabulate educ kommune
-  - id: tab_title
-    type: text
-    text: 'Women born 1985: education × municipality'
-    x: 420
-    'y': 625
-    style:
-      color: '#8f887c'
-  - id: th_muni
-    type: text
-    text: Kommune
-    x: 150
-    'y': 560
-    style:
-      color: '#2f6b8f'
-  - id: th_edu1
-    type: text
-    text: Grunnskole
-    at:
-      ref: th_muni
-      side: right
-      gap: 60
-    style:
-      color: '#2f6b8f'
-  - id: th_edu2
-    type: text
-    text: Videregående
-    at:
-      ref: th_edu1
-      side: right
-      gap: 50
-    style:
-      color: '#2f6b8f'
-  - id: th_edu3
-    type: text
-    text: Universitet
-    at:
-      ref: th_edu2
-      side: right
-      gap: 50
-    style:
-      color: '#2f6b8f'
-  - id: rule
-    type: path
-    points:
-      - [0, 0]
-      - [680, 0]
-    at:
-      ref: th_muni
-      side: below
-      gap: 12
-    anchor: top_left
-    style:
-      color: '#8f887c'
-  - id: rh1
-    type: text
-    text: Oslo
-    at:
-      ref: th_muni
-      side: below
-      gap: 34
-  - id: r1c1
-    type: text
-    text: 1 450
-    at:
-      ref: th_edu1
-      side: below
-      gap: 34
-  - id: r1c2
-    type: text
-    text: 3 100
-    at:
-      ref: th_edu2
-      side: below
-      gap: 34
-  - id: r1c3
-    type: text
-    text: 6 200
-    at:
-      ref: th_edu3
-      side: below
-      gap: 34
-  - id: rh2
-    type: text
-    text: Bergen
-    at:
-      ref: rh1
-      side: below
-      gap: 18
-  - id: r2c1
-    type: text
-    text: '320'
-    at:
-      ref: r1c1
-      side: below
-      gap: 18
-  - id: r2c2
-    type: text
-    text: '980'
-    at:
-      ref: r1c2
-      side: below
-      gap: 18
-  - id: r2c3
-    type: text
-    text: 1 640
-    at:
-      ref: r1c3
-      side: below
-      gap: 18
-  - id: rh3
-    type: text
-    text: Vadsø
-    at:
-      ref: rh2
-      side: below
-      gap: 18
-  - id: r3c1
-    type: text
-    text: '*'
-    at:
-      ref: r2c1
-      side: below
-      gap: 18
-    style:
-      color: '#b5482e'
-  - id: r3c2
-    type: text
-    text: '14'
-    at:
-      ref: r2c2
-      side: below
-      gap: 18
-  - id: r3c3
-    type: text
-    text: '11'
-    at:
-      ref: r2c3
-      side: below
-      gap: 18
-  - id: rh4
-    type: text
-    text: Utsira
-    at:
-      ref: rh3
-      side: below
-      gap: 18
-  - id: r4c1
-    type: text
-    text: '*'
-    at:
-      ref: r3c1
-      side: below
-      gap: 18
-    style:
-      color: '#b5482e'
-  - id: r4c2
-    type: text
-    text: '*'
-    at:
-      ref: r3c2
-      side: below
-      gap: 18
-    style:
-      color: '#b5482e'
-  - id: r4c3
-    type: text
-    text: '*'
-    at:
-      ref: r3c3
-      side: below
-      gap: 18
-    style:
-      color: '#b5482e'
-  - id: legend
-    type: text
-    text: '*   too few units to publish'
-    at:
-      ref: rh4
-      side: below
-      gap: 44
-    style:
-      color: '#b5482e'
-  - id: mark_row
-    type: annotation
-    target: legend
-    kind: box
-  - id: tab
-    type: group
-    members:
-      - tab_title
-      - th_muni
-      - th_edu1
-      - th_edu2
-      - th_edu3
-      - rule
-      - rh1
-      - r1c1
-      - r1c2
-      - r1c3
-      - rh2
-      - r2c1
-      - r2c2
-      - r2c3
-      - rh3
-      - r3c1
-      - r3c2
-      - r3c3
-      - rh4
-      - r4c1
-      - r4c2
-      - r4c3
-      - legend
-    fit:
-      x: 120
-      'y': 130
-      w: 760
-      h: 460
-commands:
-  - card:
-      title: Why your output came back censored
-      subtitle: Part 1 — The empty cell
-    speak: Across these four parts we will work out why microdata.no sometimes hands back blanks instead of numbers, what the service does to your results before you ever see them, and how to rewrite a script so a printable answer comes back.
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-      - md_line_7
-      - md_line_8
-      - md_line_9
-      - md_line_10
-      - md_line_11
-    speak: 'Here is our script from lecture seven, unchanged: five variables imported onto one dataset, then three keeps that leave us with women born in 1985 — roughly thirty thousand people.'
-  - pause: 1
-  - draw:
-      - md_line_12
-    speak: 'And the last line asks for the crossing we actually want: highest completed education by municipality.'
-  - draw:
-      - md_mark_1
-    speak: Two variables in one tabulate — some three hundred and fifty municipalities times a handful of education levels, which is a couple of thousand cells to be filled by thirty thousand women.
-  - pause: 1
-  - clear: {}
-  - draw:
-      - tab_title
-      - th_muni
-      - th_edu1
-      - th_edu2
-      - th_edu3
-      - rule
-    speak: 'Run it, and back comes a table like this one: education across the top, municipality down the side. The counts here are illustrative, but the shape is exactly what the service returns.'
-  - draw:
-      - rh1
-      - r1c1
-      - r1c2
-      - r1c3
-      - rh2
-      - r2c1
-      - r2c2
-      - r2c3
-    speak: Oslo and Bergen are comfortable — hundreds in the lowest education group, thousands in the highest.
-  - pause: 1
-  - draw:
-      - rh3
-      - r3c1
-      - r3c2
-      - r3c3
-    speak: 'Vadsø, in Finnmark, has a few thousand inhabitants: fourteen women of the cohort with upper secondary, eleven with a degree — and where basic schooling should be, an asterisk.'
-  - draw:
-      - rh4
-      - r4c1
-      - r4c2
-      - r4c3
-    speak: 'And Utsira, the smallest municipality in the country: three cells, three asterisks.'
-  - draw:
-      - legend
-    delivery: grave
-    speak: An asterisk is not a zero and not a missing value — it means the number existed, and was withheld.
-  - focus:
-      target:
-        - r3c1
-        - r4c1
-        - r4c2
-        - r4c3
-        - legend
-    speak: The counts were computed on the server, checked against a minimum-cell rule, and replaced before anything travelled to your screen; you never touch the raw cell at all.
-  - pause: 1
-  - point:
-      at:
-        ref: r4c2
-      gesture: circle
-    speak: 'And you can see why: on an island of two hundred people, a woman born in 1985 with only basic schooling is not a statistic, it is a neighbour.'
-  - highlight:
-      target:
-        - legend
-      effect: glow
-    speak: The practice has a name and a date — in 1977 the Swedish statistician Tore Dalenius published Towards a methodology for statistical disclosure control, which turned a set of office habits into a research field.
-  - highlight:
-      target:
-        - r1c1
-        - r1c2
-        - r1c3
-        - r2c1
-        - r2c2
-        - r2c3
-      effect: pulse
-    speak: 'Dalenius also set the ideal — a published figure should teach a reader nothing new about any one person — and decades later Cynthia Dwork''s work showed that ideal unreachable, offering differential privacy instead: add calibrated noise to every cell and publish them all.'
-  - speak: So nothing is blank, but nothing is exact either, and when the United States Census Bureau took that route for the 2020 census, demographers protested that small-area counts came out distorted for precisely the places that depend on them; that argument is unresolved, and part four is where we come back to it.
-  - quiz:
-      intro: A quick check before we go on.
-      question: Why does the Utsira row come back as asterisks?
-      choices:
-        - No women born in 1985 live there
-        - The cells hold too few people to publish
-        - The education variable is missing there
-        - The script has a syntax error
-      correct: 2
-      right: The cells are too small — a count of one or two people could point at a named individual, so the service replaces the number before it reaches you.
-      wrong: The people are there; what is missing is permission to print them.
-  - draw:
-      - mark_row
-    speak: 'So a censored output is not a bug in your script: the service answered your question, then decided how much of the answer it was allowed to say — and next time we take apart exactly which rules it applies.'
----
-title: 'What the service does: inside the disclosure-control layer'
-level: advanced
-voice: male
-elements:
-  - id: script
-    type: node
-    shape: rect
-    text: Your script
-    x: 150
-    'y': 570
-    width: 200
-    height: 80
-  - id: wall
-    type: path
-    points:
-      - [330, 180]
-      - [330, 680]
-    style:
-      dash: true
-      color: '#8f887c'
-      stroke_width: 3
-  - id: label_wall
-    type: label
-    text: No row of data crosses
-    attach_to: wall
-    side: above
-  - id: store
-    type: node
-    shape: rect
-    text: The datastore
-    x: 710
-    'y': 570
-    width: 230
-    height: 80
-    style:
-      color: '#2f6b8f'
-  - id: store_note
-    type: label
-    text: one row per person
-    attach_to: store
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: agg
-    type: node
-    shape: rect
-    text: Counts and means
-    x: 710
-    'y': 360
-    width: 230
-    height: 80
-    style:
-      color: '#2f6b8f'
-  - id: sdc
-    type: node
-    shape: rect
-    text: Disclosure control
-    x: 470
-    'y': 360
-    width: 210
-    height: 80
-    style:
-      color: '#8a5fa8'
-  - id: screen
-    type: node
-    shape: rect
-    text: What you see
-    x: 150
-    'y': 360
-    width: 200
-    height: 80
-  - id: a1
-    type: arrow
-    from:
-      ref: script
-    to:
-      ref: store
-  - id: a2
-    type: arrow
-    from:
-      ref: store
-    to:
-      ref: agg
-    style:
-      color: '#2f6b8f'
-  - id: a3
-    type: arrow
-    from:
-      ref: agg
-    to:
-      ref: sdc
-    style:
-      color: '#8a5fa8'
-  - id: a4
-    type: arrow
-    from:
-      ref: sdc
-    to:
-      ref: screen
-    style:
-      color: '#8a5fa8'
-  - id: c1
-    type: text
-    text: 1   Count the people behind every cell
-    x: 600
-    'y': 250
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-  - id: c2
-    type: text
-    text: 2   Suppress the cells under the threshold
-    x: 600
-    'y': 198
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-  - id: c3
-    type: text
-    text: 3   Round what is printed
-    x: 600
-    'y': 146
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-  - id: c4
-    type: text
-    text: 4   Check that no one unit dominates a sum
-    x: 600
-    'y': 94
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-  - id: t_title
-    type: text
-    text: Mean wage income, cohort born 1985
-    x: 500
-    'y': 690
-    font_size: 28
-  - id: h1
-    type: text
-    text: Primary
-    x: 300
-    'y': 600
-    font_size: 24
-  - id: h2
-    type: text
-    text: Upper sec.
-    x: 520
-    'y': 600
-    font_size: 24
-  - id: h3
-    type: text
-    text: University
-    x: 750
-    'y': 600
-    font_size: 24
-  - id: rule
-    type: path
-    points:
-      - [90, 572]
-      - [890, 572]
-    style:
-      color: '#8f887c'
-  - id: r1
-    type: text
-    text: Men
-    x: 130
-    'y': 525
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: r2
-    type: text
-    text: Women
-    x: 130
-    'y': 455
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: m1
-    type: text
-    text: 450 000
-    x: 300
-    'y': 525
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: m2
-    type: text
-    text: 610 000
-    x: 520
-    'y': 525
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: m3
-    type: text
-    text: 780 000
-    x: 750
-    'y': 525
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: w1
-    type: text
-    text: 390 000
-    x: 300
-    'y': 455
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: w2
-    type: text
-    text: 470 000
-    x: 520
-    'y': 455
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: w3
-    type: text
-    text: 620 000
-    x: 750
-    'y': 455
-    font_size: 24
-    style:
-      color: '#b5482e'
-  - id: cmd
-    type: text
-    text: tabulate sex educ kommune
-    x: 500
-    'y': 375
-    font_size: 24
-    style:
-      color: '#8f887c'
-  - id: eq
-    type: math
-    tex: \frac{51\,000}{2\times 6\times 350}\approx 12
-    x: 500
-    'y': 300
-  - id: cens
-    type: text
-    text: 'Vadsø  ·  women  ·  university:   n = 7   →   nothing printed'
-    x: 500
-    'y': 213
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: eq2
-    type: math
-    tex: 1\,240-1\,233=7
-    x: 500
-    'y': 145
-  - id: cens2
-    type: text
-    text: 'Vadsø  ·  men  ·  university:   n = 61   →   hidden as well'
-    x: 500
-    'y': 68
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: mark2
-    type: annotation
-    target: cens2
-    kind: box
-  - id: hist
-    type: text
-    text: Tore Dalenius, Stockholm, 1977
-    x: 500
-    'y': 630
-    font_size: 28
-  - id: ideal
-    type: text
-    text: Learn nothing about a person that you could not learn without their data
-    x: 500
-    'y': 560
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: box_a
-    type: node
-    shape: rect
-    text: Suppress the cell
-    x: 260
-    'y': 400
-    width: 300
-    height: 90
-    style:
-      color: '#8a5fa8'
-  - id: cap_a
-    type: label
-    text: exact numbers, but subtraction leaks
-    attach_to: box_a
-    side: below
-    style:
-      color: '#8a5fa8'
-  - id: box_b
-    type: node
-    shape: rect
-    text: Add noise everywhere
-    x: 740
-    'y': 400
-    width: 300
-    height: 90
-    style:
-      color: '#2f6b8f'
-  - id: cap_b
-    type: label
-    text: nothing leaks, but small areas wobble
-    attach_to: box_b
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: synth
-    type: text
-    text: An empty cell is a measurement of your table
-    x: 500
-    'y': 180
-    font_size: 28
-  - id: mark_synth
-    type: annotation
-    target: synth
-    kind: box
-commands:
-  - draw:
-      - script
-      - wall
-      - label_wall
-    speak: Now that we have seen an empty cell in our own output, let's find out who emptied it — because once you can read that layer, a censored table tells you something useful instead of wasting an afternoon.
-  - draw:
-      - store
-      - store_note
-      - a1
-    speak: Your script crosses this line; the register rows behind it — sex, birth month, education, wage income, one row per person — never do.
-  - flow:
-      along:
-        - a1
-      duration: 2
-  - draw:
-      - agg
-      - a2
-    speak: The server runs your tabulate on those rows, and what comes back is a count or a mean — here, mean wage income in the 1985 cohort.
-  - pause: 1
-  - draw:
-      - sdc
-      - a3
-    speak: Between that result and your screen sits one more step, automatic, on every output, every time.
-  - draw:
-      - c1
-      - c2
-    speak: It counts the people behind each cell, and anything under the service's threshold is not printed at all.
-  - draw:
-      - c3
-      - c4
-    speak: What is printed is rounded, so it cannot be read back as an exact headcount, and a dominance check catches a total that is really one person's salary in disguise.
-  - pause: 1
-  - draw:
-      - screen
-      - a4
-    speak: So a blocked run is not an error — it is this layer answering four questions about your table and declining one of them.
-  - flow:
-      along:
-        - a3
-        - a4
-      duration: 2
-  - pause: 1
-  - clear: {}
-  - draw:
-      - t_title
-      - h1
-      - h2
-      - h3
-      - r1
-      - r2
-      - rule
-  - draw:
-      - m1
-      - m2
-      - m3
-      - w1
-      - w2
-      - w3
-    parallel: true
-    speak: 'Last lecture''s national table: seven hundred and eighty thousand kroner for men with a degree, six hundred and twenty for women — six cells, thousands of people each, all six printed.'
-  - pause: 1
-  - draw:
-      - cmd
-      - eq
-    speak: Add municipality, and the same fifty-one thousand people spread over four thousand cells — about twelve apiece.
-  - draw:
-      - cens
-    speak: The cell you wanted, women with a degree in Vadsø, has seven people behind it and nothing in it.
-  - pause: 1
-  - draw:
-      - eq2
-    speak: 'And here is the part that surprises people: print the municipality total and the cells around it, and one subtraction hands you the seven you were never shown.'
-    delivery: grave
-  - draw:
-      - cens2
-      - mark2
-    speak: So the neighbour goes dark too — sixty-one people, perfectly safe alone, hidden to protect the small cell beside it.
-  - highlight:
-      target:
-        - eq2
-        - cens2
-      effect: glow
-    speak: Suppression is not about a cell's own size; it is about what the arithmetic of the whole table would give away.
-  - pause: 1
-  - clear: {}
-  - draw:
-      - hist
-      - ideal
-    speak: 'The Swedish statistician Tore Dalenius, writing in 1977, gave this field its name and the ideal it still chases: learn nothing about a person that you could not learn without their data.'
-  - draw:
-      - box_a
-      - cap_a
-      - box_b
-      - cap_b
-    speak: 'That ideal turned out to be unreachable, and the argument sits here: suppress cells, as microdata does, and printed numbers stay exact while subtraction leaks; add noise everywhere, as the US Census did in 2020, and nothing leaks but every small place wobbles.'
-  - pause: 1
-  - speak: American demographers said the noise made small-area numbers unusable, and Alabama sued the Census Bureau; the Bureau answered that it had reconstructed individual records from its own published tables. Neither side has conceded.
-  - draw:
-      - synth
-      - mark_synth
-    speak: 'So an empty cell measures your table, not your code: it says how few people your question was standing on.'
-  - quiz:
-      intro: One check before we go.
-      question: A cell you know holds sixty people comes back empty. Most likely why?
-      choices:
-        - Your script has a bug
-        - It would let you subtract out a smaller neighbour
-        - The service rounds all counts to zero
-      correct: 2
-      right: 'Protection spreads: a big cell is hidden so the small cell beside it cannot be recovered by arithmetic.'
-      wrong: Size alone does not decide it — the cell's arithmetic relationship to its neighbours does.
----
-title: Rewriting a blocked script
-level: advanced
-voice: male
-elements:
-  - id: head
-    type: text
-    text: Three levers on one script
-    x: 500
-    'y': 712
-    font_size: 30
-  - id: cells
-    type: pieces
-    of: grid
-    'n': 8
-    rows: 2
-    x: 300
-    'y': 460
-    width: 440
-    height: 150
-  - id: lab_edu
-    type: text
-    text: 'education: 8 NUS levels'
-    font_size: 22
-    at:
-      ref: cells
-      side: above
-      gap: 16
-    style:
-      color: '#8f887c'
-  - id: lab_sex
-    type: text
-    text: sex
-    font_size: 22
-    at:
-      ref: cells
-      side: left
-      gap: 16
-    style:
-      color: '#8f887c'
-  - id: eq1
-    type: math
-    tex: \text{born 1985} \approx 51\,000
-    x: 760
-    'y': 600
-  - id: eq2
-    type: math
-    tex: \text{one kommune} \approx 500
-    at:
-      ref: eq1
-      side: below
-      gap: 28
-  - id: eq3
-    type: math
-    tex: 500 / (2 \times 8) \approx 30
-    at:
-      ref: eq2
-      side: below
-      gap: 28
-  - id: eq4
-    type: math
-    tex: \text{top cells}:\; n \le 3
-    at:
-      ref: eq3
-      side: below
-      gap: 28
-    style:
-      color: '#b5482e'
-  - id: fix
-    type: code
-    language: microdata
-    show: above
-    width: 920
-    lines: 8
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      destring born
-      generate cohort = int(born/100)
-      keep if cohort >= 1983
-      keep if cohort <= 1987
-      generate level = int(educ/100000)
-      recode level (1/2 = 1) (3/4 = 2) (5/8 = 3)
-      tabulate level sex
-    marks:
-      - recode level (1/2 = 1) (3/4 = 2) (5/8 = 3)
-      - keep if cohort >= 1983
-      - text: import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-        kind: strike
-      - tabulate level sex
-  - id: dal
-    type: portrait
-    of: Tore Dalenius
-    cameo: true
-commands:
-  - draw:
-      - head
-      - cells
-      - lab_edu
-      - lab_sex
-    speak: Now that we have seen what the service does to a table, the useful question is how to get your answer back without abandoning it — because a suppressed table is almost always a fixable script.
-  - pause: 1
-  - draw:
-      - eq1
-      - eq2
-    speak: Take the crossing that blocked us. Fifty-one thousand children were born in Norway in 1985 — plenty — but keep one municipality of fifty thousand, and the cohort inside it is about five hundred.
-  - pause: 1
-  - draw:
-      - eq3
-    speak: Those five hundred spread over sixteen cells, two sexes by eight education levels, average about thirty each.
-  - highlight:
-      target:
-        - cells_8
-        - cells_16
-      effect: glow
-    speak: 'And the average was never the danger: education is badly skewed, so the doctoral cells in one town hold two or three people.'
-  - pause: 1
-  - draw:
-      - eq4
-    speak: Under the threshold, so those go — and their neighbours go with them, or the row totals would give them back.
-  - pause: 1
-  - clear: {}
-    speak: There are only three levers, and the same script can pull all three.
-  - draw:
-      - fix
-      - fix_line_1
-      - fix_line_2
-      - fix_line_3
-      - fix_line_4
-      - fix_line_5
-      - fix_line_6
-      - fix_line_7
-    parallel: true
-    speak: 'It opens as it has all course: the datastore, a dataset of persons, and five variables imported onto it, wage income included.'
-  - draw:
-      - fix_line_8
-      - fix_line_9
-      - fix_line_10
-      - fix_line_11
-      - fix_line_12
-      - fix_line_13
-      - fix_line_14
-    speak: Then the familiar work — the birth code made numeric, a year out of it, a population kept, an education level built and coarsened, a table asked for.
-  - pause: 1
-  - draw:
-      - fix_mark_1
-    speak: 'Lever one: eight NUS levels recoded to three, so sixteen cells become six, each nearly three times as fat.'
-  - pause: 1
-  - draw:
-      - fix_mark_2
-    speak: 'Lever two: five cohorts instead of one, 1983 to 1987 — a quarter of a million people where there were fifty thousand.'
-  - pause: 1
-  - draw:
-      - fix_mark_3
-    speak: 'Lever three is the one people miss: municipality stays imported, it just never enters the table. Holding a variable costs you nothing; crossing by it divides every cell you had.'
-  - pause: 1
-  - draw:
-      - fix_mark_4
-      - fix_out
-    speak: Two variables crossed, not three — and the table comes back whole, six cells with thousands in each.
-  - pause: 1
-  - draw:
-      - dal
-    speak: The name for all this, statistical disclosure control, traces to the Swedish statistician Tore Dalenius, who in the nineteen-seventies asked what it would even mean for a published table to be safe.
-  - erase:
-      - dal
-    speak: 'His answer was uncompromising: nothing about a person should be learnable from the statistics that could not be learned without them — a standard no useful table has ever met.'
-  - highlight:
-      target:
-        - fix_mark_1
-        - fix_mark_2
-        - fix_mark_3
-      effect: pulse
-    speak: 'Which is why the compromise is still argued over: suppression is transparent, you see which cells went — but two nearly identical tables can be differenced against each other to recover exactly what was hidden.'
-  - speak: The alternative is calibrated noise everywhere, as the US Census Bureau did in 2020 — and demographers protested that small-area counts came back unusable, with Alabama suing the Bureau over it. Where that line belongs is next time.
-    delivery: grave
-  - quiz:
-      intro: A quick check before we close.
-      question: Your table of wage by sex and detailed education in one municipality is mostly suppressed. Which change does NOT help?
-      choices:
-        - Collapse education into three levels
-        - Keep five birth cohorts instead of one
-        - Add municipality as a third crossing
-      correct: 3
-      right: A third crossing multiplies the cells and thins every one of them — the fastest way to lose a table.
-      wrong: Both of the others make cells fatter; only one of these makes them thinner.
-  - speak: 'Suppression is never a verdict on your question, only on how finely you asked it — and every repair is the same move: fewer, fatter cells.'
----
-title: How much control before the answer changes
+# Why your output came back censored
+prompt: "Why does microdata.no refuse to print a cell with very few observations, and what exactly does the service do to your results before you see them? How should you rewrite a script that keeps hitting suppression — coarser categories, larger populations, fewer crossings? The real debate: how much statistical disclosure control can you add before the research answer changes?"
+next: {"title":"Many years at once: panels, event data and the gap over the life cycle","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/many-years-at-once-panels-event-data-and.cast"}
+
+## The empty cell
 voice: male
 level: advanced
-template: line_chart
-params:
-  x:
-    - kommune × educ
-    - county × educ
-    - educ only
-    - national
-  series:
-    - name: Gender gap (%)
-      values:
-        - 21
-        - 19
-        - 16
-        - 13
-    - name: Cells suppressed (%)
-      values:
-        - 71
-        - 38
-        - 4
-        - 0
-  points: true
-  ylim: [0, 80]
-  y_label: Percent
-  x_label: Aggregation used
-  title: How much control before the answer changes
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    width: 680
-    x: 500
-    'y': 470
-    font_size: 16
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset wages
-      import db/BEFOLKNING_KJOENN as sex
-      import db/NUDB_BU 2022-01-01 as educ
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      // coarsen one dimension at a time: kommune goes first
-      tabulate sex educ
-    marks:
-      - '// coarsen one dimension at a time: kommune goes first'
-  - id: eq_raw
-    type: math
-    tex: \text{pooled} = \bar w_{\text{men}} - \bar w_{\text{women}}
-    x: 500
-    'y': 235
-    colors:
-      \text{pooled}: '#2f6b8f'
-  - id: eq_within
-    type: math
-    tex: \text{within} = \sum_c \omega_c\,(\bar w_{\text{men},c} - \bar w_{\text{women},c})
-    x: 500
-    'y': 130
-    colors:
-      \text{within}: '#b5482e'
-  - id: t_prot
-    type: text
-    text: Protection
-    x: 230
-    'y': 615
-    font_size: 30
-    style:
-      color: '#2f6b8f'
-  - id: t_use
-    type: text
-    text: Usefulness
-    x: 770
-    'y': 615
-    font_size: 30
-    style:
-      color: '#b5482e'
-  - id: arr1
-    type: arrow
-    from:
-      ref: t_prot
-    to:
-      ref: t_use
-    curved: true
-    style:
-      color: '#8f887c'
-  - id: arr2
-    type: arrow
-    from:
-      ref: t_use
-    to:
-      ref: t_prot
-    curved: true
-    style:
-      color: '#8f887c'
-  - id: dwork
-    type: portrait
-    of: Cynthia Dwork
-    cameo: true
-    source: https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Cynthia_Dwork_lectures_at_Harvard_Kennedy_School.jpg/330px-Cynthia_Dwork_lectures_at_Harvard_Kennedy_School.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail
-    strokes: img1:IY:data:image/jpeg;base64,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
-  - id: c1
-    type: text
-    text: If the estimate keeps moving,
-    x: 500
-    'y': 335
-    font_size: 32
-  - id: c2
-    type: text
-    text: you have changed the question.
-    x: 500
-    'y': 265
-    font_size: 32
-    style:
-      color: '#b5482e'
-  - id: mark_c2
-    type: annotation
-    target: c2
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: 'Now that we have seen how to rewrite a blocked script, the danger is subtler: the version that finally prints can answer a different question than the one you asked.'
-  - draw:
-      - axes
-  - draw:
-      - line_1
-    speak: 'Here is the wage gap for our 1985 cohort, estimated four ways: from the finest crossing on the left — sex by education by municipality — out to a single national number on the right.'
-  - pause: 1
-  - draw:
-      - line_2
-    speak: 'And here is what that detail costs: at the finest crossing, seventy-one percent of the cells came back suppressed.'
-  - highlight:
-      target:
-        - line_2
-      effect: glow
-    speak: The cells that survived are the large municipalities and the crowded education levels, so twenty-one percent is the gap among the visible, not the gap in the cohort.
-  - pause: 1
-  - point:
-      at:
-        ref: line_1
-      gesture: underline
-    speak: Coarsen to county and suppression falls to thirty-eight percent, the estimate to nineteen; drop place and keep education, and only a few cells are gone — sixteen.
-  - pause: 1
-  - draw:
-      - line_1
-    speak: 'Pool everything and nothing is suppressed at all: about thirteen percent, close to the figure Statistics Norway publishes for the whole labour force.'
-  - pause: 1
-  - focus:
-      target:
-        - line_1
-    speak: Eight points of movement, and not one of them came from new data.
-    delivery: grave
-  - pause: 1
-  - clear: {}
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    parallel: true
-    speak: So the discipline has to live in the script — same cohort, same wage variable, one change at a time.
-  - draw:
-      - md_line_6
-      - md_line_7
-      - md_mark_1
-    speak: Let municipality go first, since it makes the most cells and puts the fewest people in each, then run the table again and write the new estimate beside the old.
-  - pause: 1
-  - draw:
-      - eq_raw
-      - eq_within
-    speak: 'These are not one quantity measured twice: the pooled gap compares all men with all women, while the fine one averages gaps inside education and place.'
-  - highlight:
-      target:
-        - eq_within
-      effect: glow
-    speak: If the estimate stops moving as you coarsen, you lost only precision; if it keeps moving, the aggregation is doing the work, and you are reporting a different estimand — so name it in the paper.
-  - pause: 1
-  - clear: {}
-  - draw:
-      - t_prot
-      - t_use
-      - arr1
-      - arr2
-    speak: 'This tug-of-war has a name — statistical disclosure control — and an origin: a 1977 paper by the Swedish statistician Tore Dalenius, who set the ideal that nothing about a person should be learnable from the statistics that you could not learn without them.'
-  - draw:
-      - dwork
-    speak: Nearly thirty years later Cynthia Dwork proved that ideal unreachable — a release useful enough to teach you something new always teaches you something about somebody — so the question was never whether to distort, only how much.
-  - erase:
-      - dwork
-    speak: 'And how much is genuinely contested: for the 2020 census the United States Census Bureau showed its own published tables could be used to reconstruct individual records, and replaced its old methods with differential privacy — deliberate, measured noise.'
-  - highlight:
-      target:
-        - t_use
-      effect: glow
-    speak: Demographers objected that the noise falls hardest on exactly the small places and small groups their research is about; the Bureau answered that the old protection had been an illusion — and that unresolved argument sits behind every suppressed cell you meet here.
-  - pause: 1
-  - quiz:
-      intro: One check before we close.
-      question: Your gap estimate moves from 19 to 13 percent when you drop education from the table. What do you report?
-      choices:
-        - 13 — it is the unsuppressed one
-        - 19 — it came from the finer table
-        - Both, each with the aggregation it used
-      correct: 3
-      right: 'Report both with their aggregation: the two numbers answer different questions, and the movement between them is a finding, not noise.'
-      wrong: Neither number is wrong on its own — what would be wrong is presenting one of them as the gap.
-  - draw:
-      - c1
-      - c2
-      - mark_c2
-    speak: 'Across these four parts: the empty cell is a rule, the service applies it before you ever see a number, and you answer it by coarsening — but each coarsening spends part of the question, and if the estimate keeps moving, you have changed the question.'
-    delivery: grave
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Many years at once: panels, event data and the gap over the life cycle'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 9 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Many years at once: panels, event data and the gap over the life cycle'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+
+    ```microdata md x 500 y 375 width 880 font_size 18 show code lines 12 frame screen marks ["tabulate educ kommune"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    destring born
+    keep if born >= 198501
+    keep if born <= 198512
+    keep if sex == '2'
+    tabulate educ kommune
+    ```
+    text tab_title "Women born 1985: education × municipality" #8f887c x 420 y 625 hidden true
+    text th_muni "Kommune" #2f6b8f x 150 y 560 hidden true
+    text th_edu1 "Grunnskole" right th_muni gap 60 #2f6b8f hidden true
+    text th_edu2 "Videregående" right th_edu1 gap 50 #2f6b8f hidden true
+    text th_edu3 "Universitet" right th_edu2 gap 50 #2f6b8f hidden true
+    path rule below th_muni gap 12 #8f887c anchor top_left points [[0,0],[680,0]] hidden true
+    text rh1 "Oslo" below th_muni gap 34 hidden true
+    text r1c1 "1 450" below th_edu1 gap 34 hidden true
+    text r1c2 "3 100" below th_edu2 gap 34 hidden true
+    text r1c3 "6 200" below th_edu3 gap 34 hidden true
+    text rh2 "Bergen" below rh1 gap 18 hidden true
+    text r2c1 "320" below r1c1 gap 18 hidden true
+    text r2c2 "980" below r1c2 gap 18 hidden true
+    text r2c3 "1 640" below r1c3 gap 18 hidden true
+    text rh3 "Vadsø" below rh2 gap 18 hidden true
+    text r3c1 "*" below r2c1 gap 18 #b5482e hidden true
+    text r3c2 "14" below r2c2 gap 18 hidden true
+    text r3c3 "11" below r2c3 gap 18 hidden true
+    text rh4 "Utsira" below rh3 gap 18 hidden true
+    text r4c1 "*" below r3c1 gap 18 #b5482e hidden true
+    text r4c2 "*" below r3c2 gap 18 #b5482e hidden true
+    text r4c3 "*" below r3c3 gap 18 #b5482e hidden true
+    text legend "*   too few units to publish" below rh4 gap 44 #b5482e hidden true
+    mark mark_row target legend kind box hidden true
+    group tab members ["tab_title","th_muni","th_edu1","th_edu2","th_edu3","rule","rh1","r1c1","r1c2","r1c3","rh2","r2c1","r2c2","r2c3","rh3","r3c1","r3c2","r3c3","rh4","r4c1","r4c2","r4c3","legend"] fit.h 460 fit.w 760 fit.x 120 fit.y 130 hidden true
+
+Across these four parts we will work out why microdata.no sometimes hands back blanks instead of numbers, what the service does to your results before you ever see them, and how to rewrite a script so a printable answer comes back.
+    card title "Why your output came back censored" subtitle "Part 1 — The empty cell"
+
+Here is our script from lecture seven, unchanged: five variables imported onto one dataset, then three keeps that leave us with women born in 1985 — roughly thirty thousand people.
+    draw md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 md_line_6 md_line_7 md_line_8 md_line_9 md_line_10 md_line_11
+
+    pause 1
+
+And the last line asks for the crossing we actually want: highest completed education by municipality.
+    draw md_line_12
+
+Two variables in one tabulate — some three hundred and fifty municipalities times a handful of education levels, which is a couple of thousand cells to be filled by thirty thousand women.
+    draw md_mark_1
+
+    pause 1
+
+    clear
+
+Run it, and back comes a table like this one: education across the top, municipality down the side. The counts here are illustrative, but the shape is exactly what the service returns.
+    draw tab_title th_muni th_edu1 th_edu2 th_edu3 rule
+
+Oslo and Bergen are comfortable — hundreds in the lowest education group, thousands in the highest.
+    draw rh1 r1c1 r1c2 r1c3 rh2 r2c1 r2c2 r2c3
+
+    pause 1
+
+Vadsø, in Finnmark, has a few thousand inhabitants: fourteen women of the cohort with upper secondary, eleven with a degree — and where basic schooling should be, an asterisk.
+    draw rh3 r3c1 r3c2 r3c3
+
+And Utsira, the smallest municipality in the country: three cells, three asterisks.
+    draw rh4 r4c1 r4c2 r4c3
+
+An asterisk is not a zero and not a missing value — it means the number existed, and was withheld.
+    draw legend delivery grave
+
+The counts were computed on the server, checked against a minimum-cell rule, and replaced before anything travelled to your screen; you never touch the raw cell at all.
+    focus r3c1 r4c1 r4c2 r4c3 legend
+
+    pause 1
+
+And you can see why: on an island of two hundred people, a woman born in 1985 with only basic schooling is not a statistic, it is a neighbour.
+    point at.ref r4c2 gesture circle
+
+The practice has a name and a date — in 1977 the Swedish statistician Tore Dalenius published Towards a methodology for statistical disclosure control, which turned a set of office habits into a research field.
+    highlight legend effect glow
+
+Dalenius also set the ideal — a published figure should teach a reader nothing new about any one person — and decades later Cynthia Dwork's work showed that ideal unreachable, offering differential privacy instead: add calibrated noise to every cell and publish them all.
+    highlight r1c1 r1c2 r1c3 r2c1 r2c2 r2c3 effect pulse
+
+So nothing is blank, but nothing is exact either, and when the United States Census Bureau took that route for the 2020 census, demographers protested that small-area counts came out distorted for precisely the places that depend on them; that argument is unresolved, and part four is where we come back to it.
+
+    quiz "Why does the Utsira row come back as asterisks?"
+        intro: A quick check before we go on.
+        right: The cells are too small — a count of one or two people could point at a named individual, so the service replaces the number before it reaches you.
+        wrong: The people are there; what is missing is permission to print them.
+        * No women born in 1985 live there
+        + The cells hold too few people to publish
+        * The education variable is missing there
+        * The script has a syntax error
+
+So a censored output is not a bug in your script: the service answered your question, then decided how much of the answer it was allowed to say — and next time we take apart exactly which rules it applies.
+    draw mark_row
+
+## What the service does: inside the disclosure-control layer
+voice: male
+level: advanced
+
+    box script "Your script" x 150 y 570 width 200 height 80 hidden true
+    path wall dashed thick #8f887c points [[330,180],[330,680]] hidden true
+    label label_wall "No row of data crosses" above attach_to wall hidden true
+    box store "The datastore" #2f6b8f x 710 y 570 width 230 height 80 hidden true
+    label store_note "one row per person" above #2f6b8f attach_to store hidden true
+    box agg "Counts and means" #2f6b8f x 710 y 360 width 230 height 80 hidden true
+    box sdc "Disclosure control" #8a5fa8 x 470 y 360 width 210 height 80 hidden true
+    box screen "What you see" x 150 y 360 width 200 height 80 hidden true
+    arrow a1 script -> store hidden true
+    arrow a2 store -> agg #2f6b8f hidden true
+    arrow a3 agg -> sdc #8a5fa8 hidden true
+    arrow a4 sdc -> screen #8a5fa8 hidden true
+    text c1 "1   Count the people behind every cell" #8a5fa8 x 600 y 250 font_size 24 hidden true
+    text c2 "2   Suppress the cells under the threshold" #8a5fa8 x 600 y 198 font_size 24 hidden true
+    text c3 "3   Round what is printed" #8a5fa8 x 600 y 146 font_size 24 hidden true
+    text c4 "4   Check that no one unit dominates a sum" #8a5fa8 x 600 y 94 font_size 24 hidden true
+    text t_title "Mean wage income, cohort born 1985" x 500 y 690 font_size 28 hidden true
+    text h1 "Primary" x 300 y 600 font_size 24 hidden true
+    text h2 "Upper sec." x 520 y 600 font_size 24 hidden true
+    text h3 "University" x 750 y 600 font_size 24 hidden true
+    path rule #8f887c points [[90,572],[890,572]] hidden true
+    text r1 "Men" #2f6b8f x 130 y 525 font_size 24 hidden true
+    text r2 "Women" #b5482e x 130 y 455 font_size 24 hidden true
+
+Now that we have seen an empty cell in our own output, let's find out who emptied it — because once you can read that layer, a censored table tells you something useful instead of wasting an afternoon.
+    draw script wall label_wall
+
+Your script crosses this line; the register rows behind it — sex, birth month, education, wage income, one row per person — never do.
+    draw store store_note a1
+
+    flow a1 duration 2
+
+The server runs your tabulate on those rows, and what comes back is a count or a mean — here, mean wage income in the 1985 cohort.
+    draw agg a2
+
+    pause 1
+
+Between that result and your screen sits one more step, automatic, on every output, every time.
+    draw sdc a3
+
+It counts the people behind each cell, and anything under the service's threshold is not printed at all.
+    draw c1 c2
+
+What is printed is rounded, so it cannot be read back as an exact headcount, and a dominance check catches a total that is really one person's salary in disguise.
+    draw c3 c4
+
+    pause 1
+
+So a blocked run is not an error — it is this layer answering four questions about your table and declining one of them.
+    draw screen a4
+
+    flow a3 a4 duration 2
+
+    pause 1
+
+    clear
+
+    draw t_title h1 h2 h3 r1 r2 rule
+
+Last lecture's national table: seven hundred and eighty thousand kroner for men with a degree, six hundred and twenty for women — six cells, thousands of people each, all six printed.
+    text m1 "450 000" #2f6b8f x 300 y 525 font_size 24
+    text m2 "610 000" #2f6b8f x 520 y 525 font_size 24
+    text m3 "780 000" #2f6b8f x 750 y 525 font_size 24
+    text w1 "390 000" #b5482e x 300 y 455 font_size 24
+    text w2 "470 000" #b5482e x 520 y 455 font_size 24
+    text w3 "620 000" #b5482e x 750 y 455 font_size 24
+    parallel true
+
+    pause 1
+
+Add municipality, and the same fifty-one thousand people spread over four thousand cells — about twelve apiece.
+    text cmd "tabulate sex educ kommune" #8f887c x 500 y 375 font_size 24
+    math eq tex "\\frac{51\\,000}{2\\times 6\\times 350}\\approx 12" x 500 y 300
+
+The cell you wanted, women with a degree in Vadsø, has seven people behind it and nothing in it.
+    text cens "Vadsø  ·  women  ·  university:   n = 7   →   nothing printed" #b5482e x 500 y 213 font_size 22
+
+    pause 1
+
+And here is the part that surprises people: print the municipality total and the cells around it, and one subtraction hands you the seven you were never shown.
+    math eq2 tex 1\,240-1\,233=7 x 500 y 145
+    delivery grave
+
+So the neighbour goes dark too — sixty-one people, perfectly safe alone, hidden to protect the small cell beside it.
+    text cens2 "Vadsø  ·  men  ·  university:   n = 61   →   hidden as well" #b5482e x 500 y 68 font_size 22
+    mark mark2 target cens2 kind box
+
+Suppression is not about a cell's own size; it is about what the arithmetic of the whole table would give away.
+    highlight eq2 cens2 effect glow
+
+    pause 1
+
+    clear
+
+The Swedish statistician Tore Dalenius, writing in 1977, gave this field its name and the ideal it still chases: learn nothing about a person that you could not learn without their data.
+    text hist "Tore Dalenius, Stockholm, 1977" x 500 y 630 font_size 28
+    text ideal "Learn nothing about a person that you could not learn without their data" #8f887c x 500 y 560 font_size 22
+
+That ideal turned out to be unreachable, and the argument sits here: suppress cells, as microdata does, and printed numbers stay exact while subtraction leaks; add noise everywhere, as the US Census did in 2020, and nothing leaks but every small place wobbles.
+    box box_a "Suppress the cell" #8a5fa8 x 260 y 400 width 300 height 90
+    label cap_a "exact numbers, but subtraction leaks" below #8a5fa8 attach_to box_a
+    box box_b "Add noise everywhere" #2f6b8f x 740 y 400 width 300 height 90
+    label cap_b "nothing leaks, but small areas wobble" below #2f6b8f attach_to box_b
+
+    pause 1
+
+American demographers said the noise made small-area numbers unusable, and Alabama sued the Census Bureau; the Bureau answered that it had reconstructed individual records from its own published tables. Neither side has conceded.
+
+So an empty cell measures your table, not your code: it says how few people your question was standing on.
+    text synth "An empty cell is a measurement of your table" x 500 y 180 font_size 28
+    mark mark_synth target synth kind box
+
+    quiz "A cell you know holds sixty people comes back empty. Most likely why?" intro "One check before we go."
+        right: Protection spreads: a big cell is hidden so the small cell beside it cannot be recovered by arithmetic.
+        wrong: Size alone does not decide it — the cell's arithmetic relationship to its neighbours does.
+        * Your script has a bug
+        + It would let you subtract out a smaller neighbour
+        * The service rounds all counts to zero
+
+## Rewriting a blocked script
+voice: male
+level: advanced
+
+    text head "Three levers on one script" x 500 y 712 font_size 30 hidden true
+    pieces cells x 300 y 460 width 440 height 150 n 8 rows 2 of grid hidden true
+    text lab_edu "education: 8 NUS levels" above cells gap 16 #8f887c font_size 22 hidden true
+    text lab_sex "sex" left cells gap 16 #8f887c font_size 22 hidden true
+    math eq1 tex "\\text{born 1985} \\approx 51\\,000" x 760 y 600 hidden true
+    math eq2 below eq1 gap 28 tex "\\text{one kommune} \\approx 500" hidden true
+    math eq3 below eq2 gap 28 tex "500 / (2 \\times 8) \\approx 30" hidden true
+    math eq4 below eq3 gap 28 #b5482e tex "\\text{top cells}:\\; n \\le 3" hidden true
+    ```microdata fix width 920 show above lines 8 frame screen marks ["recode level (1/2 = 1) (3/4 = 2) (5/8 = 3)","keep if cohort >= 1983",{"text":"import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune","kind":"strike"},"tabulate level sex"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    destring born
+    generate cohort = int(born/100)
+    keep if cohort >= 1983
+    keep if cohort <= 1987
+    generate level = int(educ/100000)
+    recode level (1/2 = 1) (3/4 = 2) (5/8 = 3)
+    tabulate level sex
+    ```
+
+Now that we have seen what the service does to a table, the useful question is how to get your answer back without abandoning it — because a suppressed table is almost always a fixable script.
+    draw head cells lab_edu lab_sex
+
+    pause 1
+
+Take the crossing that blocked us. Fifty-one thousand children were born in Norway in 1985 — plenty — but keep one municipality of fifty thousand, and the cohort inside it is about five hundred.
+    draw eq1 eq2
+
+    pause 1
+
+Those five hundred spread over sixteen cells, two sexes by eight education levels, average about thirty each.
+    draw eq3
+
+And the average was never the danger: education is badly skewed, so the doctoral cells in one town hold two or three people.
+    highlight cells_8 cells_16 effect glow
+
+    pause 1
+
+Under the threshold, so those go — and their neighbours go with them, or the row totals would give them back.
+    draw eq4
+
+    pause 1
+
+There are only three levers, and the same script can pull all three.
+    clear
+
+It opens as it has all course: the datastore, a dataset of persons, and five variables imported onto it, wage income included.
+    draw fix fix_line_1 fix_line_2 fix_line_3 fix_line_4 fix_line_5 fix_line_6 fix_line_7 parallel true
+
+Then the familiar work — the birth code made numeric, a year out of it, a population kept, an education level built and coarsened, a table asked for.
+    draw fix_line_8 fix_line_9 fix_line_10 fix_line_11 fix_line_12 fix_line_13 fix_line_14
+
+    pause 1
+
+Lever one: eight NUS levels recoded to three, so sixteen cells become six, each nearly three times as fat.
+    draw fix_mark_1
+
+    pause 1
+
+Lever two: five cohorts instead of one, 1983 to 1987 — a quarter of a million people where there were fifty thousand.
+    draw fix_mark_2
+
+    pause 1
+
+Lever three is the one people miss: municipality stays imported, it just never enters the table. Holding a variable costs you nothing; crossing by it divides every cell you had.
+    draw fix_mark_3
+
+    pause 1
+
+Two variables crossed, not three — and the table comes back whole, six cells with thousands in each.
+    draw fix_mark_4 fix_out
+
+    pause 1
+
+The name for all this, statistical disclosure control, traces to the Swedish statistician Tore Dalenius, who in the nineteen-seventies asked what it would even mean for a published table to be safe.
+    portrait dal of "Tore Dalenius" cameo true
+
+His answer was uncompromising: nothing about a person should be learnable from the statistics that could not be learned without them — a standard no useful table has ever met.
+    erase dal
+
+Which is why the compromise is still argued over: suppression is transparent, you see which cells went — but two nearly identical tables can be differenced against each other to recover exactly what was hidden.
+    highlight fix_mark_1 fix_mark_2 fix_mark_3 effect pulse
+
+The alternative is calibrated noise everywhere, as the US Census Bureau did in 2020 — and demographers protested that small-area counts came back unusable, with Alabama suing the Bureau over it. Where that line belongs is next time.
+    delivery grave
+
+    quiz "Your table of wage by sex and detailed education in one municipality is mostly suppressed. Which change does NOT help?"
+        intro: A quick check before we close.
+        right: A third crossing multiplies the cells and thins every one of them — the fastest way to lose a table.
+        wrong: Both of the others make cells fatter; only one of these makes them thinner.
+        * Collapse education into three levels
+        * Keep five birth cohorts instead of one
+        + Add municipality as a third crossing
+
+Suppression is never a verdict on your question, only on how finely you asked it — and every repair is the same move: fewer, fatter cells.
+
+## How much control before the answer changes
+voice: male
+level: advanced
+use: line_chart
+with:
+    x:
+      - kommune × educ
+      - county × educ
+      - educ only
+      - national
+    series:
+      - {name: Gender gap (%), values: [21, 19, 16, 13]}
+      - {name: Cells suppressed (%), values: [71, 38, 4, 0]}
+    points: true
+    ylim:
+      - 0
+      - 80
+    y_label: Percent
+    x_label: Aggregation used
+    title: How much control before the answer changes
+
+    ```microdata md x 500 y 470 width 680 font_size 16 show code frame screen marks ["// coarsen one dimension at a time: kommune goes first"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset wages
+    import db/BEFOLKNING_KJOENN as sex
+    import db/NUDB_BU 2022-01-01 as educ
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    // coarsen one dimension at a time: kommune goes first
+    tabulate sex educ
+    ```
+
+Now that we have seen how to rewrite a blocked script, the danger is subtler: the version that finally prints can answer a different question than the one you asked.
+    draw title
+
+    draw axes
+
+Here is the wage gap for our 1985 cohort, estimated four ways: from the finest crossing on the left — sex by education by municipality — out to a single national number on the right.
+    draw line_1
+
+    pause 1
+
+And here is what that detail costs: at the finest crossing, seventy-one percent of the cells came back suppressed.
+    draw line_2
+
+The cells that survived are the large municipalities and the crowded education levels, so twenty-one percent is the gap among the visible, not the gap in the cohort.
+    highlight line_2 effect glow
+
+    pause 1
+
+Coarsen to county and suppression falls to thirty-eight percent, the estimate to nineteen; drop place and keep education, and only a few cells are gone — sixteen.
+    point at.ref line_1 gesture underline
+
+    pause 1
+
+Pool everything and nothing is suppressed at all: about thirteen percent, close to the figure Statistics Norway publishes for the whole labour force.
+    draw line_1
+
+    pause 1
+
+Eight points of movement, and not one of them came from new data.
+    focus line_1 delivery grave
+
+    pause 1
+
+    clear
+
+So the discipline has to live in the script — same cohort, same wage variable, one change at a time.
+    draw md md_line_1 md_line_2 md_line_3 md_line_4 md_line_5 parallel true
+
+Let municipality go first, since it makes the most cells and puts the fewest people in each, then run the table again and write the new estimate beside the old.
+    draw md_line_6 md_line_7 md_mark_1
+
+    pause 1
+
+These are not one quantity measured twice: the pooled gap compares all men with all women, while the fine one averages gaps inside education and place.
+    math eq_raw tex "\\text{pooled} = \\bar w_{\\text{men}} - \\bar w_{\\text{women}}" colors {"\\text{pooled}":"#2f6b8f"} x 500 y 235
+    math eq_within tex "\\text{within} = \\sum_c \\omega_c\\,(\\bar w_{\\text{men},c} - \\bar w_{\\text{women},c})" colors {"\\text{within}":"#b5482e"} x 500 y 130
+
+If the estimate stops moving as you coarsen, you lost only precision; if it keeps moving, the aggregation is doing the work, and you are reporting a different estimand — so name it in the paper.
+    highlight eq_within effect glow
+
+    pause 1
+
+    clear
+
+This tug-of-war has a name — statistical disclosure control — and an origin: a 1977 paper by the Swedish statistician Tore Dalenius, who set the ideal that nothing about a person should be learnable from the statistics that you could not learn without them.
+    text t_prot "Protection" #2f6b8f x 230 y 615 font_size 30
+    text t_use "Usefulness" #b5482e x 770 y 615 font_size 30
+    arrow arr1 t_prot -> t_use curved #8f887c
+    arrow arr2 t_use -> t_prot curved #8f887c
+
+Nearly thirty years later Cynthia Dwork proved that ideal unreachable — a release useful enough to teach you something new always teaches you something about somebody — so the question was never whether to distort, only how much.
+    portrait dwork of "Cynthia Dwork" strokes img1:IY:data:image/jpeg;base64,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 source https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Cynthia_Dwork_lectures_at_Harvard_Kennedy_School.jpg/330px-Cynthia_Dwork_lectures_at_Harvard_Kennedy_School.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail cameo true
+
+And how much is genuinely contested: for the 2020 census the United States Census Bureau showed its own published tables could be used to reconstruct individual records, and replaced its old methods with differential privacy — deliberate, measured noise.
+    erase dwork
+
+Demographers objected that the noise falls hardest on exactly the small places and small groups their research is about; the Bureau answered that the old protection had been an illusion — and that unresolved argument sits behind every suppressed cell you meet here.
+    highlight t_use effect glow
+
+    pause 1
+
+    quiz "Your gap estimate moves from 19 to 13 percent when you drop education from the table. What do you report?"
+        intro: One check before we close.
+        right: Report both with their aggregation: the two numbers answer different questions, and the movement between them is a finding, not noise.
+        wrong: Neither number is wrong on its own — what would be wrong is presenting one of them as the gap.
+        * 13 — it is the unsuppressed one
+        * 19 — it came from the finer table
+        + Both, each with the aggregation it used
+
+Across these four parts: the empty cell is a rule, the service applies it before you ever see a number, and you answer it by coarsening — but each coarsening spends part of the question, and if the estimate keeps moving, you have changed the question.
+    text c1 "If the estimate keeps moving," x 500 y 335 font_size 32
+    text c2 "you have changed the question." #b5482e x 500 y 265 font_size 32
+    mark mark_c2 target c2 kind box
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: Many years at once: panels, event data and the gap over the life cycle
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:7 title "Output that tells the truth: tabulate, summarize, histogram, boxplot, scatter" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:9 title "Many years at once: panels, event data and the gap over the life cycle" size 320 x 735 y 395
+
+    link end_again href lecture:8 title "Watch again" form text open here x 500 y 160
+    text end_count "8 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

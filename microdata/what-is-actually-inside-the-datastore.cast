@@ -1,1165 +1,377 @@
-playlist:
-  title: What is actually inside the datastore
-  prompt: 'Which registers and which years does the microdata.no datastore cover, and who is the unit of observation? How is a variable described in the metadata catalogue — name, unit type, value labels, time coverage? What the cohort born in 1985 looks like in the data: how many people, and which variables exist for them'
-  next:
-    title: 'Building datasets I: create-dataset and the four shapes of import'
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/building-datasets-i-create-dataset-and.yaml
----
-title: What is actually inside the datastore — the map before the script
-level: advanced
-voice: male
-elements:
-  - id: script
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    width: 740
-    font_size: 18
-    x: 500
-    'y': 400
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as born
-      import db/BEFOLKNING_KJOENN as sex
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      histogram wage
-    marks:
-      - BEFOLKNING_FOEDSELS_AAR_MND
-      - INNTEKT_WLONN
-      - '2022-01-01'
-  - id: axis
-    type: path
-    points:
-      - [0, 0]
-      - [240, 0]
-      - [480, 0]
-      - [720, 0]
-    style:
-      color: '#8f887c'
-  - id: y1965
-    type: text
-    text: '1965'
-    font_size: 20
-    at:
-      ref: axis
-      anchor: point_1
-      offset: [0, -26]
-    style:
-      color: '#8f887c'
-  - id: y1985
-    type: text
-    text: '1985'
-    font_size: 20
-    at:
-      ref: axis
-      anchor: point_2
-      offset: [0, -26]
-    style:
-      color: '#8f887c'
-  - id: y2005
-    type: text
-    text: '2005'
-    font_size: 20
-    at:
-      ref: axis
-      anchor: point_3
-      offset: [0, -26]
-    style:
-      color: '#8f887c'
-  - id: y2025
-    type: text
-    text: '2025'
-    font_size: 20
-    at:
-      ref: axis
-      anchor: point_4
-      offset: [0, -26]
-    style:
-      color: '#8f887c'
-  - id: band_bef
-    type: shape
-    shape: rect
-    x: 372
-    'y': 90
-    width: 696
-    height: 48
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-      opacity: 0.35
-  - id: lab_bef
-    type: label
-    text: BEFOLKNING (population)
-    attach_to: band_bef
-    side: right
-    style:
-      color: '#2f6b8f'
-  - id: band_inn
-    type: shape
-    shape: rect
-    x: 372
-    'y': 175
-    width: 696
-    height: 48
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-      opacity: 0.35
-  - id: lab_inn
-    type: label
-    text: INNTEKT (income)
-    attach_to: band_inn
-    side: right
-    style:
-      color: '#b5482e'
-  - id: band_nudb
-    type: shape
-    shape: rect
-    x: 390
-    'y': 260
-    width: 660
-    height: 48
-    style:
-      fill: '#8a5fa8'
-      color: '#8a5fa8'
-      opacity: 0.35
-  - id: lab_nudb
-    type: label
-    text: NUDB (education)
-    attach_to: band_nudb
-    side: right
-    style:
-      color: '#8a5fa8'
-  - id: more_note
-    type: text
-    text: + employment, benefits, sickness absence …
-    font_size: 22
-    at:
-      ref: band_nudb
-      side: above
-      gap: 26
-    style:
-      color: '#8f887c'
-  - id: person
-    type: shape
-    shape: person
-    width: 70
-    height: 120
-    at:
-      ref: band_inn
-      side: left
-      gap: 40
-  - id: lab_person
-    type: label
-    text: one row = one person
-    attach_to: person
-    side: below
-  - id: cohort_line
-    type: path
-    points:
-      - [240, 58]
-      - [240, 296]
-    style:
-      color: '#3d3833'
-      dash: true
-  - id: lab_cohort
-    type: label
-    text: born 1985
-    attach_to: cohort_line
-    side: above-left
-  - id: mark_cohort
-    type: annotation
-    target: lab_cohort
-    kind: box
-  - id: map
-    type: group
-    members:
-      - axis
-      - y1965
-      - y1985
-      - y2005
-      - y2025
-      - band_bef
-      - lab_bef
-      - band_inn
-      - lab_inn
-      - band_nudb
-      - lab_nudb
-      - more_note
-      - person
-      - lab_person
-      - cohort_line
-      - lab_cohort
-    fit: full
-commands:
-  - draw:
-      - script
-      - script_line_1
-    parallel: true
-    speak: Across these four parts we open the datastore itself — which registers are in it, which years each one covers, and who a single row actually is.
-  - draw:
-      - script_line_2
-      - script_line_3
-      - script_line_4
-      - script_line_5
-    speak: 'Our question has not changed since lecture one: people born in 1985 — what do the men and the women earn in wages?'
-  - draw:
-      - script_line_6
-    speak: Five lines, one plot — and nothing in them told us where those kroner came from, or which years we could have asked for.
-  - draw:
-      - script_mark_1
-    speak: 'The name itself says it: BEFOLKNING is a register, the population register, and FOEDSELS_AAR_MND is what it holds — birth year and month.'
-  - draw:
-      - script_mark_2
-    speak: INNTEKT_WLONN reads the same way — income register, wage income. A variable name here is an address, not a label.
-  - draw:
-      - script_mark_3
-    speak: And the date belongs to the address too, because almost nothing in a register is simply true; it is true on a day.
-  - clear: {}
-    speak: So before we add another line of script, let us draw the place those addresses point into.
-  - draw:
-      - axis
-      - y1965
-      - y1985
-      - y2005
-      - y2025
-    parallel: true
-  - draw:
-      - band_bef
-      - lab_bef
-    speak: 'The spine of everything: the population register — every person registered as living in Norway, about 5.6 million of them today, reaching back to the late 1960s.'
-  - draw:
-      - band_inn
-      - lab_inn
-    speak: 'Above it, income from the tax registers: annual sums, person by person, the oldest series also reaching back to the late sixties.'
-  - draw:
-      - band_nudb
-      - lab_nudb
-    speak: And education — NUDB, the national education database — which has carried people's highest completed education since the 1970 census.
-  - draw:
-      - more_note
-    speak: Employment, benefits, sickness absence and dozens more sit alongside these; the bands show the shape only — the catalogue prints the exact first and last year for every single variable.
-  - draw:
-      - person
-      - lab_person
-    speak: 'All of it hangs on one unit, the person: one row, one human being, joined across registers by the eleven-digit ID number Norway introduced back in 1964.'
-  - point:
-      at:
-        ref: band_bef
-      gesture: underline
-    speak: Which is why a municipality code is never a fact about a municipality — it is a fact about a person, where they were registered on a given date.
-  - draw:
-      - cohort_line
-      - lab_cohort
-    speak: 'Now put our cohort on the map: just over fifty thousand children were born in Norway in 1985, and that line is where they enter the population register.'
-  - highlight:
-      target:
-        - band_nudb
-        - band_inn
-      effect: glow
-    speak: Education fills in through their teens, wages from their first job around the turn of the millennium — and at our measurement date, in 2022, they turn thirty-seven.
-  - draw:
-      - mark_cohort
-    speak: 'Three registers overlapping one cohort''s whole working life: that overlap is why the wage-gap question is answerable at all.'
-    delivery: grave
-  - speak: Read the map before the script — the register says where a variable lives, the years say whether your cohort is in it, and the unit says what one row means.
-  - quiz:
-      intro: One check before part two.
-      question: In db/NUDB_BU, what is NUDB?
-      choices:
-        - The register the variable comes from
-        - The unit of observation
-        - The year it was measured
-      correct: 1
-      right: NUDB is the register — the national education database — and BU is the variable inside it.
-      wrong: 'Look at where it sits in the name: it comes before the thing being measured.'
----
-title: Registers, years, units
-level: advanced
-voice: male
-elements:
-  - id: title
-    type: text
-    text: What the datastore covers
-    x: 500
-    'y': 700
-    font_size: 32
-  - id: grid
-    type: pieces
-    of: grid
-    x: 560
-    'y': 430
-    width: 480
-    height: 280
-    'n': 7
-    rows: 4
-    style:
-      fill: '#87a878'
-      color: '#3d3833'
-  - id: d1
-    type: text
-    text: 1960s
-    x: 360
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: d2
-    type: text
-    text: 1970s
-    x: 440
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: d3
-    type: text
-    text: 1980s
-    x: 520
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: d4
-    type: text
-    text: 1990s
-    x: 600
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: d5
-    type: text
-    text: 2000s
-    x: 680
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: d6
-    type: text
-    text: 2010s
-    x: 760
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: d7
-    type: text
-    text: 2020s
-    x: 840
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: r1
-    type: text
-    text: Population
-    x: 225
-    'y': 535
-    font_size: 24
-  - id: r2
-    type: text
-    text: Education
-    x: 225
-    'y': 465
-    font_size: 24
-  - id: r3
-    type: text
-    text: Income
-    x: 225
-    'y': 395
-    font_size: 24
-  - id: r4
-    type: text
-    text: Employment
-    x: 225
-    'y': 325
-    font_size: 24
-  - id: unit_head
-    type: text
-    text: Unit
-    x: 900
-    'y': 590
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: u1
-    type: text
-    text: person
-    x: 900
-    'y': 535
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: u2
-    type: text
-    text: person
-    x: 900
-    'y': 465
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: u3
-    type: text
-    text: person
-    x: 900
-    'y': 395
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: u4
-    type: text
-    text: person + firm
-    x: 898
-    'y': 325
-    font_size: 20
-    style:
-      color: '#2f6b8f'
-  - id: note
-    type: text
-    text: Spans here are indicative — every variable entry states its own first and last year.
-    x: 500
-    'y': 235
-    font_size: 20
-    style:
-      color: '#8f887c'
-  - id: scr1
-    type: text
-    text: import db/INNTEKT_WLONN
-    x: 392
-    'y': 140
-    font_size: 22
-  - id: scr2
-    type: text
-    text: '2019-01-01'
-    at:
-      ref: scr1
-      side: right
-      gap: 14
-    font_size: 22
-  - id: scr3
-    type: text
-    text: as wage
-    at:
-      ref: scr2
-      side: right
-      gap: 14
-    font_size: 22
-  - id: mark_date
-    type: annotation
-    target: scr2
-    kind: box
-    style:
-      color: '#b5482e'
-commands:
-  - draw:
-      - title
-      - grid
-    speak: 'Now that we have the map of microdata.no in our heads, let''s look at the territory itself: which registers are in there, how far back each one reaches, and what a single row of it actually is.'
-  - draw:
-      - d1
-      - d2
-      - d3
-      - d4
-      - d5
-      - d6
-      - d7
-    parallel: true
-  - draw:
-      - r1
-    speak: 'The population register is the spine: BEFOLKNING variables — sex, birth year and month, municipality of residence — for everyone registered as resident in Norway, reaching back to the sixties, when the central population register was built in 1964.'
-  - pause: 0.3
-  - draw:
-      - r2
-    speak: Education comes from NUDB, the national education database, which holds each person's highest completed qualification, and it starts with the 1970 census, when the whole population was asked what they had finished.
-  - fade:
-      target:
-        - grid_8
-      to: 0.12
-    speak: 'So the nineteen-sixties column of that row is simply empty: there is no education variable to ask about 1965 with.'
-  - draw:
-      - r3
-    speak: Income comes from the tax registers — INNTEKT_WLONN, wage income, is the variable at the centre of our gender-gap script.
-  - fade:
-      target:
-        - grid_15
-        - grid_16
-        - grid_17
-      to: 0.12
-    speak: 'It does not reach back as far as the people do: the register-based income statistics covering every person begin in the nineteen-nineties, so three decades here stay blank.'
-  - draw:
-      - r4
-    speak: And employment — who worked where, for whom, and how much.
-  - fade:
-      target:
-        - grid_22
-        - grid_23
-        - grid_24
-        - grid_25
-        - grid_26
-      to: 0.12
-    speak: Nearly that whole row is blank, because today's employment data come from a-ordningen, the joint monthly report employers have filed since the first of January 2015.
-  - draw:
-      - note
-    speak: 'Treat these spans as indicative: the years that bind are printed in each variable''s own entry, which we open in the next part — and the right edge is never today, since a tax year must close and be processed before it lands.'
-  - pause: 0.4
-  - draw:
-      - unit_head
-      - u1
-      - u2
-      - u3
-    speak: 'Now the question that quietly wrecks analyses: what is one row? For these three, one row is one person — the person is the datastore''s default unit of observation.'
-  - draw:
-      - u4
-    speak: Employment is the awkward one, because a job ties a person to an employer, so the datastore also carries units of its own for enterprises and establishments.
-  - point:
-      at:
-        ref: r1
-      gesture: underline
-    speak: 'Households and families are units in their own right as well — but nothing here is a municipality: KOMMNR_FORMELL is a number carried by a person, not a unit with rows of its own.'
-  - draw:
-      - scr1
-      - scr2
-      - scr3
-    speak: 'Which is why an import line carries two things: a variable from one of these registers, and a date.'
-  - draw:
-      - mark_date
-    speak: That date has to land inside the variable's span — ask for wage income in 1985, the year our cohort was born, and the blank cells up there are your answer.
-  - quiz:
-      intro: A quick check before we open a variable entry.
-      question: In the datastore, what is one row of BEFOLKNING_KJOENN?
-      choices:
-        - One person
-        - One household
-        - One municipality
-      correct: 1
-      right: One person — the person is the default unit, and household or firm units have to be asked for separately.
-      wrong: Sex is recorded for individuals, not for groups of them.
-  - highlight:
-      target:
-        - grid
-      effect: glow
-    speak: 'Three things settled before you write a line of script: which register holds the variable, which years it covers, and what one of its rows is.'
----
-title: Anatomy of a variable entry
+# What is actually inside the datastore
+prompt: "Which registers and which years does the microdata.no datastore cover, and who is the unit of observation? How is a variable described in the metadata catalogue — name, unit type, value labels, time coverage? What the cohort born in 1985 looks like in the data: how many people, and which variables exist for them"
+next: {"title":"Building datasets I: create-dataset and the four shapes of import","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/building-datasets-i-create-dataset-and.cast"}
+
+## What is actually inside the datastore — the map before the script
 voice: male
 level: advanced
-elements:
-  - id: heading
-    type: text
-    text: Anatomy of a variable entry
-    x: 500
-    'y': 712
-    font_size: 30
-  - id: card
-    type: shape
-    shape: rect
-    x: 300
-    'y': 380
-    width: 440
-    height: 470
-  - id: vname
-    type: text
-    text: BEFOLKNING_KJOENN
-    font_size: 26
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -26]
-    anchor: top_left
-    style:
-      color: '#2f6b8f'
-  - id: rule
-    type: path
-    points:
-      - [0, 0]
-      - [384, 0]
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -72]
-    anchor: start
-    style:
-      color: '#8f887c'
-  - id: r1k
-    type: text
-    text: Unit type
-    font_size: 18
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -110]
-    anchor: top_left
-    style:
-      color: '#8f887c'
-  - id: r1v
-    type: text
-    text: Person
-    font_size: 24
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -140]
-    anchor: top_left
-  - id: r2k
-    type: text
-    text: Data type
-    font_size: 18
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -200]
-    anchor: top_left
-    style:
-      color: '#8f887c'
-  - id: r2v
-    type: text
-    text: Categorical code
-    font_size: 24
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -230]
-    anchor: top_left
-  - id: r3k
-    type: text
-    text: Value labels
-    font_size: 18
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -290]
-    anchor: top_left
-    style:
-      color: '#8f887c'
-  - id: r3v
-    type: text
-    text: 1 = man   2 = woman
-    font_size: 24
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -320]
-    anchor: top_left
-    style:
-      color: '#b5482e'
-  - id: r4k
-    type: text
-    text: Time coverage
-    font_size: 18
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -380]
-    anchor: top_left
-    style:
-      color: '#8f887c'
-  - id: r4v
-    type: text
-    text: Fixed — no date needed
-    font_size: 24
-    at:
-      ref: card
-      anchor: top_left
-      offset: [28, -410]
-    anchor: top_left
-  - id: card_group
-    type: group
-    members:
-      - card
-      - vname
-      - rule
-      - r1k
-      - r1v
-      - r2k
-      - r2v
-      - r3k
-      - r3v
-      - r4k
-      - r4v
-    fit:
-      x: 50
-      'y': 90
-      w: 430
-      h: 520
-  - id: p_head
-    type: text
-    text: What the prefix tells you
-    font_size: 24
-    x: 600
-    'y': 560
-  - id: p1k
-    type: text
-    text: BEFOLKNING_
-    font_size: 24
-    at:
-      ref: p_head
-      side: below
-      gap: 30
-    style:
-      color: '#2f6b8f'
-  - id: p1v
-    type: text
-    text: population register · any date
-    font_size: 20
-    at:
-      ref: p1k
-      side: below
-      gap: 8
-  - id: p2k
-    type: text
-    text: INNTEKT_
-    font_size: 24
-    at:
-      ref: p1v
-      side: below
-      gap: 30
-    style:
-      color: '#2f6b8f'
-  - id: p2v
-    type: text
-    text: tax register · one value per year
-    font_size: 20
-    at:
-      ref: p2k
-      side: below
-      gap: 8
-  - id: p3k
-    type: text
-    text: NUDB_
-    font_size: 24
-    at:
-      ref: p2v
-      side: below
-      gap: 30
-    style:
-      color: '#2f6b8f'
-  - id: p3v
-    type: text
-    text: education database · one value per year
-    font_size: 20
-    at:
-      ref: p3k
-      side: below
-      gap: 8
-  - id: prefix_group
-    type: group
-    members:
-      - p_head
-      - p1k
-      - p1v
-      - p2k
-      - p2v
-      - p3k
-      - p3v
-    fit:
-      x: 520
-      'y': 150
-      w: 430
-      h: 430
-  - id: md
-    type: code
-    language: microdata
-    show: above
-    width: 900
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      // fixed variable: no date
-      import db/BEFOLKNING_KJOENN as sex
-      // annual variable: a date is required
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      tabulate sex
-commands:
-  - draw:
-      - heading
-      - card
-      - vname
-    speak: Now that we have seen which registers and which years the datastore covers, let's read one catalogue card line by line — because every mistake in our gender-gap script starts with a card someone skimmed.
-  - draw:
-      - rule
-      - r1k
-      - r1v
-    speak: 'Unit type: person. That one word fixes the shape of everything you build — one row per human being, not per household, not per firm.'
-  - pause: 0.3
-  - draw:
-      - r2k
-      - r2v
-    speak: 'Data type: categorical, and the values are stored as bare codes, not as words.'
-  - draw:
-      - r3k
-      - r3v
-    speak: 'So the card has to tell you what the codes mean: one is man, two is woman.'
-  - highlight:
-      target:
-        - r3v
-      effect: glow
-    speak: Nothing in the data itself ever says "woman" — the meaning lives here, in the metadata, and filtering on the wrong side of that line silently hands you the other half of Norway.
-  - draw:
-      - r4k
-      - r4v
-    speak: 'And time coverage: sex is a fixed variable, one value per person for all time, so the import takes no date at all — while an income card shows a span of years and demands one.'
-  - pause: 0.4
-  - point:
-      at:
-        ref: vname
-      gesture: underline
-    speak: Now look at the name once more, because it is not only a name.
-  - draw:
-      - p_head
-      - p1k
-      - p1v
-    speak: 'Everything before the first underscore is the register the variable comes from: BEFOLKNING is the population register, which is event-based, so it can answer for any date you ask.'
-  - draw:
-      - p2k
-      - p2v
-      - p3k
-      - p3v
-    speak: INNTEKT comes from the tax settlement, one value per income year; NUDB is the national education database, which likewise lands once a year.
-  - highlight:
-      target:
-        - p1k
-        - p2k
-        - p3k
-      effect: pulse
-    speak: 'So the prefix tells you the update rhythm before you read a single number — and all of these cards are public: you can browse the catalogue at microdata dot no long before you have an account.'
-  - pause: 0.4
-  - clear:
-      keep:
-        - heading
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: 'Now the card becomes script: version fifty-four of the datastore, and an empty dataset of persons.'
-  - draw:
-      - md_line_3
-      - md_line_4
-    speak: The card said fixed, so this import carries no date — the catalogue name on the left, your short alias, sex, on the right.
-  - draw:
-      - md_line_5
-      - md_line_6
-    speak: 'Wage income is the other kind: its card covers a span of years, so we must name a date, the first of January twenty twenty-two.'
-  - draw:
-      - md_line_7
-      - md_out
-    speak: Tabulate, and back come exactly the two codes the card promised — one and two, with no words attached, because the labels never left the metadata.
-  - quiz:
-      intro: A quick check.
-      question: A card says the variable is fixed. What does your import line need?
-      choices:
-        - A date
-        - No date
-        - A from- and a to-date
-      correct: 2
-      right: No date — a fixed variable has one value per person, so you import it bare; only time-varying variables take a date.
-      wrong: Not quite — look again at what the card said about sex.
-  - speak: 'A variable card is a contract: the unit type says what a row is, the codes say what you may filter on, and the prefix says how often the truth behind it is refreshed.'
----
-title: What the 1985 cohort looks like
-level: advanced
+
+    ```microdata script x 500 y 400 width 740 font_size 18 show code frame screen marks ["BEFOLKNING_FOEDSELS_AAR_MND","INNTEKT_WLONN","2022-01-01"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as born
+    import db/BEFOLKNING_KJOENN as sex
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    histogram wage
+    ```
+    path axis #8f887c points [[0,0],[240,0],[480,0],[720,0]] hidden true
+    text y1965 "1965" #8f887c at.anchor point_1 at.offset [0,-26] at.ref axis font_size 20 hidden true
+    text y1985 "1985" #8f887c at.anchor point_2 at.offset [0,-26] at.ref axis font_size 20 hidden true
+    text y2005 "2005" #8f887c at.anchor point_3 at.offset [0,-26] at.ref axis font_size 20 hidden true
+    text y2025 "2025" #8f887c at.anchor point_4 at.offset [0,-26] at.ref axis font_size 20 hidden true
+    shape band_bef #2f6b8f shape rect x 372 y 90 width 696 height 48 style.fill #2f6b8f style.opacity 0.35 hidden true
+    label lab_bef "BEFOLKNING (population)" right #2f6b8f attach_to band_bef hidden true
+    shape band_inn #b5482e shape rect x 372 y 175 width 696 height 48 style.fill #b5482e style.opacity 0.35 hidden true
+    label lab_inn "INNTEKT (income)" right #b5482e attach_to band_inn hidden true
+    shape band_nudb #8a5fa8 shape rect x 390 y 260 width 660 height 48 style.fill #8a5fa8 style.opacity 0.35 hidden true
+    label lab_nudb "NUDB (education)" right #8a5fa8 attach_to band_nudb hidden true
+    text more_note "+ employment, benefits, sickness absence …" above band_nudb gap 26 #8f887c font_size 22 hidden true
+    shape person left band_inn gap 40 shape person width 70 height 120 hidden true
+    label lab_person "one row = one person" below attach_to person hidden true
+    path cohort_line dashed #3d3833 points [[240,58],[240,296]] hidden true
+    label lab_cohort "born 1985" above-left attach_to cohort_line hidden true
+    mark mark_cohort target lab_cohort kind box hidden true
+    group map members ["axis","y1965","y1985","y2005","y2025","band_bef","lab_bef","band_inn","lab_inn","band_nudb","lab_nudb","more_note","person","lab_person","cohort_line","lab_cohort"] fit full hidden true
+
+Across these four parts we open the datastore itself — which registers are in it, which years each one covers, and who a single row actually is.
+    draw script script_line_1 parallel true
+
+Our question has not changed since lecture one: people born in 1985 — what do the men and the women earn in wages?
+    draw script_line_2 script_line_3 script_line_4 script_line_5
+
+Five lines, one plot — and nothing in them told us where those kroner came from, or which years we could have asked for.
+    draw script_line_6
+
+The name itself says it: BEFOLKNING is a register, the population register, and FOEDSELS_AAR_MND is what it holds — birth year and month.
+    draw script_mark_1
+
+INNTEKT_WLONN reads the same way — income register, wage income. A variable name here is an address, not a label.
+    draw script_mark_2
+
+And the date belongs to the address too, because almost nothing in a register is simply true; it is true on a day.
+    draw script_mark_3
+
+So before we add another line of script, let us draw the place those addresses point into.
+    clear
+
+    draw axis y1965 y1985 y2005 y2025 parallel true
+
+The spine of everything: the population register — every person registered as living in Norway, about 5.6 million of them today, reaching back to the late 1960s.
+    draw band_bef lab_bef
+
+Above it, income from the tax registers: annual sums, person by person, the oldest series also reaching back to the late sixties.
+    draw band_inn lab_inn
+
+And education — NUDB, the national education database — which has carried people's highest completed education since the 1970 census.
+    draw band_nudb lab_nudb
+
+Employment, benefits, sickness absence and dozens more sit alongside these; the bands show the shape only — the catalogue prints the exact first and last year for every single variable.
+    draw more_note
+
+All of it hangs on one unit, the person: one row, one human being, joined across registers by the eleven-digit ID number Norway introduced back in 1964.
+    draw person lab_person
+
+Which is why a municipality code is never a fact about a municipality — it is a fact about a person, where they were registered on a given date.
+    point at.ref band_bef gesture underline
+
+Now put our cohort on the map: just over fifty thousand children were born in Norway in 1985, and that line is where they enter the population register.
+    draw cohort_line lab_cohort
+
+Education fills in through their teens, wages from their first job around the turn of the millennium — and at our measurement date, in 2022, they turn thirty-seven.
+    highlight band_nudb band_inn effect glow
+
+Three registers overlapping one cohort's whole working life: that overlap is why the wage-gap question is answerable at all.
+    draw mark_cohort delivery grave
+
+Read the map before the script — the register says where a variable lives, the years say whether your cohort is in it, and the unit says what one row means.
+
+    quiz "In db/NUDB_BU, what is NUDB?"
+        intro: One check before part two.
+        right: NUDB is the register — the national education database — and BU is the variable inside it.
+        wrong: Look at where it sits in the name: it comes before the thing being measured.
+        + The register the variable comes from
+        * The unit of observation
+        * The year it was measured
+
+## Registers, years, units
 voice: male
-domain:
-  x: [1985, 2027]
-  'y': [0, 6]
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 7
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KJOENN as sex
-      generate byear = int(birth/100)
-      keep if byear == 1985
-      tabulate sex
-    marks:
-      - keep if byear == 1985
-  - id: ax
-    type: axes
-    x_label: Year
-    y_label: ''
-  - id: cov_birth
-    type: curve
-    expr: '5.2'
-    x_from: 1985
-    x_to: 2027
-    style:
-      color: '#8f887c'
-      dash: true
-      stroke_width: 6
-  - id: lab_birth
-    type: label
-    text: BEFOLKNING_FOEDSELS_AAR_MND
-    attach_to: cov_birth
-    side: above
-    style:
-      color: '#8f887c'
-  - id: cov_sex
-    type: curve
-    expr: '4.3'
-    x_from: 1985
-    x_to: 2027
-    style:
-      color: '#8f887c'
-      dash: true
-      stroke_width: 6
-  - id: lab_sex
-    type: label
-    text: BEFOLKNING_KJOENN
-    attach_to: cov_sex
-    side: above
-    style:
-      color: '#8f887c'
-  - id: cov_kommune
-    type: curve
-    expr: '3.3'
-    x_from: 1985
-    x_to: 2027
-    style:
-      color: '#2f6b8f'
-      stroke_width: 9
-  - id: lab_kommune
-    type: label
-    text: BEFOLKNING_KOMMNR_FORMELL
-    attach_to: cov_kommune
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: cov_educ
-    type: curve
-    expr: '2.2'
-    x_from: 2001
-    x_to: 2027
-    style:
-      color: '#8a5fa8'
-      stroke_width: 9
-  - id: lab_educ
-    type: label
-    text: NUDB_BU
-    attach_to: cov_educ
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: cov_wage
-    type: curve
-    expr: '1.1'
-    x_from: 2002
-    x_to: 2027
-    style:
-      color: '#b5482e'
-      stroke_width: 9
-  - id: lab_wage
-    type: label
-    text: INNTEKT_WLONN
-    attach_to: cov_wage
-    side: above
-    style:
-      color: '#b5482e'
-  - id: age18
-    type: line
-    through:
-      - [2003, 0]
-    angle: 90
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: lab18
-    type: label
-    text: age 18 — 2003
-    attach_to: age18
-    side: above
-    style:
-      color: '#8f887c'
-  - id: age25
-    type: line
-    through:
-      - [2010, 0]
-    angle: 90
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: lab25
-    type: label
-    text: age 25 — 2010
-    attach_to: age25
-    side: above
-    style:
-      color: '#8f887c'
-  - id: window
-    type: region
-    between:
-      - cov_kommune
-      - cov_wage
-    x_from: 2010
-    x_to: 2027
-    style:
-      fill: '#87a878'
-      opacity: 0.3
-  - id: m1
-    type: math
-    tex: 51\,000 \text{ people}
-    size: 34
-    at:
-      ref: ax
-      anchor: center
-  - id: mark_final
-    type: annotation
-    target: m1
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: 'Now that we have seen how a single variable is described in the catalogue, let''s ask the datastore for a whole cohort of people: everyone born in 1985.'
-  - draw:
-      - md_line_2
-      - md_line_3
-      - md_line_4
-    speak: One dataset, one row per person — and two variables that need no date at all, because sex and birth month are fixed for life.
-  - draw:
-      - md_line_5
-      - md_line_6
-    speak: Birth month arrives as a six-digit number like 198504, so dividing by a hundred and truncating leaves the year, and then we keep only 1985.
-  - draw:
-      - md_line_7
-      - md_out
-    speak: Tabulate sex, and the cohort counts itself — though these figures come from the synthetic data the emulator runs on, never from real people.
-  - draw:
-      - md_mark_1
-    speak: 'In the real datastore that one line picks out about fifty-one thousand people: the children born in Norway in 1985, near the bottom of the century''s fertility dip.'
-  - highlight:
-      target:
-        - md_out
-      effect: glow
-    speak: The count comes out a little above the birth register, because everyone born in 1985 who immigrated later is in there too — so expect roughly fifty to sixty thousand rows.
-  - clear: {}
-  - draw:
-      - ax
-  - draw:
-      - cov_birth
-      - lab_birth
-      - cov_sex
-      - lab_sex
-    speak: 'Here are the forty years of this cohort''s life, and the two fixed variables stretch across all of it: imported without a date, true in every year.'
-  - draw:
-      - cov_kommune
-      - lab_kommune
-    speak: Municipality is not fixed — it is an annual snapshot, one value per year, carried for them from the moment they were registered.
-  - draw:
-      - cov_educ
-      - lab_educ
-    speak: Highest completed education, NUDB_BU, can only say something once they have finished something, so it turns informative in their late teens.
-  - draw:
-      - cov_wage
-      - lab_wage
-    speak: 'And wage income is stamped with an income year: a summer job''s few thousand kroner first, then a working life.'
-  - draw:
-      - age18
-      - lab18
-      - age25
-      - lab25
-      - window
-    speak: They turned eighteen in 2003 and twenty-five in 2010, and from about there all four variables carry real content at once.
-  - focus:
-      target:
-        - window
-        - cov_kommune
-        - cov_educ
-        - cov_wage
-    speak: That overlap, not the register's full span, is the window our gender-gap question actually lives in.
-  - quiz:
-      intro: A quick check on the four.
-      question: Which of these must be imported with a date?
-      choices:
-        - BEFOLKNING_KJOENN
-        - BEFOLKNING_FOEDSELS_AAR_MND
-        - INNTEKT_WLONN
-      correct: 3
-      right: Wage income is an income-year variable — without a date the datastore has no idea which year's wages you asked for.
-      wrong: 'Sex and birth month are fixed: one value per person, no date needed.'
-  - clear: {}
-  - draw:
-      - m1
-    speak: Fifty-odd thousand people sounds like plenty of data.
-  - morph:
-      target:
-        - m1
-      tex: \frac{51\,000}{2 \times 5} \approx 5\,000
-    speak: Split them by sex and by five levels of education, and each group is down to about five thousand.
-  - morph:
-      target:
-        - m1
-      tex: \frac{51\,000}{2 \times 5 \times 350} \approx 15
-    speak: Add Norway's three hundred and fifty-odd municipalities, and the average cell holds fifteen people.
-  - draw:
-      - mark_final
-    speak: 'That is the real constraint of register data: the datastore covers everyone, yet the moment you cross three variables the cells get thin.'
-    delivery: grave
-  - speak: So the map is complete — registers with their years, a unit of observation, a variable entry read line by line, and now one cohort of some fifty-five thousand people with sex, municipality, education and wage waiting to be imported.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Building datasets I: create-dataset and the four shapes of import'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 3 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Building datasets I: create-dataset and the four shapes of import'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+
+    text title "What the datastore covers" x 500 y 700 font_size 32 hidden true
+    pieces grid #3d3833 x 560 y 430 width 480 height 280 n 7 rows 4 of grid style.fill #87a878 hidden true
+    text d1 "1960s" #8f887c x 360 y 590 font_size 20 hidden true
+    text d2 "1970s" #8f887c x 440 y 590 font_size 20 hidden true
+    text d3 "1980s" #8f887c x 520 y 590 font_size 20 hidden true
+    text d4 "1990s" #8f887c x 600 y 590 font_size 20 hidden true
+    text d5 "2000s" #8f887c x 680 y 590 font_size 20 hidden true
+    text d6 "2010s" #8f887c x 760 y 590 font_size 20 hidden true
+    text d7 "2020s" #8f887c x 840 y 590 font_size 20 hidden true
+    text r1 "Population" x 225 y 535 font_size 24 hidden true
+    text r2 "Education" x 225 y 465 font_size 24 hidden true
+    text r3 "Income" x 225 y 395 font_size 24 hidden true
+    text r4 "Employment" x 225 y 325 font_size 24 hidden true
+    text unit_head "Unit" #8f887c x 900 y 590 font_size 20 hidden true
+    text u1 "person" #2f6b8f x 900 y 535 font_size 22 hidden true
+    text u2 "person" #2f6b8f x 900 y 465 font_size 22 hidden true
+    text u3 "person" #2f6b8f x 900 y 395 font_size 22 hidden true
+    text u4 "person + firm" #2f6b8f x 898 y 325 font_size 20 hidden true
+
+Now that we have the map of microdata.no in our heads, let's look at the territory itself: which registers are in there, how far back each one reaches, and what a single row of it actually is.
+    draw title grid
+
+    draw d1 d2 d3 d4 d5 d6 d7 parallel true
+
+The population register is the spine: BEFOLKNING variables — sex, birth year and month, municipality of residence — for everyone registered as resident in Norway, reaching back to the sixties, when the central population register was built in 1964.
+    draw r1
+
+    pause 0.3
+
+Education comes from NUDB, the national education database, which holds each person's highest completed qualification, and it starts with the 1970 census, when the whole population was asked what they had finished.
+    draw r2
+
+So the nineteen-sixties column of that row is simply empty: there is no education variable to ask about 1965 with.
+    fade grid_8 to 0.12
+
+Income comes from the tax registers — INNTEKT_WLONN, wage income, is the variable at the centre of our gender-gap script.
+    draw r3
+
+It does not reach back as far as the people do: the register-based income statistics covering every person begin in the nineteen-nineties, so three decades here stay blank.
+    fade grid_15 grid_16 grid_17 to 0.12
+
+And employment — who worked where, for whom, and how much.
+    draw r4
+
+Nearly that whole row is blank, because today's employment data come from a-ordningen, the joint monthly report employers have filed since the first of January 2015.
+    fade grid_22 grid_23 grid_24 grid_25 grid_26 to 0.12
+
+Treat these spans as indicative: the years that bind are printed in each variable's own entry, which we open in the next part — and the right edge is never today, since a tax year must close and be processed before it lands.
+    text note "Spans here are indicative — every variable entry states its own first and last year." #8f887c x 500 y 235 font_size 20
+
+    pause 0.4
+
+Now the question that quietly wrecks analyses: what is one row? For these three, one row is one person — the person is the datastore's default unit of observation.
+    draw unit_head u1 u2 u3
+
+Employment is the awkward one, because a job ties a person to an employer, so the datastore also carries units of its own for enterprises and establishments.
+    draw u4
+
+Households and families are units in their own right as well — but nothing here is a municipality: KOMMNR_FORMELL is a number carried by a person, not a unit with rows of its own.
+    point at.ref r1 gesture underline
+
+Which is why an import line carries two things: a variable from one of these registers, and a date.
+    text scr1 "import db/INNTEKT_WLONN" x 392 y 140 font_size 22
+    text scr2 "2019-01-01" right scr1 gap 14 font_size 22
+    text scr3 "as wage" right scr2 gap 14 font_size 22
+
+That date has to land inside the variable's span — ask for wage income in 1985, the year our cohort was born, and the blank cells up there are your answer.
+    mark mark_date #b5482e target scr2 kind box
+
+    quiz "In the datastore, what is one row of BEFOLKNING_KJOENN?"
+        intro: A quick check before we open a variable entry.
+        right: One person — the person is the default unit, and household or firm units have to be asked for separately.
+        wrong: Sex is recorded for individuals, not for groups of them.
+        + One person
+        * One household
+        * One municipality
+
+Three things settled before you write a line of script: which register holds the variable, which years it covers, and what one of its rows is.
+    highlight grid effect glow
+
+## Anatomy of a variable entry
+voice: male
+level: advanced
+
+    text heading "Anatomy of a variable entry" x 500 y 712 font_size 30 hidden true
+    shape card shape rect x 300 y 380 width 440 height 470 hidden true
+    text vname "BEFOLKNING_KJOENN" #2f6b8f at.anchor top_left at.offset [28,-26] at.ref card anchor top_left font_size 26 hidden true
+    path rule #8f887c at.anchor top_left at.offset [28,-72] at.ref card anchor start points [[0,0],[384,0]] hidden true
+    text r1k "Unit type" #8f887c at.anchor top_left at.offset [28,-110] at.ref card anchor top_left font_size 18 hidden true
+    text r1v "Person" at.anchor top_left at.offset [28,-140] at.ref card anchor top_left font_size 24 hidden true
+    text r2k "Data type" #8f887c at.anchor top_left at.offset [28,-200] at.ref card anchor top_left font_size 18 hidden true
+    text r2v "Categorical code" at.anchor top_left at.offset [28,-230] at.ref card anchor top_left font_size 24 hidden true
+    text r3k "Value labels" #8f887c at.anchor top_left at.offset [28,-290] at.ref card anchor top_left font_size 18 hidden true
+    text r3v "1 = man   2 = woman" #b5482e at.anchor top_left at.offset [28,-320] at.ref card anchor top_left font_size 24 hidden true
+    text r4k "Time coverage" #8f887c at.anchor top_left at.offset [28,-380] at.ref card anchor top_left font_size 18 hidden true
+    text r4v "Fixed — no date needed" at.anchor top_left at.offset [28,-410] at.ref card anchor top_left font_size 24 hidden true
+    group card_group members ["card","vname","rule","r1k","r1v","r2k","r2v","r3k","r3v","r4k","r4v"] fit.h 520 fit.w 430 fit.x 50 fit.y 90 hidden true
+    text p_head "What the prefix tells you" x 600 y 560 font_size 24 hidden true
+    text p1k "BEFOLKNING_" below p_head gap 30 #2f6b8f font_size 24 hidden true
+    text p1v "population register · any date" below p1k gap 8 font_size 20 hidden true
+    text p2k "INNTEKT_" below p1v gap 30 #2f6b8f font_size 24 hidden true
+    text p2v "tax register · one value per year" below p2k gap 8 font_size 20 hidden true
+    text p3k "NUDB_" below p2v gap 30 #2f6b8f font_size 24 hidden true
+    text p3v "education database · one value per year" below p3k gap 8 font_size 20 hidden true
+    group prefix_group members ["p_head","p1k","p1v","p2k","p2v","p3k","p3v"] fit.h 430 fit.w 430 fit.x 520 fit.y 150 hidden true
+    ```microdata md width 900 show above frame screen draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    // fixed variable: no date
+    import db/BEFOLKNING_KJOENN as sex
+    // annual variable: a date is required
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    tabulate sex
+    ```
+
+Now that we have seen which registers and which years the datastore covers, let's read one catalogue card line by line — because every mistake in our gender-gap script starts with a card someone skimmed.
+    draw heading card vname
+
+Unit type: person. That one word fixes the shape of everything you build — one row per human being, not per household, not per firm.
+    draw rule r1k r1v
+
+    pause 0.3
+
+Data type: categorical, and the values are stored as bare codes, not as words.
+    draw r2k r2v
+
+So the card has to tell you what the codes mean: one is man, two is woman.
+    draw r3k r3v
+
+Nothing in the data itself ever says "woman" — the meaning lives here, in the metadata, and filtering on the wrong side of that line silently hands you the other half of Norway.
+    highlight r3v effect glow
+
+And time coverage: sex is a fixed variable, one value per person for all time, so the import takes no date at all — while an income card shows a span of years and demands one.
+    draw r4k r4v
+
+    pause 0.4
+
+Now look at the name once more, because it is not only a name.
+    point at.ref vname gesture underline
+
+Everything before the first underscore is the register the variable comes from: BEFOLKNING is the population register, which is event-based, so it can answer for any date you ask.
+    draw p_head p1k p1v
+
+INNTEKT comes from the tax settlement, one value per income year; NUDB is the national education database, which likewise lands once a year.
+    draw p2k p2v p3k p3v
+
+So the prefix tells you the update rhythm before you read a single number — and all of these cards are public: you can browse the catalogue at microdata dot no long before you have an account.
+    highlight p1k p2k p3k effect pulse
+
+    pause 0.4
+
+    clear keep ["heading"]
+
+Now the card becomes script: version fifty-four of the datastore, and an empty dataset of persons.
+    draw md md_line_1 md_line_2 parallel true
+
+The card said fixed, so this import carries no date — the catalogue name on the left, your short alias, sex, on the right.
+    draw md_line_3 md_line_4
+
+Wage income is the other kind: its card covers a span of years, so we must name a date, the first of January twenty twenty-two.
+    draw md_line_5 md_line_6
+
+Tabulate, and back come exactly the two codes the card promised — one and two, with no words attached, because the labels never left the metadata.
+    draw md_line_7 md_out
+
+    quiz "A card says the variable is fixed. What does your import line need?" intro "A quick check."
+        right: No date — a fixed variable has one value per person, so you import it bare; only time-varying variables take a date.
+        wrong: Not quite — look again at what the card said about sex.
+        * A date
+        + No date
+        * A from- and a to-date
+
+A variable card is a contract: the unit type says what a row is, the codes say what you may filter on, and the prefix says how often the truth behind it is refreshed.
+
+## What the 1985 cohort looks like
+voice: male
+level: advanced
+domain: {"x":[1985,2027],"y":[0,6]}
+
+    ```microdata md width 960 font_size 16 show below lines 7 frame screen marks ["keep if byear == 1985"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KJOENN as sex
+    generate byear = int(birth/100)
+    keep if byear == 1985
+    tabulate sex
+    ```
+
+Now that we have seen how a single variable is described in the catalogue, let's ask the datastore for a whole cohort of people: everyone born in 1985.
+    draw md md_line_1 parallel true
+
+One dataset, one row per person — and two variables that need no date at all, because sex and birth month are fixed for life.
+    draw md_line_2 md_line_3 md_line_4
+
+Birth month arrives as a six-digit number like 198504, so dividing by a hundred and truncating leaves the year, and then we keep only 1985.
+    draw md_line_5 md_line_6
+
+Tabulate sex, and the cohort counts itself — though these figures come from the synthetic data the emulator runs on, never from real people.
+    draw md_line_7 md_out
+
+In the real datastore that one line picks out about fifty-one thousand people: the children born in Norway in 1985, near the bottom of the century's fertility dip.
+    draw md_mark_1
+
+The count comes out a little above the birth register, because everyone born in 1985 who immigrated later is in there too — so expect roughly fifty to sixty thousand rows.
+    highlight md_out effect glow
+
+    clear
+
+    axes ax x_label Year y_label ""
+
+Here are the forty years of this cohort's life, and the two fixed variables stretch across all of it: imported without a date, true in every year.
+    curve cov_birth dashed #8f887c expr "5.2" x_from 1985 x_to 2027 style.stroke_width 6
+    label lab_birth "BEFOLKNING_FOEDSELS_AAR_MND" above #8f887c attach_to cov_birth
+    curve cov_sex dashed #8f887c expr "4.3" x_from 1985 x_to 2027 style.stroke_width 6
+    label lab_sex "BEFOLKNING_KJOENN" above #8f887c attach_to cov_sex
+
+Municipality is not fixed — it is an annual snapshot, one value per year, carried for them from the moment they were registered.
+    curve cov_kommune #2f6b8f expr "3.3" x_from 1985 x_to 2027 style.stroke_width 9
+    label lab_kommune "BEFOLKNING_KOMMNR_FORMELL" above #2f6b8f attach_to cov_kommune
+
+Highest completed education, NUDB_BU, can only say something once they have finished something, so it turns informative in their late teens.
+    curve cov_educ #8a5fa8 expr "2.2" x_from 2001 x_to 2027 style.stroke_width 9
+    label lab_educ "NUDB_BU" above #8a5fa8 attach_to cov_educ
+
+And wage income is stamped with an income year: a summer job's few thousand kroner first, then a working life.
+    curve cov_wage #b5482e expr "1.1" x_from 2002 x_to 2027 style.stroke_width 9
+    label lab_wage "INNTEKT_WLONN" above #b5482e attach_to cov_wage
+
+They turned eighteen in 2003 and twenty-five in 2010, and from about there all four variables carry real content at once.
+    line age18 dashed #8f887c through [[2003,0]] angle 90
+    label lab18 "age 18 — 2003" above #8f887c attach_to age18
+    line age25 dashed #8f887c through [[2010,0]] angle 90
+    label lab25 "age 25 — 2010" above #8f887c attach_to age25
+    region window x_from 2010 x_to 2027 between ["cov_kommune","cov_wage"] style.fill #87a878 style.opacity 0.3
+
+That overlap, not the register's full span, is the window our gender-gap question actually lives in.
+    focus window cov_kommune cov_educ cov_wage
+
+    quiz "Which of these must be imported with a date?"
+        intro: A quick check on the four.
+        right: Wage income is an income-year variable — without a date the datastore has no idea which year's wages you asked for.
+        wrong: Sex and birth month are fixed: one value per person, no date needed.
+        * BEFOLKNING_KJOENN
+        * BEFOLKNING_FOEDSELS_AAR_MND
+        + INNTEKT_WLONN
+
+    clear
+
+Fifty-odd thousand people sounds like plenty of data.
+    math m1 at.anchor center at.ref ax tex "51\\,000 \\text{ people}" size 34
+
+Split them by sex and by five levels of education, and each group is down to about five thousand.
+    morph m1 tex "\\frac{51\\,000}{2 \\times 5} \\approx 5\\,000"
+
+Add Norway's three hundred and fifty-odd municipalities, and the average cell holds fifteen people.
+    morph m1 tex "\\frac{51\\,000}{2 \\times 5 \\times 350} \\approx 15"
+
+That is the real constraint of register data: the datastore covers everyone, yet the moment you cross three variables the cells get thin.
+    mark mark_final target m1 kind box
+    delivery grave
+
+So the map is complete — registers with their years, a unit of observation, a variable entry read line by line, and now one cohort of some fifty-five thousand people with sex, municipality, education and wage waiting to be imported.
+
+## Where next
+end_page: true
+
+Next: Building datasets I: create-dataset and the four shapes of import
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:1 title "Five lines to your first plot" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:3 title "Building datasets I: create-dataset and the four shapes of import" size 320 x 735 y 395
+
+    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
+    text end_count "2 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

@@ -1,1234 +1,614 @@
-playlist:
-  title: 'Many years at once: panels, event data and the gap over the life cycle'
-  prompt: How do you import wage income for 2010 through 2022 and end up with a usable panel rather than thirteen unnamed columns? How do event variables (spells with a start and an end) differ from yearly snapshots, and when do you need them? What does the gender wage gap in the 1985 cohort look like from age 25 to age 37, and what does the shape suggest?
-  next:
-    title: The whole script, end to end — and what to do when it breaks
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/the-whole-script-end-to-end-and-what-to.yaml
----
-title: Thirteen Years, One Table
-level: advanced
+# Many years at once: panels, event data and the gap over the life cycle
+prompt: "How do you import wage income for 2010 through 2022 and end up with a usable panel rather than thirteen unnamed columns? How do event variables (spells with a start and an end) differ from yearly snapshots, and when do you need them? What does the gender wage gap in the 1985 cohort look like from age 25 to age 37, and what does the shape suggest?"
+next: {"title":"The whole script, end to end — and what to do when it breaks","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/the-whole-script-end-to-end-and-what-to.cast"}
+
+## Thirteen Years, One Table
 voice: female
-template: data_table
-params:
-  columns:
-    - person
-    - wage2010
-    - wage2011
-    - …
-    - wage2022
-  rows:
-    - - p_1
-      - 318000
-      - 342000
-      - …
-      - 655000
-    - - p_2
-      - 295000
-      - 0
-      - …
-      - 512000
-    - - p_3
-      - 401000
-      - 428000
-      - …
-      - 744000
-    - - p_4
-      - 262000
-      - 288000
-      - …
-      - null
-  decimals: 0
-  font_size: 18
-  title: One row per person. Thirteen wage columns.
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 10
-    font_size: 14
-    frame: screen
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset panel
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      keep if birth >= '198501'
-      keep if birth <= '198512'
-      import db/INNTEKT_WLONN 2010-01-01 as wage2010
-      import db/INNTEKT_WLONN 2011-01-01 as wage2011
-      // ... eleven more imports, one per year ...
-      import db/INNTEKT_WLONN 2022-01-01 as wage2022
-    marks:
-      - '2010-01-01'
-      - as wage2010
-      - as wage2022
-  - id: eq
-    type: math
-    tex: 50\,000 \text{ persons} \times 13 \text{ years} \approx 650\,000 \text{ rows}
-    at:
-      ref: row_4
-      side: below
-      gap: 36
-commands:
-  - draw:
-      - md
-      - md_line_1
-    parallel: true
-    speak: 'Across these five parts we build one thing: a panel of wage income for everyone born in 1985, from age twenty-five to thirty-seven — and then read the gender gap off it, year by year.'
-  - draw:
-      - md_line_2
-    speak: 'The single headline number — Norwegian women earn about eighty-seven percent of men''s average monthly wage — hides the question that matters: at what age does that gap open?'
-  - draw:
-      - md_line_3
-      - md_line_4
-    speak: 'So we continue the course script: one dataset, sex and birth year-month imported for the whole population.'
-  - draw:
-      - md_line_5
-      - md_line_6
-    speak: 'Two keeps fence off the cohort: born in 1985, so they turn twenty-five in 2010 and thirty-seven in 2022 — roughly fifty thousand people.'
-  - highlight:
-      target:
-        - md_line_5
-        - md_line_6
-      effect: glow
-    speak: Those are exactly the years when careers steepen and first children arrive, which is why this window is the one worth following.
-  - pause: 0.3
-  - draw:
-      - md_line_7
-    speak: 'Now the wage itself: one import of INNTEKT_WLONN, carrying a date.'
-  - draw:
-      - md_mark_1
-    speak: That date is a lookup key into an annual accumulated variable rather than a measurement at a moment, so it selects an income year — verify which one in the metadata catalogue before you trust it.
-  - draw:
-      - md_line_8
-    speak: Want 2011 as well? That is a second import — and it cannot land in the same alias.
-  - draw:
-      - md_mark_2
-    speak: 'Every import needs its own name, so the year quietly migrates into the alias: wage2010, wage2011.'
-  - draw:
-      - md_line_9
-      - md_line_10
-    speak: Thirteen years, thirteen import lines, thirteen aliases, ending at wage2022.
-  - draw:
-      - md_mark_3
-    delivery: grave
-    speak: And this is the line where the naive script stops being a panel.
-  - pause: 0.4
-  - draw:
-      - title
-      - header
-    speak: 'Here is the table it actually builds: a person column, then one wage column per year.'
-  - draw:
-      - row_1
-      - row_2
-    speak: These are synthetic persons — the real ones never leave the server — and each gets exactly one row.
-  - draw:
-      - row_3
-      - row_4
-    speak: Thirteen columns wide and one row per person, however many years you import.
-  - quiz:
-      intro: Quick check.
-      question: How many rows does this script give each person?
-      choices:
-        - Thirteen — one per year
-        - One, with thirteen wage columns
-        - One per year they had wage income
-      correct: 2
-      right: One row per person — the years arrived as columns, not as rows.
-      wrong: 'Count the columns instead: each import added a variable, not a row.'
-  - focus:
-      target:
-        - row_2
-        - row_4
-    speak: 'And the wide shape hides a distinction you will need: the zero in 2011 is a real value, someone with no wage income, while the blank in 2022 is a person who has left the register.'
-  - draw:
-      - eq
-    speak: What we want instead is fifty thousand people times thirteen years — about six hundred and fifty thousand person-year rows, with the year itself a variable.
-  - highlight:
-      target:
-        - header
-      effect: pulse
-    delivery: grave
-    speak: In the wide table the year exists only inside the column names, and no tabulate, summarize or regression can group by a name.
-  - point:
-      at:
-        ref: md
-      gesture: tap
-    speak: 'Nor can you fix it by looking: microdata.no, built by Statistics Norway with NSD, never shows you a single row, so the reshaping has to be reasoned about rather than eyeballed.'
-  - quiz:
-      question: Why can't this table answer "what did twenty-five-year-olds earn"?
-      choices:
-        - The wage variable came back censored
-        - Age lives in thirteen column names, not in a column
-        - The 1985 cohort is too small to analyse
-      correct: 2
-      right: Age is encoded in the column names, so there is no variable to group by.
-      wrong: Censoring and sample size are separate problems — here the year simply is not a variable.
-  - highlight:
-      target:
-        - md_mark_3
-      effect: glow
-    speak: 'So you can now see the defect precisely: thirteen imports bought thirteen variables, not thirteen years. Next part, we make the year a column — and fifty thousand rows become six hundred and fifty thousand.'
----
-title: Importing a panel, one year at a time
 level: advanced
+use: data_table
+with:
+    columns:
+      - person
+      - wage2010
+      - wage2011
+      - …
+      - wage2022
+    rows:
+      - [p_1, 318000, 342000, …, 655000]
+      - [p_2, 295000, 0, …, 512000]
+      - [p_3, 401000, 428000, …, 744000]
+      - [p_4, 262000, 288000, …, null]
+    decimals: 0
+    font_size: 18
+    title: One row per person. Thirteen wage columns.
+
+    ```microdata md font_size 14 show code lines 10 frame screen marks ["2010-01-01","as wage2010","as wage2022"] hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset panel
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    keep if birth >= '198501'
+    keep if birth <= '198512'
+    import db/INNTEKT_WLONN 2010-01-01 as wage2010
+    import db/INNTEKT_WLONN 2011-01-01 as wage2011
+    // ... eleven more imports, one per year ...
+    import db/INNTEKT_WLONN 2022-01-01 as wage2022
+    ```
+
+Across these five parts we build one thing: a panel of wage income for everyone born in 1985, from age twenty-five to thirty-seven — and then read the gender gap off it, year by year.
+    draw md md_line_1 parallel true
+
+The single headline number — Norwegian women earn about eighty-seven percent of men's average monthly wage — hides the question that matters: at what age does that gap open?
+    draw md_line_2
+
+So we continue the course script: one dataset, sex and birth year-month imported for the whole population.
+    draw md_line_3 md_line_4
+
+Two keeps fence off the cohort: born in 1985, so they turn twenty-five in 2010 and thirty-seven in 2022 — roughly fifty thousand people.
+    draw md_line_5 md_line_6
+
+Those are exactly the years when careers steepen and first children arrive, which is why this window is the one worth following.
+    highlight md_line_5 md_line_6 effect glow
+
+    pause 0.3
+
+Now the wage itself: one import of INNTEKT_WLONN, carrying a date.
+    draw md_line_7
+
+That date is a lookup key into an annual accumulated variable rather than a measurement at a moment, so it selects an income year — verify which one in the metadata catalogue before you trust it.
+    draw md_mark_1
+
+Want 2011 as well? That is a second import — and it cannot land in the same alias.
+    draw md_line_8
+
+Every import needs its own name, so the year quietly migrates into the alias: wage2010, wage2011.
+    draw md_mark_2
+
+Thirteen years, thirteen import lines, thirteen aliases, ending at wage2022.
+    draw md_line_9 md_line_10
+
+And this is the line where the naive script stops being a panel.
+    draw md_mark_3 delivery grave
+
+    pause 0.4
+
+Here is the table it actually builds: a person column, then one wage column per year.
+    draw title header
+
+These are synthetic persons — the real ones never leave the server — and each gets exactly one row.
+    draw row_1 row_2
+
+Thirteen columns wide and one row per person, however many years you import.
+    draw row_3 row_4
+
+    quiz "How many rows does this script give each person?" intro "Quick check."
+        right: One row per person — the years arrived as columns, not as rows.
+        wrong: Count the columns instead: each import added a variable, not a row.
+        * Thirteen — one per year
+        + One, with thirteen wage columns
+        * One per year they had wage income
+
+And the wide shape hides a distinction you will need: the zero in 2011 is a real value, someone with no wage income, while the blank in 2022 is a person who has left the register.
+    focus row_2 row_4
+
+What we want instead is fifty thousand people times thirteen years — about six hundred and fifty thousand person-year rows, with the year itself a variable.
+    math eq below row_4 gap 36 tex "50\\,000 \\text{ persons} \\times 13 \\text{ years} \\approx 650\\,000 \\text{ rows}"
+
+In the wide table the year exists only inside the column names, and no tabulate, summarize or regression can group by a name.
+    highlight header effect pulse delivery grave
+
+Nor can you fix it by looking: microdata.no, built by Statistics Norway with NSD, never shows you a single row, so the reshaping has to be reasoned about rather than eyeballed.
+    point at.ref md gesture tap
+
+    quiz "Why can't this table answer \"what did twenty-five-year-olds earn\"?"
+        right: Age is encoded in the column names, so there is no variable to group by.
+        wrong: Censoring and sample size are separate problems — here the year simply is not a variable.
+        * The wage variable came back censored
+        + Age lives in thirteen column names, not in a column
+        * The 1985 cohort is too small to analyse
+
+So you can now see the defect precisely: thirteen imports bought thirteen variables, not thirteen years. Next part, we make the year a column — and fifty thousand rows become six hundred and fifty thousand.
+    highlight md_mark_3 effect glow
+
+## Importing a panel, one year at a time
 voice: female
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: above
-    lines: 9
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset income
-      import db/BEFOLKNING_KJOENN as sex
-      // one import per year: the date picks the year
-      import db/INNTEKT_WLONN 2010-01-01 as wage2010
-      import db/INNTEKT_WLONN 2011-01-01 as wage2011
-      import db/INNTEKT_WLONN 2012-01-01 as wage2012
-      import db/INNTEKT_WLONN 2013-01-01 as wage2013
-      import db/INNTEKT_WLONN 2014-01-01 as wage2014
-      import db/INNTEKT_WLONN 2015-01-01 as wage2015
-      import db/INNTEKT_WLONN 2016-01-01 as wage2016
-      import db/INNTEKT_WLONN 2017-01-01 as wage2017
-      import db/INNTEKT_WLONN 2018-01-01 as wage2018
-      import db/INNTEKT_WLONN 2019-01-01 as wage2019
-      import db/INNTEKT_WLONN 2020-01-01 as wage2020
-      import db/INNTEKT_WLONN 2021-01-01 as wage2021
-      import db/INNTEKT_WLONN 2022-01-01 as wage2022
-      summarize wage2010 wage2022
-    marks:
-      - '2010-01-01'
-      - as wage2010
-      - '2015-01-01'
-  - id: head
-    type: text
-    text: 'income: the wide panel'
-    x: 500
-    'y': 615
-    font_size: 30
-  - id: panel
-    type: pieces
-    of: grid
-    x: 500
-    'y': 360
-    width: 620
-    height: 200
-    'n': 5
-    rows: 3
-  - id: lab_2010
-    type: label
-    text: wage2010
-    attach_to: panel_1
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: lab_2022
-    type: label
-    text: wage2022
-    attach_to: panel_5
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: lab_person
-    type: label
-    text: one row = one person
-    attach_to: panel_6
-    side: left
-    style:
-      color: '#b5482e'
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: 'Now that we have seen what thirteen years in one table looks like, let''s build it: thirteen imports, explicit dates, and names that remember the year.'
-  - draw:
-      - md_line_3
-    speak: Sex arrives with no date at all — the datastore holds BEFOLKNING KJOENN as a constant of the person, so one import gives one column and there is no year to choose.
-  - draw:
-      - md_line_4
-      - md_line_5
-    speak: 'Wage income is the opposite: it changes every year, so INNTEKT WLONN takes a date, and an alias we pick ourselves.'
-  - draw:
-      - md_mark_1
-    speak: That date is not a timestamp of when anything was measured; it selects the reference period, and for an annual income variable that is the calendar year the date falls in.
-  - quiz:
-      intro: A quick check.
-      question: Each wage import carries a date. What is the date doing?
-      choices:
-        - Timestamping when the value was recorded
-        - Selecting which reference period's value you get
-        - Restricting the population to people alive that day
-      correct: 2
-      right: It selects the reference period — the value INNTEKT WLONN holds for the year that date falls in.
-      wrong: Nothing is filtered and nothing is timestamped — the date picks which period's value comes back.
-  - draw:
-      - md_mark_2
-    speak: 'And the alias carries the year with it: wage2010, not wage.'
-  - highlight:
-      target:
-        - md_line_5
-      effect: glow
-    speak: In a wide panel the column name is the only place the year is recorded, so reusing one alias across thirteen imports throws the time dimension away.
-  - draw:
-      - md_line_6
-      - md_line_7
-      - md_line_8
-      - md_line_9
-    speak: 'So we write the years out: eleven through fourteen are the same line with two numbers changed.'
-  - highlight:
-      target:
-        - md_line_6
-        - md_line_7
-        - md_line_8
-        - md_line_9
-      effect: pulse
-    speak: A loop over the years is legal here — for y in 2010 to 2022, no parentheses and no nesting — but thirteen visible lines let you see at a glance which years you actually asked for.
-  - draw:
-      - md_line_10
-    speak: 2015 is worth stopping at.
-  - draw:
-      - md_mark_3
-    speak: From the first of January 2015, Norwegian employers report wages monthly through a-ordningen — one shared report to the tax authority, NAV and Statistics Norway — so this panel crosses a change in how the numbers are collected, not only in what people earned.
-  - draw:
-      - md_line_11
-      - md_line_12
-      - md_line_13
-      - md_line_14
-      - md_line_15
-      - md_line_16
-      - md_line_17
-    speak: 'The rest, out to 2022: each line adds exactly one column, and none of them touches the rows.'
-  - draw:
-      - md_line_18
-    speak: Then one printing command on the first year and the last, to confirm that both columns really arrived.
-  - draw:
-      - md_out
-    speak: And there they are — wage income in nominal kroner, thirteen years apart.
-  - point:
-      at:
-        ref: md_out
-      gesture: underline
-    speak: 'Nominal: Norwegian consumer prices rose roughly forty percent between 2010 and 2022, and 5.8 percent in 2022 alone, so part of any rise across these columns is just the price level — deflating is your job, not the datastore''s.'
-  - clear: {}
-    speak: Step back from the code and look at the table you are now holding.
-  - draw:
-      - head
-      - panel
-    speak: Thirteen wage columns standing beside sex, one column per year.
-  - draw:
-      - lab_2010
-      - lab_2022
-    speak: The names run from wage2010 to wage2022, so any later command can name a single year without you remembering an import order.
-  - draw:
-      - lab_person
-    speak: 'And the rows have not multiplied: thirteen measurements are stretched sideways across one person.'
-  - quiz:
-      question: What is the unit of analysis in this dataset?
-      choices:
-        - One row per person
-        - One row per person-year
-        - One row per year
-      correct: 1
-      right: One row per person — the years sit side by side as columns, which is exactly what wide means.
-      wrong: 'Not yet: the years are columns here, so each person still occupies a single row.'
-  - highlight:
-      target:
-        - panel
-      effect: glow
-    speak: 'That is the whole trick of importing a panel: explicit dates so every column is a known year, and year-suffixed aliases so the table documents itself.'
-    delivery: grave
-  - speak: Next we lay it on its side — thirteen columns becoming one wage column and one year column, so the row becomes a person-year.
----
-title: 'Wide to long: person-year rows'
 level: advanced
+
+    ```microdata md width 960 font_size 16 show above lines 9 frame screen marks ["2010-01-01","as wage2010","2015-01-01"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset income
+    import db/BEFOLKNING_KJOENN as sex
+    // one import per year: the date picks the year
+    import db/INNTEKT_WLONN 2010-01-01 as wage2010
+    import db/INNTEKT_WLONN 2011-01-01 as wage2011
+    import db/INNTEKT_WLONN 2012-01-01 as wage2012
+    import db/INNTEKT_WLONN 2013-01-01 as wage2013
+    import db/INNTEKT_WLONN 2014-01-01 as wage2014
+    import db/INNTEKT_WLONN 2015-01-01 as wage2015
+    import db/INNTEKT_WLONN 2016-01-01 as wage2016
+    import db/INNTEKT_WLONN 2017-01-01 as wage2017
+    import db/INNTEKT_WLONN 2018-01-01 as wage2018
+    import db/INNTEKT_WLONN 2019-01-01 as wage2019
+    import db/INNTEKT_WLONN 2020-01-01 as wage2020
+    import db/INNTEKT_WLONN 2021-01-01 as wage2021
+    import db/INNTEKT_WLONN 2022-01-01 as wage2022
+    summarize wage2010 wage2022
+    ```
+
+Now that we have seen what thirteen years in one table looks like, let's build it: thirteen imports, explicit dates, and names that remember the year.
+    draw md md_line_1 md_line_2 parallel true
+
+Sex arrives with no date at all — the datastore holds BEFOLKNING KJOENN as a constant of the person, so one import gives one column and there is no year to choose.
+    draw md_line_3
+
+Wage income is the opposite: it changes every year, so INNTEKT WLONN takes a date, and an alias we pick ourselves.
+    draw md_line_4 md_line_5
+
+That date is not a timestamp of when anything was measured; it selects the reference period, and for an annual income variable that is the calendar year the date falls in.
+    draw md_mark_1
+
+    quiz "Each wage import carries a date. What is the date doing?" intro "A quick check."
+        right: It selects the reference period — the value INNTEKT WLONN holds for the year that date falls in.
+        wrong: Nothing is filtered and nothing is timestamped — the date picks which period's value comes back.
+        * Timestamping when the value was recorded
+        + Selecting which reference period's value you get
+        * Restricting the population to people alive that day
+
+And the alias carries the year with it: wage2010, not wage.
+    draw md_mark_2
+
+In a wide panel the column name is the only place the year is recorded, so reusing one alias across thirteen imports throws the time dimension away.
+    highlight md_line_5 effect glow
+
+So we write the years out: eleven through fourteen are the same line with two numbers changed.
+    draw md_line_6 md_line_7 md_line_8 md_line_9
+
+A loop over the years is legal here — for y in 2010 to 2022, no parentheses and no nesting — but thirteen visible lines let you see at a glance which years you actually asked for.
+    highlight md_line_6 md_line_7 md_line_8 md_line_9 effect pulse
+
+2015 is worth stopping at.
+    draw md_line_10
+
+From the first of January 2015, Norwegian employers report wages monthly through a-ordningen — one shared report to the tax authority, NAV and Statistics Norway — so this panel crosses a change in how the numbers are collected, not only in what people earned.
+    draw md_mark_3
+
+The rest, out to 2022: each line adds exactly one column, and none of them touches the rows.
+    draw md_line_11 md_line_12 md_line_13 md_line_14 md_line_15 md_line_16 md_line_17
+
+Then one printing command on the first year and the last, to confirm that both columns really arrived.
+    draw md_line_18
+
+And there they are — wage income in nominal kroner, thirteen years apart.
+    draw md_out
+
+Nominal: Norwegian consumer prices rose roughly forty percent between 2010 and 2022, and 5.8 percent in 2022 alone, so part of any rise across these columns is just the price level — deflating is your job, not the datastore's.
+    point at.ref md_out gesture underline
+
+Step back from the code and look at the table you are now holding.
+    clear
+
+Thirteen wage columns standing beside sex, one column per year.
+    text head "income: the wide panel" x 500 y 615 font_size 30
+    pieces panel x 500 y 360 width 620 height 200 n 5 rows 3 of grid
+
+The names run from wage2010 to wage2022, so any later command can name a single year without you remembering an import order.
+    label lab_2010 "wage2010" above #2f6b8f attach_to panel_1
+    label lab_2022 "wage2022" above #2f6b8f attach_to panel_5
+
+And the rows have not multiplied: thirteen measurements are stretched sideways across one person.
+    label lab_person "one row = one person" left #b5482e attach_to panel_6
+
+    quiz "What is the unit of analysis in this dataset?"
+        right: One row per person — the years sit side by side as columns, which is exactly what wide means.
+        wrong: Not yet: the years are columns here, so each person still occupies a single row.
+        + One row per person
+        * One row per person-year
+        * One row per year
+
+That is the whole trick of importing a panel: explicit dates so every column is a known year, and year-suffixed aliases so the table documents itself.
+    highlight panel effect glow delivery grave
+
+Next we lay it on its side — thirteen columns becoming one wage column and one year column, so the row becomes a person-year.
+
+## Wide to long: person-year rows
 voice: female
-template: data_table
-params:
-  columns:
-    - person
-    - year
-    - age
-    - wage
-  rows:
-    - - 1
-      - 2010
+level: advanced
+domain: {"x":[24,38],"y":[0,700000]}
+use: data_table
+with:
+    columns:
+      - person
+      - year
+      - age
+      - wage
+    rows:
+      - [1, 2010, 25, 318400]
+      - [1, 2011, 26, 352900]
+      - [1, 2012, 27, 389100]
+      - […, …, …, …]
+      - [1, 2022, 37, 612500]
+      - [2, 2010, 25, 271300]
+      - [2, 2011, 26, 298800]
+    decimals: 0
+    font_size: 18
+    title: One row per person-year
+
+    ```microdata md font_size 14 show code lines 10 frame screen marks ["as wage_${y}","generate year = 2010","generate age = year - 1985","generate key = sex ++ \"_\" ++ to_str(age)","collapse (mean) wage, by(key)"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset panel
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    for y in 2010:2022
+      import db/INNTEKT_WLONN ${y}-01-01 as wage_${y}
+    end
+    // wide: one row per person, year in the name
+    create-dataset py2010
+    import db/BEFOLKNING_KJOENN as sex
+    // 1985 cohort kept exactly as in lecture 6
+    import db/INNTEKT_WLONN 2010-01-01 as wage
+    generate year = 2010
+    generate age = year - 1985
+    generate key = sex ++ "_" ++ to_str(age)
+    collapse (mean) wage, by(key)
+    ```
+    axes ax x_label Age y_label "Mean wage income" hidden true
+    curve men #2f6b8f expr "350000 + 27500*(x-25) - 250*(x-25)*(x-25)" x_from 25 x_to 37 hidden true
+    curve women #b5482e expr "335000 + 14000*(x-25) - 200*(x-25)*(x-25)" x_from 25 x_to 37 hidden true
+    label lab_men "Men" above #2f6b8f attach_to men hidden true
+    label lab_women "Women" below-right #b5482e attach_to women hidden true
+
+Last time we filled thirteen columns with wage income — and a panel in that shape cannot answer a single question about age.
+    draw md md_line_1 md_line_2 parallel true
+
+Sex and birth month arrive as one row per person, because the person is the datastore's native unit.
+    draw md_line_3 md_line_4
+
+And here is the loop from part two: one import per income year, each landing in a column of its own.
+    draw md_line_5 md_line_6 md_line_7
+
+Look where the year lives — inside the variable name. It is metadata, not data.
+    draw md_mark_1
+
+So: about fifty thousand people born in 1985, thirteen wage columns beside them.
+    draw md_line_8
+
+You cannot condition on a year that has no column, and no regression accepts an age variable that does not exist — so today we turn those columns into rows.
+    highlight md_line_6 effect glow
+
+    pause 0.4
+
+This is the shape we want: one row for every person in every year.
+    draw title header
+
+Person one, income year 2010, age 25, one wage value — illustrative rows, since real ones never leave the platform.
+    draw row_1
+
+The same person again and again, the age column climbing with the year, down to age 37 in 2022.
+    draw row_2 row_3 row_4 row_5
+
+Then the next person starts underneath, and the rows simply stack.
+    draw row_6 row_7
+
+Two ordinary columns now do the work the column names were doing — and nothing was added to the data; the year was always there, just unreadable.
+    point at.ref header gesture underline
+
+    quiz "What does one row of this long table represent?"
+        intro: Quick check before we write it.
+        right: One person in one year — the unit of analysis moved from the person to the person-year.
+        wrong: Each person now has thirteen rows, one per income year, so a row is narrower than a person.
+        * One person
+        + One person in one year
+        * One birth cohort
+
+There is no reshape command here, so you build the long table the way this language wants — one income year at a time, in its own dataset.
+    draw md_line_9 md_line_10
+
+The cohort filter from lecture six, and then the money: not wage underscore 2010 any more, just wage.
+    draw md_line_11 md_line_12
+
+The year that was hiding in the old column name is written out as a column of its own.
+    draw md_line_13 md_mark_2
+
+And age follows from it — year minus 1985 — since every person in this dataset shares one birth year.
+    draw md_line_14 md_mark_3
+
+collapse here takes a single grouping key, so sex and age are pasted into one composite string first — a workaround you will use constantly.
+    draw md_line_15 md_mark_4
+
+Then means by that key, and each pass of the loop contributes its rows.
+    draw md_line_16 md_mark_5
+
+Six hundred and fifty thousand person-years, and after lecture eight you know none of them leave individually — the long table you can actually read is the aggregated one.
+    highlight md_line_16
+
+    pause 0.4
+
+    clear
+
+With age as a genuine column, the payoff is one plot instead of thirteen.
+    draw ax
+
+Mean wage income for the cohort's men, plotted straight against age — the shape, not yet the numbers; part five puts the real means here.
+    draw men lab_men
+
+The women start close behind at 25 — this cohort's women are the better-educated half — and then the paths part.
+    draw women lab_women
+
+Norwegian women's average monthly earnings have sat near 88 per cent of men's in recent years, and annual wage income, which counts hours as well as rates, diverges more.
+    region gap x_from 25 x_to 37 between ["men","women"] style.fill #c96567 style.opacity 0.35
+    label lab_gap "The gap" above-left attach_to gap
+
+Kleven, Landais and Søgaard's Danish register study puts most of that divergence around first births — a long-run earnings penalty of roughly twenty per cent that never closes.
+    highlight gap effect glow
+
+Which brings the fine print in your own age column back into view.
+    math eq_age below women gap 30 tex "\\text{age} = \\text{year} - 1985"
+    mark mark_eq target eq_age kind box
+
+One cohort means age and calendar year are the same column twice, so this widening is the life cycle and thirteen years of Norwegian wage growth welded together — inseparable until you import more cohorts.
+    highlight eq_age delivery grave
+
+Reshaping was never cosmetic: the long table is what lets age be a variable at all, and it is also what puts that confound on the page where you can see it.
+
+## Spells, not snapshots
+voice: female
+level: advanced
+
+    text hd "Spells, not snapshots" x 500 y 716 font_size 30 hidden true
+    arrow tline from.x 0 from.y 60 to.x 950 to.y 60 hidden true
+    path snap_15 dashed #8f887c points [[0,50],[0,300]] hidden true
+    path snap_16 dashed #8f887c points [[300,50],[300,300]] hidden true
+    path snap_17 dashed #8f887c points [[600,50],[600,300]] hidden true
+    path snap_18 dashed #8f887c points [[900,50],[900,300]] hidden true
+    shape spell_sick1 #b5482e shape rect x 87 y 110 width 75 height 24 style.fill #b5482e hidden true
+    shape spell_leave #2f6b8f shape rect x 612 y 172 width 275 height 24 style.fill #2f6b8f hidden true
+    shape spell_sick2 #b5482e shape rect x 809 y 110 width 18 height 24 style.fill #b5482e hidden true
+    group tl members ["tline","snap_15","snap_16","snap_17","snap_18","spell_sick1","spell_leave","spell_sick2"] fit.h 320 fit.w 880 fit.x 60 fit.y 365 hidden true
+    label lab_2015 "1 Jan 2015" below attach_to snap_15 hidden true
+    label lab_2016 "1 Jan 2016" below attach_to snap_16 hidden true
+    label lab_2017 "1 Jan 2017" below attach_to snap_17 hidden true
+    label lab_2018 "1 Jan 2018" below attach_to snap_18 hidden true
+    label read_15 "no" above #8f887c attach_to snap_15 hidden true
+    label read_16 "no" above #8f887c attach_to snap_16 hidden true
+    label read_17 "on leave" above-right #2f6b8f attach_to snap_17 hidden true
+    label read_18 "no" above #8f887c attach_to snap_18 hidden true
+    label lab_sick1 "63 days sick" above #b5482e attach_to spell_sick1 hidden true
+    label lab_leave "Parental leave, 11 months" below #2f6b8f attach_to spell_leave hidden true
+    label lab_sick2 "18 days" above #b5482e attach_to spell_sick2 hidden true
+    mark mark_vanish target spell_sick2 kind circle hidden true
+    text insight "Snapshots over-sample long spells" #b5482e x 500 y 265 font_size 30 hidden true
+    text q1 "How long did it last?" #2f6b8f x 170 y 700 font_size 20 hidden true
+    text q2 "When, relative to the birth?" #2f6b8f x 500 y 700 font_size 20 hidden true
+    text q3 "How much person-time at risk?" #2f6b8f x 830 y 700 font_size 20 hidden true
+    ```microdata md x 500 y 180 width 900 font_size 16 show code lines 7 marks ["2017-01-01","2015-01-01 to 2017-12-31"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset snapshot
+    import db/SYKEFRAVAR_SYKEFRAVAR_DAGSVERK1 2017-01-01 as tapte
+    // the other shape: an interval, not an instant
+    create-dataset spells
+    import-event db/SYKEFRAVAR_SYKEFRAVAR_DAGSVERK1 2015-01-01 to 2017-12-31 as tapte
+    summarize tapte
+    ```
+
+Now that we have folded thirteen wide columns into one long panel, the panel is tidy and quietly wrong about absence — and if you report durations from it, you will overstate them.
+    draw hd tline
+
+Every import so far has been one of these: a vertical line through a single date, asking what was true that morning.
+    draw snap_15 snap_16 snap_17 snap_18 lab_2015 lab_2016 lab_2017 lab_2018 parallel true
+
+Underneath lies a life. A woman in our 1985 cohort is signed off sick on the second of March 2015 and returns on the twenty-ninth of May — sixty-three working days, one unbroken episode.
+    draw spell_sick1 lab_sick1
+
+The following August she starts parental leave and stays on it until the end of June 2017, eleven months straddling a new year.
+    draw spell_leave lab_leave
+
+And in September 2017, eighteen days off sick.
+    draw spell_sick2 lab_sick2
+
+Each one is stored as a person, a start date, an end date and a value — an event variable, an interval rather than an instant.
+    point at.ref spell_leave gesture underline
+
+Ask the register what she was doing on each first of January, and it answers: no, no, on leave, no.
+    draw read_15 read_16 read_17 read_18 parallel true
+
+Two of her three episodes leave no trace — the register kept them; our question threw them away.
+    focus spell_sick1 spell_sick2 delivery grave
+
+    pause 0.5
+
+The language keeps the two shapes apart. This is the one we know — a dataset, and an import pinned to a single day.
+    draw md md_line_1 md_line_2 md_line_3 parallel true
+
+That date carries the whole question; move it two months and a different set of women is on leave.
+    draw md_mark_1
+
+The event import takes an interval instead, and the register returns everything that happened inside it.
+    draw md_line_4 md_line_5 md_line_6
+
+Three years in one call: the episodes are found and their lost day-equivalents summed per person, so the unit is exposure rather than status.
+    draw md_mark_2
+
+Summarize now describes days lost across 2015 to 2017 — a quantity you can add up.
+    draw md_line_7
+
+With one liability you have just accepted: any spell starting before your window or ending after it is clipped by your own two dates, so short follow-up manufactures short durations.
+    highlight md_line_6 effect glow
+
+Now back to the picture, because the bias in the snapshot panel is visible in it.
+    erase md_mark_1 md_mark_2 md
+
+Of three episodes, the snapshots caught exactly one — the eleven-month one.
+    focus spell_leave snap_17
+
+Not luck: a fixed date lands inside a spell with probability proportional to that spell's length.
+    highlight snap_15 snap_16 snap_17 snap_18 effect pulse
+
+Eighteen days never had a chance; eleven months could hardly be missed.
+    draw mark_vanish
+
+So the snapshot panel does not simply see less — it draws a length-biased sample: too few episodes, and every survivor longer than typical.
+    draw insight delivery grave
+
+    quiz "Compared with the spells themselves, what does a 1 January snapshot of sickness absence do?" intro "A quick check."
+        right: A date falls inside a spell in proportion to its length, so short episodes vanish and the survivors look longer than typical.
+        wrong: Think about which spells a single fixed date is likely to land inside.
+        + Misses short episodes and over-states typical length
+        * Misses long episodes and under-states typical length
+        * Gives an unbiased sample of episodes
+
+Three things a yearly panel cannot give you at all: duration, timing relative to another event, and person-time at risk — the denominator under every rate you will report.
+    draw q1 q2 q3 parallel true
+
+Timing is the one that reorganised this literature: Kleven, Landais and Søgaard lined Danish parents up by years since the first birth instead of calendar year, and mothers' earnings drop around twenty percent below the counterfactual and stay there.
+    highlight q2 effect glow
+
+A January wage column cannot tell you which January came after the birth, so event time is unreachable without event dates.
+    point at.ref spell_leave gesture tap
+
+And these spells were built to pay people, not to describe them: the Norwegian employer covers the first sixteen days, so a benefit spell can open on day seventeen, and one illness can appear as two records when the payer or the rate changes.
+    highlight spell_sick1 effect glow
+
+    quiz "In a benefit register, what most directly determines a spell's end date?" intro "One more."
+        right: The end date is booked when the payment stops, so a closure can be administrative rather than medical — read the rules before calling it a duration.
+        wrong: Remember who created the record, and what it was created for.
+        * The day the underlying condition changed
+        + The administrative rule that closes the case
+        * The date of the next snapshot
+
+For our cohort, then: keep the yearly panel for wage, education and municipality, where a January reading is a fair description of a state — and go to event data for the leave, because the gap opens in the months between the lines.
+    highlight spell_leave effect glow
+
+You can now see why: a snapshot reports what someone was on a date, a spell reports what happened and for how long, and only the second can be summed — or lined up against a birth.
+    delivery grave
+
+## The Gap from 25 to 37
+voice: female
+level: advanced
+use: line_chart
+with:
+    x:
       - 25
-      - 318400
-    - - 1
-      - 2011
       - 26
-      - 352900
-    - - 1
-      - 2012
       - 27
-      - 389100
-    - - …
-      - …
-      - …
-      - …
-    - - 1
-      - 2022
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
       - 37
-      - 612500
-    - - 2
-      - 2010
-      - 25
-      - 271300
-    - - 2
-      - 2011
-      - 26
-      - 298800
-  decimals: 0
-  font_size: 18
-  title: One row per person-year
-domain:
-  x: [24, 38]
-  'y': [0, 700000]
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 10
-    font_size: 14
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset panel
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      for y in 2010:2022
-        import db/INNTEKT_WLONN ${y}-01-01 as wage_${y}
-      end
-      // wide: one row per person, year in the name
-      create-dataset py2010
-      import db/BEFOLKNING_KJOENN as sex
-      // 1985 cohort kept exactly as in lecture 6
-      import db/INNTEKT_WLONN 2010-01-01 as wage
-      generate year = 2010
-      generate age = year - 1985
-      generate key = sex ++ "_" ++ to_str(age)
-      collapse (mean) wage, by(key)
-    marks:
-      - as wage_${y}
-      - generate year = 2010
-      - generate age = year - 1985
-      - generate key = sex ++ "_" ++ to_str(age)
-      - collapse (mean) wage, by(key)
-  - id: ax
-    type: axes
-    x_label: Age
-    y_label: Mean wage income
-  - id: men
-    type: curve
-    expr: 350000 + 27500*(x-25) - 250*(x-25)*(x-25)
-    x_from: 25
-    x_to: 37
-    style:
-      color: '#2f6b8f'
-  - id: women
-    type: curve
-    expr: 335000 + 14000*(x-25) - 200*(x-25)*(x-25)
-    x_from: 25
-    x_to: 37
-    style:
-      color: '#b5482e'
-  - id: lab_men
-    type: label
-    text: Men
-    attach_to: men
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: lab_women
-    type: label
-    text: Women
-    attach_to: women
-    side: below-right
-    style:
-      color: '#b5482e'
-  - id: gap
-    type: region
-    between:
-      - men
-      - women
-    x_from: 25
-    x_to: 37
-    style:
-      fill: '#c96567'
-      opacity: 0.35
-  - id: lab_gap
-    type: label
-    text: The gap
-    attach_to: gap
-    side: above-left
-  - id: eq_age
-    type: math
-    tex: \text{age} = \text{year} - 1985
-    at:
-      ref: women
-      side: below
-      gap: 30
-  - id: mark_eq
-    type: annotation
-    target: eq_age
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Last time we filled thirteen columns with wage income — and a panel in that shape cannot answer a single question about age.
-  - draw:
-      - md_line_3
-      - md_line_4
-    speak: Sex and birth month arrive as one row per person, because the person is the datastore's native unit.
-  - draw:
-      - md_line_5
-      - md_line_6
-      - md_line_7
-    speak: 'And here is the loop from part two: one import per income year, each landing in a column of its own.'
-  - draw:
-      - md_mark_1
-    speak: Look where the year lives — inside the variable name. It is metadata, not data.
-  - draw:
-      - md_line_8
-    speak: 'So: about fifty thousand people born in 1985, thirteen wage columns beside them.'
-  - highlight:
-      target:
-        - md_line_6
-      effect: glow
-    speak: You cannot condition on a year that has no column, and no regression accepts an age variable that does not exist — so today we turn those columns into rows.
-  - pause: 0.4
-  - draw:
-      - title
-      - header
-    speak: 'This is the shape we want: one row for every person in every year.'
-  - draw:
-      - row_1
-    speak: Person one, income year 2010, age 25, one wage value — illustrative rows, since real ones never leave the platform.
-  - draw:
-      - row_2
-      - row_3
-      - row_4
-      - row_5
-    speak: The same person again and again, the age column climbing with the year, down to age 37 in 2022.
-  - draw:
-      - row_6
-      - row_7
-    speak: Then the next person starts underneath, and the rows simply stack.
-  - point:
-      at:
-        ref: header
-      gesture: underline
-    speak: Two ordinary columns now do the work the column names were doing — and nothing was added to the data; the year was always there, just unreadable.
-  - quiz:
-      intro: Quick check before we write it.
-      question: What does one row of this long table represent?
-      choices:
-        - One person
-        - One person in one year
-        - One birth cohort
-      correct: 2
-      right: One person in one year — the unit of analysis moved from the person to the person-year.
-      wrong: Each person now has thirteen rows, one per income year, so a row is narrower than a person.
-  - draw:
-      - md_line_9
-      - md_line_10
-    speak: There is no reshape command here, so you build the long table the way this language wants — one income year at a time, in its own dataset.
-  - draw:
-      - md_line_11
-      - md_line_12
-    speak: 'The cohort filter from lecture six, and then the money: not wage underscore 2010 any more, just wage.'
-  - draw:
-      - md_line_13
-      - md_mark_2
-    speak: The year that was hiding in the old column name is written out as a column of its own.
-  - draw:
-      - md_line_14
-      - md_mark_3
-    speak: And age follows from it — year minus 1985 — since every person in this dataset shares one birth year.
-  - draw:
-      - md_line_15
-      - md_mark_4
-    speak: collapse here takes a single grouping key, so sex and age are pasted into one composite string first — a workaround you will use constantly.
-  - draw:
-      - md_line_16
-      - md_mark_5
-    speak: Then means by that key, and each pass of the loop contributes its rows.
-  - highlight:
-      target:
-        - md_line_16
-    speak: Six hundred and fifty thousand person-years, and after lecture eight you know none of them leave individually — the long table you can actually read is the aggregated one.
-  - pause: 0.4
-  - clear: {}
-  - draw:
-      - ax
-    speak: With age as a genuine column, the payoff is one plot instead of thirteen.
-  - draw:
-      - men
-      - lab_men
-    speak: Mean wage income for the cohort's men, plotted straight against age — the shape, not yet the numbers; part five puts the real means here.
-  - draw:
-      - women
-      - lab_women
-    speak: The women start close behind at 25 — this cohort's women are the better-educated half — and then the paths part.
-  - draw:
-      - gap
-      - lab_gap
-    speak: Norwegian women's average monthly earnings have sat near 88 per cent of men's in recent years, and annual wage income, which counts hours as well as rates, diverges more.
-  - highlight:
-      target:
-        - gap
-      effect: glow
-    speak: Kleven, Landais and Søgaard's Danish register study puts most of that divergence around first births — a long-run earnings penalty of roughly twenty per cent that never closes.
-  - draw:
-      - eq_age
-      - mark_eq
-    speak: Which brings the fine print in your own age column back into view.
-  - highlight:
-      target:
-        - eq_age
-    delivery: grave
-    speak: One cohort means age and calendar year are the same column twice, so this widening is the life cycle and thirteen years of Norwegian wage growth welded together — inseparable until you import more cohorts.
-  - speak: 'Reshaping was never cosmetic: the long table is what lets age be a variable at all, and it is also what puts that confound on the page where you can see it.'
----
-title: Spells, not snapshots
-level: advanced
-voice: female
-elements:
-  - id: hd
-    type: text
-    x: 500
-    'y': 716
-    text: Spells, not snapshots
-    font_size: 30
-  - id: tline
-    type: arrow
-    from:
-      x: 0
-      'y': 60
-    to:
-      x: 950
-      'y': 60
-  - id: snap_15
-    type: path
-    points:
-      - [0, 50]
-      - [0, 300]
-    style:
-      dash: true
-      color: '#8f887c'
-  - id: snap_16
-    type: path
-    points:
-      - [300, 50]
-      - [300, 300]
-    style:
-      dash: true
-      color: '#8f887c'
-  - id: snap_17
-    type: path
-    points:
-      - [600, 50]
-      - [600, 300]
-    style:
-      dash: true
-      color: '#8f887c'
-  - id: snap_18
-    type: path
-    points:
-      - [900, 50]
-      - [900, 300]
-    style:
-      dash: true
-      color: '#8f887c'
-  - id: spell_sick1
-    type: shape
-    shape: rect
-    x: 87
-    'y': 110
-    width: 75
-    height: 24
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: spell_leave
-    type: shape
-    shape: rect
-    x: 612
-    'y': 172
-    width: 275
-    height: 24
-    style:
-      fill: '#2f6b8f'
-      color: '#2f6b8f'
-  - id: spell_sick2
-    type: shape
-    shape: rect
-    x: 809
-    'y': 110
-    width: 18
-    height: 24
-    style:
-      fill: '#b5482e'
-      color: '#b5482e'
-  - id: tl
-    type: group
-    members:
-      - tline
-      - snap_15
-      - snap_16
-      - snap_17
-      - snap_18
-      - spell_sick1
-      - spell_leave
-      - spell_sick2
-    fit:
-      x: 60
-      'y': 365
-      w: 880
-      h: 320
-  - id: lab_2015
-    type: label
-    text: 1 Jan 2015
-    attach_to: snap_15
-    side: below
-  - id: lab_2016
-    type: label
-    text: 1 Jan 2016
-    attach_to: snap_16
-    side: below
-  - id: lab_2017
-    type: label
-    text: 1 Jan 2017
-    attach_to: snap_17
-    side: below
-  - id: lab_2018
-    type: label
-    text: 1 Jan 2018
-    attach_to: snap_18
-    side: below
-  - id: read_15
-    type: label
-    text: 'no'
-    attach_to: snap_15
-    side: above
-    style:
-      color: '#8f887c'
-  - id: read_16
-    type: label
-    text: 'no'
-    attach_to: snap_16
-    side: above
-    style:
-      color: '#8f887c'
-  - id: read_17
-    type: label
-    text: on leave
-    attach_to: snap_17
-    side: above-right
-    style:
-      color: '#2f6b8f'
-  - id: read_18
-    type: label
-    text: 'no'
-    attach_to: snap_18
-    side: above
-    style:
-      color: '#8f887c'
-  - id: lab_sick1
-    type: label
-    text: 63 days sick
-    attach_to: spell_sick1
-    side: above
-    style:
-      color: '#b5482e'
-  - id: lab_leave
-    type: label
-    text: Parental leave, 11 months
-    attach_to: spell_leave
-    side: below
-    style:
-      color: '#2f6b8f'
-  - id: lab_sick2
-    type: label
-    text: 18 days
-    attach_to: spell_sick2
-    side: above
-    style:
-      color: '#b5482e'
-  - id: mark_vanish
-    type: annotation
-    target: spell_sick2
-    kind: circle
-  - id: insight
-    type: text
-    x: 500
-    'y': 265
-    text: Snapshots over-sample long spells
-    font_size: 30
-    style:
-      color: '#b5482e'
-  - id: q1
-    type: text
-    x: 170
-    'y': 700
-    text: How long did it last?
-    font_size: 20
-    style:
-      color: '#2f6b8f'
-  - id: q2
-    type: text
-    x: 500
-    'y': 700
-    text: When, relative to the birth?
-    font_size: 20
-    style:
-      color: '#2f6b8f'
-  - id: q3
-    type: text
-    x: 830
-    'y': 700
-    text: How much person-time at risk?
-    font_size: 20
-    style:
-      color: '#2f6b8f'
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    x: 500
-    'y': 180
-    width: 900
-    lines: 7
-    font_size: 16
-    draw:
-      mode: type
-    marks:
-      - '2017-01-01'
-      - 2015-01-01 to 2017-12-31
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset snapshot
-      import db/SYKEFRAVAR_SYKEFRAVAR_DAGSVERK1 2017-01-01 as tapte
-      // the other shape: an interval, not an instant
-      create-dataset spells
-      import-event db/SYKEFRAVAR_SYKEFRAVAR_DAGSVERK1 2015-01-01 to 2017-12-31 as tapte
-      summarize tapte
-commands:
-  - draw:
-      - hd
-      - tline
-    speak: Now that we have folded thirteen wide columns into one long panel, the panel is tidy and quietly wrong about absence — and if you report durations from it, you will overstate them.
-  - draw:
-      - snap_15
-      - snap_16
-      - snap_17
-      - snap_18
-      - lab_2015
-      - lab_2016
-      - lab_2017
-      - lab_2018
-    parallel: true
-    speak: 'Every import so far has been one of these: a vertical line through a single date, asking what was true that morning.'
-  - draw:
-      - spell_sick1
-      - lab_sick1
-    speak: Underneath lies a life. A woman in our 1985 cohort is signed off sick on the second of March 2015 and returns on the twenty-ninth of May — sixty-three working days, one unbroken episode.
-  - draw:
-      - spell_leave
-      - lab_leave
-    speak: The following August she starts parental leave and stays on it until the end of June 2017, eleven months straddling a new year.
-  - draw:
-      - spell_sick2
-      - lab_sick2
-    speak: And in September 2017, eighteen days off sick.
-  - point:
-      at:
-        ref: spell_leave
-      gesture: underline
-    speak: Each one is stored as a person, a start date, an end date and a value — an event variable, an interval rather than an instant.
-  - draw:
-      - read_15
-      - read_16
-      - read_17
-      - read_18
-    parallel: true
-    speak: 'Ask the register what she was doing on each first of January, and it answers: no, no, on leave, no.'
-  - focus:
-      target:
-        - spell_sick1
-        - spell_sick2
-    speak: Two of her three episodes leave no trace — the register kept them; our question threw them away.
-    delivery: grave
-  - pause: 0.5
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-    parallel: true
-    speak: The language keeps the two shapes apart. This is the one we know — a dataset, and an import pinned to a single day.
-  - draw:
-      - md_mark_1
-    speak: That date carries the whole question; move it two months and a different set of women is on leave.
-  - draw:
-      - md_line_4
-      - md_line_5
-      - md_line_6
-    speak: The event import takes an interval instead, and the register returns everything that happened inside it.
-  - draw:
-      - md_mark_2
-    speak: 'Three years in one call: the episodes are found and their lost day-equivalents summed per person, so the unit is exposure rather than status.'
-  - draw:
-      - md_line_7
-    speak: Summarize now describes days lost across 2015 to 2017 — a quantity you can add up.
-  - highlight:
-      target:
-        - md_line_6
-      effect: glow
-    speak: 'With one liability you have just accepted: any spell starting before your window or ending after it is clipped by your own two dates, so short follow-up manufactures short durations.'
-  - erase:
-      - md_mark_1
-      - md_mark_2
-      - md
-    speak: Now back to the picture, because the bias in the snapshot panel is visible in it.
-  - focus:
-      target:
-        - spell_leave
-        - snap_17
-    speak: Of three episodes, the snapshots caught exactly one — the eleven-month one.
-  - highlight:
-      target:
-        - snap_15
-        - snap_16
-        - snap_17
-        - snap_18
-      effect: pulse
-    speak: 'Not luck: a fixed date lands inside a spell with probability proportional to that spell''s length.'
-  - draw:
-      - mark_vanish
-    speak: Eighteen days never had a chance; eleven months could hardly be missed.
-  - draw:
-      - insight
-    speak: 'So the snapshot panel does not simply see less — it draws a length-biased sample: too few episodes, and every survivor longer than typical.'
-    delivery: grave
-  - quiz:
-      intro: A quick check.
-      question: Compared with the spells themselves, what does a 1 January snapshot of sickness absence do?
-      choices:
-        - Misses short episodes and over-states typical length
-        - Misses long episodes and under-states typical length
-        - Gives an unbiased sample of episodes
-      correct: 1
-      right: A date falls inside a spell in proportion to its length, so short episodes vanish and the survivors look longer than typical.
-      wrong: Think about which spells a single fixed date is likely to land inside.
-  - draw:
-      - q1
-      - q2
-      - q3
-    parallel: true
-    speak: 'Three things a yearly panel cannot give you at all: duration, timing relative to another event, and person-time at risk — the denominator under every rate you will report.'
-  - highlight:
-      target:
-        - q2
-      effect: glow
-    speak: 'Timing is the one that reorganised this literature: Kleven, Landais and Søgaard lined Danish parents up by years since the first birth instead of calendar year, and mothers'' earnings drop around twenty percent below the counterfactual and stay there.'
-  - point:
-      at:
-        ref: spell_leave
-      gesture: tap
-    speak: A January wage column cannot tell you which January came after the birth, so event time is unreachable without event dates.
-  - highlight:
-      target:
-        - spell_sick1
-      effect: glow
-    speak: 'And these spells were built to pay people, not to describe them: the Norwegian employer covers the first sixteen days, so a benefit spell can open on day seventeen, and one illness can appear as two records when the payer or the rate changes.'
-  - quiz:
-      intro: One more.
-      question: In a benefit register, what most directly determines a spell's end date?
-      choices:
-        - The day the underlying condition changed
-        - The administrative rule that closes the case
-        - The date of the next snapshot
-      correct: 2
-      right: The end date is booked when the payment stops, so a closure can be administrative rather than medical — read the rules before calling it a duration.
-      wrong: Remember who created the record, and what it was created for.
-  - highlight:
-      target:
-        - spell_leave
-      effect: glow
-    speak: 'For our cohort, then: keep the yearly panel for wage, education and municipality, where a January reading is a fair description of a state — and go to event data for the leave, because the gap opens in the months between the lines.'
-  - speak: 'You can now see why: a snapshot reports what someone was on a date, a spell reports what happened and for how long, and only the second can be summed — or lined up against a birth.'
-    delivery: grave
----
-title: The Gap from 25 to 37
-level: advanced
-voice: female
-template: line_chart
-params:
-  x:
-    - 25
-    - 26
-    - 27
-    - 28
-    - 29
-    - 30
-    - 31
-    - 32
-    - 33
-    - 34
-    - 35
-    - 36
-    - 37
-  series:
-    - name: Men
-      values:
-        - - 310
-          - 360
-          - 405
-          - 445
-        - - 310
-          - 360
-          - 405
-          - 445
-          - 480
-          - 515
-          - 550
-          - 585
-          - 615
-        - - 310
-          - 360
-          - 405
-          - 445
-          - 480
-          - 515
-          - 550
-          - 585
-          - 615
-          - 645
-          - 665
-          - 685
-          - 705
-    - name: Women
-      values:
-        - - 295
-          - 340
-          - 380
-          - 410
-        - - 295
-          - 340
-          - 380
-          - 410
-          - 435
-          - 450
-          - 460
-          - 470
-          - 485
-        - - 295
-          - 340
-          - 380
-          - 410
-          - 435
-          - 450
-          - 460
-          - 470
-          - 485
-          - 500
-          - 515
-          - 530
-          - 545
-  stage: 0
-  points: true
-  ylim: [0, 760]
-  x_label: 'Age (1985 cohort: 25 = 2010, 37 = 2022)'
-  y_label: Mean wage income (1000 NOK)
-  title: The 1985 cohort, by sex and age
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    lines: 9
-    font_size: 17
-    frame: screen
-    draw:
-      mode: type
-    marks:
-      - collapse(mean) wage, by(sex)
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset gap
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      destring birth
-      keep if birth >= 198501
-      keep if birth <= 198512
-      collapse(mean) wage, by(sex)
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that the panel can hold spells as well as snapshots, we can draw the figure this series was built for — and the whole point of drawing it carefully is that a gap this striking invites a causal story the data cannot carry.
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    speak: 'Three variables, the same three as in lecture one: sex, birth year and month, and wage income at one date.'
-  - draw:
-      - md_line_6
-      - md_line_7
-      - md_line_8
-    speak: Destring makes the year-month a number, and two keeps fence the cohort — everyone born in the twelve months of 1985, nobody else.
-  - draw:
-      - md_line_9
-    speak: 'Collapse turns the roughly fifty thousand people born in Norway that year into two numbers: mean wage income for men, and for women.'
-  - draw:
-      - md_mark_1
-    speak: Run it once and you get one point; run the panel version from part two — thirteen import dates, collapsed by sex and age — and you get thirteen, on each of two lines.
-  - draw:
-      - title
-      - axes
-  - draw:
-      - line_1
-      - line_2
-    speak: 'Ages twenty-five to twenty-eight, 2010 to 2013: both lines climb together from a bit over three hundred thousand kroner, women at ninety-five percent of men. Rounded means, so your run will differ in the decimals, not the shape.'
-  - pause: 0.4
-  - animate:
-      stage: 1
-    duration: 3
-    speak: Carry it to thirty-three and the lines come apart — the men's keeps its slope, the women's bends away.
-  - animate:
-      stage: 2
-    duration: 3
-    speak: 'From thirty-four to thirty-seven the new distance simply persists: seven hundred and five against five hundred and forty-five thousand kroner.'
-  - highlight:
-      target:
-        - line_2
-      effect: glow
-    speak: Ninety-five percent at twenty-five, eighty-seven at thirty, seventy-seven at thirty-seven — and then flat.
-  - camera:
-      center:
-        ref: line_2
-      zoom: 1.5
-    speak: 'The bend is the thing to see: women''s wage income does not fall, it stops accelerating while the other line carries on.'
-  - camera:
-      reset: true
-    speak: Almost the whole divergence sits in a five-year window around thirty — and the mean age at first birth for Norwegian women is just about thirty.
-  - highlight:
-      target:
-        - line_1
-        - line_2
-      effect: pulse
-    speak: 'Kleven, Landais and Søgaard found this same hinge in Danish registers and named it the child penalty: a long-run earnings gap near twenty percent that opens at the first birth and does not close.'
-  - point:
-      at:
-        ref: axes
-      gesture: underline
-    speak: But the horizontal axis is not only age — in one cohort twenty-five is 2010 and thirty-seven is 2022, so age, period and cohort are not separately identified; the 2014 oil-price fall and the pandemic sit inside this slope, and with prices up roughly a third, part of the climb is just kroner.
-  - quiz:
-      intro: A quick check before we go on.
-      question: In a single-cohort age profile like this, what is age inseparable from?
-      choices:
-        - Education level
-        - Calendar year
-        - Municipality of residence
-      correct: 2
-      right: Age and calendar year move together in one cohort — 2014 and 2020 are inside this slope, not outside it.
-      wrong: Education and municipality you can hold fixed or split on; the calendar you cannot.
-  - focus:
-      target:
-        - line_2
-    speak: 'The level is a composition too: annual wage income is pay times hours, so part-time work, parental leave and a year out of employment all land in the same number.'
-  - speak: Statistics Norway's headline figure — women at about eighty-seven percent of men's earnings — is a monthly, full-time-equivalent measure; hours sit outside it and inside ours, which is why our gap is wider.
-  - point:
-      at:
-        ref: axes
-        anchor: left
-      gesture: tap
-    speak: 'And every person-year with no wage income forces a choice: zero, or sysmiss — the extensive margin, or a missing observation. Across thirteen years you make that choice thirteen times.'
-  - flow:
-      along:
-        - line_2
-    speak: 'Above all these are two different sets of people, not one person with and without a child — so re-index the panel on last time''s spells: years since the first birth, instead of age.'
-  - quiz:
-      question: Which re-indexing of the panel compares the same people before and after the event?
-      choices:
-        - Age in years
-        - Years since the first birth
-        - Calendar year
-      correct: 2
-      right: Event time puts each person's own before and after on one axis — exactly what the spell variables were for.
-      wrong: Age and calendar year both mix people who have had a child with people who have not.
-  - highlight:
-      target:
-        - line_1
-        - line_2
-      effect: glow
-    speak: 'That is the series in one figure: thirteen imports became a table, the table a long panel, the panel learned spells — so these two lines could be drawn without lying about what they are.'
-  - speak: The 1985 cohort's gap is not a constant but a hinge around age thirty — and a panel can tell you precisely when it opens, never on its own why.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: The whole script, end to end — and what to do when it breaks
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 10 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: The whole script, end to end — and what to do when it breaks'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+    series:
+      - {name: Men, values: [[310, 360, 405, 445], [310, 360, 405, 445, 480, 515, 550, 585, 615], [310, 360, 405, 445, 480, 515, 550, 585, 615, 645, 665, 685, 705]]}
+      - {name: Women, values: [[295, 340, 380, 410], [295, 340, 380, 410, 435, 450, 460, 470, 485], [295, 340, 380, 410, 435, 450, 460, 470, 485, 500, 515, 530, 545]]}
+    stage: 0
+    points: true
+    ylim:
+      - 0
+      - 760
+    x_label: 'Age (1985 cohort: 25 = 2010, 37 = 2022)'
+    y_label: Mean wage income (1000 NOK)
+    title: The 1985 cohort, by sex and age
+
+    ```microdata md font_size 17 show code lines 9 frame screen marks ["collapse(mean) wage, by(sex)"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset gap
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    destring birth
+    keep if birth >= 198501
+    keep if birth <= 198512
+    collapse(mean) wage, by(sex)
+    ```
+
+Now that the panel can hold spells as well as snapshots, we can draw the figure this series was built for — and the whole point of drawing it carefully is that a gap this striking invites a causal story the data cannot carry.
+    draw md md_line_1 md_line_2 parallel true
+
+Three variables, the same three as in lecture one: sex, birth year and month, and wage income at one date.
+    draw md_line_3 md_line_4 md_line_5
+
+Destring makes the year-month a number, and two keeps fence the cohort — everyone born in the twelve months of 1985, nobody else.
+    draw md_line_6 md_line_7 md_line_8
+
+Collapse turns the roughly fifty thousand people born in Norway that year into two numbers: mean wage income for men, and for women.
+    draw md_line_9
+
+Run it once and you get one point; run the panel version from part two — thirteen import dates, collapsed by sex and age — and you get thirteen, on each of two lines.
+    draw md_mark_1
+
+    draw title axes
+
+Ages twenty-five to twenty-eight, 2010 to 2013: both lines climb together from a bit over three hundred thousand kroner, women at ninety-five percent of men. Rounded means, so your run will differ in the decimals, not the shape.
+    draw line_1 line_2
+
+    pause 0.4
+
+Carry it to thirty-three and the lines come apart — the men's keeps its slope, the women's bends away.
+    animate stage 1 duration 3
+
+From thirty-four to thirty-seven the new distance simply persists: seven hundred and five against five hundred and forty-five thousand kroner.
+    animate stage 2 duration 3
+
+Ninety-five percent at twenty-five, eighty-seven at thirty, seventy-seven at thirty-seven — and then flat.
+    highlight line_2 effect glow
+
+The bend is the thing to see: women's wage income does not fall, it stops accelerating while the other line carries on.
+    camera center.ref line_2 zoom 1.5
+
+Almost the whole divergence sits in a five-year window around thirty — and the mean age at first birth for Norwegian women is just about thirty.
+    camera reset true
+
+Kleven, Landais and Søgaard found this same hinge in Danish registers and named it the child penalty: a long-run earnings gap near twenty percent that opens at the first birth and does not close.
+    highlight line_1 line_2 effect pulse
+
+But the horizontal axis is not only age — in one cohort twenty-five is 2010 and thirty-seven is 2022, so age, period and cohort are not separately identified; the 2014 oil-price fall and the pandemic sit inside this slope, and with prices up roughly a third, part of the climb is just kroner.
+    point at.ref axes gesture underline
+
+    quiz "In a single-cohort age profile like this, what is age inseparable from?"
+        intro: A quick check before we go on.
+        right: Age and calendar year move together in one cohort — 2014 and 2020 are inside this slope, not outside it.
+        wrong: Education and municipality you can hold fixed or split on; the calendar you cannot.
+        * Education level
+        + Calendar year
+        * Municipality of residence
+
+The level is a composition too: annual wage income is pay times hours, so part-time work, parental leave and a year out of employment all land in the same number.
+    focus line_2
+
+Statistics Norway's headline figure — women at about eighty-seven percent of men's earnings — is a monthly, full-time-equivalent measure; hours sit outside it and inside ours, which is why our gap is wider.
+
+And every person-year with no wage income forces a choice: zero, or sysmiss — the extensive margin, or a missing observation. Across thirteen years you make that choice thirteen times.
+    point at.ref axes at.anchor left gesture tap
+
+Above all these are two different sets of people, not one person with and without a child — so re-index the panel on last time's spells: years since the first birth, instead of age.
+    flow line_2
+
+    quiz "Which re-indexing of the panel compares the same people before and after the event?"
+        right: Event time puts each person's own before and after on one axis — exactly what the spell variables were for.
+        wrong: Age and calendar year both mix people who have had a child with people who have not.
+        * Age in years
+        + Years since the first birth
+        * Calendar year
+
+That is the series in one figure: thirteen imports became a table, the table a long panel, the panel learned spells — so these two lines could be drawn without lying about what they are.
+    highlight line_1 line_2 effect glow
+
+The 1985 cohort's gap is not a constant but a hinge around age thirty — and a panel can tell you precisely when it opens, never on its own why.
+
+## Where next
+end_page: true
+
+Next: The whole script, end to end — and what to do when it breaks
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:8 title "Why your output came back censored" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:10 title "The whole script, end to end — and what to do when it breaks" size 320 x 735 y 395
+
+    link end_again href lecture:9 title "Watch again" form text open here x 500 y 160
+    text end_count "9 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

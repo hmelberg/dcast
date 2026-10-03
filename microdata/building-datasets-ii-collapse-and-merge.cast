@@ -1,1873 +1,634 @@
-playlist:
-  title: 'Building datasets II: collapse and merge, or how to change the unit of analysis'
-  prompt: How do you turn a dataset of persons into a dataset of municipalities with `collapse (mean) wage, by(kommune)`? How does `merge` put the municipal mean wage back onto every person — and what does microdata do when the key does not match? When should you collapse before merging rather than after, and how do you tell you got it wrong?
-  next:
-    title: 'Making new variables: generate, replace, recode and labels'
-    href: https://drawcast.app/#gh=hmelberg/dcast/microdata/making-new-variables-generate-replace.yaml
----
-title: One row per what?
+# Building datasets II: collapse and merge, or how to change the unit of analysis
+prompt: "How do you turn a dataset of persons into a dataset of municipalities with `collapse (mean) wage, by(kommune)`? How does `merge` put the municipal mean wage back onto every person — and what does microdata do when the key does not match? When should you collapse before merging rather than after, and how do you tell you got it wrong?"
+next: {"title":"Making new variables: generate, replace, recode and labels","href":"https://drawcast.app/#gh=hmelberg/dcast/microdata/making-new-variables-generate-replace.cast"}
+
+## One row per what?
+voice: male
 level: advanced
+
+    text heading "One row per what?" x 500 y 706 font_size 34 hidden true
+    ```microdata md x 500 y 410 width 780 font_size 18 show code frame screen marks ["create-dataset persons"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    ```
+    shape prow_1 #2f6b8f shape rect x 250 y 515 width 420 height 56 hidden true
+    shape prow_2 #2f6b8f shape rect x 250 y 459 width 420 height 56 hidden true
+    shape prow_3 #2f6b8f shape rect x 250 y 403 width 420 height 56 hidden true
+    shape prow_4 #2f6b8f shape rect x 250 y 347 width 420 height 56 hidden true
+    shape prow_5 #2f6b8f shape rect x 250 y 291 width 420 height 56 hidden true
+    text pcap "persons — one row per person" above prow_1 gap 16 #2f6b8f font_size 22 hidden true
+    text ph1 "person" at.anchor left at.offset [78,0] at.ref prow_1 font_size 20 hidden true
+    text ph2 "kommune" at.anchor center at.ref prow_1 font_size 20 hidden true
+    text ph3 "wage" at.anchor right at.offset [-78,0] at.ref prow_1 font_size 20 hidden true
+    text pa1 "p. 1" at.anchor left at.offset [78,0] at.ref prow_2 font_size 20 hidden true
+    text pa2 "0301" at.anchor center at.ref prow_2 font_size 20 hidden true
+    text pa3 "512 000" at.anchor right at.offset [-78,0] at.ref prow_2 font_size 20 hidden true
+    text pb1 "p. 2" at.anchor left at.offset [78,0] at.ref prow_3 font_size 20 hidden true
+    text pb2 "0301" at.anchor center at.ref prow_3 font_size 20 hidden true
+    text pb3 "388 000" at.anchor right at.offset [-78,0] at.ref prow_3 font_size 20 hidden true
+    text pc1 "p. 3" at.anchor left at.offset [78,0] at.ref prow_4 font_size 20 hidden true
+    text pc2 "4601" at.anchor center at.ref prow_4 font_size 20 hidden true
+    text pc3 "447 000" at.anchor right at.offset [-78,0] at.ref prow_4 font_size 20 hidden true
+    text pdots "… 50 000 more rows" at.anchor center at.ref prow_5 font_size 20 hidden true
+    shape mrow_1 #b5482e shape rect x 770 y 501 width 340 height 56 hidden true
+    shape mrow_2 #b5482e shape rect x 770 y 445 width 340 height 56 hidden true
+    shape mrow_3 #b5482e shape rect x 770 y 389 width 340 height 56 hidden true
+    shape mrow_4 #b5482e shape rect x 770 y 333 width 340 height 56 hidden true
+    text mcap "muni — one row per municipality" above mrow_1 gap 16 #b5482e font_size 22 hidden true
+    text mh1 "kommune" at.anchor left at.offset [80,0] at.ref mrow_1 font_size 20 hidden true
+    text mh2 "mean wage" at.anchor right at.offset [-80,0] at.ref mrow_1 font_size 20 hidden true
+    text ma1 "0301" at.anchor left at.offset [80,0] at.ref mrow_2 font_size 20 hidden true
+    text ma2 "450 000" at.anchor right at.offset [-80,0] at.ref mrow_2 font_size 20 hidden true
+    mark mark_mean target ma2 kind circle hidden true
+    text mb1 "4601" at.anchor left at.offset [80,0] at.ref mrow_3 font_size 20 hidden true
+    text mb2 "447 000" at.anchor right at.offset [-80,0] at.ref mrow_3 font_size 20 hidden true
+    text mdots "… 354 more rows" at.anchor center at.ref mrow_4 font_size 20 hidden true
+    arrow arr_c1 curved #8a5fa8 from.anchor right from.ref prow_2 to.anchor left to.ref mrow_2 hidden true
+    arrow arr_c2 curved #8a5fa8 from.anchor right from.ref prow_3 to.anchor left to.ref mrow_2 hidden true
+    label lab_collapse "collapse" above #8a5fa8 attach_to arr_c1 hidden true
+    arrow arr_merge curved #8a5fa8 from.anchor left from.ref mrow_3 to.anchor right to.ref prow_4 hidden true
+    label lab_merge "merge" below #8a5fa8 attach_to arr_merge hidden true
+    text cmd_text "collapse (mean) wage, by(kommune)" #8a5fa8 x 500 y 168 font_size 24 hidden true
+
+A: Across these five parts we do one thing: change the unit of analysis — person rows into municipality rows, and back — because almost every wrong number in register work comes from mixing the two up.
+    draw heading md md_line_1
+
+A: Here is the file from lecture three: create-dataset persons, then a municipality number for everyone in our 1985 cohort, as it stood on the first of January 2022.
+    draw md_line_2 md_line_3
+
+A: And wage income for the same year — INNTEKT_WLONN, in kroner.
+    draw md_line_4
+
+B: So create-dataset decided the rows, and every import after it just hangs a column on them?
+    point at.ref md_line_2 gesture underline
+
+A: That one line fixed the unit: one row per person, and nothing later moves it.
+    draw md_mark_1
+
+    clear keep ["heading"]
+
+A: Let's look at the rows themselves: who the row is, where they lived, what they earned.
+    draw pcap prow_1 ph1 ph2 ph3
+
+A: Row one: someone born in 1985, municipality 0301 — Oslo — 512 000 kroner in wages.
+    draw prow_2 pa1 pa2 pa3
+
+A: Row two: also 0301, but 388 000.
+    draw prow_3 pb1 pb2 pb3
+
+A: Row three: 4601, Bergen, 447 000.
+    draw prow_4 pc1 pc2 pc3
+
+A: And under them fifty thousand more lines — one for every person born that year.
+    draw prow_5 pdots
+
+B: A row is a person. What is there to get wrong?
+    point at.ref prow_3 gesture underline
+
+A: This. The same cohort, written out with one row per municipality instead.
+    draw mcap mrow_1 mh1 mh2
+
+A: Oslo gets a single row, and the wage column is now a mean: 450 000 — the average of our 512 and our 388.
+    draw mrow_2 ma1 ma2
+
+B: So that 450 000 is somebody's salary, roughly?
+    point at.ref ma2
+
+A: Nobody earns 450 000. It is a property of a place, and it belongs to no one in the file it came from.
+    draw mark_mean delivery grave
+
+A: Bergen takes its own row at 447 000, and with 356 municipalities in 2022 this file has 356 rows, not fifty thousand.
+    draw mrow_3 mb1 mb2 mrow_4 mdots
+
+A: Left to right is collapse: many person rows in, one municipal row out, and you must say which function — mean, sum, count.
+    draw arr_c1 arr_c2 lab_collapse cmd_text
+
+A: Right to left is merge: that single municipal mean copied back onto every person living there.
+    draw arr_merge lab_merge
+
+B: And the kommune code is what links the two files?
+    highlight pa2 pb2 pc2 ma1 mb1 effect glow
+
+A: That is the key. Match on it and everyone gets their municipality's mean; miss on it and you get rows with nothing attached — part three.
+    focus ph2 pa2 pb2 pc2 mh1 ma1 mb1
+
+A: And the codes themselves move: in 2020 Norway merged 422 municipalities down to 356, so a key that matched in 2019 quietly stops matching the year after.
+    point at.ref mh1 gesture circle
+
+A: Which is why the unit is not bookkeeping: a regression on 356 municipal means is a different study from one on fifty thousand people — same register, far fewer observations, often a different conclusion.
+    highlight pcap mcap effect pulse delivery grave
+
+    quiz "A file has 356 rows, one per municipality, with a mean wage column. What is one row?"
+        intro: Quick check before we go on.
+        right: A row is a place — Oslo's 450 000 is nobody's salary, it is the mean over everyone who lives there.
+        wrong: Careful — collapsing threw the individual persons away.
+        * One person's wage
+        + The average wage of a place
+        * A municipality's total wage bill
+
+A: So you can now read any register file by asking one question of it — one row per what? — and next part we write the line that changes the answer: collapse, mean wage, by kommune.
+    point at.ref mrow_2 gesture circle
+
+## collapse (mean) wage
 voice: male
-elements:
-  - id: heading
-    type: text
-    text: One row per what?
-    x: 500
-    'y': 706
-    font_size: 34
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    width: 780
-    x: 500
-    'y': 410
-    font_size: 18
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-    marks:
-      - create-dataset persons
-  - id: prow_1
-    type: shape
-    shape: rect
-    x: 250
-    'y': 515
-    width: 420
-    height: 56
-    style:
-      color: '#2f6b8f'
-  - id: prow_2
-    type: shape
-    shape: rect
-    x: 250
-    'y': 459
-    width: 420
-    height: 56
-    style:
-      color: '#2f6b8f'
-  - id: prow_3
-    type: shape
-    shape: rect
-    x: 250
-    'y': 403
-    width: 420
-    height: 56
-    style:
-      color: '#2f6b8f'
-  - id: prow_4
-    type: shape
-    shape: rect
-    x: 250
-    'y': 347
-    width: 420
-    height: 56
-    style:
-      color: '#2f6b8f'
-  - id: prow_5
-    type: shape
-    shape: rect
-    x: 250
-    'y': 291
-    width: 420
-    height: 56
-    style:
-      color: '#2f6b8f'
-  - id: pcap
-    type: text
-    text: persons — one row per person
-    at:
-      ref: prow_1
-      side: above
-      gap: 16
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: ph1
-    type: text
-    text: person
-    at:
-      ref: prow_1
-      anchor: left
-      offset: [78, 0]
-    font_size: 20
-  - id: ph2
-    type: text
-    text: kommune
-    at:
-      ref: prow_1
-      anchor: center
-    font_size: 20
-  - id: ph3
-    type: text
-    text: wage
-    at:
-      ref: prow_1
-      anchor: right
-      offset: [-78, 0]
-    font_size: 20
-  - id: pa1
-    type: text
-    text: p. 1
-    at:
-      ref: prow_2
-      anchor: left
-      offset: [78, 0]
-    font_size: 20
-  - id: pa2
-    type: text
-    text: '0301'
-    at:
-      ref: prow_2
-      anchor: center
-    font_size: 20
-  - id: pa3
-    type: text
-    text: 512 000
-    at:
-      ref: prow_2
-      anchor: right
-      offset: [-78, 0]
-    font_size: 20
-  - id: pb1
-    type: text
-    text: p. 2
-    at:
-      ref: prow_3
-      anchor: left
-      offset: [78, 0]
-    font_size: 20
-  - id: pb2
-    type: text
-    text: '0301'
-    at:
-      ref: prow_3
-      anchor: center
-    font_size: 20
-  - id: pb3
-    type: text
-    text: 388 000
-    at:
-      ref: prow_3
-      anchor: right
-      offset: [-78, 0]
-    font_size: 20
-  - id: pc1
-    type: text
-    text: p. 3
-    at:
-      ref: prow_4
-      anchor: left
-      offset: [78, 0]
-    font_size: 20
-  - id: pc2
-    type: text
-    text: '4601'
-    at:
-      ref: prow_4
-      anchor: center
-    font_size: 20
-  - id: pc3
-    type: text
-    text: 447 000
-    at:
-      ref: prow_4
-      anchor: right
-      offset: [-78, 0]
-    font_size: 20
-  - id: pdots
-    type: text
-    text: … 50 000 more rows
-    at:
-      ref: prow_5
-      anchor: center
-    font_size: 20
-  - id: mrow_1
-    type: shape
-    shape: rect
-    x: 770
-    'y': 501
-    width: 340
-    height: 56
-    style:
-      color: '#b5482e'
-  - id: mrow_2
-    type: shape
-    shape: rect
-    x: 770
-    'y': 445
-    width: 340
-    height: 56
-    style:
-      color: '#b5482e'
-  - id: mrow_3
-    type: shape
-    shape: rect
-    x: 770
-    'y': 389
-    width: 340
-    height: 56
-    style:
-      color: '#b5482e'
-  - id: mrow_4
-    type: shape
-    shape: rect
-    x: 770
-    'y': 333
-    width: 340
-    height: 56
-    style:
-      color: '#b5482e'
-  - id: mcap
-    type: text
-    text: muni — one row per municipality
-    at:
-      ref: mrow_1
-      side: above
-      gap: 16
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: mh1
-    type: text
-    text: kommune
-    at:
-      ref: mrow_1
-      anchor: left
-      offset: [80, 0]
-    font_size: 20
-  - id: mh2
-    type: text
-    text: mean wage
-    at:
-      ref: mrow_1
-      anchor: right
-      offset: [-80, 0]
-    font_size: 20
-  - id: ma1
-    type: text
-    text: '0301'
-    at:
-      ref: mrow_2
-      anchor: left
-      offset: [80, 0]
-    font_size: 20
-  - id: ma2
-    type: text
-    text: 450 000
-    at:
-      ref: mrow_2
-      anchor: right
-      offset: [-80, 0]
-    font_size: 20
-  - id: mark_mean
-    type: annotation
-    target: ma2
-    kind: circle
-  - id: mb1
-    type: text
-    text: '4601'
-    at:
-      ref: mrow_3
-      anchor: left
-      offset: [80, 0]
-    font_size: 20
-  - id: mb2
-    type: text
-    text: 447 000
-    at:
-      ref: mrow_3
-      anchor: right
-      offset: [-80, 0]
-    font_size: 20
-  - id: mdots
-    type: text
-    text: … 354 more rows
-    at:
-      ref: mrow_4
-      anchor: center
-    font_size: 20
-  - id: arr_c1
-    type: arrow
-    from:
-      ref: prow_2
-      anchor: right
-    to:
-      ref: mrow_2
-      anchor: left
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: arr_c2
-    type: arrow
-    from:
-      ref: prow_3
-      anchor: right
-    to:
-      ref: mrow_2
-      anchor: left
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: lab_collapse
-    type: label
-    text: collapse
-    attach_to: arr_c1
-    side: above
-    style:
-      color: '#8a5fa8'
-  - id: arr_merge
-    type: arrow
-    from:
-      ref: mrow_3
-      anchor: left
-    to:
-      ref: prow_4
-      anchor: right
-    curved: true
-    style:
-      color: '#8a5fa8'
-  - id: lab_merge
-    type: label
-    text: merge
-    attach_to: arr_merge
-    side: below
-    style:
-      color: '#8a5fa8'
-  - id: cmd_text
-    type: text
-    text: collapse (mean) wage, by(kommune)
-    x: 500
-    'y': 168
-    font_size: 24
-    style:
-      color: '#8a5fa8'
-commands:
-  - draw:
-      - heading
-      - md
-      - md_line_1
-    speak: 'Across these five parts we do one thing: change the unit of analysis — person rows into municipality rows, and back — because almost every wrong number in register work comes from mixing the two up.'
-    voice: a
-  - draw:
-      - md_line_2
-      - md_line_3
-    speak: 'Here is the file from lecture three: create-dataset persons, then a municipality number for everyone in our 1985 cohort, as it stood on the first of January 2022.'
-    voice: a
-  - draw:
-      - md_line_4
-    speak: And wage income for the same year — INNTEKT_WLONN, in kroner.
-    voice: a
-  - point:
-      at:
-        ref: md_line_2
-      gesture: underline
-    speak: So create-dataset decided the rows, and every import after it just hangs a column on them?
-    voice: b
-  - draw:
-      - md_mark_1
-    speak: 'That one line fixed the unit: one row per person, and nothing later moves it.'
-    voice: a
-  - clear:
-      keep:
-        - heading
-  - draw:
-      - pcap
-      - prow_1
-      - ph1
-      - ph2
-      - ph3
-    speak: 'Let''s look at the rows themselves: who the row is, where they lived, what they earned.'
-    voice: a
-  - draw:
-      - prow_2
-      - pa1
-      - pa2
-      - pa3
-    speak: 'Row one: someone born in 1985, municipality 0301 — Oslo — 512 000 kroner in wages.'
-    voice: a
-  - draw:
-      - prow_3
-      - pb1
-      - pb2
-      - pb3
-    speak: 'Row two: also 0301, but 388 000.'
-    voice: a
-  - draw:
-      - prow_4
-      - pc1
-      - pc2
-      - pc3
-    speak: 'Row three: 4601, Bergen, 447 000.'
-    voice: a
-  - draw:
-      - prow_5
-      - pdots
-    speak: And under them fifty thousand more lines — one for every person born that year.
-    voice: a
-  - point:
-      at:
-        ref: prow_3
-      gesture: underline
-    speak: A row is a person. What is there to get wrong?
-    voice: b
-  - draw:
-      - mcap
-      - mrow_1
-      - mh1
-      - mh2
-    speak: This. The same cohort, written out with one row per municipality instead.
-    voice: a
-  - draw:
-      - mrow_2
-      - ma1
-      - ma2
-    speak: 'Oslo gets a single row, and the wage column is now a mean: 450 000 — the average of our 512 and our 388.'
-    voice: a
-  - point:
-      at:
-        ref: ma2
-    speak: So that 450 000 is somebody's salary, roughly?
-    voice: b
-  - draw:
-      - mark_mean
-    speak: Nobody earns 450 000. It is a property of a place, and it belongs to no one in the file it came from.
-    voice: a
-    delivery: grave
-  - draw:
-      - mrow_3
-      - mb1
-      - mb2
-      - mrow_4
-      - mdots
-    speak: Bergen takes its own row at 447 000, and with 356 municipalities in 2022 this file has 356 rows, not fifty thousand.
-    voice: a
-  - draw:
-      - arr_c1
-      - arr_c2
-      - lab_collapse
-      - cmd_text
-    speak: 'Left to right is collapse: many person rows in, one municipal row out, and you must say which function — mean, sum, count.'
-    voice: a
-  - draw:
-      - arr_merge
-      - lab_merge
-    speak: 'Right to left is merge: that single municipal mean copied back onto every person living there.'
-    voice: a
-  - highlight:
-      target:
-        - pa2
-        - pb2
-        - pc2
-        - ma1
-        - mb1
-      effect: glow
-    speak: And the kommune code is what links the two files?
-    voice: b
-  - focus:
-      target:
-        - ph2
-        - pa2
-        - pb2
-        - pc2
-        - mh1
-        - ma1
-        - mb1
-    speak: That is the key. Match on it and everyone gets their municipality's mean; miss on it and you get rows with nothing attached — part three.
-    voice: a
-  - point:
-      at:
-        ref: mh1
-      gesture: circle
-    speak: 'And the codes themselves move: in 2020 Norway merged 422 municipalities down to 356, so a key that matched in 2019 quietly stops matching the year after.'
-    voice: a
-  - highlight:
-      target:
-        - pcap
-        - mcap
-      effect: pulse
-    speak: 'Which is why the unit is not bookkeeping: a regression on 356 municipal means is a different study from one on fifty thousand people — same register, far fewer observations, often a different conclusion.'
-    voice: a
-    delivery: grave
-  - quiz:
-      intro: Quick check before we go on.
-      question: A file has 356 rows, one per municipality, with a mean wage column. What is one row?
-      choices:
-        - One person's wage
-        - The average wage of a place
-        - A municipality's total wage bill
-      correct: 2
-      right: A row is a place — Oslo's 450 000 is nobody's salary, it is the mean over everyone who lives there.
-      wrong: Careful — collapsing threw the individual persons away.
-  - point:
-      at:
-        ref: mrow_2
-      gesture: circle
-    speak: 'So you can now read any register file by asking one question of it — one row per what? — and next part we write the line that changes the answer: collapse, mean wage, by kommune.'
-    voice: a
----
-title: collapse (mean) wage
+
+    ```microdata md x 500 y 390 width 900 font_size 18 show code lines 8 frame screen marks ["(mean) wage","by(kommune)"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    keep if birth >= '198501' & birth <= '198512'
+    collapse (mean) wage, by(kommune)
+    ```
+    text p_title "persons — one row per person" x 250 y 645 font_size 24 hidden true
+    text p_head "sex    kommune    wage" #8f887c x 250 y 598 font_size 22 hidden true
+    text p_r1 "1      0301      640 000" x 250 y 552 font_size 24 hidden true
+    text p_r2 "2      0301      600 000" x 250 y 512 font_size 24 hidden true
+    text p_r3 "1      5001      520 000" x 250 y 472 font_size 24 hidden true
+    text p_r4 "2      5001      560 000" x 250 y 432 font_size 24 hidden true
+    text p_r5 "2      1151      480 000" x 250 y 392 font_size 24 hidden true
+    text p_dots "…   51 000 rows" #8f887c x 250 y 345 font_size 22 hidden true
+    text m_title "muni — one row per kommune" #2f6b8f x 745 y 645 font_size 24 hidden true
+    text m_head "kommune    wage" #8f887c x 745 y 598 font_size 22 hidden true
+    text m_r1 "0301      620 000" #2f6b8f x 745 y 532 font_size 24 hidden true
+    text m_r2 "5001      540 000" #2f6b8f x 745 y 452 font_size 24 hidden true
+    text m_r3 "1151      480 000" #2f6b8f x 745 y 392 font_size 24 hidden true
+    text m_dots "…   356 rows" #8f887c x 745 y 345 font_size 22 hidden true
+    arrow a1 curved #2f6b8f from.anchor right from.ref p_r2 to.anchor left to.ref m_r1 hidden true
+    arrow a2 curved #2f6b8f from.anchor right from.ref p_r4 to.anchor left to.ref m_r2 hidden true
+    arrow a3 curved #2f6b8f from.anchor right from.ref p_r5 to.anchor left to.ref m_r3 hidden true
+
+A: Last time we asked "one row per what?" — today one line answers it differently, and quietly throws away most of your data.
+    draw md md_line_1 md_line_2 parallel true
+
+A: The four imports from lecture three: sex, birth month, the kommune a person was registered in on the first of January twenty twenty-two, and that year's wage income.
+    draw md_line_3 md_line_4 md_line_5 md_line_6
+
+A: Then the cohort — everyone born in 1985. About fifty-one thousand people, one row each.
+    draw md_line_7
+
+B: Every row is still a person there. What does it cost to make every row a kommune instead?
+    point at.ref md_line_7 gesture underline
+
+A: One line. The verb, a statistic in parentheses, the variable it applies to — and after the comma, the grouping.
+    draw md_line_8
+
+A: "Mean wage" is the instruction for the numbers: average them.
+    draw md_mark_1
+
+A: "By kommune" is the instruction for the rows: one row for every distinct value of kommune — and that is now your unit of analysis.
+    draw md_mark_2 delivery grave
+
+    pause 0.4
+
+    clear
+
+A: So watch it happen on five of those fifty-one thousand rows: sex, kommune, wage, sorted here by municipality.
+    draw p_title p_head p_r1 p_r2 p_r3 p_r4 p_r5 p_dots
+
+B: Two of them live in 0301 — Oslo — on six hundred and forty, and six hundred thousand kroner.
+    focus p_r1 p_r2
+
+A: After the collapse the dataset has a new shape, and a new answer to what a row means.
+    draw m_title m_head
+
+A: Oslo's two rows become one, carrying their average: six hundred and twenty thousand.
+    draw a1 m_r1
+
+A: Trondheim, 5001: five-twenty and five-sixty average to five hundred and forty thousand.
+    draw a2 m_r2
+
+A: And Utsira, 1151, where our whole cohort is one man — his own wage simply becomes the municipal mean.
+    draw a3 m_r3 m_dots
+
+B: Hang on — where did sex go? We imported it four lines earlier.
+    point at.ref p_head gesture tap
+
+A: Gone. A variable that is neither in by() nor given a statistic is not in the new dataset at all — and nothing warns you.
+    highlight m_head effect glow delivery grave
+
+A: So if the gender gap is your question, you group by kommune and sex, and get two rows per kommune instead of one.
+    text t_bysex "collapse (mean) wage, by(kommune sex)" #2f6b8f x 500 y 268 font_size 24
+
+A: And a person whose wage is missing never enters the mean: the average is over those who had a value, not over everyone who lives there.
+    text note_miss "wage missing  →  that person is not in the mean" #b5482e x 500 y 210 font_size 22
+
+B: Fine — then I can just average that wage column and read off the national mean?
+    erase t_bysex note_miss
+
+A: Average the five persons: five hundred and sixty thousand. Average the three kommune rows: five hundred and forty-six thousand seven hundred.
+    math eq1 tex "\\bar{w}_{\\text{persons}} = 560\\,000" x 250 y 245
+    math eq2 #b5482e tex "\\bar{w}_{\\text{kommuner}} = 546\\,700" x 745 y 245
+
+A: Utsira's single man now weighs exactly as much as all of Oslo. Collapse doesn't only change the rows — it changes who counts.
+    mark mark_eq target eq2 kind box
+    delivery grave
+
+B: Oh — so the mean of the means is not the mean of the people.
+    highlight eq1 eq2 effect pulse
+
+A: Which is why you ask collapse for a count beside the mean — the size of each kommune travels with its number, and that is not classroom hygiene: regional health atlases and grant formulas are built on municipal means exactly like these.
+    text t_count "collapse (mean) wage (count) wage, by(kommune)" #2f6b8f x 500 y 140 font_size 24
+
+    pause 0.4
+
+    clear keep ["m_title","m_head","m_r1","m_r2","m_r3","m_dots"]
+
+A: So read the collapsed dataset for what it is: a new dataset — three hundred and fifty-six rows, a kommune and a mean — and the fifty-one thousand persons are not hidden, they are gone.
+    text t_final "one row = one kommune   ·   356 rows" x 275 y 480 font_size 26
+
+B: Then the order is everything: if I still want people, I have to put this mean back onto them before I throw them away — which is exactly where we go next.
+    highlight t_final effect glow
+
+    quiz "After collapse (mean) wage, by(kommune) — what happened to the variable sex?"
+        intro: One check before we stop.
+        right: It is gone: collapse keeps only the by() variables and the statistics you explicitly asked for.
+        wrong: Collapse keeps nothing it was not told to keep.
+        * Kept, one value per kommune
+        + Gone — not in by(), not aggregated
+        * Turned into the most common sex
+
+## merge it back: the municipal mean on every person
 voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    lines: 8
-    width: 900
-    x: 500
-    'y': 390
-    font_size: 18
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      keep if birth >= '198501' & birth <= '198512'
-      collapse (mean) wage, by(kommune)
-    marks:
-      - (mean) wage
-      - by(kommune)
-  - id: p_title
-    type: text
-    text: persons — one row per person
-    x: 250
-    'y': 645
-    font_size: 24
-  - id: p_head
-    type: text
-    text: sex    kommune    wage
-    x: 250
-    'y': 598
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: p_r1
-    type: text
-    text: 1      0301      640 000
-    x: 250
-    'y': 552
-    font_size: 24
-  - id: p_r2
-    type: text
-    text: 2      0301      600 000
-    x: 250
-    'y': 512
-    font_size: 24
-  - id: p_r3
-    type: text
-    text: 1      5001      520 000
-    x: 250
-    'y': 472
-    font_size: 24
-  - id: p_r4
-    type: text
-    text: 2      5001      560 000
-    x: 250
-    'y': 432
-    font_size: 24
-  - id: p_r5
-    type: text
-    text: 2      1151      480 000
-    x: 250
-    'y': 392
-    font_size: 24
-  - id: p_dots
-    type: text
-    text: …   51 000 rows
-    x: 250
-    'y': 345
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: m_title
-    type: text
-    text: muni — one row per kommune
-    x: 745
-    'y': 645
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: m_head
-    type: text
-    text: kommune    wage
-    x: 745
-    'y': 598
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: m_r1
-    type: text
-    text: 0301      620 000
-    x: 745
-    'y': 532
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: m_r2
-    type: text
-    text: 5001      540 000
-    x: 745
-    'y': 452
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: m_r3
-    type: text
-    text: 1151      480 000
-    x: 745
-    'y': 392
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: m_dots
-    type: text
-    text: …   356 rows
-    x: 745
-    'y': 345
-    font_size: 22
-    style:
-      color: '#8f887c'
-  - id: a1
-    type: arrow
-    from:
-      ref: p_r2
-      anchor: right
-    to:
-      ref: m_r1
-      anchor: left
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: a2
-    type: arrow
-    from:
-      ref: p_r4
-      anchor: right
-    to:
-      ref: m_r2
-      anchor: left
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: a3
-    type: arrow
-    from:
-      ref: p_r5
-      anchor: right
-    to:
-      ref: m_r3
-      anchor: left
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: t_bysex
-    type: text
-    text: collapse (mean) wage, by(kommune sex)
-    x: 500
-    'y': 268
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: note_miss
-    type: text
-    text: wage missing  →  that person is not in the mean
-    x: 500
-    'y': 210
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: eq1
-    type: math
-    tex: \bar{w}_{\text{persons}} = 560\,000
-    x: 250
-    'y': 245
-  - id: eq2
-    type: math
-    tex: \bar{w}_{\text{kommuner}} = 546\,700
-    x: 745
-    'y': 245
-    style:
-      color: '#b5482e'
-  - id: mark_eq
-    type: annotation
-    target: eq2
-    kind: box
-  - id: t_count
-    type: text
-    text: collapse (mean) wage (count) wage, by(kommune)
-    x: 500
-    'y': 140
-    font_size: 24
-    style:
-      color: '#2f6b8f'
-  - id: t_final
-    type: text
-    text: one row = one kommune   ·   356 rows
-    x: 275
-    'y': 480
-    font_size: 26
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Last time we asked "one row per what?" — today one line answers it differently, and quietly throws away most of your data.
-    voice: a
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-    speak: 'The four imports from lecture three: sex, birth month, the kommune a person was registered in on the first of January twenty twenty-two, and that year''s wage income.'
-    voice: a
-  - draw:
-      - md_line_7
-    speak: Then the cohort — everyone born in 1985. About fifty-one thousand people, one row each.
-    voice: a
-  - point:
-      at:
-        ref: md_line_7
-      gesture: underline
-    speak: Every row is still a person there. What does it cost to make every row a kommune instead?
-    voice: b
-  - draw:
-      - md_line_8
-    speak: One line. The verb, a statistic in parentheses, the variable it applies to — and after the comma, the grouping.
-    voice: a
-  - draw:
-      - md_mark_1
-    speak: '"Mean wage" is the instruction for the numbers: average them.'
-    voice: a
-  - draw:
-      - md_mark_2
-    speak: '"By kommune" is the instruction for the rows: one row for every distinct value of kommune — and that is now your unit of analysis.'
-    voice: a
-    delivery: grave
-  - pause: 0.4
-  - clear: {}
-  - draw:
-      - p_title
-      - p_head
-      - p_r1
-      - p_r2
-      - p_r3
-      - p_r4
-      - p_r5
-      - p_dots
-    speak: 'So watch it happen on five of those fifty-one thousand rows: sex, kommune, wage, sorted here by municipality.'
-    voice: a
-  - focus:
-      target:
-        - p_r1
-        - p_r2
-    speak: Two of them live in 0301 — Oslo — on six hundred and forty, and six hundred thousand kroner.
-    voice: b
-  - draw:
-      - m_title
-      - m_head
-    speak: After the collapse the dataset has a new shape, and a new answer to what a row means.
-    voice: a
-  - draw:
-      - a1
-      - m_r1
-    speak: 'Oslo''s two rows become one, carrying their average: six hundred and twenty thousand.'
-    voice: a
-  - draw:
-      - a2
-      - m_r2
-    speak: 'Trondheim, 5001: five-twenty and five-sixty average to five hundred and forty thousand.'
-    voice: a
-  - draw:
-      - a3
-      - m_r3
-      - m_dots
-    speak: And Utsira, 1151, where our whole cohort is one man — his own wage simply becomes the municipal mean.
-    voice: a
-  - point:
-      at:
-        ref: p_head
-      gesture: tap
-    speak: Hang on — where did sex go? We imported it four lines earlier.
-    voice: b
-  - highlight:
-      target:
-        - m_head
-      effect: glow
-    speak: Gone. A variable that is neither in by() nor given a statistic is not in the new dataset at all — and nothing warns you.
-    voice: a
-    delivery: grave
-  - draw:
-      - t_bysex
-    speak: So if the gender gap is your question, you group by kommune and sex, and get two rows per kommune instead of one.
-    voice: a
-  - draw:
-      - note_miss
-    speak: 'And a person whose wage is missing never enters the mean: the average is over those who had a value, not over everyone who lives there.'
-    voice: a
-  - erase:
-      - t_bysex
-      - note_miss
-    speak: Fine — then I can just average that wage column and read off the national mean?
-    voice: b
-  - draw:
-      - eq1
-      - eq2
-    speak: 'Average the five persons: five hundred and sixty thousand. Average the three kommune rows: five hundred and forty-six thousand seven hundred.'
-    voice: a
-  - draw:
-      - mark_eq
-    speak: Utsira's single man now weighs exactly as much as all of Oslo. Collapse doesn't only change the rows — it changes who counts.
-    voice: a
-    delivery: grave
-  - highlight:
-      target:
-        - eq1
-        - eq2
-      effect: pulse
-    speak: Oh — so the mean of the means is not the mean of the people.
-    voice: b
-  - draw:
-      - t_count
-    speak: 'Which is why you ask collapse for a count beside the mean — the size of each kommune travels with its number, and that is not classroom hygiene: regional health atlases and grant formulas are built on municipal means exactly like these.'
-    voice: a
-  - pause: 0.4
-  - clear:
-      keep:
-        - m_title
-        - m_head
-        - m_r1
-        - m_r2
-        - m_r3
-        - m_dots
-  - draw:
-      - t_final
-    speak: 'So read the collapsed dataset for what it is: a new dataset — three hundred and fifty-six rows, a kommune and a mean — and the fifty-one thousand persons are not hidden, they are gone.'
-    voice: a
-  - highlight:
-      target:
-        - t_final
-      effect: glow
-    speak: 'Then the order is everything: if I still want people, I have to put this mean back onto them before I throw them away — which is exactly where we go next.'
-    voice: b
-  - quiz:
-      intro: One check before we stop.
-      question: After collapse (mean) wage, by(kommune) — what happened to the variable sex?
-      choices:
-        - Kept, one value per kommune
-        - Gone — not in by(), not aggregated
-        - Turned into the most common sex
-      correct: 2
-      right: 'It is gone: collapse keeps only the by() variables and the statistics you explicitly asked for.'
-      wrong: Collapse keeps nothing it was not told to keep.
----
-title: 'merge it back: the municipal mean on every person'
 level: advanced
+
+    ```microdata md width 940 font_size 16 show below lines 7 frame screen marks ["as muni_wage","merge muni"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    create-dataset muni
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as muni_wage
+    collapse (mean) muni_wage, by(kommune)
+    merge muni
+    summarize muni_wage
+    ```
+    box p1 "Ada — 0301" x 250 y 530 width 260 height 66 hidden true
+    box p2 "Bo — 4601" below p1 gap 28 width 260 height 66 hidden true
+    box p3 "Cato — 1201" below p2 gap 28 width 260 height 66 hidden true
+    box m1 "0301 · 612 000" #2f6b8f x 720 y 530 width 290 height 66 hidden true
+    box m2 "4601 · 548 000" below m1 gap 28 #2f6b8f width 290 height 66 hidden true
+    box m3 "1103 · 598 000" below m2 gap 28 #2f6b8f width 290 height 66 hidden true
+    box nomatch "no 1201 row" below m3 gap 28 #b5482e width 250 height 66 hidden true
+    arrow a1 p1 -> m1 #2f6b8f hidden true
+    arrow a2 p2 -> m2 #2f6b8f hidden true
+    arrow a3 p3 -> nomatch curved #b5482e hidden true
+    group pic members ["p1","p2","p3","m1","m2","m3","nomatch","a1","a2","a3"] fit.h 500 fit.w 820 fit.x 90 fit.y 110 hidden true
+    label head_p "persons — one row per person" above attach_to p1 hidden true
+    label head_m "muni — one row per municipality" above #2f6b8f attach_to m1 hidden true
+    label key_label "key: kommune" above attach_to a1 hidden true
+
+A: Now that collapse has given us one row per municipality, we want the opposite direction: is the gender gap wider where wages are high? That question needs every person to carry her municipality's mean — and the verb that does it is merge.
+    draw md md_line_1 md_line_2 parallel true
+
+A: Here is the person dataset from lecture three: sex, municipality number and wage income, one row per person.
+    draw md_line_3 md_line_4 md_line_5
+
+B: Hold on — persons already has a wage. Won't the municipal mean land on top of it?
+    point at.ref md_line_5 gesture underline
+
+A: That is why the muni dataset imports the very same register variable under a different alias: muni_wage.
+    draw md_line_6 md_line_7 md_line_8
+
+A: Name the aggregate before it travels — two datasets, two aliases, nothing to collide.
+    draw md_mark_1
+
+A: Collapse, exactly as last time: one row per kommune, and muni_wage is now the mean of everyone living there.
+    draw md_line_9
+
+A: And here is the new line: merge muni.
+    draw md_line_10
+
+B: Merge muni — so the small dataset travels into the big one, not the other way round?
+    point at.ref md_line_10 gesture underline
+
+A: Yes: microdata matches on the shared variable, kommune, and persons stays the active dataset with muni_wage now attached to it.
+    draw md_mark_2
+
+A: Summarize the merged variable, and read N: it is counting people now, not municipalities.
+    draw md_line_11 md_out
+
+    pause 0.4
+
+B: But how does microdata know which municipal mean belongs to which person?
+    clear
+
+A: Three people from our 1985 cohort, each carrying a municipality number and nothing else.
+    draw head_p p1 p2 p3
+
+A: And three rows of muni: the number, and the mean wage there — six hundred and twelve thousand kroner in Oslo.
+    draw head_m m1 m2 m3
+
+A: Kommune is the key. Where the numbers agree the mean is copied down — the same six hundred and twelve thousand onto every Oslo resident.
+    draw a1 a2 key_label
+
+B: And Cato? Twelve-oh-one — that's Bergen, surely.
+    point at.ref p3 gesture circle
+
+A: It was Bergen, until the 2020 municipal reform renumbered it forty-six-oh-one — one of a hundred and nineteen municipalities that changed number in a decade of reform. Merge a 2019 kommune onto 2022 means and the key hits nothing.
+    draw a3 nomatch
+
+A: Cato is not dropped and nothing is flagged: his row stays, and muni_wage simply comes back missing.
+    mark mark_miss target nomatch kind box
+    delivery grave
+
+B: So a broken merge looks exactly like a working one?
+    point at.ref nomatch gesture tap
+
+A: Almost — the giveaway is the count. Summarize the merged variable and compare its N with your population; the missing people are the ones whose key found no row, and they are never a random sample.
+    highlight nomatch a3 effect glow
+
+    pause 0.4
+
+A: One more caution, and it is the one that ends up in print. That six hundred and twelve thousand belongs to Oslo, not to Ada.
+    highlight m1 effect glow
+
+B: Oh — so I can't read it as what Ada earns?
+    point at.ref a1 gesture tap
+
+A: No. Reading a group mean as a fact about the individual is the ecological fallacy, and merged contextual variables are exactly where people walk into it.
+    highlight p1 p2 p3 effect pulse
+
+A: Used properly it is why this is worth the trouble: regional labour markets, area deprivation, neighbourhood effects all reach the analysis this way.
+    focus a1 a2 m1
+
+    quiz "A person's kommune has no matching row in muni. What does merge do?"
+        intro: A quick check before we stop.
+        right: The row stays and muni_wage comes back missing — which is why you check N after every merge.
+        wrong: Nothing is dropped and nothing is flagged — that is precisely the danger.
+        * Drops that person
+        + Leaves the value missing
+        * Stops with an error
+        * Uses the nearest municipality
+
+A: Collapse changed the unit of analysis; merge hands the answer back down. Ada now carries Oslo's mean beside her own wage — a fact about her municipality, never about her, and only as complete as the key that fetched it.
+    delivery grave
+
+## Order matters
 voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: below
-    lines: 7
-    width: 940
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      create-dataset muni
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as muni_wage
-      collapse (mean) muni_wage, by(kommune)
-      merge muni
-      summarize muni_wage
-    marks:
-      - as muni_wage
-      - merge muni
-  - id: p1
-    type: node
-    shape: rect
-    text: Ada — 0301
-    x: 250
-    'y': 530
-    width: 260
-    height: 66
-  - id: p2
-    type: node
-    shape: rect
-    text: Bo — 4601
-    width: 260
-    height: 66
-    at:
-      ref: p1
-      side: below
-      gap: 28
-  - id: p3
-    type: node
-    shape: rect
-    text: Cato — 1201
-    width: 260
-    height: 66
-    at:
-      ref: p2
-      side: below
-      gap: 28
-  - id: m1
-    type: node
-    shape: rect
-    text: 0301 · 612 000
-    x: 720
-    'y': 530
-    width: 290
-    height: 66
-    style:
-      color: '#2f6b8f'
-  - id: m2
-    type: node
-    shape: rect
-    text: 4601 · 548 000
-    width: 290
-    height: 66
-    at:
-      ref: m1
-      side: below
-      gap: 28
-    style:
-      color: '#2f6b8f'
-  - id: m3
-    type: node
-    shape: rect
-    text: 1103 · 598 000
-    width: 290
-    height: 66
-    at:
-      ref: m2
-      side: below
-      gap: 28
-    style:
-      color: '#2f6b8f'
-  - id: nomatch
-    type: node
-    shape: rect
-    text: no 1201 row
-    width: 250
-    height: 66
-    at:
-      ref: m3
-      side: below
-      gap: 28
-    style:
-      color: '#b5482e'
-  - id: a1
-    type: arrow
-    from:
-      ref: p1
-    to:
-      ref: m1
-    style:
-      color: '#2f6b8f'
-  - id: a2
-    type: arrow
-    from:
-      ref: p2
-    to:
-      ref: m2
-    style:
-      color: '#2f6b8f'
-  - id: a3
-    type: arrow
-    from:
-      ref: p3
-    to:
-      ref: nomatch
-    curved: true
-    style:
-      color: '#b5482e'
-  - id: pic
-    type: group
-    members:
-      - p1
-      - p2
-      - p3
-      - m1
-      - m2
-      - m3
-      - nomatch
-      - a1
-      - a2
-      - a3
-    fit:
-      x: 90
-      'y': 110
-      w: 820
-      h: 500
-  - id: head_p
-    type: label
-    text: persons — one row per person
-    attach_to: p1
-    side: above
-  - id: head_m
-    type: label
-    text: muni — one row per municipality
-    attach_to: m1
-    side: above
-    style:
-      color: '#2f6b8f'
-  - id: key_label
-    type: label
-    text: 'key: kommune'
-    attach_to: a1
-    side: above
-  - id: mark_miss
-    type: annotation
-    target: nomatch
-    kind: box
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    voice: a
-    speak: 'Now that collapse has given us one row per municipality, we want the opposite direction: is the gender gap wider where wages are high? That question needs every person to carry her municipality''s mean — and the verb that does it is merge.'
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-    voice: a
-    speak: 'Here is the person dataset from lecture three: sex, municipality number and wage income, one row per person.'
-  - point:
-      at:
-        ref: md_line_5
-      gesture: underline
-    voice: b
-    speak: Hold on — persons already has a wage. Won't the municipal mean land on top of it?
-  - draw:
-      - md_line_6
-      - md_line_7
-      - md_line_8
-    voice: a
-    speak: 'That is why the muni dataset imports the very same register variable under a different alias: muni_wage.'
-  - draw:
-      - md_mark_1
-    voice: a
-    speak: Name the aggregate before it travels — two datasets, two aliases, nothing to collide.
-  - draw:
-      - md_line_9
-    voice: a
-    speak: 'Collapse, exactly as last time: one row per kommune, and muni_wage is now the mean of everyone living there.'
-  - draw:
-      - md_line_10
-    voice: a
-    speak: 'And here is the new line: merge muni.'
-  - point:
-      at:
-        ref: md_line_10
-      gesture: underline
-    voice: b
-    speak: Merge muni — so the small dataset travels into the big one, not the other way round?
-  - draw:
-      - md_mark_2
-    voice: a
-    speak: 'Yes: microdata matches on the shared variable, kommune, and persons stays the active dataset with muni_wage now attached to it.'
-  - draw:
-      - md_line_11
-      - md_out
-    voice: a
-    speak: 'Summarize the merged variable, and read N: it is counting people now, not municipalities.'
-  - pause: 0.4
-  - clear: {}
-    voice: b
-    speak: But how does microdata know which municipal mean belongs to which person?
-  - draw:
-      - head_p
-      - p1
-      - p2
-      - p3
-    voice: a
-    speak: Three people from our 1985 cohort, each carrying a municipality number and nothing else.
-  - draw:
-      - head_m
-      - m1
-      - m2
-      - m3
-    voice: a
-    speak: 'And three rows of muni: the number, and the mean wage there — six hundred and twelve thousand kroner in Oslo.'
-  - draw:
-      - a1
-      - a2
-      - key_label
-    voice: a
-    speak: Kommune is the key. Where the numbers agree the mean is copied down — the same six hundred and twelve thousand onto every Oslo resident.
-  - point:
-      at:
-        ref: p3
-      gesture: circle
-    voice: b
-    speak: And Cato? Twelve-oh-one — that's Bergen, surely.
-  - draw:
-      - a3
-      - nomatch
-    voice: a
-    speak: It was Bergen, until the 2020 municipal reform renumbered it forty-six-oh-one — one of a hundred and nineteen municipalities that changed number in a decade of reform. Merge a 2019 kommune onto 2022 means and the key hits nothing.
-  - draw:
-      - mark_miss
-    voice: a
-    delivery: grave
-    speak: 'Cato is not dropped and nothing is flagged: his row stays, and muni_wage simply comes back missing.'
-  - point:
-      at:
-        ref: nomatch
-      gesture: tap
-    voice: b
-    speak: So a broken merge looks exactly like a working one?
-  - highlight:
-      target:
-        - nomatch
-        - a3
-      effect: glow
-    voice: a
-    speak: Almost — the giveaway is the count. Summarize the merged variable and compare its N with your population; the missing people are the ones whose key found no row, and they are never a random sample.
-  - pause: 0.4
-  - highlight:
-      target:
-        - m1
-      effect: glow
-    voice: a
-    speak: One more caution, and it is the one that ends up in print. That six hundred and twelve thousand belongs to Oslo, not to Ada.
-  - point:
-      at:
-        ref: a1
-      gesture: tap
-    voice: b
-    speak: Oh — so I can't read it as what Ada earns?
-  - highlight:
-      target:
-        - p1
-        - p2
-        - p3
-      effect: pulse
-    voice: a
-    speak: No. Reading a group mean as a fact about the individual is the ecological fallacy, and merged contextual variables are exactly where people walk into it.
-  - focus:
-      target:
-        - a1
-        - a2
-        - m1
-    voice: a
-    speak: 'Used properly it is why this is worth the trouble: regional labour markets, area deprivation, neighbourhood effects all reach the analysis this way.'
-  - quiz:
-      intro: A quick check before we stop.
-      question: A person's kommune has no matching row in muni. What does merge do?
-      choices:
-        - Drops that person
-        - Leaves the value missing
-        - Stops with an error
-        - Uses the nearest municipality
-      correct: 2
-      right: The row stays and muni_wage comes back missing — which is why you check N after every merge.
-      wrong: Nothing is dropped and nothing is flagged — that is precisely the danger.
-  - voice: a
-    delivery: grave
-    speak: Collapse changed the unit of analysis; merge hands the answer back down. Ada now carries Oslo's mean beside her own wage — a fact about her municipality, never about her, and only as complete as the key that fetched it.
----
-title: Order matters
 level: advanced
+
+    text head "Order matters" x 500 y 712 font_size 34 hidden true
+    box n_pers "persons: 54 000 rows" x 230 y 610 width 330 height 90 hidden true
+    box n_muni "muni: 357 rows" x 760 y 470 width 300 height 90 hidden true
+    arrow a_collapse n_pers -> n_muni hidden true
+    label l_collapse "collapse (mean) wage, by(kommune)" above attach_to a_collapse font_size 22 hidden true
+    arrow a_merge n_muni -> n_pers curved #2f6b8f hidden true
+    label l_merge "merge mwage into persons" below #2f6b8f attach_to a_merge font_size 22 hidden true
+    box n_gap "gap between people" #2f6b8f x 230 y 200 width 340 height 90 hidden true
+    arrow a_right n_pers -> n_gap #2f6b8f hidden true
+    box n_wrong "gap between municipalities" #b5482e x 760 y 150 width 400 height 90 hidden true
+    arrow a_wrong n_muni -> n_wrong #b5482e hidden true
+    box oslo "Oslo: 9 100 persons, mean 690 000" x 230 y 610 width 420 height 90 hidden true
+    box utsira "Utsira: 2 persons, mean 410 000" below oslo gap 50 width 420 height 90 hidden true
+    math eq_true #2f6b8f tex "\\frac{1}{54\\,000}\\sum_i w_i = 612\\,000" x 760 y 610 hidden true
+    label lab_true "one vote per person" above #2f6b8f attach_to eq_true font_size 22 hidden true
+    math eq_unw #b5482e tex "\\frac{1}{357}\\sum_k \\bar w_k = 561\\,000" x 760 y 400 hidden true
+    label lab_unw "one vote per municipality" below #b5482e attach_to eq_unw font_size 22 hidden true
+    math gap_line tex "\\text{gap} = 126\\,000 \\quad \\text{vs} \\quad 109\\,000" colors {"126\\,000":"#2f6b8f","109\\,000":"#b5482e"} x 460 y 170 hidden true
+    ```microdata md x 250 y 420 width 560 font_size 14 show code lines 10 frame screen marks ["collapse (mean) wage, by(kommune)","merge mwage into persons"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    create-dataset muni
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    collapse (mean) wage, by(kommune)
+    generate mwage = wage
+    merge mwage into persons
+    ```
+    text chk_head "After the merge, check:" x 790 y 610 font_size 24 hidden true
+    text chk1 "rows: still 54 000" below chk_head gap 26 #2f6b8f font_size 22 hidden true
+    text chk2 "357 rows: merged into muni" below chk1 gap 20 #b5482e font_size 22 hidden true
+    text chk3 "more rows: key not unique" below chk2 gap 20 #b5482e font_size 22 hidden true
+    text chk4 "mean of means vs mean over persons" below chk3 gap 20 font_size 22 hidden true
+    mark mark_chk4 target chk4 kind box hidden true
+    math fix_eq below chk4 gap 34 tex "\\bar w = \\frac{\\sum_k n_k \\bar w_k}{\\sum_k n_k}" hidden true
+    group checks members ["chk_head","chk1","chk2","chk3","chk4","fix_eq"] fit.h 520 fit.w 320 fit.x 650 fit.y 140 hidden true
+
+A: Now that we have seen merge carry the municipal mean back onto every person, the last thing standing between you and a wrong published number is the order of those two steps.
+    draw head n_pers
+
+A: Collapse takes our fifty-four thousand people born in 1985 and hands back three hundred and fifty-seven rows, one per municipality.
+    draw n_muni a_collapse l_collapse
+
+A: Merge sends that mean back the other way, so every person carries the average wage of the place they live.
+    draw a_merge l_merge
+
+B: Then why bother going back? A mean is a mean — take the men's mean straight out of the municipality table and I save myself the merge.
+    point at.ref n_muni gesture circle
+
+A: Two routes, then. Down the left: collapse the persons by sex, and you get the gender gap in our cohort.
+    draw a_right n_gap
+
+A: Down the right: collapse by kommune and sex, then average those municipal means. Same variable, same people, the same word — collapse — and a different number at the end.
+    draw a_wrong n_wrong
+
+    clear keep ["head"]
+
+A: Here is why. Oslo brings some nine thousand people from our cohort, at a mean wage income near six hundred and ninety thousand kroner.
+    draw oslo
+
+A: Utsira brings two — a cell so small microdata would censor it on the way out, though collapse computes its mean without a murmur.
+    draw utsira
+
+B: And in the municipality table each of those is one row. Oslo's nine thousand people count no more than Utsira's two.
+    highlight oslo utsira effect glow
+
+    clear keep ["head"]
+
+A: Averaged over persons, the men of this cohort earn about six hundred and twelve thousand.
+    draw eq_true lab_true
+
+A: Averaged over municipalities, five hundred and sixty-one thousand: Norway has a long tail of small, low-wage kommuner, and they outvote the cities.
+    draw eq_unw lab_unw
+
+B: Fifty thousand kroner of difference, from nothing but which rows I averaged?
+    point at.ref eq_unw
+
+A: And the gap moves with it: a hundred and twenty-six thousand between men and women per person, a hundred and nine thousand per municipality.
+    draw gap_line
+
+A: Both of those get published. The second is not false — it answers a question about the average municipality — but labelled "the gender gap", no one can reproduce it.
+    highlight gap_line effect glow delivery grave
+
+    clear keep ["head"]
+
+A: So, the order on screen. Persons is the dataset we already built, with kommune and wage on every person.
+    draw md md_line_1 md_line_2 md_line_3 parallel true
+
+A: The municipality table starts fresh beside it: same two variables, same date.
+    draw md_line_4 md_line_5 md_line_6 md_line_7
+
+A: Collapse by kommune, and the key of this dataset is now the municipality — the persons in it are gone.
+    draw md_line_8 md_mark_1
+
+A: Give the mean its own name so it cannot collide, then merge it into persons. Collapse first, merge second — and the persons dataset survives the operation.
+    draw md_line_9 md_line_10 md_mark_2
+
+B: And if I get those two the wrong way round, what does the screen actually show me?
+    point at.ref md_line_10 gesture underline
+
+A: The row count, first and always: after the merge, persons must still be fifty-four thousand.
+    draw chk_head chk1
+
+A: Three hundred and fifty-seven means you collapsed the people away and merged into the table; more rows than you started with means the key was not unique, and every person got duplicated.
+    draw chk2 chk3
+
+A: And the quiet one: the plain mean of your municipal means will not match the mean over persons — weight each municipality by its count, and it matches exactly.
+    draw chk4 mark_chk4 fix_eq
+
+B: So the mismatch is the alarm — not a bug, but proof I am averaging the wrong unit.
+    point at.ref fix_eq gesture tap
+
+    quiz "After your merge, persons comes back with 357 rows. What happened?"
+        intro: One check before we close.
+        right: 357 is one row per municipality — you were standing in the collapsed dataset, so the persons were gone before the merge ran.
+        wrong: Count what 357 is: one row per municipality, not one per person.
+        * The merge duplicated every person
+        + You collapsed the people away and merged into muni
+        * Microdata dropped the unmatched keys
+
+A: Collapse changes the unit; merge changes what each unit carries. Keep them in that order and the gap in this cohort stays a gap between people — a hundred and twenty-six thousand kroner — and never quietly becomes a gap between municipalities.
+    highlight chk1 effect pulse delivery grave
+
+A: Swap those last two lines yourself, and count the rows that come back.
+    explore code md
+
+## The script grows one line
 voice: male
-elements:
-  - id: head
-    type: text
-    text: Order matters
-    x: 500
-    'y': 712
-    font_size: 34
-  - id: n_pers
-    type: node
-    shape: rect
-    text: 'persons: 54 000 rows'
-    x: 230
-    'y': 610
-    width: 330
-    height: 90
-  - id: n_muni
-    type: node
-    shape: rect
-    text: 'muni: 357 rows'
-    x: 760
-    'y': 470
-    width: 300
-    height: 90
-  - id: a_collapse
-    type: arrow
-    from:
-      ref: n_pers
-    to:
-      ref: n_muni
-  - id: l_collapse
-    type: label
-    text: collapse (mean) wage, by(kommune)
-    attach_to: a_collapse
-    side: above
-    font_size: 22
-  - id: a_merge
-    type: arrow
-    from:
-      ref: n_muni
-    to:
-      ref: n_pers
-    curved: true
-    style:
-      color: '#2f6b8f'
-  - id: l_merge
-    type: label
-    text: merge mwage into persons
-    attach_to: a_merge
-    side: below
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: n_gap
-    type: node
-    shape: rect
-    text: gap between people
-    x: 230
-    'y': 200
-    width: 340
-    height: 90
-    style:
-      color: '#2f6b8f'
-  - id: a_right
-    type: arrow
-    from:
-      ref: n_pers
-    to:
-      ref: n_gap
-    style:
-      color: '#2f6b8f'
-  - id: n_wrong
-    type: node
-    shape: rect
-    text: gap between municipalities
-    x: 760
-    'y': 150
-    width: 400
-    height: 90
-    style:
-      color: '#b5482e'
-  - id: a_wrong
-    type: arrow
-    from:
-      ref: n_muni
-    to:
-      ref: n_wrong
-    style:
-      color: '#b5482e'
-  - id: oslo
-    type: node
-    shape: rect
-    text: 'Oslo: 9 100 persons, mean 690 000'
-    x: 230
-    'y': 610
-    width: 420
-    height: 90
-  - id: utsira
-    type: node
-    shape: rect
-    text: 'Utsira: 2 persons, mean 410 000'
-    at:
-      ref: oslo
-      side: below
-      gap: 50
-    width: 420
-    height: 90
-  - id: eq_true
-    type: math
-    tex: \frac{1}{54\,000}\sum_i w_i = 612\,000
-    x: 760
-    'y': 610
-    style:
-      color: '#2f6b8f'
-  - id: lab_true
-    type: label
-    text: one vote per person
-    attach_to: eq_true
-    side: above
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: eq_unw
-    type: math
-    tex: \frac{1}{357}\sum_k \bar w_k = 561\,000
-    x: 760
-    'y': 400
-    style:
-      color: '#b5482e'
-  - id: lab_unw
-    type: label
-    text: one vote per municipality
-    attach_to: eq_unw
-    side: below
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: gap_line
-    type: math
-    tex: \text{gap} = 126\,000 \quad \text{vs} \quad 109\,000
-    x: 460
-    'y': 170
-    colors:
-      126\,000: '#2f6b8f'
-      109\,000: '#b5482e'
-  - id: md
-    type: code
-    language: microdata
-    show: code
-    frame: screen
-    lines: 10
-    width: 560
-    x: 250
-    'y': 420
-    font_size: 14
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      create-dataset muni
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      collapse (mean) wage, by(kommune)
-      generate mwage = wage
-      merge mwage into persons
-    marks:
-      - collapse (mean) wage, by(kommune)
-      - merge mwage into persons
-  - id: chk_head
-    type: text
-    text: 'After the merge, check:'
-    x: 790
-    'y': 610
-    font_size: 24
-  - id: chk1
-    type: text
-    text: 'rows: still 54 000'
-    at:
-      ref: chk_head
-      side: below
-      gap: 26
-    font_size: 22
-    style:
-      color: '#2f6b8f'
-  - id: chk2
-    type: text
-    text: '357 rows: merged into muni'
-    at:
-      ref: chk1
-      side: below
-      gap: 20
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: chk3
-    type: text
-    text: 'more rows: key not unique'
-    at:
-      ref: chk2
-      side: below
-      gap: 20
-    font_size: 22
-    style:
-      color: '#b5482e'
-  - id: chk4
-    type: text
-    text: mean of means vs mean over persons
-    at:
-      ref: chk3
-      side: below
-      gap: 20
-    font_size: 22
-  - id: mark_chk4
-    type: annotation
-    target: chk4
-    kind: box
-  - id: fix_eq
-    type: math
-    tex: \bar w = \frac{\sum_k n_k \bar w_k}{\sum_k n_k}
-    at:
-      ref: chk4
-      side: below
-      gap: 34
-  - id: checks
-    type: group
-    members:
-      - chk_head
-      - chk1
-      - chk2
-      - chk3
-      - chk4
-      - fix_eq
-    fit:
-      x: 650
-      'y': 140
-      w: 320
-      h: 520
-commands:
-  - draw:
-      - head
-      - n_pers
-    speak: Now that we have seen merge carry the municipal mean back onto every person, the last thing standing between you and a wrong published number is the order of those two steps.
-    voice: a
-  - draw:
-      - n_muni
-      - a_collapse
-      - l_collapse
-    speak: Collapse takes our fifty-four thousand people born in 1985 and hands back three hundred and fifty-seven rows, one per municipality.
-    voice: a
-  - draw:
-      - a_merge
-      - l_merge
-    speak: Merge sends that mean back the other way, so every person carries the average wage of the place they live.
-    voice: a
-  - point:
-      at:
-        ref: n_muni
-      gesture: circle
-    speak: Then why bother going back? A mean is a mean — take the men's mean straight out of the municipality table and I save myself the merge.
-    voice: b
-  - draw:
-      - a_right
-      - n_gap
-    speak: 'Two routes, then. Down the left: collapse the persons by sex, and you get the gender gap in our cohort.'
-    voice: a
-  - draw:
-      - a_wrong
-      - n_wrong
-    speak: 'Down the right: collapse by kommune and sex, then average those municipal means. Same variable, same people, the same word — collapse — and a different number at the end.'
-    voice: a
-  - clear:
-      keep:
-        - head
-  - draw:
-      - oslo
-    speak: Here is why. Oslo brings some nine thousand people from our cohort, at a mean wage income near six hundred and ninety thousand kroner.
-    voice: a
-  - draw:
-      - utsira
-    speak: Utsira brings two — a cell so small microdata would censor it on the way out, though collapse computes its mean without a murmur.
-    voice: a
-  - highlight:
-      target:
-        - oslo
-        - utsira
-      effect: glow
-    speak: And in the municipality table each of those is one row. Oslo's nine thousand people count no more than Utsira's two.
-    voice: b
-  - clear:
-      keep:
-        - head
-  - draw:
-      - eq_true
-      - lab_true
-    speak: Averaged over persons, the men of this cohort earn about six hundred and twelve thousand.
-    voice: a
-  - draw:
-      - eq_unw
-      - lab_unw
-    speak: 'Averaged over municipalities, five hundred and sixty-one thousand: Norway has a long tail of small, low-wage kommuner, and they outvote the cities.'
-    voice: a
-  - point:
-      at:
-        ref: eq_unw
-    speak: Fifty thousand kroner of difference, from nothing but which rows I averaged?
-    voice: b
-  - draw:
-      - gap_line
-    speak: 'And the gap moves with it: a hundred and twenty-six thousand between men and women per person, a hundred and nine thousand per municipality.'
-    voice: a
-  - highlight:
-      target:
-        - gap_line
-      effect: glow
-    speak: Both of those get published. The second is not false — it answers a question about the average municipality — but labelled "the gender gap", no one can reproduce it.
-    voice: a
-    delivery: grave
-  - clear:
-      keep:
-        - head
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-      - md_line_3
-    parallel: true
-    speak: So, the order on screen. Persons is the dataset we already built, with kommune and wage on every person.
-    voice: a
-  - draw:
-      - md_line_4
-      - md_line_5
-      - md_line_6
-      - md_line_7
-    speak: 'The municipality table starts fresh beside it: same two variables, same date.'
-    voice: a
-  - draw:
-      - md_line_8
-      - md_mark_1
-    speak: Collapse by kommune, and the key of this dataset is now the municipality — the persons in it are gone.
-    voice: a
-  - draw:
-      - md_line_9
-      - md_line_10
-      - md_mark_2
-    speak: Give the mean its own name so it cannot collide, then merge it into persons. Collapse first, merge second — and the persons dataset survives the operation.
-    voice: a
-  - point:
-      at:
-        ref: md_line_10
-      gesture: underline
-    speak: And if I get those two the wrong way round, what does the screen actually show me?
-    voice: b
-  - draw:
-      - chk_head
-      - chk1
-    speak: 'The row count, first and always: after the merge, persons must still be fifty-four thousand.'
-    voice: a
-  - draw:
-      - chk2
-      - chk3
-    speak: Three hundred and fifty-seven means you collapsed the people away and merged into the table; more rows than you started with means the key was not unique, and every person got duplicated.
-    voice: a
-  - draw:
-      - chk4
-      - mark_chk4
-      - fix_eq
-    speak: 'And the quiet one: the plain mean of your municipal means will not match the mean over persons — weight each municipality by its count, and it matches exactly.'
-    voice: a
-  - point:
-      at:
-        ref: fix_eq
-      gesture: tap
-    speak: So the mismatch is the alarm — not a bug, but proof I am averaging the wrong unit.
-    voice: b
-  - quiz:
-      intro: One check before we close.
-      question: After your merge, persons comes back with 357 rows. What happened?
-      choices:
-        - The merge duplicated every person
-        - You collapsed the people away and merged into muni
-        - Microdata dropped the unmatched keys
-      correct: 2
-      right: 357 is one row per municipality — you were standing in the collapsed dataset, so the persons were gone before the merge ran.
-      wrong: 'Count what 357 is: one row per municipality, not one per person.'
-  - highlight:
-      target:
-        - chk1
-      effect: pulse
-    speak: Collapse changes the unit; merge changes what each unit carries. Keep them in that order and the gap in this cohort stays a gap between people — a hundred and twenty-six thousand kroner — and never quietly becomes a gap between municipalities.
-    voice: a
-    delivery: grave
-  - explore:
-      code: md
-    speak: Swap those last two lines yourself, and count the rows that come back.
-    voice: a
----
-title: The script grows one line
 level: advanced
-voice: male
-elements:
-  - id: md
-    type: code
-    language: microdata
-    show: above
-    lines: 8
-    width: 960
-    font_size: 16
-    frame: screen
-    draw:
-      mode: type
-    code: |-
-      require no.ssb.fdb:54 as db
-      create-dataset persons
-      import db/BEFOLKNING_KJOENN as sex
-      import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as wage
-      keep if birth >= '198501'
-      keep if birth <= '198512'
-      // one row per municipality
-      create-dataset muni
-      import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
-      import db/INNTEKT_WLONN 2022-01-01 as muni_wage
-      collapse (mean) muni_wage, by(kommune)
-      merge muni
-      summarize muni_wage
-    marks:
-      - as muni_wage
-      - collapse (mean) muni_wage, by(kommune)
-      - merge muni
-  - id: check_title
-    type: text
-    text: One row per what? — the checklist
-    x: 500
-    'y': 600
-    font_size: 30
-  - id: item1
-    type: text
-    text: 1. Name the unit before you write a line.
-    font_size: 26
-    at:
-      ref: check_title
-      side: below
-      gap: 46
-  - id: item2
-    type: text
-    text: 2. Collapse a copy — collapse replaces, it never returns.
-    font_size: 26
-    at:
-      ref: item1
-      side: below
-      gap: 30
-  - id: item3
-    type: text
-    text: 3. Collapse first, then merge. Never the other way.
-    font_size: 26
-    style:
-      color: '#b5482e'
-    at:
-      ref: item2
-      side: below
-      gap: 30
-  - id: item4
-    type: text
-    text: '4. Count the rows after: same N, missings you can explain.'
-    font_size: 26
-    style:
-      color: '#2f6b8f'
-    at:
-      ref: item3
-      side: below
-      gap: 30
-  - id: checklist
-    type: group
-    members:
-      - check_title
-      - item1
-      - item2
-      - item3
-      - item4
-    fit:
-      x: 80
-      'y': 150
-      w: 840
-      h: 470
-commands:
-  - draw:
-      - md
-      - md_line_1
-      - md_line_2
-    parallel: true
-    speak: Now that we have seen how the order of collapse and merge decides what the average means, let's write the four lines that add a municipality's wage level to every person in our cohort — because a referee will ask which mean you computed, and the script is your only answer.
-    voice: a
-  - draw:
-      - md_line_3
-      - md_line_4
-      - md_line_5
-      - md_line_6
-    speak: 'The four imports you already know: sex, birth year-month, municipality and wage income — one row per person.'
-    voice: a
-  - draw:
-      - md_line_7
-      - md_line_8
-    speak: 'And the cohort: everyone born in 1985, filtered in two plain steps rather than one clever one.'
-    voice: a
-  - point:
-      at:
-        ref: md_line_8
-    speak: This is where our script stopped last week. Now we want each person's municipal mean sitting beside them.
-    voice: b
-  - highlight:
-      target:
-        - md_line_5
-      effect: glow
-    speak: Which is how every contextual variable in register research gets built — a municipality's wage level, a school's mean grade, a firm's size — one number about a place, written onto sixty thousand people.
-    voice: a
-  - point:
-      at:
-        ref: md_line_6
-    speak: Then can't we just collapse persons right here? It would be one line shorter.
-    voice: b
-  - draw:
-      - md_line_9
-      - md_line_10
-    speak: 'One line shorter and sixty thousand rows poorer — collapse replaces the dataset it runs on. So we build a second one: create-dataset muni.'
-    voice: a
-  - draw:
-      - md_line_11
-      - md_line_12
-    speak: 'The same two variables imported again, straight from the datastore: municipality, and wage income for 2022.'
-    voice: a
-  - draw:
-      - md_mark_1
-    speak: But this time wage arrives under a different alias, muni_wage, because in two lines it has to live next to the person's own wage without colliding with it.
-    voice: a
-  - draw:
-      - md_line_13
-    speak: Then the collapse — the mean of muni_wage, by kommune. Sixty thousand rows become about three hundred and fifty, one per Norwegian municipality.
-    voice: a
-  - draw:
-      - md_mark_2
-    speak: 'And by(kommune) does more than group: it makes kommune the new dataset''s identifier, the key merge will match on.'
-    voice: a
-  - point:
-      at:
-        ref: md_mark_2
-      gesture: circle
-    speak: So the by-variable and the merge key are the same thing — and if I had collapsed by county instead, the merge would simply fail?
-    voice: b
-  - draw:
-      - md_line_14
-      - md_mark_3
-    speak: 'It would find nothing to match on. Here it does: merge muni finds kommune on both sides and writes the municipal mean back onto all sixty thousand person rows.'
-    voice: a
-  - highlight:
-      target:
-        - md_line_14
-      effect: glow
-    speak: And where a person's kommune has no row in muni — an old code from a municipality that merged away — microdata writes sysmiss, never a zero, never a guess.
-    voice: a
-  - draw:
-      - md_line_15
-    speak: One last line, summarize, so we can see what we actually built.
-    voice: a
-  - draw:
-      - md_out
-    delivery: grave
-    speak: 'There it is: a number about a place, living as a person-level variable, with a count that still says sixty thousand.'
-    voice: a
-  - point:
-      at:
-        ref: md_out
-    speak: Oh — so the count is the test. Same N as before the merge, and the unit of analysis never moved.
-    voice: b
-  - clear: {}
-    speak: Four lines added to the script — and behind them, four questions worth taping to the wall.
-    voice: a
-  - draw:
-      - check_title
-      - item1
-    speak: 'First: before you write a line, say the unit out loud. One row per person, or one row per municipality?'
-    voice: a
-  - draw:
-      - item2
-    speak: 'Second: collapse a copy. Collapse replaces — it does not hand you a summary and leave your data standing.'
-    voice: a
-  - point:
-      at:
-        ref: item2
-    speak: That is the one I would have got wrong — it reads like a summary command, not like a demolition.
-    voice: b
-  - draw:
-      - item3
-    speak: 'Third: collapse first, then merge. Average after the merge and Oslo is counted once for every Oslo resident — you have quietly weighted the country by population.'
-    voice: a
-  - highlight:
-      target:
-        - item3
-      effect: pulse
-    speak: So the mean of the municipal means stops being the mean of the municipalities.
-    voice: b
-  - draw:
-      - item4
-    speak: 'And fourth: count the rows afterwards. The same N, with a missing count you can explain, is the whole test.'
-    voice: a
-  - quiz:
-      intro: One check before we close the series.
-      question: After the merge, a few thousand persons have sysmiss on muni_wage. What is the most likely cause?
-      choices:
-        - Their wage income was zero
-        - Their kommune code had no row in muni
-        - collapse dropped them earlier
-      correct: 2
-      right: Their municipality key found no match, so microdata wrote a missing value rather than inventing a number.
-      wrong: A zero wage is still a value, and collapse never touched persons — the gap has to come from the key.
-  - highlight:
-      target:
-        - check_title
-      effect: glow
-    speak: 'Across these five parts one question came back twice: collapse changes what a row means, and merge changes it back.'
-    voice: a
-  - speak: So a dataset isn't rows and columns — it's an answer to 'one row per what?'
-    voice: b
-  - point:
-      at:
-        ref: item1
-      gesture: underline
-    speak: Ask that before every collapse and every merge, and the gender gap you report will be the gap you meant to compute — per person, or per place, and you will know which.
-    voice: a
-    delivery: grave
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: 'Making new variables: generate, replace, recode and labels'
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - [330, 352]
-      - [670, 348]
-  - id: nx_count
-    type: text
-    text: 5 of 10
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Making new variables: generate, replace, recode and labels'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+
+    ```microdata md width 960 font_size 16 show above lines 8 frame screen marks ["as muni_wage","collapse (mean) muni_wage, by(kommune)","merge muni"] draw.mode type hidden true
+    require no.ssb.fdb:54 as db
+    create-dataset persons
+    import db/BEFOLKNING_KJOENN as sex
+    import db/BEFOLKNING_FOEDSELS_AAR_MND as birth
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as wage
+    keep if birth >= '198501'
+    keep if birth <= '198512'
+    // one row per municipality
+    create-dataset muni
+    import db/BEFOLKNING_KOMMNR_FORMELL 2022-01-01 as kommune
+    import db/INNTEKT_WLONN 2022-01-01 as muni_wage
+    collapse (mean) muni_wage, by(kommune)
+    merge muni
+    summarize muni_wage
+    ```
+    text check_title "One row per what? — the checklist" x 500 y 600 font_size 30 hidden true
+    text item1 "1. Name the unit before you write a line." below check_title gap 46 font_size 26 hidden true
+    text item2 "2. Collapse a copy — collapse replaces, it never returns." below item1 gap 30 font_size 26 hidden true
+    text item3 "3. Collapse first, then merge. Never the other way." below item2 gap 30 #b5482e font_size 26 hidden true
+    text item4 "4. Count the rows after: same N, missings you can explain." below item3 gap 30 #2f6b8f font_size 26 hidden true
+    group checklist members ["check_title","item1","item2","item3","item4"] fit.h 470 fit.w 840 fit.x 80 fit.y 150 hidden true
+
+A: Now that we have seen how the order of collapse and merge decides what the average means, let's write the four lines that add a municipality's wage level to every person in our cohort — because a referee will ask which mean you computed, and the script is your only answer.
+    draw md md_line_1 md_line_2 parallel true
+
+A: The four imports you already know: sex, birth year-month, municipality and wage income — one row per person.
+    draw md_line_3 md_line_4 md_line_5 md_line_6
+
+A: And the cohort: everyone born in 1985, filtered in two plain steps rather than one clever one.
+    draw md_line_7 md_line_8
+
+B: This is where our script stopped last week. Now we want each person's municipal mean sitting beside them.
+    point at.ref md_line_8
+
+A: Which is how every contextual variable in register research gets built — a municipality's wage level, a school's mean grade, a firm's size — one number about a place, written onto sixty thousand people.
+    highlight md_line_5 effect glow
+
+B: Then can't we just collapse persons right here? It would be one line shorter.
+    point at.ref md_line_6
+
+A: One line shorter and sixty thousand rows poorer — collapse replaces the dataset it runs on. So we build a second one: create-dataset muni.
+    draw md_line_9 md_line_10
+
+A: The same two variables imported again, straight from the datastore: municipality, and wage income for 2022.
+    draw md_line_11 md_line_12
+
+A: But this time wage arrives under a different alias, muni_wage, because in two lines it has to live next to the person's own wage without colliding with it.
+    draw md_mark_1
+
+A: Then the collapse — the mean of muni_wage, by kommune. Sixty thousand rows become about three hundred and fifty, one per Norwegian municipality.
+    draw md_line_13
+
+A: And by(kommune) does more than group: it makes kommune the new dataset's identifier, the key merge will match on.
+    draw md_mark_2
+
+B: So the by-variable and the merge key are the same thing — and if I had collapsed by county instead, the merge would simply fail?
+    point at.ref md_mark_2 gesture circle
+
+A: It would find nothing to match on. Here it does: merge muni finds kommune on both sides and writes the municipal mean back onto all sixty thousand person rows.
+    draw md_line_14 md_mark_3
+
+A: And where a person's kommune has no row in muni — an old code from a municipality that merged away — microdata writes sysmiss, never a zero, never a guess.
+    highlight md_line_14 effect glow
+
+A: One last line, summarize, so we can see what we actually built.
+    draw md_line_15
+
+A: There it is: a number about a place, living as a person-level variable, with a count that still says sixty thousand.
+    draw md_out delivery grave
+
+B: Oh — so the count is the test. Same N as before the merge, and the unit of analysis never moved.
+    point at.ref md_out
+
+A: Four lines added to the script — and behind them, four questions worth taping to the wall.
+    clear
+
+A: First: before you write a line, say the unit out loud. One row per person, or one row per municipality?
+    draw check_title item1
+
+A: Second: collapse a copy. Collapse replaces — it does not hand you a summary and leave your data standing.
+    draw item2
+
+B: That is the one I would have got wrong — it reads like a summary command, not like a demolition.
+    point at.ref item2
+
+A: Third: collapse first, then merge. Average after the merge and Oslo is counted once for every Oslo resident — you have quietly weighted the country by population.
+    draw item3
+
+B: So the mean of the municipal means stops being the mean of the municipalities.
+    highlight item3 effect pulse
+
+A: And fourth: count the rows afterwards. The same N, with a missing count you can explain, is the whole test.
+    draw item4
+
+    quiz "After the merge, a few thousand persons have sysmiss on muni_wage. What is the most likely cause?"
+        intro: One check before we close the series.
+        right: Their municipality key found no match, so microdata wrote a missing value rather than inventing a number.
+        wrong: A zero wage is still a value, and collapse never touched persons — the gap has to come from the key.
+        * Their wage income was zero
+        + Their kommune code had no row in muni
+        * collapse dropped them earlier
+
+A: Across these five parts one question came back twice: collapse changes what a row means, and merge changes it back.
+    highlight check_title effect glow
+
+B: So a dataset isn't rows and columns — it's an answer to 'one row per what?'
+
+A: Ask that before every collapse and every merge, and the gender gap you report will be the gap you meant to compute — per person, or per place, and you will know which.
+    point at.ref item1 gesture underline delivery grave
+
+## Where next
+end_page: true
+
+Next: Making new variables: generate, replace, recode and labels
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:3 title "Building datasets I: create-dataset and the four shapes of import" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:5 title "Making new variables: generate, replace, recode and labels" size 320 x 735 y 395
+
+    link end_again href lecture:4 title "Watch again" form text open here x 500 y 160
+    text end_count "4 of 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
