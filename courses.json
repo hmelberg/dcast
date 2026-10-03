@@ -51,34 +51,6 @@
       "updated": "2026-10-03"
     },
     {
-      "slug": "causal-inference-in-economics-evidence-from-health-and-health-care",
-      "title": "Causal Inference in Economics: Evidence from Health and Health Care",
-      "files": [
-        "causal-inference-in-economics-evidence-from-health-and-health-care/what-makes-a-question-causal.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/why-insured-people-can-look-sicker-selection-bias-decomposed.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/the-oregon-lottery-what-randomization-actually-buys-you.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/the-rand-health-insurance-experiment-randomizing-the-price-of-care.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/which-average-effect-are-you-even-estimating.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/nobody-complies-intention-to-treat-versus-the-effect-of-treatment.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/instrumental-variables-and-the-late-theorem.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/bad-instruments-weak-instruments.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/selection-on-observables-matching-regression-and-the-leap-of-faith.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/arrows-or-potential-outcomes-bad-controls-and-colliders.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/difference-in-differences-and-the-parallel-trends-assumption.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/when-treatment-arrives-at-different-times-staggered-did-in-trouble.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/regression-discontinuity-what-happens-at-your-65th-birthday.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/stress-testing-a-discontinuity.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/building-a-counterfactual-state-synthetic-control-and-proposition-99.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/reading-a-null-power-precision-and-the-oregon-blood-sugar-result.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/genes-as-instruments-mendelian-randomization.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/choosing-a-design-and-turning-an-estimate-into-a-policy.cast",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/course.md",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/index.html",
-        "causal-inference-in-economics-evidence-from-health-and-health-care/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "taylor-series-and-the-economics-of",
       "title": "Taylor Series and the Economics of Approximation",
       "files": [
@@ -121,6 +93,34 @@
         "understanding-the-qaly/course.md",
         "understanding-the-qaly/index.html",
         "understanding-the-qaly/README.md"
+      ],
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "causal-inference-in-economics-evidence-from-health-and-health-care",
+      "title": "Causal Inference in Economics: Evidence from Health and Health Care",
+      "files": [
+        "causal-inference-in-economics-evidence-from-health-and-health-care/what-makes-a-question-causal.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/why-insured-people-can-look-sicker-selection-bias-decomposed.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/the-oregon-lottery-what-randomization-actually-buys-you.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/the-rand-health-insurance-experiment-randomizing-the-price-of-care.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/which-average-effect-are-you-even-estimating.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/nobody-complies-intention-to-treat-versus-the-effect-of-treatment.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/instrumental-variables-and-the-late-theorem.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/bad-instruments-weak-instruments.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/selection-on-observables-matching-regression-and-the-leap-of-faith.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/arrows-or-potential-outcomes-bad-controls-and-colliders.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/difference-in-differences-and-the-parallel-trends-assumption.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/when-treatment-arrives-at-different-times-staggered-did-in-trouble.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/regression-discontinuity-what-happens-at-your-65th-birthday.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/stress-testing-a-discontinuity.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/building-a-counterfactual-state-synthetic-control-and-proposition-99.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/reading-a-null-power-precision-and-the-oregon-blood-sugar-result.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/genes-as-instruments-mendelian-randomization.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/choosing-a-design-and-turning-an-estimate-into-a-policy.cast",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/course.md",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/index.html",
+        "causal-inference-in-economics-evidence-from-health-and-health-care/README.md"
       ],
       "updated": "2026-10-03"
     }
