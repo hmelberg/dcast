@@ -1,12 +1,6 @@
 {
   "casts": [
     {
-      "slug": "does-it-work-in-practice-evidence-limits",
-      "title": "Does it work in practice? Evidence, limits, and alternatives",
-      "file": "does-it-work-in-practice-evidence-limits.yaml",
-      "updated": "2026-09-28"
-    },
-    {
       "slug": "stress-testing-a-discontinuity",
       "title": "Stress-testing a discontinuity",
       "file": "stress-testing-a-discontinuity.cast",
@@ -22,6 +16,12 @@
       "slug": "drawcastdemo",
       "title": "A drawcast, drawing itself",
       "file": "drawcastdemo.cast",
+      "updated": "2026-10-03"
+    },
+    {
+      "slug": "does-it-work-in-practice-evidence-limits",
+      "title": "Does it work in practice? Evidence, limits, and alternatives",
+      "file": "does-it-work-in-practice-evidence-limits.cast",
       "updated": "2026-10-03"
     }
   ]
