@@ -1,289 +1,105 @@
-playlist:
-  title: Why should a polynomial built at one point tell you anything about its neighbours?
-  prompt: If I only know f, f', f'' … at the single point a, what right do I have to say anything about f somewhere else? What exactly is the remainder R_n measuring, and why does the Lagrange form make the error a statement about the derivative you did not use? Why does a Taylor series sometimes converge beautifully and sometimes not converge to the function at all — what does 1/(1+x²) know that we don't? In practice, what makes economists stop at n = 1 or n = 2 rather than pushing n higher?
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  next:
-    title: What is the second derivative doing in the utility function?
-    href: https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.yaml
-  enroll: https://drawcast.anvil.app
----
-title: A Curve Pinned at One Point
-level: advanced
+# Why should a polynomial built at one point tell you anything about its neighbours?
+prompt: "If I only know f, f', f'' … at the single point a, what right do I have to say anything about f somewhere else? What exactly is the remainder R_n measuring, and why does the Lagrange form make the error a statement about the derivative you did not use? Why does a Taylor series sometimes converge beautifully and sometimes not converge to the function at all — what does 1/(1+x²) know that we don't? In practice, what makes economists stop at n = 1 or n = 2 rather than pushing n higher?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+next: {"title":"What is the second derivative doing in the utility function?","href":"https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.cast"}
+enroll: https://drawcast.anvil.app
+
+## A Curve Pinned at One Point
 voice: male
-domain:
-  x:
-    - 0
-    - 10
-  'y':
-    - 0
-    - 8
-elements:
-  - id: title
-    type: text
-    text: A Curve Pinned at One Point
-    x: 500
-    'y': 706
-    font_size: 34
-  - id: ax
-    type: axes
-    x_label: Consumption c
-    y_label: Utility u(c)
-  - id: ucurve
-    type: curve
-    expr: 2*sqrt(x)
-    style:
-      color: '#3d3833'
-      stroke_width: 2.5
-  - id: label_u
-    type: label
-    text: u(c) = c^(1−γ)/(1−γ),  γ = ½
-    attach_to: ucurve
-    side: above-left
-  - id: pt
-    type: point
-    at:
-      x: 4
-      'y': 4
-    guides: true
-    style:
-      color: '#3d3833'
-  - id: label_pt
-    type: label
-    text: (c̄, u(c̄)) = (4, 4)
-    attach_to: pt
-    side: below-right
-  - id: t0
-    type: curve
-    expr: '4'
-    style:
-      color: '#8f887c'
-      dash: true
-  - id: label_t0
-    type: label
-    text: 'T₀ = u(c̄): level only'
-    attach_to: t0
-    side: above-left
-    style:
-      color: '#8f887c'
-  - id: t1
-    type: curve
-    expr: 4 + 0.5*(x-4)
-    style:
-      color: '#b5482e'
-  - id: label_t1
-    type: label
-    text: 'T₁: + u′(c̄)(c−c̄)'
-    attach_to: t1
-    side: right
-    style:
-      color: '#b5482e'
-  - id: t2
-    type: curve
-    expr: 4 + 0.5*(x-4) - 0.03125*(x-4)^2
-    style:
-      color: '#2f6b8f'
-  - id: label_t2
-    type: label
-    text: 'T₂: + ½u″(c̄)(c−c̄)²'
-    attach_to: t2
-    side: below-right
-    style:
-      color: '#2f6b8f'
-  - id: p9
-    type: point
-    at:
-      x: 9
-      'y': 6
-    style:
-      color: '#3d3833'
-  - id: p9_lin
-    type: point
-    at:
-      x: 9
-      'y': 6.5
-    style:
-      color: '#b5482e'
-  - id: gap
-    type: arrow
-    from:
-      x: 9
-      'y': 6
-    to:
-      x: 9
-      'y': 6.5
-    style:
-      color: '#b5482e'
-  - id: label_gap
-    type: label
-    text: R₁ = 0.50
-    attach_to: gap
-    side: right
-    style:
-      color: '#b5482e'
-  - id: p9_quad
-    type: point
-    at:
-      x: 9
-      'y': 5.72
-    style:
-      color: '#2f6b8f'
-  - id: taylor
-    type: portrait
-    of: Brook Taylor
-    cameo: true
-    strokes: img1:Je:data:image/jpeg;base64,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
-  - id: takeaway
-    type: text
-    text: Local data buys a neighbourhood — not a function.
-    x: 655
-    'y': 160
-    font_size: 24
-  - id: box_takeaway
-    type: annotation
-    target: takeaway
-    kind: box
-commands:
-  - draw:
-      - title
-    speak: 'Every linearized macro model a central bank runs stands or falls on one question this series asks: what can a polynomial built at a single point honestly claim about the function everywhere else?'
-  - draw:
-      - ax
-  - draw:
-      - ucurve
-      - label_u
-    speak: Here is the curve we carry through the whole course — a household with CRRA utility, c to the one minus gamma over one minus gamma, with gamma one half, so u of c is simply two root c.
-  - pause: 1
-  - draw:
-      - pt
-      - label_pt
-    speak: Mean consumption c-bar is four, and utility there is four; this point is the only place we are ever allowed to stand.
-  - point:
-      at:
-        ref: pt
-      gesture: circle
-    speak: Everything we are about to use is measured here — the level, and the derivatives evaluated here — and nothing whatsoever is measured out at c equals nine.
-  - pause: 1
-  - draw:
-      - t0
-      - label_t0
-    speak: 'The crudest expansion spends one number, u of c-bar: a flat line that matches the level and nothing else.'
-  - pause: 1
-  - draw:
-      - t1
-      - label_t1
-    speak: Add the first derivative — u prime of c-bar is one half — and we get the tangent, agreeing now in level and in slope.
-  - pause: 1
-  - draw:
-      - t2
-      - label_t2
-    speak: Add the second — u double prime of c-bar is minus one sixteenth — and the parabola bends the right way, carrying the curvature with it.
-  - pause: 1
-  - camera:
-      center:
-        ref: pt
-      zoom: 2.6
-    speak: 'Close to c-bar the three become hard to tell apart: each derivative buys one more order of agreement, so the errors fall like the deviation, then its square, then its cube.'
-  - pause: 1
-  - camera:
-      reset: true
-  - clear:
-      keep:
-        - title
-        - ax
-        - ucurve
-        - pt
-        - label_pt
-        - t1
-        - label_t1
-        - t2
-        - label_t2
-  - draw:
-      - p9
-      - p9_lin
-      - gap
-      - label_gap
-    speak: 'Pull back out to c equals nine — consumption more than doubled — and the truth is six while the tangent insists on six and a half: half a util, an error of eight percent.'
-  - pause: 1
-  - draw:
-      - p9_quad
-    speak: The quadratic lands at five point seven two, an error of zero point two eight, and it now undershoots rather than overshoots.
-  - point:
-      at:
-        x: 5
-        'y': 4.47
-      gesture: tap
-    speak: 'Move only to c equals five and the tangent errs by twenty-eight thousandths, the quadratic by three: a modest deviation costs almost nothing, a large one costs a great deal — which is why a small shock is safely linearized and a crisis is not.'
-  - pause: 1
-  - highlight:
-      target:
-        - ucurve
-      effect: glow
-    speak: So the answer to the opening question is this — a derivative is itself a limit of neighbouring values, so local data was never purely local, but what it licenses is a neighbourhood, whose size is set by the term we threw away.
-    delivery: grave
-  - pause: 1
-  - draw:
-      - taylor
-    speak: Brook Taylor published this construction in 1715, in his Methodus Incrementorum, with no error term attached to it at all.
-    delivery: soft
-  - erase:
-      - taylor
-    speak: James Gregory had such expansions decades earlier, and it took until Lagrange in 1797 for anyone to state in general what the truncation costs — that missing statement is the remainder R sub n, and it is where part two goes.
-  - pause: 1
-  - draw:
-      - takeaway
-      - box_takeaway
-    speak: Local data buys you a neighbourhood, never a function — and the price of the neighbourhood is the derivative you chose not to use.
-    delivery: grave
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: What is the second derivative doing in the utility function?
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 2 of 3
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: What is the second derivative doing in the utility function?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+domain: {"x":[0,10],"y":[0,8]}
+
+Every linearized macro model a central bank runs stands or falls on one question this series asks: what can a polynomial built at a single point honestly claim about the function everywhere else?
+    text title "A Curve Pinned at One Point" x 500 y 706 font_size 34
+
+    axes ax x_label "Consumption c" y_label "Utility u(c)"
+
+Here is the curve we carry through the whole course — a household with CRRA utility, c to the one minus gamma over one minus gamma, with gamma one half, so u of c is simply two root c.
+    curve ucurve #3d3833 expr 2*sqrt(x) style.stroke_width 2.5
+    label label_u "u(c) = c^(1−γ)/(1−γ),  γ = ½" above-left attach_to ucurve
+
+    pause 1
+
+Mean consumption c-bar is four, and utility there is four; this point is the only place we are ever allowed to stand.
+    dot pt #3d3833 at.x 4 at.y 4 guides true
+    label label_pt "(c̄, u(c̄)) = (4, 4)" below-right attach_to pt
+
+Everything we are about to use is measured here — the level, and the derivatives evaluated here — and nothing whatsoever is measured out at c equals nine.
+    point at.ref pt gesture circle
+
+    pause 1
+
+The crudest expansion spends one number, u of c-bar: a flat line that matches the level and nothing else.
+    curve t0 dashed #8f887c expr "4"
+    label label_t0 "T₀ = u(c̄): level only" above-left #8f887c attach_to t0
+
+    pause 1
+
+Add the first derivative — u prime of c-bar is one half — and we get the tangent, agreeing now in level and in slope.
+    curve t1 #b5482e expr "4 + 0.5*(x-4)"
+    label label_t1 "T₁: + u′(c̄)(c−c̄)" right #b5482e attach_to t1
+
+    pause 1
+
+Add the second — u double prime of c-bar is minus one sixteenth — and the parabola bends the right way, carrying the curvature with it.
+    curve t2 #2f6b8f expr "4 + 0.5*(x-4) - 0.03125*(x-4)^2"
+    label label_t2 "T₂: + ½u″(c̄)(c−c̄)²" below-right #2f6b8f attach_to t2
+
+    pause 1
+
+Close to c-bar the three become hard to tell apart: each derivative buys one more order of agreement, so the errors fall like the deviation, then its square, then its cube.
+    camera center.ref pt zoom 2.6
+
+    pause 1
+
+    camera reset true
+
+    clear keep ["title","ax","ucurve","pt","label_pt","t1","label_t1","t2","label_t2"]
+
+Pull back out to c equals nine — consumption more than doubled — and the truth is six while the tangent insists on six and a half: half a util, an error of eight percent.
+    dot p9 #3d3833 at.x 9 at.y 6
+    dot p9_lin #b5482e at.x 9 at.y 6.5
+    arrow gap #b5482e from.x 9 from.y 6 to.x 9 to.y 6.5
+    label label_gap "R₁ = 0.50" right #b5482e attach_to gap
+
+    pause 1
+
+The quadratic lands at five point seven two, an error of zero point two eight, and it now undershoots rather than overshoots.
+    dot p9_quad #2f6b8f at.x 9 at.y 5.72
+
+Move only to c equals five and the tangent errs by twenty-eight thousandths, the quadratic by three: a modest deviation costs almost nothing, a large one costs a great deal — which is why a small shock is safely linearized and a crisis is not.
+    point at.x 5 at.y 4.47 gesture tap
+
+    pause 1
+
+So the answer to the opening question is this — a derivative is itself a limit of neighbouring values, so local data was never purely local, but what it licenses is a neighbourhood, whose size is set by the term we threw away.
+    highlight ucurve effect glow delivery grave
+
+    pause 1
+
+Brook Taylor published this construction in 1715, in his Methodus Incrementorum, with no error term attached to it at all.
+    portrait taylor of "Brook Taylor" strokes img1:Je:data:image/jpeg;base64,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 cameo true
+    delivery soft
+
+James Gregory had such expansions decades earlier, and it took until Lagrange in 1797 for anyone to state in general what the truncation costs — that missing statement is the remainder R sub n, and it is where part two goes.
+    erase taylor
+
+    pause 1
+
+Local data buys you a neighbourhood, never a function — and the price of the neighbourhood is the derivative you chose not to use.
+    text takeaway "Local data buys a neighbourhood — not a function." x 655 y 160 font_size 24
+    mark box_takeaway target takeaway kind box
+    delivery grave
+
+## Where next
+end_page: true
+
+Next: What is the second derivative doing in the utility function?
+    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:2 title "What is the second derivative doing in the utility function?" size 320 x 500 y 395
+
+    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
+    text end_count "1 of 3" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

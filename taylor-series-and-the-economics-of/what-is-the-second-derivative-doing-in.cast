@@ -1,218 +1,111 @@
-playlist:
-  title: What is the second derivative doing in the utility function?
-  prompt: 'Expand u(c) around mean consumption c̄: why does the first-order term vanish in expectation and leave curvature alone with the variance? How does that one term become the Arrow–Pratt measure A(c) = −u''''/u'', and why is the level of u irrelevant to it? What does the certainty equivalent look like once we accept a quadratic approximation — and what have we quietly assumed about skewness and fat tails by stopping at second order? The equity premium puzzle: given the observed US premium of roughly six percentage points a year, what γ does the second-order argument demand, and should we blame the preference or the approximation?'
-  comments:
-    repoId: R_kgDOUIbP1A
-    category: Announcements
-    categoryId: DIC_kwDOUIbP1M4DEv5x
-  next:
-    title: Is log-linearizing around the steady state a technique or a bet?
-    href: https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.yaml
-  enroll: https://drawcast.anvil.app
----
-chapter: Curvature meets variance
----
-title: From curvature to Arrow–Pratt
-level: advanced
+# What is the second derivative doing in the utility function?
+prompt: "Expand u(c) around mean consumption c̄: why does the first-order term vanish in expectation and leave curvature alone with the variance? How does that one term become the Arrow–Pratt measure A(c) = −u''/u', and why is the level of u irrelevant to it? What does the certainty equivalent look like once we accept a quadratic approximation — and what have we quietly assumed about skewness and fat tails by stopping at second order? The equity premium puzzle: given the observed US premium of roughly six percentage points a year, what γ does the second-order argument demand, and should we blame the preference or the approximation?"
+comments: {"repoId":"R_kgDOUIbP1A","category":"Announcements","categoryId":"DIC_kwDOUIbP1M4DEv5x"}
+next: {"title":"Is log-linearizing around the steady state a technique or a bet?","href":"https://drawcast.app/#gh=hmelberg/dcast/taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.cast"}
+enroll: https://drawcast.anvil.app
+
+chapter: "Curvature meets variance"
+
+## From curvature to Arrow–Pratt
 voice: female
-template: equation_steps
-params:
-  title: From curvature to Arrow–Pratt
-  steps:
-    - tex: \mathbb{E}[u(c)] \approx u(\bar c) + \tfrac{1}{2}u''(\bar c)\,\sigma^2
-      note: Where part 2 ended.
-    - tex: \pi \approx -\frac{u''(\bar c)}{2\,u'(\bar c)}\,\sigma^2
-      note: Utils ÷ u'(c̄) → goods.
-    - tex: A(c) = -\frac{u''(c)}{u'(c)}\,,\qquad \pi \approx \tfrac{1}{2}A(\bar c)\,\sigma^2
-      note: Pratt 1964, Arrow 1965.
-    - tex: v = a + b\,u\ (b>0)\;\Rightarrow\; A_v = -\frac{b\,u''}{b\,u'} = A_u
-      note: b cancels; a died on u'.
-elements:
-  - id: crra_head
-    type: text
-    x: 500
-    'y': 650
-    font_size: 30
-    text: 'CRRA:  u(c) = c^(1−γ)/(1−γ)'
-  - id: derivs
-    type: text
-    x: 500
-    'y': 570
-    font_size: 26
-    text: u′(c) = c^(−γ)        u″(c) = −γ·c^(−γ−1)
-  - id: a_line
-    type: text
-    x: 500
-    'y': 480
-    font_size: 32
-    text: A(c) = −u″/u′ = γ / c
-    style:
-      color: '#b5482e'
-  - id: rel_line
-    type: text
-    x: 500
-    'y': 410
-    font_size: 24
-    text: c·A(c) = γ   (relative risk aversion, constant)
-    style:
-      color: '#2f6b8f'
-  - id: nums
-    type: text
-    x: 500
-    'y': 315
-    font_size: 26
-    text: c̄ = $50,000     γ = 2     σ = $5,000
-  - id: result
-    type: text
-    x: 500
-    'y': 235
-    font_size: 30
-    text: π ≈ ½ · (2/50,000) · 5,000² = $500 per year
-    style:
-      color: '#b5482e'
-  - id: mark_result
-    type: annotation
-    target: result
-    kind: box
-  - id: caveat
-    type: text
-    x: 500
-    'y': 140
-    font_size: 22
-    text: 'Local: the first surviving term only — small σ'
-    style:
-      color: '#8f887c'
-commands:
-  - draw:
-      - title
-    speak: Now that we have watched the expansion collapse to u of c-bar plus one half u double-prime times the variance, the question is what that one curvature term is actually worth.
-  - draw:
-      - step_0
-      - note_0
-    speak: 'This is where part two left us: expected utility is utility at the mean, plus curvature multiplied by the variance of consumption.'
-  - highlight:
-      target:
-        - step_0
-      effect: glow
-    speak: So can we simply call that term risk aversion — one half u double-prime sigma squared?
-  - pause: 1.8
-  - point:
-      at:
-        ref: step_0
-      gesture: underline
-    speak: No — it is denominated in utils, and a von Neumann–Morgenstern utility is pinned down only up to a positive affine transformation, so that number on its own means nothing.
-  - wait: click
-  - draw:
-      - step_1
-      - note_1
-    speak: 'Divide by the marginal utility of consumption at c-bar, and the utils cancel: what remains is a quantity of goods — the risk premium pi, in dollars.'
-  - speak: Pi is what the household would surrender to be rid of the gamble; part four takes that object seriously, and here it is only doing the unit conversion.
-  - highlight:
-      target:
-        - step_1
-      effect: glow
-    speak: Sigma squared describes the gamble, not the household — so what is left once we strip it away?
-  - pause: 1.8
-  - draw:
-      - step_2
-      - note_2
-    speak: 'Minus u double-prime over u prime: the Arrow–Pratt coefficient of absolute risk aversion, and the premium is one half of it times the variance.'
-  - speak: John Pratt published it in Econometrica in 1964, in a paper titled Risk Aversion in the Small and in the Large; Kenneth Arrow reached the same ratio independently in his 1965 Yrjö Jahnsson lectures in Helsinki.
-  - wait: click
-  - highlight:
-      target:
-        - step_2
-      effect: glow
-    speak: 'Now the test: if I triple your utility function and add a hundred to it, have I made you more cautious?'
-  - pause: 1.8
-  - draw:
-      - step_3
-      - note_3
-    speak: Both derivatives pick up the same factor b, so b cancels — and the additive constant a never appears at all, since it dies on the first derivative.
-  - speak: The level and the scale of utility are unobservable; this ratio is the part of the curve that survives every admissible rescaling, which is exactly why it, and not u double-prime, is the object economists estimate.
-  - wait: click
-  - clear: {}
-  - draw:
-      - crra_head
-    speak: 'Put the course''s household into it: constant relative risk aversion, u of c equal to c to the one minus gamma, over one minus gamma.'
-  - draw:
-      - derivs
-    speak: Marginal utility is c to the minus gamma, and the second derivative is minus gamma times c to the minus gamma minus one.
-  - draw:
-      - a_line
-    speak: Their ratio is gamma over c — absolute risk aversion falls as the household grows richer, which is why a wealthy household insures a bicycle far less eagerly than a student does.
-  - draw:
-      - rel_line
-    speak: 'Multiply by c and the consumption level disappears, leaving gamma alone: relative risk aversion, constant by construction, which is precisely what the CRRA name promises.'
-  - draw:
-      - nums
-    speak: 'Real magnitudes now: mean consumption of fifty thousand dollars, a gamma of two, and a standard deviation of five thousand — a ten percent risk.'
-  - draw:
-      - result
-      - mark_result
-    speak: 'One half, times two over fifty thousand, times twenty-five million: five hundred dollars a year, one percent of consumption.'
-  - highlight:
-      target:
-        - result
-      effect: pulse
-    speak: And had we tripled the utility function and added a hundred, this five hundred dollars would be identical to the cent.
-  - draw:
-      - caveat
-    speak: 'That is the strength — one comparable number that turns curvature into money — and equally the weakness: it is the first surviving term of a Taylor series, honest only for small gambles.'
-  - speak: 'Matthew Rabin''s calibration theorem, in Econometrica in 2000, is the sharp version: an agent who always turns down a fifty-fifty bet to lose a hundred or gain a hundred and ten must, under expected utility, reject a fifty-fifty bet to lose a thousand for any gain at all.'
-  - highlight:
-      target:
-        - a_line
-        - result
-      effect: glow
-    speak: So the second derivative alone says nothing; divided by the first it becomes gamma over c — five hundred dollars for this household, and the only piece of the utility function that a rescaling cannot touch.
----
-elements:
-  - id: nx_kicker
-    type: text
-    text: Next
-    x: 500
-    'y': 465
-    font_size: 24
-    style:
-      opacity: 0.6
-  - id: nx_title
-    type: text
-    text: Is log-linearizing around the steady state a technique or a bet?
-    x: 500
-    'y': 390
-    font_size: 34
-    draw:
-      mode: sketch
-      duration: 1
-  - id: nx_line
-    type: path
-    points:
-      - - 330
-        - 352
-      - - 670
-        - 348
-  - id: nx_count
-    type: text
-    text: 3 of 3
-    x: 500
-    'y': 300
-    font_size: 26
-    style:
-      opacity: 0.7
-    draw:
-      mode: sketch
-      duration: 0.7
-commands:
-  - draw:
-      - nx_kicker
-      - nx_title
-      - nx_line
-    speak: 'Next: Is log-linearizing around the steady state a technique or a bet?'
-  - draw:
-      - nx_count
-  - pause: 1.5
-  - clear: {}
+level: advanced
+use: equation_steps
+with:
+    title: From curvature to Arrow–Pratt
+    steps:
+      - {tex: '\mathbb{E}[u(c)] \approx u(\bar c) + \tfrac{1}{2}u''''(\bar c)\,\sigma^2', note: Where part 2 ended.}
+      - {tex: '\pi \approx -\frac{u''''(\bar c)}{2\,u''(\bar c)}\,\sigma^2', note: Utils ÷ u'(c̄) → goods.}
+      - {tex: 'A(c) = -\frac{u''''(c)}{u''(c)}\,,\qquad \pi \approx \tfrac{1}{2}A(\bar c)\,\sigma^2', note: 'Pratt 1964, Arrow 1965.'}
+      - {tex: 'v = a + b\,u\ (b>0)\;\Rightarrow\; A_v = -\frac{b\,u''''}{b\,u''} = A_u', note: b cancels; a died on u'.}
+
+Now that we have watched the expansion collapse to u of c-bar plus one half u double-prime times the variance, the question is what that one curvature term is actually worth.
+    draw title
+
+This is where part two left us: expected utility is utility at the mean, plus curvature multiplied by the variance of consumption.
+    draw step_0 note_0
+
+So can we simply call that term risk aversion — one half u double-prime sigma squared?
+    highlight step_0 effect glow
+
+    pause 1.8
+
+No — it is denominated in utils, and a von Neumann–Morgenstern utility is pinned down only up to a positive affine transformation, so that number on its own means nothing.
+    point at.ref step_0 gesture underline
+
+    wait
+
+Divide by the marginal utility of consumption at c-bar, and the utils cancel: what remains is a quantity of goods — the risk premium pi, in dollars.
+    draw step_1 note_1
+
+Pi is what the household would surrender to be rid of the gamble; part four takes that object seriously, and here it is only doing the unit conversion.
+
+Sigma squared describes the gamble, not the household — so what is left once we strip it away?
+    highlight step_1 effect glow
+
+    pause 1.8
+
+Minus u double-prime over u prime: the Arrow–Pratt coefficient of absolute risk aversion, and the premium is one half of it times the variance.
+    draw step_2 note_2
+
+John Pratt published it in Econometrica in 1964, in a paper titled Risk Aversion in the Small and in the Large; Kenneth Arrow reached the same ratio independently in his 1965 Yrjö Jahnsson lectures in Helsinki.
+
+    wait
+
+Now the test: if I triple your utility function and add a hundred to it, have I made you more cautious?
+    highlight step_2 effect glow
+
+    pause 1.8
+
+Both derivatives pick up the same factor b, so b cancels — and the additive constant a never appears at all, since it dies on the first derivative.
+    draw step_3 note_3
+
+The level and the scale of utility are unobservable; this ratio is the part of the curve that survives every admissible rescaling, which is exactly why it, and not u double-prime, is the object economists estimate.
+
+    wait
+
+    clear
+
+Put the course's household into it: constant relative risk aversion, u of c equal to c to the one minus gamma, over one minus gamma.
+    text crra_head "CRRA:  u(c) = c^(1−γ)/(1−γ)" x 500 y 650 font_size 30
+
+Marginal utility is c to the minus gamma, and the second derivative is minus gamma times c to the minus gamma minus one.
+    text derivs "u′(c) = c^(−γ)        u″(c) = −γ·c^(−γ−1)" x 500 y 570 font_size 26
+
+Their ratio is gamma over c — absolute risk aversion falls as the household grows richer, which is why a wealthy household insures a bicycle far less eagerly than a student does.
+    text a_line "A(c) = −u″/u′ = γ / c" #b5482e x 500 y 480 font_size 32
+
+Multiply by c and the consumption level disappears, leaving gamma alone: relative risk aversion, constant by construction, which is precisely what the CRRA name promises.
+    text rel_line "c·A(c) = γ   (relative risk aversion, constant)" #2f6b8f x 500 y 410 font_size 24
+
+Real magnitudes now: mean consumption of fifty thousand dollars, a gamma of two, and a standard deviation of five thousand — a ten percent risk.
+    text nums "c̄ = $50,000     γ = 2     σ = $5,000" x 500 y 315 font_size 26
+
+One half, times two over fifty thousand, times twenty-five million: five hundred dollars a year, one percent of consumption.
+    text result "π ≈ ½ · (2/50,000) · 5,000² = $500 per year" #b5482e x 500 y 235 font_size 30
+    mark mark_result target result kind box
+
+And had we tripled the utility function and added a hundred, this five hundred dollars would be identical to the cent.
+    highlight result effect pulse
+
+That is the strength — one comparable number that turns curvature into money — and equally the weakness: it is the first surviving term of a Taylor series, honest only for small gambles.
+    text caveat "Local: the first surviving term only — small σ" #8f887c x 500 y 140 font_size 22
+
+Matthew Rabin's calibration theorem, in Econometrica in 2000, is the sharp version: an agent who always turns down a fifty-fifty bet to lose a hundred or gain a hundred and ten must, under expected utility, reject a fifty-fifty bet to lose a thousand for any gain at all.
+
+So the second derivative alone says nothing; divided by the first it becomes gamma over c — five hundred dollars for this household, and the only piece of the utility function that a rescaling cannot touch.
+    highlight a_line result effect glow
+
+## Where next
+end_page: true
+
+Next: Is log-linearizing around the steady state a technique or a bet?
+    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+    link end_prev href lecture:1 title "Why should a polynomial built at one point tell you anything about its neighbours?" size 320 x 265 y 395
+    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    link end_next href lecture:3 title "Is log-linearizing around the steady state a technique or a bet?" size 320 x 735 y 395
+
+    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
+    text end_count "2 of 3" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
