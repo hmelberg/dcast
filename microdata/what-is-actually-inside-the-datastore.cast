@@ -365,17 +365,18 @@ Det er registerdataenes egentlige begrensning: databanken dekker alle, men i det
 
 Så er kartet komplett – registre med sine år, en enhet, en variabelbeskrivelse lest linje for linje, og nå ett kull på rundt femtifem tusen personer med kjønn, kommune, utdanning og lønn som venter på å bli importert.
 
-## Where next
+## Hvor nå
+lang: nb
 end_page: true
 
-Next: Å bygge datasett I: create-dataset og de fire typene import
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+Neste: Å bygge datasett I: create-dataset og de fire typene import
+    text end_prev_kicker "Forrige" x 265 y 545 font_size 24 style.opacity 0.6
     link end_prev href lecture:1 title "Fem linjer til ditt første plott" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    text end_next_kicker "Neste" x 735 y 545 font_size 24 style.opacity 0.6
     link end_next href lecture:3 title "Å bygge datasett I: create-dataset og de fire typene import" size 320 x 735 y 395
 
-    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
-    text end_count "2 of 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:2 title "Se igjen" form text open here x 500 y 160
+    text end_count "2 av 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb

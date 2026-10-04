@@ -350,17 +350,18 @@ Og det er vanen hele denne blokken egentlig har lært deg.
 
 De nye variablene dine er bare så sanne som antallene du sjekker dem mot – og neste gang retter vi de samme betingelsene mot selve populasjonen, med keep og drop.
 
-## Where next
+## Hvor nå
+lang: nb
 end_page: true
 
-Next: Å definere populasjonen: keep, drop og folkene som stille forsvinner
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+Neste: Å definere populasjonen: keep, drop og folkene som stille forsvinner
+    text end_prev_kicker "Forrige" x 265 y 545 font_size 24 style.opacity 0.6
     link end_prev href lecture:4 title "Å bygge datasett II: collapse og merge, eller hvordan du bytter analyseenhet" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    text end_next_kicker "Neste" x 735 y 545 font_size 24 style.opacity 0.6
     link end_next href lecture:6 title "Å definere populasjonen: keep, drop og folkene som stille forsvinner" size 320 x 735 y 395
 
-    link end_again href lecture:5 title "Watch again" form text open here x 500 y 160
-    text end_count "5 of 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:5 title "Se igjen" form text open here x 500 y 160
+    text end_count "5 av 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb

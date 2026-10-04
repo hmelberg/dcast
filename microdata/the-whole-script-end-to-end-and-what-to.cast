@@ -610,14 +610,15 @@ B: Så serien slutter der den begynte: i microdata er skriptet ikke dokumentasjo
         + Registrene ble revidert mellom versjonene
         * Regresjonsresultater er tilfeldige
 
-## Where next
+## Hvor nå
+lang: nb
 end_page: true
 
-    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
+    text end_prev_kicker "Forrige" x 500 y 545 font_size 24 style.opacity 0.6
     link end_prev href lecture:9 title "Mange år på en gang: paneldata, forløpsdata og lønnsgapet gjennom livsløpet" size 320 x 500 y 395
 
-    link end_again href lecture:10 title "Watch again" form text open here x 500 y 160
-    text end_count "10 of 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:10 title "Se igjen" form text open here x 500 y 160
+    text end_count "10 av 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb

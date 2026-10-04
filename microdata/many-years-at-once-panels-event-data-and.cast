@@ -608,17 +608,18 @@ Det er serien i én figur: tretten importer ble en tabell, tabellen et langt pan
 
 Gapet i 1985-kullet er ikke en konstant, men et hengsel rundt tretti år – og et panel kan fortelle deg nøyaktig når det åpner seg, men aldri alene hvorfor.
 
-## Where next
+## Hvor nå
+lang: nb
 end_page: true
 
-Next: Hele skriptet fra start til slutt – og hva du gjør når det stopper
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+Neste: Hele skriptet fra start til slutt – og hva du gjør når det stopper
+    text end_prev_kicker "Forrige" x 265 y 545 font_size 24 style.opacity 0.6
     link end_prev href lecture:8 title "Hvorfor resultatet ditt kom tilbake sensurert" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    text end_next_kicker "Neste" x 735 y 545 font_size 24 style.opacity 0.6
     link end_next href lecture:10 title "Hele skriptet fra start til slutt – og hva du gjør når det stopper" size 320 x 735 y 395
 
-    link end_again href lecture:9 title "Watch again" form text open here x 500 y 160
-    text end_count "9 of 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:9 title "Se igjen" form text open here x 500 y 160
+    text end_count "9 av 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb

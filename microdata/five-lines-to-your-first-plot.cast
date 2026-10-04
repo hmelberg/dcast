@@ -344,15 +344,16 @@ Det snur den vanlige vanen på hodet: i Stata eller R ser du på radene først o
 Fem linjer ga deg et plott over hele befolkningen uten at du så en eneste person – og hver forelesning herfra legger bare til en linje i det samme skriptet, mens svaret alltid kommer på samme måte: regnet ut der borte, sendt tilbake som et aggregat, lest i det panelet.
     delivery grave
 
-## Where next
+## Hvor nå
+lang: nb
 end_page: true
 
-Next: Hva som faktisk ligger i databanken
-    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
+Neste: Hva som faktisk ligger i databanken
+    text end_next_kicker "Neste" x 500 y 545 font_size 24 style.opacity 0.6
     link end_next href lecture:2 title "Hva som faktisk ligger i databanken" size 320 x 500 y 395
 
-    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
-    text end_count "1 of 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:1 title "Se igjen" form text open here x 500 y 160
+    text end_count "1 av 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb

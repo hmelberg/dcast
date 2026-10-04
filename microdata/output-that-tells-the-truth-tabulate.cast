@@ -420,17 +420,18 @@ Så aggregeringen er utgangen din: noen hundre snitt får plass i resultatvindue
 
 Fire deler, én regel: la spørsmålet velge kommandoen, og når bildet skal overbevise, eksporter aggregatene – aldri menneskene.
 
-## Where next
+## Hvor nå
+lang: nb
 end_page: true
 
-Next: Hvorfor resultatet ditt kom tilbake sensurert
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
+Neste: Hvorfor resultatet ditt kom tilbake sensurert
+    text end_prev_kicker "Forrige" x 265 y 545 font_size 24 style.opacity 0.6
     link end_prev href lecture:6 title "Å definere populasjonen: keep, drop og folkene som stille forsvinner" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
+    text end_next_kicker "Neste" x 735 y 545 font_size 24 style.opacity 0.6
     link end_next href lecture:8 title "Hvorfor resultatet ditt kom tilbake sensurert" size 320 x 735 y 395
 
-    link end_again href lecture:7 title "Watch again" form text open here x 500 y 160
-    text end_count "7 of 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:7 title "Se igjen" form text open here x 500 y 160
+    text end_count "7 av 10" x 500 y 95 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb
