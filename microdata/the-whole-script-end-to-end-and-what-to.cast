@@ -51,8 +51,6 @@ A: Utdanning, kommune og lønn får hver sin dato: utdanning slik den var først
 B: Fem importer, og vi har ennå ikke sett en eneste person. Det er ikke en forglemmelse, det er selve konstruksjonen.
     point at.ref md_line_9 gesture underline
 
-    wait
-
 A: Blokk tre lager det databanken ikke har: fødsel kommer som tallet en-ni-åtte-fem-null-fire, så heltallsdivider på hundre, og kullet faller ut.
     draw md_line_10 md_line_11
 
@@ -68,8 +66,6 @@ B: Og så bare positiv lønnsinntekt – som stille fjerner alle uten inntekt, o
 A: Så estimatet du snart ser, gjelder bare dem som jobber i det hele tatt: tre kodelinjer, og det vanskeligste spørsmålet i hele artikkelen.
     focus md_line_16 md_line_17 md_line_18
 
-    wait
-
 B: Blokk fem beskriver før den forklarer: hvor store de to gruppene er, og hvordan lønnsinntekten ser ut.
     draw md_line_19 md_line_20 md_line_21
 
@@ -84,8 +80,6 @@ A: Én koeffisient, og alt over den er et argument om hva den betyr – for et k
 
 B: Lønnsinntekt, ikke timelønn: deltid og måneder uten arbeid ligger inne i tallet, så et gap målt her er et gap i inntekt, ikke i lønnssats.
     highlight md_line_9 effect glow
-
-    wait
 
 A: Oppsett, import, nye variabler, populasjon, beskrivelse, estimering – seks blokker, alltid i den rekkefølgen, for hver blokk kan bare bruke det blokken over har laget.
     focus md_line_1 md_line_4 md_line_10 md_line_16 md_line_19 md_line_22
@@ -142,8 +136,6 @@ B: Så create-dataset persons: en tom tabell med et navn, og hver kommando etter
 A: Et substantiv med små bokstaver, én analyseenhet – persons, for hver rad her skal bli én person født i 1985, og det er rundt femti tusen av dem.
     draw script_mark_2
 
-    wait
-
 B: Blokk to, og så langt er datasettet et navn uten en eneste kolonne.
     draw script_line_4
 
@@ -167,8 +159,6 @@ B: For folk flytter. Uten dato har spørsmålet om hvilken kommune ikke noe svar
 
 A: Så utdanning, NUDB understrek BU, høyeste fullførte – med dato igjen, men første oktober, utdanningsregisterets egen måledato.
     draw script_line_8
-
-    wait
 
 B: Og utfallet vi faktisk bryr oss om: INNTEKT understrek WLONN, lønnsinntekt, med dato, as wage.
     draw script_line_9
@@ -252,8 +242,6 @@ A: Og én enkelt linje definerer hele studiepopulasjonen: keep if cohort er lik 
 B: Sett den her, før noe er regnet ut, så blir de andre kullene aldri behandlet. Serveren tar betalt i tålmodighet, ikke i kroner.
     draw md_mark_1
 
-    wait
-
 A: Utdanning er en sekssifret NUS-kode lagret som tekst: destring gjør den til et tall, og heltallsdivisjon med hundre tusen beholder akkurat det første sifferet, nivået.
     draw md_line_14 md_line_15
 
@@ -265,8 +253,6 @@ A: Kjønn er en tekstkode, så dummyen bygges for hånd – null for alle, så e
 
 B: Og krysstabellen fra forelesning sju, som sjekker at ingen celle for kjønn og utdanning er tom, overlever som en kommentar – der gode intensjoner bor.
     draw md_line_19
-
-    wait
 
 A: Så delen folk snubler i. Helt øverst, før persons finnes, et annet datasett: muni, med bare kommune og lønn.
     draw md_line_1 md_line_2 md_line_3 md_line_4
@@ -282,8 +268,6 @@ B: Så use muni, og merge mwage into persons on kommune sender snittet over – 
 
 A: Verdt å stoppe ved: snittet er delvis regnet ut fra de samme menneskene vi skal forklare. Manski kalte det refleksjonsproblemet – gruppesnittet og individet er ikke uavhengige bevis.
     highlight md_line_21 effect glow
-
-    wait
 
 B: Så, siste linje: lønnsinntekt på kvinnedummyen, utdanningsnivå og kommunesnittet.
     draw md_line_23
@@ -340,8 +324,6 @@ B: Og nøyaktig to slags ting kommer tilbake: en tabell med tall, eller en meldi
 A: Den meldingen er hele feilsøkingsverktøyet ditt. Ingen blaing i rader, ingen utskrift av de fem første – én tekstlinje, og ditt eget skript.
     highlight a_back l_back effect glow
 
-    wait
-
 B: Så her er de fire meldingene du faktisk kommer til å møte, på det samme skriptet som alltid: 1985-kullet og lønna deres.
     clear keep ["heading"]
 
@@ -363,8 +345,6 @@ A: Ingen datasett i minnet – som høres ut som om serveren har glemt noe, og b
 
 B: En import trenger et sted å lande; slett create-dataset, og hver import under den er hjemløs.
     text l2_fix "create-dataset persons   // linjen du slettet" below m2 gap 16 #2f6b8f font_size 28
-
-    wait
 
 A: De to handlet om navn og rekkefølge. De neste to handler om hva en rad faktisk er.
     clear keep ["heading"]
@@ -389,8 +369,6 @@ A: Sett fnutter rundt, og linjen kjører. To tegn, førti minutter. Samme famili
     text l4_fix "keep if sex == '2'" below m4 gap 16 #2f6b8f font_size 30
     text n4 "og: sysmiss(wage), aldri wage == ." below l4_fix gap 14 #8f887c font_size 24
 
-    wait
-
 B: Fire meldinger, to familier. Navn og tilstand, fanget med en gang – mot variabeloversikten, og mot skriptets egen rekkefølge.
     clear keep ["heading"]
 
@@ -405,8 +383,6 @@ B: Form og type fanges mens skriptet kjører, mot strukturen i datasettet du sel
     text g2_when "mens skriptet kjører" above g2 gap 18 #8f887c font_size 24
     text g2_ex "enheter · typekonflikt" below g2 gap 18 font_size 24
     parallel true
-
-    wait
 
 A: Og hver eneste en av dem handler om skriptet ditt eller metadataene. Ikke én nevner en person, en rad eller en verdi.
     text punch "Ingen melding nevner en person, en rad eller en verdi." #b5482e x 500 y 210 font_size 30
@@ -461,8 +437,6 @@ B: Og linjen alt handler om – en summarize her, regresjonen med utdanning og k
 A: Du kjører det, serveren sier ingen observasjoner, og den peker hit – på den ene linjen som helt sikkert er uskyldig.
     point at.ref md_line_10 gesture tap
 
-    wait
-
 B: Så i stedet for å gjette setter vi inn sjekkpunkter: summarize som kommentarer, én per blokk, som slås på når du trenger dem.
     draw md_line_6 md_line_9 parallel true
 
@@ -477,8 +451,6 @@ A: Dette svir mer her enn i Stata: du kan ikke bla i en eneste rad, så et aggre
 
 B: Sjekk B, etter populasjonsblokken, sier hvor mange som overlevde den – rundt tjuefem tusen kvinner fra åttifem-kullet, eller ingen i det hele tatt.
     draw md_mark_2
-
-    wait
 
 A: Blokk for blokk går fint på ti linjer. Det ekte skriptet vårt er på førti, og det blir førti kjøringer.
     point at.ref md_line_10 gesture underline
@@ -497,8 +469,6 @@ A: Del det som er igjen, og igjen – førti linjer tar seks kjøringer, ikke f�
 
 B: Samme triks som git bisect, slik kjerneutviklere finner én dårlig commit blant tusenvis.
     highlight md effect glow
-
-    wait
 
 A: Og den sjette kjøringen lander her. Versjonen som feilet, sa keep if sysmiss wage – behold nettopp dem som ikke har lønn.
     draw md_mark_4
@@ -560,8 +530,6 @@ A: Da får du femtisjus data – rettede lønnstall for 2022, sene adresseregist
 B: Og det er det folk fra surveyverdenen synes er vanskeligst: et register er ikke et fotografi av et år, det er en regnskapsbok som rettes lenge etter at året er over.
     point at.ref md_line_2 gesture underline
 
-    wait
-
 A: Versjonen er låst. Så variabelnavnene, som er halve dokumentasjonen – BEFOLKNING understrek KJOENN er én bestemt koding, ikke bare «kjønn».
     draw md_line_3 md_line_4 md_line_5
 
@@ -577,8 +545,6 @@ B: Så hvem som teller: født i 1985, og med en inntekt det året.
 A: To linjer med et argument begravd i seg – fjern dem uten inntekt, og du har fjernet mye av populasjonen gapet handler om.
     draw md_mark_3
 
-    wait
-
 B: Siste blokk er estimeringen: en kvinneindikator, utdanningsnivå, log lønn og regresjonen vi har bygget siden forelesning én.
     draw md_line_11 md_line_12 md_line_13 md_line_14 md_line_15
 
@@ -593,8 +559,6 @@ A: Hentedatoen fortjener plassen sin: den sier hvilken kjøring tallene kom fra 
 
 B: Og ingen kan sende deg datafila. Skriptet er det eneste som reiser, og det gjør jo versjonskontrollen enklere.
     focus md
-
-    wait
 
 A: Fire linjer bærer hele resultatet: versjonen, variabelen med sin dato, populasjonsregelen og estimatoren. Alt annet er rørleggerarbeid.
     focus md_line_2 md_line_7 md_line_9 md_line_15
