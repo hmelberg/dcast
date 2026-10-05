@@ -5,7 +5,7 @@
 - [Understanding the QALY: Definition, Calculation, and Debates](understanding-the-qaly/) — updated 2026-10-03
 - [Causal Inference in Economics: Evidence from Health and Health Care](causal-inference-in-economics-evidence-from-health-and-health-care/) — updated 2026-10-03
 - [Health Technology Assessment: Deciding What a Health System Should Buy](health-technology-assessment-deciding/) — updated 2026-10-03
-- [Dataanalyse i microdata.no: et skriptkurs](microdata/) — updated 2026-10-04
+- [Dataanalyse i microdata.no: et skriptkurs](microdata/) — updated 2026-10-05
 
 ---
 
