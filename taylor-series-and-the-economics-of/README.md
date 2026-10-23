@@ -20,4 +20,4 @@ Three lectures on why economists spend so much of their lives replacing true fun
 
 ---
 
-Made with [drawcast](https://drawcast.app/).
+Made with [drawcast](https://www.drawcast.app/).

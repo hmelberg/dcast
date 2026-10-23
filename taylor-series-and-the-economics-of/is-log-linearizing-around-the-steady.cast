@@ -263,11 +263,8 @@ The hat was a Taylor term, the linear Euler equation a first-order truncation, a
 ## Where next
 end_page: true
 
-    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
-    link end_prev href lecture:2 title "What is the second derivative doing in the utility function?" size 320 x 500 y 395
-
-    link end_again href lecture:3 title "Watch again" form text open here x 500 y 160
-    text end_count "3 of 3" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:3 title "Watch again" form text mark replay open here x 500 y 400 font_size 28
+    text end_count "3 of 3" x 500 y 330 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

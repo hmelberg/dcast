@@ -1,19 +1,6 @@
 {
   "courses": [
     {
-      "slug": "taylor-series-and-the-economics-of",
-      "title": "Taylor Series and the Economics of Approximation",
-      "files": [
-        "taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.cast",
-        "taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.cast",
-        "taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.cast",
-        "taylor-series-and-the-economics-of/course.md",
-        "taylor-series-and-the-economics-of/index.html",
-        "taylor-series-and-the-economics-of/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "registerdata-i-praksis-python-og-pandas",
       "title": "Register data in practice: Python and pandas on NPR, the Norwegian drug register and HELFO",
       "files": [
@@ -123,6 +110,20 @@
         "microdata/README.md"
       ],
       "updated": "2026-10-05"
+    },
+    {
+      "slug": "taylor-series-and-the-economics-of",
+      "title": "Taylor Series and the Economics of Approximation",
+      "files": [
+        "taylor-series-and-the-economics-of/why-should-a-polynomial-built-at-one.cast",
+        "taylor-series-and-the-economics-of/what-is-the-second-derivative-doing-in.cast",
+        "taylor-series-and-the-economics-of/is-log-linearizing-around-the-steady.cast",
+        "taylor-series-and-the-economics-of/course.md",
+        "taylor-series-and-the-economics-of/pool.json",
+        "taylor-series-and-the-economics-of/index.html",
+        "taylor-series-and-the-economics-of/README.md"
+      ],
+      "updated": "2026-10-23"
     }
   ]
 }
