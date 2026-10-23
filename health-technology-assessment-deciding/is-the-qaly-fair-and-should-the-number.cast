@@ -107,11 +107,8 @@ What they will tell you is this — the threshold line drew the question, twenty
 ## Where next
 end_page: true
 
-    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
-    link end_prev href lecture:19 title "If we are unsure, should we decide now or pay to learn?" size 320 x 500 y 395
-
-    link end_again href lecture:20 title "Watch again" form text open here x 500 y 160
-    text end_count "20 of 20" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:20 title "Watch again" form text mark replay open here x 500 y 400 font_size 28
+    text end_count "20 of 20" x 500 y 330 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

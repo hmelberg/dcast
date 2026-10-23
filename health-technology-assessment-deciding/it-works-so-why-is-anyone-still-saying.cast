@@ -319,12 +319,11 @@ Which leaves the obvious question for next time — who exactly are those patien
 ## Where next
 end_page: true
 
-Next: The patients you never meet: opportunity cost as the hidden loser
-    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
-    link end_next href lecture:2 title "The patients you never meet: opportunity cost as the hidden loser" size 320 x 500 y 395
+    text end_next_kicker "Next" x 500 y 540 font_size 26 style.opacity 0.6
+    link end_next href lecture:2 title "The patients you never meet: opportunity cost as the hidden loser" form title size 600 x 500 y 420
 
-    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
-    text end_count "1 of 20" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:1 title "Watch again" form text mark replay open here x 500 y 250 font_size 28
+    text end_count "1 of 20" x 500 y 180 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

@@ -96,4 +96,4 @@ A course on how health systems decide whether something new is worth its price: 
 
 ---
 
-Made with [drawcast](https://drawcast.app/).
+Made with [drawcast](https://www.drawcast.app/).
