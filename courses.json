@@ -1,24 +1,6 @@
 {
   "courses": [
     {
-      "slug": "registerdata-i-praksis-python-og-pandas",
-      "title": "Register data in practice: Python and pandas on NPR, the Norwegian drug register and HELFO",
-      "files": [
-        "registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.cast",
-        "registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.cast",
-        "registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.cast",
-        "registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.cast",
-        "registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.cast",
-        "registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.cast",
-        "registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.cast",
-        "registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.cast",
-        "registerdata-i-praksis-python-og-pandas/course.md",
-        "registerdata-i-praksis-python-og-pandas/index.html",
-        "registerdata-i-praksis-python-og-pandas/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "understanding-the-qaly",
       "title": "Understanding the QALY: Definition, Calculation, and Debates",
       "files": [
@@ -122,6 +104,26 @@
         "taylor-series-and-the-economics-of/pool.json",
         "taylor-series-and-the-economics-of/index.html",
         "taylor-series-and-the-economics-of/README.md"
+      ],
+      "updated": "2026-10-23"
+    },
+    {
+      "slug": "registerdata-i-praksis-python-og-pandas",
+      "title": "Register data in practice: Python and pandas on NPR, the Norwegian drug register and HELFO",
+      "files": [
+        "registerdata-i-praksis-python-og-pandas/tre-registre-tre-helt-ulike-rader-hvor.cast",
+        "registerdata-i-praksis-python-og-pandas/hvordan-leser-du-en-12-gb-registerfil.cast",
+        "registerdata-i-praksis-python-og-pandas/hva-er-det-egentlig-som-binder-en.cast",
+        "registerdata-i-praksis-python-og-pandas/holder-en-e11-kode-for-a-kalle-noen.cast",
+        "registerdata-i-praksis-python-og-pandas/fra-hendelser-til-pasienter-hvordan.cast",
+        "registerdata-i-praksis-python-og-pandas/tid-er-alt-washout-ny-bruker-og.cast",
+        "registerdata-i-praksis-python-og-pandas/tallene-selv-bruk-av-diabeteslegemidler.cast",
+        "registerdata-i-praksis-python-og-pandas/hva-registrene-ikke-maler-og-hvorfor.cast",
+        "registerdata-i-praksis-python-og-pandas/course.md",
+        "registerdata-i-praksis-python-og-pandas/pool-audio/57edc1d069612ff7.mp3",
+        "registerdata-i-praksis-python-og-pandas/pool.json",
+        "registerdata-i-praksis-python-og-pandas/index.html",
+        "registerdata-i-praksis-python-og-pandas/README.md"
       ],
       "updated": "2026-10-23"
     }

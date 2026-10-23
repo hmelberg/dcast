@@ -97,14 +97,11 @@ The fixes all start from this bill: dtype, category and usecols shrink it, parqu
 ## Where next
 end_page: true
 
-Next: What actually links a hospital contact to a prescription?
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
-    link end_prev href lecture:1 title "Three registers, three very different rows — where does the data come from?" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
-    link end_next href lecture:3 title "What actually links a hospital contact to a prescription?" size 320 x 735 y 395
+    text end_next_kicker "Next" x 500 y 540 font_size 26 style.opacity 0.6
+    link end_next href lecture:3 title "What actually links a hospital contact to a prescription?" form title size 600 x 500 y 420
 
-    link end_again href lecture:2 title "Watch again" form text open here x 500 y 160
-    text end_count "2 of 8" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:2 title "Watch again" form text mark replay open here x 500 y 250 font_size 28
+    text end_count "2 of 8" x 500 y 180 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

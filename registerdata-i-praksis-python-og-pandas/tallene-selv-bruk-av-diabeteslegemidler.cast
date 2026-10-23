@@ -338,14 +338,11 @@ Three figures, three registers, one move — once the cohort is built, the numbe
 ## Where next
 end_page: true
 
-Next: What the registers don't measure — and why your analysis must withstand scrutiny
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
-    link end_prev href lecture:6 title "Time is everything: washout, new users and drug coverage in pandas" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
-    link end_next href lecture:8 title "What the registers don't measure — and why your analysis must withstand scrutiny" size 320 x 735 y 395
+    text end_next_kicker "Next" x 500 y 540 font_size 26 style.opacity 0.6
+    link end_next href lecture:8 title "What the registers don't measure — and why your analysis must withstand scrutiny" form title size 600 x 500 y 420
 
-    link end_again href lecture:7 title "Watch again" form text open here x 500 y 160
-    text end_count "7 of 8" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:7 title "Watch again" form text mark replay open here x 500 y 250 font_size 28
+    text end_count "7 of 8" x 500 y 180 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

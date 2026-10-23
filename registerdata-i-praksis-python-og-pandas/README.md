@@ -40,4 +40,4 @@ Eight drawcasts on how you actually get Norwegian health register data into pand
 
 ---
 
-Made with [drawcast](https://drawcast.app/).
+Made with [drawcast](https://www.drawcast.app/).
