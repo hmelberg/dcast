@@ -331,12 +331,11 @@ Fem linjer ga deg et plott over hele befolkningen uten at du så en eneste perso
 lang: nb
 end_page: true
 
-Neste: Hva som faktisk ligger i databanken
-    text end_next_kicker "Neste" x 500 y 545 font_size 24 style.opacity 0.6
-    link end_next href lecture:2 title "Hva som faktisk ligger i databanken" size 320 x 500 y 395
+    text end_next_kicker "Neste" x 500 y 540 font_size 26 style.opacity 0.6
+    link end_next href lecture:2 title "Hva som faktisk ligger i databanken" form title size 600 x 500 y 420
 
-    link end_again href lecture:1 title "Se igjen" form text open here x 500 y 160
-    text end_count "1 av 10" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:1 title "Se igjen" form text mark replay open here x 500 y 250 font_size 28
+    text end_count "1 av 10" x 500 y 180 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: nb

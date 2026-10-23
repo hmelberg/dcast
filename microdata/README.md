@@ -45,4 +45,4 @@ En praktisk innføring i ti forelesninger i skriptspråket bak microdata.no, tje
 
 ---
 
-Made with [drawcast](https://drawcast.app/).
+Made with [drawcast](https://www.drawcast.app/).

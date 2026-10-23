@@ -1,26 +1,6 @@
 {
   "courses": [
     {
-      "slug": "microdata",
-      "title": "Dataanalyse i microdata.no: et skriptkurs",
-      "files": [
-        "microdata/five-lines-to-your-first-plot.cast",
-        "microdata/what-is-actually-inside-the-datastore.cast",
-        "microdata/building-datasets-i-create-dataset-and.cast",
-        "microdata/building-datasets-ii-collapse-and-merge.cast",
-        "microdata/making-new-variables-generate-replace.cast",
-        "microdata/defining-the-population-keep-drop-and.cast",
-        "microdata/output-that-tells-the-truth-tabulate.cast",
-        "microdata/why-your-output-came-back-censored.cast",
-        "microdata/many-years-at-once-panels-event-data-and.cast",
-        "microdata/the-whole-script-end-to-end-and-what-to.cast",
-        "microdata/course.md",
-        "microdata/index.html",
-        "microdata/README.md"
-      ],
-      "updated": "2026-10-05"
-    },
-    {
       "slug": "taylor-series-and-the-economics-of",
       "title": "Taylor Series and the Economics of Approximation",
       "files": [
@@ -161,6 +141,52 @@
         "health-technology-assessment-deciding/pool.json",
         "health-technology-assessment-deciding/index.html",
         "health-technology-assessment-deciding/README.md"
+      ],
+      "updated": "2026-10-23"
+    },
+    {
+      "slug": "microdata",
+      "title": "Dataanalyse i microdata.no: et skriptkurs",
+      "files": [
+        "microdata/five-lines-to-your-first-plot.cast",
+        "microdata/what-is-actually-inside-the-datastore.cast",
+        "microdata/building-datasets-i-create-dataset-and.cast",
+        "microdata/building-datasets-ii-collapse-and-merge.cast",
+        "microdata/making-new-variables-generate-replace.cast",
+        "microdata/defining-the-population-keep-drop-and.cast",
+        "microdata/output-that-tells-the-truth-tabulate.cast",
+        "microdata/why-your-output-came-back-censored.cast",
+        "microdata/many-years-at-once-panels-event-data-and.cast",
+        "microdata/the-whole-script-end-to-end-and-what-to.cast",
+        "microdata/course.md",
+        "microdata/pool-audio/038444377130e71b.mp3",
+        "microdata/pool-audio/0cfd32e0af7ea732.mp3",
+        "microdata/pool-audio/25e7015a8a826801.mp3",
+        "microdata/pool-audio/271b85efa0d3dc26.mp3",
+        "microdata/pool-audio/2a43b233b613edd6.mp3",
+        "microdata/pool-audio/2c30fd56118e63cb.mp3",
+        "microdata/pool-audio/31fc80d94d2afdb8.mp3",
+        "microdata/pool-audio/370280ab0be446e0.mp3",
+        "microdata/pool-audio/3b6d4321a815806e.mp3",
+        "microdata/pool-audio/3edb8089ceca8b13.mp3",
+        "microdata/pool-audio/4b4a121f660757ab.mp3",
+        "microdata/pool-audio/4dd0654deaa33e0b.mp3",
+        "microdata/pool-audio/688192ea7e701bef.mp3",
+        "microdata/pool-audio/89c9d50876767116.mp3",
+        "microdata/pool-audio/8aeabbc0b345410a.mp3",
+        "microdata/pool-audio/933031b5d46db690.mp3",
+        "microdata/pool-audio/abfc00dd0589818d.mp3",
+        "microdata/pool-audio/b98c6ccb8c451d0b.mp3",
+        "microdata/pool-audio/c9820fc7052645fb.mp3",
+        "microdata/pool-audio/cff06ab5c59cc387.mp3",
+        "microdata/pool-audio/d2a0fa78fbeef639.mp3",
+        "microdata/pool-audio/daab0418dcaf74ac.mp3",
+        "microdata/pool-audio/e5f6f669e1adc34e.mp3",
+        "microdata/pool-audio/e78b38fe47bfbb50.mp3",
+        "microdata/pool-audio/f43e1725ca527a19.mp3",
+        "microdata/pool.json",
+        "microdata/index.html",
+        "microdata/README.md"
       ],
       "updated": "2026-10-23"
     }
