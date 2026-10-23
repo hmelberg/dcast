@@ -311,10 +311,10 @@ Relevance first: the lottery has to move coverage, and it does — being drawn r
     draw group_0 legend_0
 
 Independence: the draw was random, so drawn and not-drawn hold the same mixture of types — it rules out Oregon quietly steering slots toward the sickest applicants.
-    highlight group_0 rest effect glow
+    highlight target ["group_0","rest"] effect glow
 
 Exclusion: the letter may touch health only through coverage — for these seventy-five, whose D_i the letter never moved, Y_i must be untouched; no relief at winning, no outreach riding along with the envelope.
-    highlight rest effect glow
+    highlight target ["rest"] effect glow
 
 Monotonicity is why there is no fourth colour on this page: no defiers, nobody who would have enrolled only if they had lost.
     point at.ref legend_rest gesture underline
@@ -352,7 +352,7 @@ Yet point at any one enrolled applicant and you cannot tell a complier from an a
     wait
 
 Now the division. The reduced form is the letter's effect on Y_i across all hundred — diluted, because for these seventy-five the letter changed no coverage at all.
-    highlight rest effect glow
+    highlight target ["rest"] effect glow
 
 By exclusion they add zero to the numerator and by definition zero to the denominator, so dividing by the first stage of 0.25 rescales a whole-sample effect onto the only people who could have produced it.
     highlight group_0 effect glow
@@ -380,14 +380,11 @@ Across these five parts: four assumptions turn a lottery into an instrument, the
 ## Where next
 end_page: true
 
-Next: Bad instruments, weak instruments
-    text end_prev_kicker "Previous" x 265 y 545 font_size 24 style.opacity 0.6
-    link end_prev href lecture:6 title "Nobody complies: intention-to-treat versus the effect of treatment" size 320 x 265 y 395
-    text end_next_kicker "Next" x 735 y 545 font_size 24 style.opacity 0.6
-    link end_next href lecture:8 title "Bad instruments, weak instruments" size 320 x 735 y 395
+    text end_next_kicker "Next" x 500 y 540 font_size 26 style.opacity 0.6
+    link end_next href lecture:8 title "Bad instruments, weak instruments" form title size 600 x 500 y 420
 
-    link end_again href lecture:7 title "Watch again" form text open here x 500 y 160
-    text end_count "7 of 18" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:7 title "Watch again" form text mark replay open here x 500 y 250 font_size 28
+    text end_count "7 of 18" x 500 y 180 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

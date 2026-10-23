@@ -240,7 +240,7 @@ The other seventy-five won a lottery that changed nothing at all about their cov
     draw rest legend_rest
 
 Winning only bought the right to apply — return the form, document your income, enrol — and roughly half never sent the paperwork back.
-    focus rest
+    focus target ["rest"]
 
     wait
 
@@ -248,7 +248,7 @@ Under monotonicity these twenty-five are the compliers: the people whose coverag
     highlight group_0 effect glow
 
 The seventy-five are never-takers — uninsured whether their name came out or not, so they carry no information about what insurance does.
-    focus rest
+    focus target ["rest"]
 
     ask "Click the people whose effect the LATE describes." intro "Quick check —" answer group_0 widget click
         right: The LATE belongs to the compliers, the quarter whose enrollment the draw changed.
@@ -453,11 +453,8 @@ Across this series the road from design to decision was one chain of things you 
 ## Where next
 end_page: true
 
-    text end_prev_kicker "Previous" x 500 y 545 font_size 24 style.opacity 0.6
-    link end_prev href lecture:17 title "Genes as instruments: Mendelian randomization" size 320 x 500 y 395
-
-    link end_again href lecture:18 title "Watch again" form text open here x 500 y 160
-    text end_count "18 of 18" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:18 title "Watch again" form text mark replay open here x 500 y 400 font_size 28
+    text end_count "18 of 18" x 500 y 330 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en
