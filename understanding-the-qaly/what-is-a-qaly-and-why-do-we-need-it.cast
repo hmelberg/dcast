@@ -185,12 +185,11 @@ So the answer to our first question is simple: it's not more years or better yea
 ## Where next
 end_page: true
 
-Next: How is a QALY actually calculated?
-    text end_next_kicker "Next" x 500 y 545 font_size 24 style.opacity 0.6
-    link end_next href lecture:2 title "How is a QALY actually calculated?" size 320 x 500 y 395
+    text end_next_kicker "Next" x 500 y 540 font_size 26 style.opacity 0.6
+    link end_next href lecture:2 title "How is a QALY actually calculated?" form title size 600 x 500 y 420
 
-    link end_again href lecture:1 title "Watch again" form text open here x 500 y 160
-    text end_count "1 of 5" x 500 y 95 font_size 22 style.opacity 0.6
+    link end_again href lecture:1 title "Watch again" form text mark replay open here x 500 y 250 font_size 28
+    text end_count "1 of 5" x 500 y 180 font_size 22 style.opacity 0.6
 ---
 audio:
   lang: en

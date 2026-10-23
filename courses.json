@@ -1,21 +1,6 @@
 {
   "courses": [
     {
-      "slug": "understanding-the-qaly",
-      "title": "Understanding the QALY: Definition, Calculation, and Debates",
-      "files": [
-        "understanding-the-qaly/what-is-a-qaly-and-why-do-we-need-it.cast",
-        "understanding-the-qaly/how-is-a-qaly-actually-calculated.cast",
-        "understanding-the-qaly/the-theoretical-foundations-where-does.cast",
-        "understanding-the-qaly/the-ethical-debate-whose-life-counts-and.cast",
-        "understanding-the-qaly/does-it-work-in-practice-evidence-limits.cast",
-        "understanding-the-qaly/course.md",
-        "understanding-the-qaly/index.html",
-        "understanding-the-qaly/README.md"
-      ],
-      "updated": "2026-10-03"
-    },
-    {
       "slug": "causal-inference-in-economics-evidence-from-health-and-health-care",
       "title": "Causal Inference in Economics: Evidence from Health and Health Care",
       "files": [
@@ -124,6 +109,27 @@
         "registerdata-i-praksis-python-og-pandas/pool.json",
         "registerdata-i-praksis-python-og-pandas/index.html",
         "registerdata-i-praksis-python-og-pandas/README.md"
+      ],
+      "updated": "2026-10-23"
+    },
+    {
+      "slug": "understanding-the-qaly",
+      "title": "Understanding the QALY: Definition, Calculation, and Debates",
+      "files": [
+        "understanding-the-qaly/what-is-a-qaly-and-why-do-we-need-it.cast",
+        "understanding-the-qaly/how-is-a-qaly-actually-calculated.cast",
+        "understanding-the-qaly/the-theoretical-foundations-where-does.cast",
+        "understanding-the-qaly/the-ethical-debate-whose-life-counts-and.cast",
+        "understanding-the-qaly/does-it-work-in-practice-evidence-limits.cast",
+        "understanding-the-qaly/course.md",
+        "understanding-the-qaly/pool-audio/0e2300255245d866.mp3",
+        "understanding-the-qaly/pool-audio/35dcda63af34d4f9.mp3",
+        "understanding-the-qaly/pool-audio/45da3caafb23be2f.mp3",
+        "understanding-the-qaly/pool-audio/5f40f2f97aa170e1.mp3",
+        "understanding-the-qaly/pool-audio/ceb6be999f3d81ef.mp3",
+        "understanding-the-qaly/pool.json",
+        "understanding-the-qaly/index.html",
+        "understanding-the-qaly/README.md"
       ],
       "updated": "2026-10-23"
     }

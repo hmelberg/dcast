@@ -25,4 +25,4 @@ A five-lecture course unpacking the Quality-Adjusted Life Year: what it means, h
 
 ---
 
-Made with [drawcast](https://drawcast.app/).
+Made with [drawcast](https://www.drawcast.app/).
