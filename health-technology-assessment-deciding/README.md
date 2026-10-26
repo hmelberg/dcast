@@ -3,9 +3,9 @@
 A course on how health systems decide whether something new is worth its price: the principles behind priority setting, the definitions that make them operational, the methods that produce a number, and the uncertainty that should stop us from trusting that number too much. Built around one Norwegian case that made the front pages, and one that never did.
 
 1. [It works. So why is anyone still saying no?](https://drawcast.app/#gh=hmelberg/dcast/health-technology-assessment-deciding/it-works-so-why-is-anyone-still-saying.cast)
-   - What exactly are we being asked when someone asks whether a new treatment is 'worth it'?
-   - Why is 'it has a real effect' not enough to justify adoption, in a private clinic as much as in a public system?
-   - Who is the 'we' that pays for nusinersen, and what does that 'we' give up?
+   - A drug that lets babies sit up: why did health systems first say no?
+   - What does a cost per QALY add to 'it works'?
+   - What does the same money buy elsewhere, and what line turns a dot into a yes or a no?
 2. [The patients you never meet: opportunity cost as the hidden loser](https://drawcast.app/#gh=hmelberg/dcast/health-technology-assessment-deciding/the-patients-you-never-meet-opportunity.cast)
    - If the budget is fixed, who pays for a yes - and why do they never appear in the newspaper?
    - Why does an opportunity cost exist even for a rich private buyer with no budget cap?
@@ -16,7 +16,7 @@ A course on how health systems decide whether something new is worth its price: 
 4. [Norway's priority-setting system, criterion by criterion](https://drawcast.app/#gh=hmelberg/dcast/health-technology-assessment-deciding/norway-s-priority-setting-system.cast)
    - The three criteria of Meld. St. 34 (2015-2016): nytte, ressursbruk, alvorlighet
    - Absolutt prognosetap: how severity becomes a number, and how it raises what we are willing to pay
-   - Who does what: Legemiddelverket's method assessment, Bestillerforum, Beslutningsforum, and the blaresept route for outpatient drugs
+   - Who does what: the method assessment by the Directorate for Medical Products (DMP, formerly Legemiddelverket), Bestillerforum, Beslutningsforum, and the blaresept route for outpatient drugs
    - The commissions behind it: Lonning I (1987), Lonning II (1997), Norheim (NOU 2014:12), Magnussen (2015)
 5. [Whose costs count? The perspective question decides the answer](https://drawcast.app/#gh=hmelberg/dcast/health-technology-assessment-deciding/whose-costs-count-the-perspective.cast)
    - Why can the same drug be cost-effective from a societal perspective and a disaster from the hospital's budget?
